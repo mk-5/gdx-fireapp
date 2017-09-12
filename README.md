@@ -3,6 +3,7 @@
 
 A libGDX cross-platform API for Firebase.
 
+[ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
 
 
 
