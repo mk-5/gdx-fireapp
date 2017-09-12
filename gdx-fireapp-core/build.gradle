@@ -1,0 +1,50 @@
+apply plugin: "java"
+apply plugin: "maven-publish"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.test.java.srcDirs = ["tests/"]
+
+jar {
+    from sourceSets.main.allSource
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
+dependencies {
+    compile libs.libgdx.core
+    testCompile libs.junit
+    testCompile libs.mockito
+}
+
+eclipse.project {
+    name = "gdx-fireapp-core"
+}
+
+apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
+apply from: "" + project.rootDir + "/gradle/pom.gradle"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId rootProject.group
+            version = rootProject.version
+            artifactId = 'gdx-fireapp-core'
+            artifact jar
+            artifact sourceJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', libraryDescription)
+                root.appendNode('name', libraryName)
+                root.appendNode('url', siteUrl)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'ios-moe' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for ios-moe
+  pod 'Firebase/Core'      # !! and here !!
+  pod 'Firebase/Storage'
+  pod 'Firebase/Database'
+  pod 'Firebase/Crash'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Messaging'
+
+end
+
+target 'ios-moe-Test' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for ios-moe-Test
+
+end
