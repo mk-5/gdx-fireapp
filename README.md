@@ -81,8 +81,6 @@ params.put(AnalyticsParam.ITEM_ID, "my super button");
 GdxFIRAnalytics.instance().logEvent(AnalyticsEvent.SELECT_CONTENT, params);
 ```
 
-__
-
 ### Auth
 
 Sign-in anonymously 
@@ -103,8 +101,6 @@ GdxFIRAuth.instance().signInAnonymously(new AuthCallback() {
   }
 });
 ```
-
-__
 
 ### Storage
 
@@ -147,8 +143,6 @@ GdxFIRStorage.instance().downloadImage("/img.png", new DownloadCallback<TextureR
      }
 });
 ```
-
-__
 
 ### Realtime Database
 
@@ -211,8 +205,6 @@ GdxFIRDatabase.instance().inReference("users")
 ```
 
 Do not forget about authorization if need it, more info [here](https://firebase.google.com/docs/database/security/quickstart)
-
-__
 
 ### Crash raporting
 
