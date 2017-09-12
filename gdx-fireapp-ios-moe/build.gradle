@@ -1,0 +1,61 @@
+apply plugin: "java"
+apply plugin: "moe"
+apply plugin: 'maven-publish'
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    exclude 'com/google/**'
+    classifier "sources"
+}
+
+jar {
+    from sourceSets.main.output
+    exclude 'com/google/**'
+
+    from sourceSets.main.allJava
+    exclude 'com/google/**'
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.test.java.srcDirs = ["tests/"]
+
+dependencies {
+    compile project(":gdx-fireapp-core")
+    compile libs.libgdx.iosmoe
+    testCompile libs.junit
+    testCompile libs.mockito
+}
+
+eclipse.project {
+    name = "gdx-fireapp-io-smoe"
+}
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Test.class" // whatever Ant pattern matches your test class files
+}
+
+apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
+apply from: "" + project.rootDir + "/gradle/pom.gradle"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId rootProject.group
+            version = rootProject.version
+            artifactId ='gdx-fireapp-ios-moe'
+            artifact jar
+            artifact sourceJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', libraryDescription)
+                root.appendNode('name', libraryName)
+                root.appendNode('url', siteUrl)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}

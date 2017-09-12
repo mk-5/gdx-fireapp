@@ -1,0 +1,28 @@
+javadoc {
+    description "Creates javadoc html for Gdx Firebase API."
+
+    source = sourceSets.main.allJava
+    exclude "com/google/**"
+    include "mk/gdx/**"
+    destinationDir = file("$buildDir/javadoc")
+    title = "GdxFireapp ${project.version} API"
+
+    options.docTitle = """<h1>GdxFireapp ${project.version} API.</h1>"""
+    options.windowTitle = "GdxFireapp ${project.version} API"
+    options.group("Main package", ["mk.gdx.firebase"])
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.outputLevel = JavadocOutputLevel.QUIET
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.use = true
+    options.splitIndex = true
+    options.noDeprecated = false
+    options.noDeprecatedList = false
+    options.noIndex = false
+    options.noNavBar = false
+    options.noTree = false
+    options.links = ['https://docs.oracle.com/javase/6/docs/api/',
+                     'http://libgdx.badlogicgames.com/nightlies/docs/api/'
+    ]
+}

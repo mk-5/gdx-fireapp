@@ -1,0 +1,32 @@
+ext {
+    libs = [:]
+    gdxVersion = '1.9.6'
+    jUnitVersion = "4.12"
+    mockitoVersion = '2.8.47'
+    firebaseVersion = '11.0.2'
+    powerMockVersion = '1.7.0'
+}
+
+
+libs.junit = "junit:junit:$jUnitVersion"
+libs.mockito = "org.mockito:mockito-core:$mockitoVersion"
+libs.powermock = [
+        junit: "org.powermock:powermock-module-junit4:$powerMockVersion",
+        api: "org.powermock:powermock-api-mockito2:$powerMockVersion"
+]
+
+/*LibGDX*/
+libs.libgdx = [
+    core : "com.badlogicgames.gdx:gdx:$gdxVersion",
+    android : "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion",
+    iosmoe : "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+]
+
+/* Firebase */
+libs.firebase = [
+    core : "com.google.firebase:firebase-core:$firebaseVersion",
+    storage: "com.google.firebase:firebase-storage:$firebaseVersion",
+    auth : "com.google.firebase:firebase-auth:$firebaseVersion",
+    crash : "com.google.firebase:firebase-crash:$firebaseVersion",
+    database : "com.google.firebase:firebase-database:$firebaseVersion"
+]
