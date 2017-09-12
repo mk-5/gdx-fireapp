@@ -18,7 +18,7 @@ allprojects {
     apply plugin: "idea"
     apply plugin: "maven-publish"
     group 'mk.gdx-fireapp'
-    version = '1.0.0-SNAPSHOT'
+    version = '1.0.1-SNAPSHOT'
 
     ext {
         appName = 'GDX Fireapp'
