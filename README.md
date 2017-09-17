@@ -19,24 +19,24 @@ You did it? Now you need to add GDX Fireapp gradle dependencies, as follow:
 **Core**
 
 ```
-compile "mk.gdx-fireapp:gdx-fireapp-core-1.0.0"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core-1.0.1"
 ```
 **Android**
 
 ```
-compile "mk.gdx-fireapp:gdx-fireapp-android-1.0.0"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android-1.0.1"
 ```
 **iOS**
 
 ```
-compile "mk.gdx-fireapp:gdx-fireapp-ios-moe-1.0.0"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe-1.0.1"
 ```
 
 Last step is:
 
 - [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
-**Version 1.0.0** was built using LibGDX v1.9.6, multi-os-engine 1.3.6.  
+**Version 1.0.1** was built using LibGDX v1.9.6, multi-os-engine 1.3.6.  
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
 

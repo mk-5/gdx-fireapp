@@ -17,12 +17,12 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
     apply plugin: "maven-publish"
-    group 'mk.gdx-fireapp'
-    version = '1.0.1-SNAPSHOT'
+    group 'pl.mk5.gdx-fireapp'
+    version = '1.0.2-SNAPSHOT'
 
     ext {
         appName = 'GDX Fireapp'
-        groupId = 'mk.gdx-fireapp'
+        groupId = 'pl.mk5.gdx-fireapp'
 
         bintrayRepo = 'maven'
         bintrayName = 'gdx-fireapp'
