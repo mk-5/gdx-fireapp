@@ -27,8 +27,18 @@ eclipse.project {
     name = "gdx-fireapp-core"
 }
 
+ext{
+    appModuleName = 'GDX Fireapp Core'
+}
+
+
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
 
 publishing {
     publications {
@@ -38,6 +48,7 @@ publishing {
             artifactId = 'gdx-fireapp-core'
             artifact jar
             artifact sourceJar
+            artifact javadocJar
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', libraryDescription)

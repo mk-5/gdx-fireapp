@@ -38,8 +38,18 @@ tasks.withType(Test) {
     include "**/*Test.class" // whatever Ant pattern matches your test class files
 }
 
+ext{
+    appModuleName = 'GDX Fireapp iOS-moe'
+}
+
+
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
 
 publishing {
     publications {
@@ -49,6 +59,7 @@ publishing {
             artifactId ='gdx-fireapp-ios-moe'
             artifact jar
             artifact sourceJar
+            artifact javadocJar
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', libraryDescription)
