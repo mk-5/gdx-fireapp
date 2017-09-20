@@ -1,9 +1,8 @@
 # GDX Fireapp
-![](https://libgdx.badlogicgames.com/img/logo.png)  +  ![](https://firebase.google.com/_static/2ceb35fd6c/images/firebase/lockup.png)
 
 A libGDX cross-platform API for Firebase.
 
-[ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
+[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
 
 
 
@@ -71,7 +70,8 @@ To deal with Firebase SDK you have to use following classes:
 
 
 
-### Analytics
+
+#### Analytics
 
 Log some button tap event
 
@@ -82,7 +82,9 @@ params.put(AnalyticsParam.ITEM_ID, "my super button");
 GdxFIRAnalytics.instance().logEvent(AnalyticsEvent.SELECT_CONTENT, params);
 ```
 
-### Auth
+
+
+#### Auth
 
 Sign-in anonymously 
 
@@ -103,28 +105,31 @@ GdxFIRAuth.instance().signInAnonymously(new AuthCallback() {
 });
 ```
 
-### Storage
 
-If your firebase storage need authorization remember to do auth first . (you can read something more [here](https://firebase.google.com/docs/storage/security/))
+
+#### Storage
+
+If yours firebase storage requires authorization remember to do some auth first . (you can read something more about it [here](https://firebase.google.com/docs/storage/security/)). Some examples of downloading from firebase storage:
+
+Download byte data:
 
 ```java
-GdxFIRAuth.instance().signInAnonymously(new AuthCallback() {
-  
+GdxFIRStorage.instance().download("/file.data", Long.MAX_VALUE, new DownloadCallback<byte[]>() {
   @Override
-  public void onSuccess(GdxFirebaseUser gdxFirebaseUser)
+  public void onSuccess(byte[] result)
   {
-    // storage actions should go here...
+    // Process just downloaded byte[] data.
   }
+
   @Override
   public void onFail(Exception e)
   {
     e.printStackTrace();
   }
-  
 });
 ```
 
-Download texture example:
+Download texture:
 
 ```java
 GdxFIRStorage.instance().downloadImage("/img.png", new DownloadCallback<TextureRegion>() {
@@ -145,7 +150,9 @@ GdxFIRStorage.instance().downloadImage("/img.png", new DownloadCallback<TextureR
 });
 ```
 
-### Realtime Database
+
+
+#### Realtime Database
 
 Sample database usage, with following POJO class
 
@@ -205,9 +212,11 @@ GdxFIRDatabase.instance().inReference("users")
 });
 ```
 
-Do not forget about authorization if need it, more info [here](https://firebase.google.com/docs/database/security/quickstart)
+If yours database requires authorization do not forget about it, more info [here](https://firebase.google.com/docs/database/security/quickstart)
 
-### Crash raporting
+
+
+#### Crash raporting
 
 Any custom errors or logs you can report as follow:
 
