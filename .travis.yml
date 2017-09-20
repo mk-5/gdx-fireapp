@@ -20,6 +20,6 @@ cache:
 before_install:
   - chmod +x gradlew
 script:
-  - ./gradlew android:assembleRelease
+  - ./gradlew gdx-fireapp-android:assembleRelease
   - ./gradlew gdx-fireapp-core:jar
   - ./gradlew gdx-fireapp-ios-moe:jar
