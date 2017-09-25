@@ -1,1 +1,1 @@
-include 'gdx-fireapp-android', 'gdx-fireapp-core', 'gdx-fireapp-ios-moe'
+include 'gdx-fireapp-android', 'gdx-fireapp-core', 'gdx-fireapp-ios-moe', 'gdx-fireapp-html'

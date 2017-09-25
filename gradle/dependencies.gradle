@@ -19,7 +19,8 @@ libs.powermock = [
 libs.libgdx = [
     core : "com.badlogicgames.gdx:gdx:$gdxVersion",
     android : "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion",
-    iosmoe : "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+    iosmoe : "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion",
+    html: "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
 ]
 
 /* Firebase */

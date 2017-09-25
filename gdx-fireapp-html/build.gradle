@@ -1,0 +1,26 @@
+apply plugin: "java"
+apply plugin: "gwt"
+apply plugin: "war"
+
+dependencies{
+    compile project(":gdx-fireapp-core")
+    compile libs.libgdx.html
+}
+
+gwt {
+    gwtVersion='2.8.0' // Should match the gwt version used for building the gwt backend
+    maxHeapSize="2G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
+    minHeapSize="2G"
+    src = files(file("src/")) // Needs to be in front of "modules" below.
+}
+
+task addSource << {
+	sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+}
+
+sourceCompatibility = 1.6
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+eclipse.project {
+    name = appName + "-html"
+}
