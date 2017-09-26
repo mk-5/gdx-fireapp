@@ -17,6 +17,7 @@
 package mk.gdx.firebase.html;
 
 import mk.gdx.firebase.distributions.AppDistribution;
+import mk.gdx.firebase.html.firebase.FirebaseConfiguration;
 
 /**
  * Javascript Firebase SDK app API.
@@ -24,11 +25,19 @@ import mk.gdx.firebase.distributions.AppDistribution;
  *
  * @see AppDistribution
  */
-public class App implements AppDistribution
-{
+public class App implements AppDistribution {
+
+    /**
+     * Loads configuration from {@code Gdx.files.internal("firebase-config.html")} file.
+     * <p>
+     * {@code firebase-config.html} should be just copy-paste configuration from Firebase console.
+     * <p>
+     * {@inheritDoc}
+     */
     @Override
     public void configure()
     {
-        // TODO
+        FirebaseConfiguration configuration = new FirebaseConfiguration();
+        configuration.load().init();
     }
 }
