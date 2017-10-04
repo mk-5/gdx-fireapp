@@ -22,8 +22,6 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 
 import mk.gdx.firebase.exceptions.PlatformDistributorException;
@@ -51,7 +49,8 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  * Last step is telling {@code PlatformDistributor} which classes it should use on each platform,<p>
  * you can do this by implementing {@link #getAndroidClassName()} and {@link #getIOSClassName()} methods.
  */
-public abstract class PlatformDistributor<T> {
+public abstract class PlatformDistributor<T>
+{
 
     protected T platformObject;
 
@@ -71,19 +70,9 @@ public abstract class PlatformDistributor<T> {
             className = getAndroidClassName();
         } else if (Gdx.app.getType() == Application.ApplicationType.iOS) {
             className = getIOSClassName();
+        } else if (Gdx.app.getType() == Application.ApplicationType.WebGL) {
+            className = getWebGLClassName();
         } else {
-            Class interfaceClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-            platformObject = (T) Proxy.newProxyInstance(
-                    interfaceClass.getClassLoader(),
-                    new Class[]{interfaceClass},
-                    new InvocationHandler() {
-                        @Override
-                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
-                        {
-                            return null;
-                        }
-                    }
-            );
             return;
         }
         try {
@@ -120,4 +109,9 @@ public abstract class PlatformDistributor<T> {
      * @return Class name with package of the android module distribution object.
      */
     protected abstract String getAndroidClassName();
+
+    /**
+     * @return Class name
+     */
+    protected abstract String getWebGLClassName();
 }

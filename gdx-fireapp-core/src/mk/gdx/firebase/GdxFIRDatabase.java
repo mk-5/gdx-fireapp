@@ -207,4 +207,13 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     {
         return "mk.gdx.firebase.android.database.Database";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getWebGLClassName()
+    {
+        return "mk.gdx.firebase.html.database.Database";
+    }
 }

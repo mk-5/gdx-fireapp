@@ -115,5 +115,14 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
     {
         return "mk.gdx.firebase.android.analytics.Analytics";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getWebGLClassName()
+    {
+        return "mk.gdx.firebase.html.analytics.Analytics";
+    }
 }
 

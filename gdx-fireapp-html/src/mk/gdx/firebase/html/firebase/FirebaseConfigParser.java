@@ -25,8 +25,11 @@ import java.util.regex.Pattern;
 
 /**
  * Gets firebase sdk api .js file and initialization script from raw Firebase configuration html.
+ * <p>
+ * TODO - deal with lazy loading. Ex. Someone calling some api methods while firebase.js is still loading.
  */
-public class FirebaseConfigParser {
+public class FirebaseConfigParser
+{
 
     private String rawHtml;
     private String firebaseScriptSrc;

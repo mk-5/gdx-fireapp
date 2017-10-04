@@ -122,4 +122,13 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
     {
         return "mk.gdx.firebase.android.auth.Auth";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getWebGLClassName()
+    {
+        return "mk.gdx.firebase.html.auth.Auth";
+    }
 }

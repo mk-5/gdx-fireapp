@@ -88,4 +88,13 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
     {
         return "mk.gdx.firebase.android.App";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getWebGLClassName()
+    {
+        return "mk.gdx.firebase.html.App";
+    }
 }

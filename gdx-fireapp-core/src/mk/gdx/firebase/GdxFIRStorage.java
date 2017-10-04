@@ -183,4 +183,13 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
     {
         return "mk.gdx.firebase.android.storage.Storage";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getWebGLClassName()
+    {
+        return "mk.gdx.firebase.html.storage.Storage";
+    }
 }

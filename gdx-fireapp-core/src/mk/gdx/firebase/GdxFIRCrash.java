@@ -86,4 +86,13 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
     {
         return "mk.gdx.firebase.android.crash.Crash";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getWebGLClassName()
+    {
+        return "mk.gdx.firebase.html.crash.Crash";
+    }
 }
