@@ -25,6 +25,7 @@ public class UserInfo
     private String uid;
     private String displayName;
     private String photoUrl;
+    private String email;
     private boolean isEmailVerified;
     private boolean isAnonymous;
 
@@ -90,6 +91,16 @@ public class UserInfo
     public String getPhotoUrl()
     {
         return photoUrl;
+    }
+
+    /**
+     * Gets Firebase user email.
+     *
+     * @return Firebase user email, may be null
+     */
+    public String getEmail()
+    {
+        return email;
     }
 
     /**
@@ -164,6 +175,18 @@ public class UserInfo
         public Builder setIsEmailVerified(boolean isEmailVerified)
         {
             inst.isEmailVerified = isEmailVerified;
+            return this;
+        }
+
+        /**
+         * Sets firebase user photo url.
+         *
+         * @param email Firebase user email
+         * @return this {@code Builder} instance
+         */
+        public Builder setEmail(String email)
+        {
+            inst.email = email;
             return this;
         }
 

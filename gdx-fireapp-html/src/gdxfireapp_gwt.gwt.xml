@@ -4,8 +4,9 @@
 <module>
     <source path="mk/gdx/firebase" />
     <!--<inherits name="com.google.gwt.json.JSON" />-->
-    <source path="com/google/gwt/json/client"/>
+    <!--<source path="com/google/gwt/json/client"/>-->
     <super-source path="fakes" />
 
     <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.html" />
+    <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.callbacks.AuthCallback" />
 </module>

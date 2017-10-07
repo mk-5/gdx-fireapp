@@ -48,7 +48,8 @@ public class Auth implements AuthDistribution {
                 .setProviderId(firUser.providerID())
                 .setUid(firUser.uid())
                 .setIsEmailVerified(firUser.isEmailVerified())
-                .setIsAnonymous(firUser.isAnonymous());
+                .setIsAnonymous(firUser.isAnonymous())
+                .setEmail(firUser.email());
         return GdxFirebaseUser.create(builder.build());
     }
 

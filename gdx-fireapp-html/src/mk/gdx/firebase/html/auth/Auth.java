@@ -17,53 +17,98 @@
 package mk.gdx.firebase.html.auth;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
+import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
+import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 /**
  * @see AuthDistribution
  */
 public class Auth implements AuthDistribution
 {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GdxFirebaseUser getCurrentUser()
     {
-//        JSONObject userFromApi = firebaseUser();
-//        if (!userFromApi.containsKey("uid")) return null;
-//        UserInfo.Builder builder = new UserInfo.Builder();
-//        builder.setDisplayName(userFromApi.get("displayName").isString().stringValue())
-//                .setPhotoUrl(userFromApi.get("photoURL").isString().stringValue())
-//                .setProviderId(userFromApi.get("providerData").isObject().get("providerId").isString().stringValue())
-//                .setUid(userFromApi.get("uid").isString().stringValue())
-//                .setIsEmailVerified(userFromApi.get("emailVerified").isBoolean().booleanValue())
-//                .setIsAnonymous(userFromApi.get("isAnonymous").isBoolean().booleanValue());
-//        return GdxFirebaseUser.create(builder.build());
-        return null;
+        FirebaseUserJSON userFromApi = AuthJS.firebaseUser();
+        if (userFromApi.isNULL()) return null;
+        UserInfo.Builder builder = new UserInfo.Builder();
+        builder.setDisplayName(userFromApi.getDisplayName())
+                .setPhotoUrl(userFromApi.getPhotoURL())
+                .setProviderId(userFromApi.getProviderId())
+                .setUid(userFromApi.getUID())
+                .setIsEmailVerified(userFromApi.isEmailVerified())
+                .setIsAnonymous(userFromApi.isAnonymous())
+                .setEmail(userFromApi.getEmail());
+        return GdxFirebaseUser.create(builder.build());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, AuthCallback callback)
+    public void createUserWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AuthJS.createUserWithEmailAndPassword(email, new String(password), callback);
+            }
+        });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, AuthCallback callback)
+    public void signInWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AuthJS.signInWithEmailAndPassword(email, new String(password), callback);
+            }
+        });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void signInWithToken(String token, AuthCallback callback)
+    public void signInWithToken(final String token, final AuthCallback callback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AuthJS.signInWithToken(token, callback);
+            }
+        });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void signInAnonymously(AuthCallback callback)
+    public void signInAnonymously(final AuthCallback callback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AuthJS.singInAnonymously(callback);
+            }
+        });
     }
 
-//    private static native JSONObject firebaseUser(); /*-{ return $wnd.firebase.auth().currentUser; }-*/
 }

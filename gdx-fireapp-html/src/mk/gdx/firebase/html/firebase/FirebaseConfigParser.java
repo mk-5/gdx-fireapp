@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
  * Gets firebase sdk api .js file and initialization script from raw Firebase configuration html.
  * <p>
  * TODO - deal with lazy loading. Ex. Someone calling some api methods while firebase.js is still loading.
+ * FIXME - firebase is not visible after firebase.js loaded.
  */
 public class FirebaseConfigParser
 {
@@ -60,7 +61,7 @@ public class FirebaseConfigParser
     /**
      * @return Laz firebase initialization script.
      */
-    public String getGWTInitializationScript()
+    public String getLazyLoadingInitializationScript()
     {
         return "(function(){\n" +
                 "var script = document.createElement(\"script\");\n" +
@@ -80,7 +81,7 @@ public class FirebaseConfigParser
         if (matcher.find()) {
             return matcher.group(1);
         } else {
-            Gdx.app.error("GWT", "Can't find <script>...</script> inside Firebase configuration file.");
+            Gdx.app.error("GdxFireapp", "Can't find <script>...</script> inside Firebase configuration file.");
         }
         return null;
     }
@@ -92,7 +93,7 @@ public class FirebaseConfigParser
         if (matcher.find()) {
             return matcher.group(1);
         } else {
-            Gdx.app.error("GWT", "Can't find <script src=\"...\" inside Firebase configuration file.");
+            Gdx.app.error("GdxFireapp", "Can't find <script src=\"...\" inside Firebase configuration file.");
         }
         return null;
     }
