@@ -47,9 +47,12 @@ import mk.gdx.firebase.ios.helpers.NSNumberHelper;
  * In case of transform from {@link NSDictionary} to POJO object,
  * {@link NSDictionary} is transformed to Json string then it is transformed by {@link com.badlogic.gdx.utils.Json#fromJson(Class, String)}
  */
-public class DataProcessor {
+public class DataProcessor
+{
 
     /**
+     * Transforms ios object to java with preserved GenericType.
+     *
      * @param iosObject          iOS object, in most cases instance of {@link NSObject}
      * @param genericPlaceholder {@link GenericPlaceholder}
      * @param <T>                Type of object which you want to get - needed by transforming types flow.
@@ -104,12 +107,13 @@ public class DataProcessor {
     }
 
     /**
+     * Transforms ios object to java primitive type object.
      * TODO - better docs.
      *
      * @param data       Object instance to be transformed.
      * @param wantedType Type of object which should be returned after transformation.
      * @param <T>        Generic type of wanted data.
-     * @return Transformed object.  If {@link NSObject} instance has passed object was transformed otherwise {@code data} itself was returned.
+     * @return Transformed object.  If {@link NSObject} instance has passed object was transformed - otherwise {@code data} itself was returned.
      */
     @SuppressWarnings("unchecked")
     public static <T> T processPrimitiveData(Object data, Class<T> wantedType)
@@ -139,6 +143,8 @@ public class DataProcessor {
     }
 
     /**
+     * Transforms ios object to java.
+     *
      * @param iosObject Any java object got by multi-os-engine classes. In most cases it should be instance of {@link NSObject}
      * @return Java object which is equals to multi-os-engine object representation.
      */
@@ -158,6 +164,8 @@ public class DataProcessor {
     }
 
     /**
+     * Transforms java object to ios.
+     *
      * @param javaObject Any java object instance.
      * @return {@link NSObject} instance equals to {@code javaObject}.
      */

@@ -62,7 +62,6 @@ public class Database implements DatabaseDistribution {
 
     /**
      * {@inheritDoc}
-     * TODO - doc note
      */
     @Override
     public void onConnect(final ConnectedListener listener)
@@ -292,7 +291,7 @@ public class Database implements DatabaseDistribution {
     }
 
     /**
-     * Simple getter of {@link DatabaseReference} which which this {@link Database} instance will be deal with.
+     * Simple getter of {@link DatabaseReference} which this {@link Database} instance will be deal with.
      *
      * @return FirebaseSDK Database reference. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
