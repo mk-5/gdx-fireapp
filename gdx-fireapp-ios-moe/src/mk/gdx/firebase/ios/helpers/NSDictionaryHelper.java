@@ -31,9 +31,9 @@ import mk.gdx.firebase.ios.database.DataProcessor;
 /**
  * Transforms {@code NSDictionary} and {@code Map}.
  * <p>
- *
  */
-public class NSDictionaryHelper {
+public class NSDictionaryHelper
+{
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> toMap(NSDictionary<NSString, NSObject> nsDictionary)
@@ -66,7 +66,9 @@ public class NSDictionaryHelper {
             return toNSDictionary((Map) object);
         } else {
             String objectJsonData = new Json().toJson(object);
-            Map objectMap = new Json().fromJson(HashMap.class, objectJsonData);
+            Json json = new Json();
+            json.setIgnoreUnknownFields(true);
+            Map objectMap = json.fromJson(HashMap.class, objectJsonData);
             return toNSDictionary(objectMap);
         }
     }

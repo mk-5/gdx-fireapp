@@ -17,7 +17,7 @@
 package mk.gdx.firebase.html.firebase;
 
 /**
- * Provides awaiting for firebase.js script.
+ * Provides awaiting for firebase.js script loaded.
  */
 public class ScriptRunner
 {

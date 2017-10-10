@@ -28,7 +28,6 @@ import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
-import sun.font.Script;
 
 /**
  * GWT Firebase API implementation.
@@ -39,10 +38,6 @@ public class Database implements DatabaseDistribution
 {
 
     private String refPath;
-
-    public Database()
-    {
-    }
 
     /**
      * {@inheritDoc}
@@ -74,27 +69,52 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value)
+    public void setValue(final Object value)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.set(databaseReference(), StringGenerator.dataToString(value));
+            }
+        });
+        terminateOperation();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value, CompleteCallback completeCallback)
+    public void setValue(final Object value, final CompleteCallback completeCallback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.setWithCallback(databaseReference(), StringGenerator.dataToString(value), completeCallback);
+            }
+        });
+        terminateOperation();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback)
+    public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.setNextDataCallback(new JSONDataCallback(dataType, callback));
+                DatabaseJS.once(databaseReference());
+            }
+        });
+        terminateOperation();
     }
 
     /**
@@ -104,6 +124,7 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
 
+        terminateOperation();
     }
 
     /**
@@ -112,6 +133,15 @@ public class Database implements DatabaseDistribution
     @Override
     public DatabaseDistribution push()
     {
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // TODO - fetch new reference?
+                DatabaseJS.push(databaseReference());
+            }
+        });
         return this;
     }
 
@@ -121,33 +151,66 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue()
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.remove(databaseReference());
+            }
+        });
+        terminateOperation();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeValue(CompleteCallback completeCallback)
+    public void removeValue(final CompleteCallback completeCallback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.removeWithCallback(databaseReference(), completeCallback);
+            }
+        });
+        terminateOperation();
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(Map<String, Object> data)
+    public void updateChildren(final Map<String, Object> data)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.update(databaseReference(), MapTransformer.mapToJSON(data));
+            }
+        });
+        terminateOperation();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(Map<String, Object> data, CompleteCallback completeCallback)
+    public void updateChildren(final Map<String, Object> data, final CompleteCallback completeCallback)
     {
-
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.updateWithCallback(databaseReference(), MapTransformer.mapToJSON(data), completeCallback);
+            }
+        });
+        terminateOperation();
     }
 
     /**
@@ -157,10 +220,12 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
 
+        terminateOperation();
     }
 
     /**
      * Firebase web api does not support this feature.
+     * <p>
      *
      * @param enabled If true persistence will be enabled.
      */
@@ -192,6 +257,27 @@ public class Database implements DatabaseDistribution
         if (refPath == null)
             throw new DatabaseReferenceNotSetException("Please call GdxFIRDatabase#inReference() first.");
         return refPath;
+    }
+
+    /**
+     * Reset {@link #refPath} to initial state.
+     * <p>
+     * After each flow-terminate operation {@link #refPath} should be reset the initial value,
+     * it forces the users to call {@link #inReference(String)} before each flow-terminate operation.
+     * <p>
+     * Flow-terminate operations are: <uL>
+     * <li>{@link #setValue(Object)}</li>
+     * <li>{@link #setValue(Object, CompleteCallback)}</li>
+     * <li>{@link #readValue(Class, DataCallback)}</li>
+     * <li>{@link #onDataChange(Class, DataChangeListener)}</li>
+     * <li>{@link #updateChildren(Map)}</li>
+     * <li>{@link #updateChildren(Map, CompleteCallback)}</li>
+     * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
+     * </uL>
+     */
+    private void terminateOperation()
+    {
+        refPath = null;
     }
 
 }

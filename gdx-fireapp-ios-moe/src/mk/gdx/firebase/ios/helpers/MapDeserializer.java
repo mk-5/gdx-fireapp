@@ -7,7 +7,8 @@ import java.util.Map;
 /**
  * Class which deserialize {@code Map<String, Object>} to POJO.
  */
-public class MapDeserializator {
+public class MapDeserializer
+{
 
     /**
      * Transforms {@code Map<String,Object>} to {@code T object}.
@@ -27,7 +28,9 @@ public class MapDeserializator {
     {
         try {
             String jsonString = new Json().toJson(map);
-            return new Json().fromJson(wantedType, jsonString);
+            Json json = new Json();
+            json.setIgnoreUnknownFields(true);
+            return json.fromJson(wantedType, jsonString);
         } catch (Exception e) {
             return null;
         }

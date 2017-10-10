@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 public class FirebaseScriptInformant
 {
     private static boolean isLoaded;
+
     /**
      * Actions waiting for firebase.js
      */

@@ -28,7 +28,7 @@ import apple.foundation.NSNull;
 import apple.foundation.NSNumber;
 import apple.foundation.NSString;
 import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
-import mk.gdx.firebase.ios.helpers.MapDeserializator;
+import mk.gdx.firebase.ios.helpers.MapDeserializer;
 import mk.gdx.firebase.ios.helpers.NSArrayHelper;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.ios.helpers.NSNumberHelper;
@@ -77,7 +77,7 @@ public class DataProcessor
                     for (int i = 0; i < ((List) result).size(); i++) {
                         Object o = ((List) result).get(i);
                         if (Map.class.isAssignableFrom(o.getClass())) {
-                            T deserialized = (T) MapDeserializator.deserialize((Map) o, listGenericType);
+                            T deserialized = (T) MapDeserializer.deserialize((Map) o, listGenericType);
                             // If deserialized was succeed - change HashMap to deserialized object
                             if (deserialized != null) {
                                 ((List) result).set(i, deserialized);
@@ -91,7 +91,7 @@ public class DataProcessor
                 // 2. Create class
                 Map map = NSDictionaryHelper.toMap((NSDictionary<NSString, NSObject>) iosObject);
                 if (!Map.class.isAssignableFrom(wantedType)) {
-                    T deserialized = (T) MapDeserializator.deserialize(map, wantedType);
+                    T deserialized = (T) MapDeserializer.deserialize(map, wantedType);
                     if (deserialized != null)
                         return deserialized;
                 }

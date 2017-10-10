@@ -18,11 +18,12 @@ package mk.gdx.firebase.html.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 
 /**
  * Transforms data to string.
  */
-public class StringProcessor
+public class StringGenerator
 {
     private static final Array<Class> PRIMITIVES = new Array<Class>(new Class[]{
             Number.class, Integer.class, String.class,
@@ -37,11 +38,15 @@ public class StringProcessor
      * @param object Any object
      * @return JSON string representation of {@code object}
      */
-    public String dataToString(Object object)
+    public static String dataToString(Object object)
     {
         if (isPrimitiveType(object))
             return object.toString();
         Json json = new Json();
+        json.setTypeName(null);
+        json.setQuoteLongValues(true);
+        json.setIgnoreUnknownFields(true);
+        json.setOutputType(JsonWriter.OutputType.json);
         return json.toJson(object);
     }
 

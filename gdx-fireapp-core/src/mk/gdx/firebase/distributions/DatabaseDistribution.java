@@ -161,7 +161,7 @@ public interface DatabaseDistribution
      * Provides transaction for value describe by path given by {@code inReference(String)} and gives response by {@code CompleteCallback}
      * <p>
      * Value that you want to change will be get in {@link TransactionCallback#run(Object)} - there you should<p>
-     * modifying data and returns a new one.
+     * modify data and returns a new one.
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      *
