@@ -123,7 +123,7 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
-
+        // TODO
         terminateOperation();
     }
 
@@ -138,8 +138,8 @@ public class Database implements DatabaseDistribution
             @Override
             public void run()
             {
-                // TODO - fetch new reference?
-                DatabaseJS.push(databaseReference());
+                // TODO - some special callback for other actions? On the other hand, no others action can be done before this if it is waiting for firebase.js
+                refPath = DatabaseJS.push(databaseReference());
             }
         });
         return this;
@@ -219,7 +219,7 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
-
+        // TODO
         terminateOperation();
     }
 

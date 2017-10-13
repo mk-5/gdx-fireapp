@@ -99,9 +99,10 @@ public class DatabaseJS
      * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#push">https://firebase.google.com/docs/reference/js/firebase.database.Reference#push</a>
      *
      * @param reference Database reference path
+     * @return A new reference path
      */
-    public static native void push(String reference) /*-{
-        $wnd.firebase.database().ref(reference).push();
+    public static native String push(String reference) /*-{
+        return $wnd.firebase.database().ref(reference).push().path["Q"].join("/");
     }-*/;
 
     /**
@@ -195,7 +196,7 @@ public class DatabaseJS
     /**
      * Set callback which is use in next javascript call with DataCallback.
      * <p>
-     * It is need to do this in this way because of GenericTypes. GWT does not support GenericTypes and we can't just
+     * Data callback has String generic type because of GWT - it does not support GenericTypes and we can't just
      * call DataCallback::onData(Ltype_description)()
      *
      * @param callback Callback, not null

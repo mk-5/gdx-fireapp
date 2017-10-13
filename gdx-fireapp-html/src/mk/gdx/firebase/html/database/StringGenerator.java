@@ -16,20 +16,15 @@
 
 package mk.gdx.firebase.html.database;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 /**
  * Transforms data to string.
  */
 public class StringGenerator
 {
-    private static final Array<Class> PRIMITIVES = new Array<Class>(new Class[]{
-            Number.class, Integer.class, String.class,
-            Float.class, Double.class, Boolean.class
-    });
-
     /**
      * Returns JSON string representation of object.
      * <p>
@@ -52,6 +47,7 @@ public class StringGenerator
 
     private static boolean isPrimitiveType(Object object)
     {
-        return PRIMITIVES.contains(object.getClass(), true);
+//        return PRIMITIVES.contains(object.getClass(), true);
+        return object.getClass() == String.class || ClassReflection.isPrimitive(object.getClass());
     }
 }

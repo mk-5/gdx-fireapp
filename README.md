@@ -13,7 +13,7 @@ First thing is installing Firebase SDK. Here you can find some short tutorials d
 - [Android Firebase SDK installation guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-SDK-installation)
 - [iOS Firebase SDK installation guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Firebase-SDK-installation)
 
-You did it? Now you need to add GDX Fireapp gradle dependencies, as follow:
+Now you need to add GDX Fireapp gradle dependencies, as follow:
 
 **Core**
 
@@ -34,6 +34,8 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe-1.0.1"
 Last step is:
 
 - [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
+
+
 
 **Version 1.0.1** was built using LibGDX v1.9.6, multi-os-engine 1.3.6.  
 
@@ -57,7 +59,7 @@ GdxFIRApp.instance().configure();
 
 
 
-## Few examples
+## Examples
 
 To deal with Firebase SDK you have to use following classes:
 
