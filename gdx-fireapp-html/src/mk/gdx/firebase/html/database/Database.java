@@ -31,7 +31,27 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
  * GWT Firebase API implementation.
+ * <p>
+ * It is throws when required annotation is missing.
+ * <p>
+ * Because of missing {@link java.lang.reflect.ParameterizedType} on GWT platform there is a need of
+ * dealing with generic types in some other way. GdxFireapp using annotation for this.
+ * <p>
+ * There are two rules when you dealing with nested generic types (for ex. Callback<List<User>>) on gwt:
+ * 1. Every callback must be separated class and added to reflection inside yours .gwt.xml configuration file.
+ * 2. The callback method must have {@link mk.gdx.firebase.annotations.NestedGenericType} annotation with description of nested class.
+ * <p>
+ * Here is some example of valid declaration:
+ * <p>
+ * {@code
+ * public class MyCallback implements Callback<List<User>>{
  *
+ * @NestedGenericType(User.class)
+ * @Override public void process(List<User> data)
+ * {
+ * // do some stuff
+ * }
+ * }
  * @see DatabaseDistribution
  */
 public class Database implements DatabaseDistribution
@@ -110,7 +130,7 @@ public class Database implements DatabaseDistribution
             @Override
             public void run()
             {
-                DatabaseJS.setNextDataCallback(new JSONDataCallback(dataType, callback));
+                DatabaseJS.setNextDataCallback(new JsonDataCallback<R>(dataType, callback));
                 DatabaseJS.once(databaseReference());
             }
         });

@@ -16,9 +16,13 @@
 
 package mk.gdx.firebase.html.database;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
  * Javascript calls to firebase database api.
@@ -26,6 +30,7 @@ import mk.gdx.firebase.listeners.ConnectedListener;
 public class DatabaseJS
 {
     private static DataCallback nextDataCallback;
+    private static ObjectMap<String, DataChangeListener<String>> dataChangeListeners = new ObjectMap<String, DataChangeListener<String>>();
 
     /**
      * Set value to database.
@@ -70,7 +75,7 @@ public class DatabaseJS
     }-*/;
 
 
-    public static native void onValue(String reference, DataCallback<String> dataCallback) /*-{
+    public static native void onValue(String reference, DataChangeListener<String> dataListener) /*-{
 
     }-*/;
 
@@ -218,5 +223,10 @@ public class DatabaseJS
             throw new IllegalStateException();
         nextDataCallback.onData(value);
         DatabaseJS.nextDataCallback = null;
+    }
+
+    static void removeDataListener(String refPath)
+    {
+
     }
 }

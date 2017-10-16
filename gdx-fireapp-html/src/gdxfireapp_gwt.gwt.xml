@@ -13,4 +13,5 @@
     <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.callbacks.CompleteCallback" />
     <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.listeners.ConnectedListener" />
     <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.listeners.DataChangeListener" />
+    <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.annotations.NestedGenericType" />
 </module>

@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Transforms {@link java.util.Map} to JSON string.
  */
-public class MapTransformer
+class MapTransformer
 {
     /**
      * @param map Map, not null
