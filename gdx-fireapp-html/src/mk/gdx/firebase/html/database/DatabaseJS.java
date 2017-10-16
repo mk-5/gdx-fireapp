@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.html.database;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
@@ -75,8 +74,18 @@ public class DatabaseJS
     }-*/;
 
 
-    public static native void onValue(String reference, DataChangeListener<String> dataListener) /*-{
-
+    // TODO -
+    public static native void onValue(String reference) /*-{
+           var ref = reference;
+           $wnd.firebase.database().ref(ref).on("value", function(snap){
+             var val;
+             try{
+                val = JSON.stringify(snapshot.val());
+             }catch(err){
+                val = stringValue;
+             }
+            @mk.gdx.firebase.html.database.DatabaseJS::callListener(Ljava/lang/String;Ljava/lang/String;)(ref,val);
+        });
     }-*/;
 
     /**
@@ -212,6 +221,23 @@ public class DatabaseJS
     }
 
     /**
+     * @param refPath  Database reference path
+     * @param listener Listener, may be null
+     */
+    static void addDataListener(String refPath, DataChangeListener listener)
+    {
+        boolean isPresent = dataChangeListeners.containsKey(refPath);
+        if (isPresent) {
+            if (listener == null) {
+                dataChangeListeners.remove(refPath);
+                // TODO - remove from firebase.js?
+            }
+        } else if (listener != null) {
+            dataChangeListeners.put(refPath, listener);
+        }
+    }
+
+    /**
      * Calls callback set by {@code setNextDataCallback}.
      *
      * @param value Value passed to original callback, not null
@@ -225,8 +251,26 @@ public class DatabaseJS
         DatabaseJS.nextDataCallback = null;
     }
 
+    /**
+     * Calls listener added by {@code addDataListener}.
+     *
+     * @param refPath  Database ref path
+     * @param newValue New value as json string
+     */
+    static void callListener(String refPath, String newValue)
+    {
+        if (!dataChangeListeners.containsKey(refPath))
+//            throw new IllegalStateException();
+            return;
+        dataChangeListeners.get(refPath).onChange(newValue);
+    }
+
+    /**
+     * @param refPath Database reference path
+     */
     static void removeDataListener(String refPath)
     {
-
+        if (dataChangeListeners.containsKey(refPath))
+            dataChangeListeners.remove(refPath);
     }
 }

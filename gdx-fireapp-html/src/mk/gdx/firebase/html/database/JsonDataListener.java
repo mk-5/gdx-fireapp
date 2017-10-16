@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.html.database;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**

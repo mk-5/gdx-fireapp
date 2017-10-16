@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.html.reflection;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.reflect.Annotation;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
@@ -31,18 +30,17 @@ public class AnnotationProcessor
 
     public static NestedGenericType getNestedGenericTypeAnnotation(Object object)
     {
-        NestedGenericType annotation = null;
+        NestedGenericType result = null;
         Method[] methods = ClassReflection.getMethods(object.getClass());
-        Gdx.app.log("AnnotationProcessor", "class: " + ClassReflection.getSimpleName(object.getClass()));
-        Gdx.app.log("AnnotationProcessor", "methods: " + methods.length);
-        Gdx.app.log("AnnotationProcessor", "annotations: " + ClassReflection.getDeclaredAnnotations(object.getClass()).length);
+        // TODO - use type annotation, not method?
         for (Method m : methods) {
+            Annotation[] annotations = m.getDeclaredAnnotations();
             Annotation a = m.getDeclaredAnnotation(NestedGenericType.class);
             if (a != null) {
-                annotation = a.getAnnotation(NestedGenericType.class);
+                result = a.getAnnotation(NestedGenericType.class);
                 break;
             }
         }
-        return annotation;
+        return result;
     }
 }

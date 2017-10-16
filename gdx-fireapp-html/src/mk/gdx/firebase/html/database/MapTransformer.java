@@ -33,7 +33,6 @@ class MapTransformer
     public static String mapToJSON(Map<String, Object> map)
     {
         Json json = new Json();
-        // TODO - maybe put some static configuration properties inside GdxFIRDatabase about?
         json.setTypeName(null);
         json.setQuoteLongValues(true);
         json.setIgnoreUnknownFields(true);
