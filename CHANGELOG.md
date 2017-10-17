@@ -1,7 +1,10 @@
 # 1.0.0
 
 - Initial release
-- Basic support for Database, Analytics, Storage, App, Authorization, Crash.
+- Android: basic support for Database, Analytics, Storage, App, Authorization, Crash
+- Ios-moe: basic support for Database, Analytics, Storage, App, Authorization, Crash
+
+
 
 # 1.1.0
 

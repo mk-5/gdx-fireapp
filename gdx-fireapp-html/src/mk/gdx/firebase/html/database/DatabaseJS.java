@@ -37,7 +37,7 @@ public class DatabaseJS
      * JSON.parse is using here. It's getting object or primitive (for primitives types it is primitive wrapped by string ex. "1", "true") and returns object representation.
      * Is one exception here - when stringValue is actually a string like "abc", JSON.parse will be throw error.
      *
-     * @param reference   Reference to deal with
+     * @param reference   Reference path, not null
      * @param stringValue String value representation
      */
     public static native void set(String reference, String stringValue) /*-{
@@ -55,7 +55,7 @@ public class DatabaseJS
      * <p>
      * For more explanation look at {@link #set(String, String)}
      *
-     * @param reference   Reference to deal with
+     * @param reference   Reference path, not null
      * @param stringValue String value representation
      * @param callback    Callback
      */
@@ -74,18 +74,32 @@ public class DatabaseJS
     }-*/;
 
 
-    // TODO -
+    /**
+     * Attaches listener from {@link #dataChangeListeners} to given reference.
+     *
+     * @param reference Reference path, not null
+     */
     public static native void onValue(String reference) /*-{
            var ref = reference;
-           $wnd.firebase.database().ref(ref).on("value", function(snap){
-             var val;
-             try{
-                val = JSON.stringify(snapshot.val());
-             }catch(err){
-                val = stringValue;
-             }
+           $wnd.valueListeners = $wnd.valueListeners || {};
+           $wnd.valueListeners[reference] = $wnd.firebase.database().ref(ref).on("value", function(snap){
+            var val = JSON.stringify(snap.val());
             @mk.gdx.firebase.html.database.DatabaseJS::callListener(Ljava/lang/String;Ljava/lang/String;)(ref,val);
-        });
+          });
+    }-*/;
+
+    /**
+     * Remove value listeners for given path.
+     * <p>
+     * If listener was not declared before - all value listeners for given path will be cleared.
+     *
+     * @param reference Reference path, not null
+     */
+    public static native void offValue(String reference) /*-{
+        $wnd.valueListeners = $wnd.valueListeners || {};
+        var listener = $wnd.valueListeners[reference] || null;
+        $wnd.firebase.database().ref(reference).off('value', listener);
+        @mk.gdx.firebase.html.database.DatabaseJS::removeDataListener(Ljava/lang/String;)(reference);
     }-*/;
 
     /**
@@ -93,16 +107,11 @@ public class DatabaseJS
      * <p>
      * Calls {@link #callCallback(String)} when done.
      *
-     * @param reference Reference to deal with
+     * @param reference Reference path, not null
      */
     public static native void once(String reference) /*-{
         $wnd.firebase.database().ref(reference).once("value").then(function(snapshot){
-            var val;
-            try{
-                val = JSON.stringify(snapshot.val());
-            }catch(err){
-                val = stringValue;
-            }
+            var val = JSON.stringify(snapshot.val());
             @mk.gdx.firebase.html.database.DatabaseJS::callCallback(Ljava/lang/String;)(val);
         });
     }-*/;
@@ -112,7 +121,7 @@ public class DatabaseJS
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#push">https://firebase.google.com/docs/reference/js/firebase.database.Reference#push</a>
      *
-     * @param reference Database reference path
+     * @param reference Reference path, not null
      * @return A new reference path
      */
     public static native String push(String reference) /*-{
@@ -141,7 +150,7 @@ public class DatabaseJS
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove">https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove</a>
      *
-     * @param reference Database reference path
+     * @param reference Reference path, not null
      */
     public static native void remove(String reference) /*-{
         $wnd.firebase.database().ref(reference).remove();
@@ -152,7 +161,7 @@ public class DatabaseJS
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove">https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove</a>
      *
-     * @param reference Database reference path
+     * @param reference Reference path, not null
      * @param callback  Callback
      */
     public static native void removeWithCallback(String reference, CompleteCallback callback) /*-{
@@ -171,7 +180,7 @@ public class DatabaseJS
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#update">https://firebase.google.com/docs/reference/js/firebase.database.Reference#update</a>
      *
-     * @param reference   Reference to deal with
+     * @param reference   Reference path, not null
      * @param stringValue String value representation
      */
     public static native void update(String reference, String stringValue) /*-{
@@ -189,7 +198,7 @@ public class DatabaseJS
      * <p>
      * For more explanation look at {@link #update(String, String)}
      *
-     * @param reference   Reference to deal with
+     * @param reference   Reference path, not null
      * @param stringValue String value representation
      * @param callback    Callback
      */
@@ -208,6 +217,35 @@ public class DatabaseJS
     }-*/;
 
     /**
+     * Modify database data in single transaction.
+     *
+     * @param reference Reference path, not null
+     * @param dataModifier
+     * @param completeCallback
+     */
+    public static native void transaction(String reference, JsonDataModifier dataModifier, CompleteCallback completeCallback) /*-{
+        $wnd.firebase.transaction().ref(reference).transaction(function(currentData){
+            var newData = dataModifier.@mk.gdx.firebase.html.database.JsonDataModifier::modify(Ljava/lang/String;)(JSON.stringify(currentData));
+            var val;
+            try{
+                val = JSON.parse(newData);
+            }catch(err){
+                val = newData;
+            }
+            return val;
+        }, function(error, committed, snapshot){
+            if( error || !committed ){
+                var message = "";
+                if( error ) message = error.message;
+                else if( !committed ) message = "Transaction was aborted.";
+                callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(message));
+            }else{
+                callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            }
+        });
+    }-*/;
+
+    /**
      * Set callback which is use in next javascript call with DataCallback.
      * <p>
      * Data callback has String generic type because of GWT - it does not support GenericTypes and we can't just
@@ -221,7 +259,7 @@ public class DatabaseJS
     }
 
     /**
-     * @param refPath  Database reference path
+     * @param refPath  Reference path, not null
      * @param listener Listener, may be null
      */
     static void addDataListener(String refPath, DataChangeListener listener)
@@ -235,6 +273,17 @@ public class DatabaseJS
         } else if (listener != null) {
             dataChangeListeners.put(refPath, listener);
         }
+    }
+
+    /**
+     * Gets true if listener for given path is already attached.
+     *
+     * @param referencePath Reference path, not null
+     * @return True if listener is already attached.
+     */
+    public static boolean hasListener(String referencePath)
+    {
+        return dataChangeListeners.containsKey(referencePath) && dataChangeListeners.get(referencePath) != null;
     }
 
     /**
@@ -266,6 +315,8 @@ public class DatabaseJS
     }
 
     /**
+     * Remove listener.
+     *
      * @param refPath Database reference path
      */
     static void removeDataListener(String refPath)

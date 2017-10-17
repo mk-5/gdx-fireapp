@@ -91,12 +91,12 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(final Object value)
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
-                DatabaseJS.set(databaseReference(), StringGenerator.dataToString(value));
+                DatabaseJS.set(scriptRefPath, StringGenerator.dataToString(value));
             }
         });
         terminateOperation();
@@ -108,12 +108,12 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(final Object value, final CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
-                DatabaseJS.setWithCallback(databaseReference(), StringGenerator.dataToString(value), completeCallback);
+                DatabaseJS.setWithCallback(scriptRefPath, StringGenerator.dataToString(value), completeCallback);
             }
         });
         terminateOperation();
@@ -125,13 +125,13 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback)
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
                 DatabaseJS.setNextDataCallback(new JsonDataCallback<R>(dataType, callback));
-                DatabaseJS.once(databaseReference());
+                DatabaseJS.once(scriptRefPath);
             }
         });
         terminateOperation();
@@ -141,9 +141,23 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
+    public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener)
     {
-        // TODO
+        // TODO test, String.class value
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        {
+            @Override
+            public void run()
+            {
+                // TODO DataChangeListener::onCancelled
+                if (listener != null && !DatabaseJS.hasListener(scriptRefPath)) {
+                    DatabaseJS.addDataListener(scriptRefPath, new JsonDataListener<R>(dataType, listener));
+                    DatabaseJS.onValue(scriptRefPath);
+                } else if (listener == null) {
+                    DatabaseJS.offValue(scriptRefPath);
+                }
+            }
+        });
         terminateOperation();
     }
 
@@ -153,13 +167,13 @@ public class Database implements DatabaseDistribution
     @Override
     public DatabaseDistribution push()
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
                 // TODO - some special callback for other actions? On the other hand, no others action can be done before this if it is waiting for firebase.js
-                refPath = DatabaseJS.push(databaseReference());
+                refPath = DatabaseJS.push(scriptRefPath);
             }
         });
         return this;
@@ -171,12 +185,12 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue()
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
-                DatabaseJS.remove(databaseReference());
+                DatabaseJS.remove(scriptRefPath);
             }
         });
         terminateOperation();
@@ -188,12 +202,12 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue(final CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
-                DatabaseJS.removeWithCallback(databaseReference(), completeCallback);
+                DatabaseJS.removeWithCallback(scriptRefPath, completeCallback);
             }
         });
         terminateOperation();
@@ -205,12 +219,12 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(final Map<String, Object> data)
     {
-        ScriptRunner.firebaseScript(new Runnable()
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
         {
             @Override
             public void run()
             {
-                DatabaseJS.update(databaseReference(), MapTransformer.mapToJSON(data));
+                DatabaseJS.update(scriptRefPath, MapTransformer.mapToJSON(data));
             }
         });
         terminateOperation();
@@ -237,9 +251,17 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
+    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
     {
-        // TODO
+        // TODO test
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        {
+            @Override
+            public void run()
+            {
+                DatabaseJS.transaction(scriptRefPath, new JsonDataModifier<R>(dataType, transactionCallback), completeCallback);
+            }
+        });
         terminateOperation();
     }
 

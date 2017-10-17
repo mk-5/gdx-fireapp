@@ -32,4 +32,14 @@ public class ScriptRunner
             action.run();
         else FirebaseScriptInformant.addWaitingAction(action);
     }
+
+    public static abstract class ScriptAction implements Runnable
+    {
+        protected String scriptRefPath;
+
+        public ScriptAction(String scriptRefPath)
+        {
+            this.scriptRefPath = scriptRefPath;
+        }
+    }
 }
