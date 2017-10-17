@@ -16,16 +16,7 @@
 
 package mk.gdx.firebase.html.database;
 
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-
-import java.util.List;
-import java.util.Map;
-
-import mk.gdx.firebase.annotations.NestedGenericType;
 import mk.gdx.firebase.callbacks.DataCallback;
-import mk.gdx.firebase.html.exceptions.NestedGenericTypeAnnotationMissingException;
-import mk.gdx.firebase.html.reflection.AnnotationProcessor;
 
 /**
  * Wraps data callback into callback with String as return type.

@@ -41,8 +41,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  * </ul><p>
  * If you do not do this {@code RuntimeException} will be thrown.
  */
-public interface DatabaseDistribution
-{
+public interface DatabaseDistribution {
 
     /**
      * Listens for database connection events.
@@ -86,7 +85,7 @@ public interface DatabaseDistribution
      * @param dataType Class you want to retrieve
      * @param callback Callback that handles response
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
-     * @param <R>      More specific type of data you want to retrieve associated with {@code callback} - needed because of nested generic types for ex. {@code List<User>}
+     * @param <R>      More specific type of data you want to retrieve associated with {@code callback} - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      * @see DataCallback
      */
@@ -100,7 +99,7 @@ public interface DatabaseDistribution
      * @param dataType Class you want to retrieve
      * @param listener Listener, may by null - if null all listeners for specified database reference will be removed.
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
-     * @param <R>      More specific type of data you want to retrieve associated with {@code listener} - needed because of nested generic types for ex. {@code List<User>}
+     * @param <R>      More specific type of data you want to retrieve associated with {@code listener} - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      * @see DataChangeListener
      */

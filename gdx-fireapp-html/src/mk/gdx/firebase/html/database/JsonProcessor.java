@@ -29,10 +29,11 @@ import mk.gdx.firebase.html.reflection.AnnotationProcessor;
 /**
  * Process json string to generic type.
  */
-public class JsonProcessor
-{
+public class JsonProcessor {
 
     /**
+     * Converts json string into java object.
+     *
      * @param wantedType        Wanted type
      * @param genericTypeKeeper Object with wanted type inside generic argument
      * @param jsonString        Json string data
@@ -43,6 +44,7 @@ public class JsonProcessor
     {
         Json json = new Json();
         json.setIgnoreUnknownFields(true);
+        json.setTypeName(null);
         R result = null;
         if (ClassReflection.isAssignableFrom(List.class, wantedType)
                 || ClassReflection.isAssignableFrom(Map.class, wantedType)) {
