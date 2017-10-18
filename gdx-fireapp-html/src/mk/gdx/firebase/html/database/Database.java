@@ -91,7 +91,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(final Object value)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -108,7 +108,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(final Object value, final CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -125,7 +125,7 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -144,7 +144,7 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener)
     {
         // TODO test, String.class value
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -167,7 +167,7 @@ public class Database implements DatabaseDistribution
     @Override
     public DatabaseDistribution push()
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -185,7 +185,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue()
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -202,7 +202,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue(final CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -219,7 +219,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(final Map<String, Object> data)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()
@@ -254,7 +254,7 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
     {
         // TODO test
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptAction(databaseReference())
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
             public void run()

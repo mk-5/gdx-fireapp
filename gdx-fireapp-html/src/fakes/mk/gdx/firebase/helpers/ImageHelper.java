@@ -16,7 +16,13 @@
 
 package mk.gdx.firebase.helpers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.gwt.GwtApplication;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.server.Base64Utils;
 
 /**
  * Fake class implementation. For GWT only.
@@ -33,7 +39,11 @@ public class ImageHelper
         // Gwt does not support Pixmap(byte[], int, int) and throws
         // error: 'The constructor Pixmap(byte[], int, int) is undefined' on compilation step.
         // Need to find other way on GWT.
-
-        return null;
+        // FIXME - can't use here Base64Utils
+        String base64 = "data:image/png;base64," + Base64Utils.toBase64(bytes);
+        Image image = new Image(base64);
+        image.getElement().setAttribute("crossOrigin", "anonymous");
+        ((GwtApplication) Gdx.app).getPreloader().images.put(base64, ImageElement.as(image.getElement()));
+        return new TextureRegion(new Texture(Gdx.files.internal(base64)));
     }
 }

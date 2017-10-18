@@ -16,8 +16,6 @@
 
 package mk.gdx.firebase.html.storage;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.google.gwt.user.server.Base64Utils;
 
 import mk.gdx.firebase.callbacks.DownloadCallback;

@@ -17,6 +17,7 @@
 package mk.gdx.firebase.html.storage;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import java.io.File;
@@ -25,7 +26,7 @@ import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
-import mk.gdx.firebase.html.exceptions.UnsupportedOperationException;
+import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 /**
  * GWT Firebase storage api.
@@ -35,24 +36,40 @@ import mk.gdx.firebase.html.exceptions.UnsupportedOperationException;
 public class Storage implements StorageDistribution
 {
 
-    private String bucketUrl;
+    private String bucketUrl = "";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void upload(FileHandle file, String path, UploadCallback callback)
     {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void upload(byte[] data, String path, UploadCallback callback)
     {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void download(String path, long bytesLimit, DownloadCallback<byte[]> callback)
+    public void download(final String path, long bytesLimit, final DownloadCallback<byte[]> callback)
     {
-
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl())
+        {
+            @Override
+            public void run()
+            {
+                StorageJS.download(scriptBucketUrl, path, new Base64DownloadCallback(callback));
+            }
+        });
     }
 
     /**
@@ -65,19 +82,30 @@ public class Storage implements StorageDistribution
     @Override
     public void download(String path, File targetFile, DownloadCallback<File> callback)
     {
-        throw new UnsupportedOperationException();
+        Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(String path, DeleteCallback callback)
     {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StorageDistribution inBucket(String url)
     {
         bucketUrl = url;
         return this;
+    }
+
+    private String bucketUrl()
+    {
+        return bucketUrl != null ? bucketUrl : "";
     }
 }

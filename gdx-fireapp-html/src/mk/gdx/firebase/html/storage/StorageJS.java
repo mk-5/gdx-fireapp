@@ -22,7 +22,28 @@ package mk.gdx.firebase.html.storage;
 public class StorageJS
 {
 
+    /**
+     * Downloads file at given path and convert it to base64 string.
+     *
+     * @param bucketUrl        Bucket url
+     * @param refPath          Storage reference path
+     * @param downloadCallback Callback
+     */
     public static native void download(String bucketUrl, String refPath, Base64DownloadCallback downloadCallback) /*-{
-        var storage = bucketUrl != null ? ($wnd.firebase.app().storage(bucketUrl)) : ($wnd.firebase.storage());
+        var storage = scriptBucketUrl != null ? ($wnd.firebase.app().storage(scriptBucketUrl)) : ($wnd.firebase.storage());
+        storage.getDownloadUrl().then(function(url){
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function(){
+                var blob = xhr.response;
+                var reader = new FileReader();
+                reader.onloadend = function(){
+                    downloadCallback.@mk.gdx.firebase.html.storage.Base64DownloadCallback::onSuccess(Ljava/lang/String;)(reader.result);
+                };
+                reader.readAsDataUrl(blob);
+            };
+        })['catch'](function(error){
+            downloadCallback.@mk.gdx.firebase.html.storage.Base64DownloadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.code));
+        });
     }-*/;
 }
