@@ -25,10 +25,13 @@ import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 
 /**
- *
+ * Provides access to Firebase Storage methods.
  */
-public interface StorageDistribution {
+public interface StorageDistribution
+{
     /**
+     * Uploads file data to storage.
+     *
      * @param file     File you want to upload
      * @param path     Target path at Firebase storage
      * @param callback Callback
@@ -36,6 +39,8 @@ public interface StorageDistribution {
     void upload(FileHandle file, String path, UploadCallback callback);
 
     /**
+     * Uploads byte array data to storage.
+     *
      * @param data     Data to upload
      * @param path     Target pat at Firebase storage
      * @param callback Callback
@@ -43,7 +48,7 @@ public interface StorageDistribution {
     void upload(byte[] data, String path, UploadCallback callback);
 
     /**
-     * TODO - path type detection.
+     * Downloads data as byte array.
      *
      * @param path       Storage path
      * @param bytesLimit Bytes size
@@ -52,6 +57,8 @@ public interface StorageDistribution {
     void download(String path, long bytesLimit, DownloadCallback<byte[]> callback);
 
     /**
+     * Downloads data to file given by {@code targetFile}.
+     *
      * @param path       Path
      * @param targetFile Target file, if null the temporary file will be created.
      * @param callback   Callback
@@ -60,12 +67,16 @@ public interface StorageDistribution {
 
 
     /**
+     * Deletes data from storage.
+     *
      * @param path     Path
      * @param callback Callback
      */
     void delete(String path, DeleteCallback callback);
 
     /**
+     * Sets bucket to deal with, url will be used for all future actions.
+     *
      * @param url Bucket url 'gs://'
      * @return this
      */

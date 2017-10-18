@@ -242,7 +242,8 @@ GdxFIRCrash.log("i'm custom log.")
 - Wiki/documentation
 - GWT support
 - Database query flow (filtering, limiting etc..)
-- Google, facebook authorization.
+- Google, facebook authorization
+- Messaging
 
 
 

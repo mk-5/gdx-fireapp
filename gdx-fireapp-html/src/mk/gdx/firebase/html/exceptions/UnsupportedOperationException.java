@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.callbacks;
+package mk.gdx.firebase.html.exceptions;
 
 /**
- * Handles response when downloading something from Firebase storage.
- *
- * @param <R> Expected data type, should be {@code File} or {@code byte[]}
+ * It is thrown when method that is not supported at GWT platform was calling.
  */
-public interface DownloadCallback<R>
+public class UnsupportedOperationException extends IllegalStateException
 {
-    /**
-     * Calls when everything was done without issues.
-     *
-     * @param result
-     */
-    void onSuccess(R result);
+    public UnsupportedOperationException()
+    {
+        super("This method is not supported in Firebase Web API");
+    }
 
-    /**
-     * Calls when something goes wrong.
-     *
-     * @param e Exception, not null
-     */
-    void onFail(Exception e);
 }

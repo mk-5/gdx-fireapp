@@ -40,7 +40,6 @@ import mk.gdx.firebase.storage.FileMetadata;
 
 /**
  * Android Firebase storage API implementation.
- * <p>
  *
  * @see StorageDistribution
  */

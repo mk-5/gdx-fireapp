@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.callbacks;
+package mk.gdx.firebase.html.storage;
 
 /**
- * Handles response when downloading something from Firebase storage.
- *
- * @param <R> Expected data type, should be {@code File} or {@code byte[]}
+ * Javascript calls to firebase storage api.
  */
-public interface DownloadCallback<R>
+public class StorageJS
 {
-    /**
-     * Calls when everything was done without issues.
-     *
-     * @param result
-     */
-    void onSuccess(R result);
 
-    /**
-     * Calls when something goes wrong.
-     *
-     * @param e Exception, not null
-     */
-    void onFail(Exception e);
+    public static native void download(String bucketUrl, String refPath, Base64DownloadCallback downloadCallback) /*-{
+        var storage = bucketUrl != null ? ($wnd.firebase.app().storage(bucketUrl)) : ($wnd.firebase.storage());
+    }-*/;
 }
