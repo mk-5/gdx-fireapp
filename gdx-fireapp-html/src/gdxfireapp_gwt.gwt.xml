@@ -3,8 +3,6 @@
     "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
 <module>
     <source path="mk/gdx/firebase" />
-    <!--<inherits name="com.google.gwt.json.JSON" />-->
-    <!--<source path="com/google/gwt/json/client"/>-->
     <super-source path="fakes" />
 
     <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.html" />

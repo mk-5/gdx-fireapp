@@ -57,8 +57,9 @@ public abstract class PlatformDistributor<T>
     /**
      * Creates platform specific object by reflection.
      * <p>
-     * Uses class names given by {@link #getAndroidClassName()} and {@link #getIOSClassName()}<p>
-     * If environment is different than Android or iOS creates mock class provided by {@link Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)}
+     * Uses class names given by {@link #getAndroidClassName()} and {@link #getIOSClassName()}
+     * <p>
+     * If you need to run project on different platform use {@link #setMockObject(Object)} to polyfill platform object.
      *
      * @throws PlatformDistributorException Throws when something is wrong with environment
      */
