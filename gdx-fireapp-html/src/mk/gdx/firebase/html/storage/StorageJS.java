@@ -29,21 +29,12 @@ public class StorageJS
      * @param refPath          Storage reference path
      * @param downloadCallback Callback
      */
-    public static native void download(String bucketUrl, String refPath, Base64DownloadCallback downloadCallback) /*-{
-        var storage = scriptBucketUrl != null ? ($wnd.firebase.app().storage(scriptBucketUrl)) : ($wnd.firebase.storage());
-        storage.getDownloadUrl().then(function(url){
-            var xhr = new XMLHttpRequest();
-            xhr.responseType = 'blob';
-            xhr.onload = function(){
-                var blob = xhr.response;
-                var reader = new FileReader();
-                reader.onloadend = function(){
-                    downloadCallback.@mk.gdx.firebase.html.storage.Base64DownloadCallback::onSuccess(Ljava/lang/String;)(reader.result);
-                };
-                reader.readAsDataUrl(blob);
-            };
+    public static native void download(String bucketUrl, String refPath, UrlDownloadCallback downloadCallback) /*-{
+        var storage = (bucketUrl != null && bucketUrl != "") ? ($wnd.firebase.app().storage(bucketUrl)) : ($wnd.firebase.storage());
+        storage.ref(refPath).getDownloadURL().then(function(url){
+             downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onSuccess(Ljava/lang/String;)(url);
         })['catch'](function(error){
-            downloadCallback.@mk.gdx.firebase.html.storage.Base64DownloadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.code));
+            downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
         });
     }-*/;
 }

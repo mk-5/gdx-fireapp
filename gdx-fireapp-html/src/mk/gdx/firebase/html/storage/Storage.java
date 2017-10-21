@@ -67,7 +67,7 @@ public class Storage implements StorageDistribution
             @Override
             public void run()
             {
-                StorageJS.download(scriptBucketUrl, path, new Base64DownloadCallback(callback));
+                StorageJS.download(scriptBucketUrl, path, new UrlDownloadCallback(callback));
             }
         });
     }
