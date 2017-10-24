@@ -21,6 +21,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
+import mk.gdx.firebase.functional.Consumer;
+
 /**
  * Helper for dealing with transforming {@code byte[]} to {@code TextureRegion}.
  */
@@ -49,5 +51,18 @@ public class ImageHelper
         TextureRegion region = new TextureRegion(new Texture(potPixmap), 0, 0, orgWidth, orgHeight);
         potPixmap.dispose();
         return region;
+    }
+
+    /**
+     * Creates texture region from byte[].
+     * <p>
+     * This method was created because need of consistity android-ios and gwt api.
+     *
+     * @param bytes    Image byte[] representation, not null
+     * @param consumer Consumer where you should deal with region, not null
+     */
+    public static void createTextureFromBytes(byte[] bytes, final Consumer<TextureRegion> consumer)
+    {
+        consumer.accept(createTextureFromBytes(bytes));
     }
 }

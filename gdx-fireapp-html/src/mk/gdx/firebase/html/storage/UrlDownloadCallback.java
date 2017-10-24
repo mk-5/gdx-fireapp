@@ -58,7 +58,10 @@ public class UrlDownloadCallback implements DownloadCallback<String>
     {
         final XMLHttpRequest xmlHttpRequest = XMLHttpRequest.create();
         xmlHttpRequest.setResponseType(XMLHttpRequest.ResponseType.ArrayBuffer);
-        String accessToken = downloadUrl.split("token=")[1];
+        String[] urlParts = downloadUrl.split("token=");
+        if (urlParts.length < 2)
+            throw new IllegalStateException("Download url should contains token variable.");
+        String accessToken = urlParts[1];
         xmlHttpRequest.setOnReadyStateChange(new ReadyStateChangeHandler()
         {
             @Override

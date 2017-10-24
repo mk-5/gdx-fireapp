@@ -16,6 +16,8 @@
 
 package mk.gdx.firebase.html.storage;
 
+import mk.gdx.firebase.callbacks.DeleteCallback;
+
 /**
  * Javascript calls to firebase storage api.
  */
@@ -30,11 +32,21 @@ public class StorageJS
      * @param downloadCallback Callback
      */
     public static native void download(String bucketUrl, String refPath, UrlDownloadCallback downloadCallback) /*-{
-        var storage = (bucketUrl != null && bucketUrl != "") ? ($wnd.firebase.app().storage(bucketUrl)) : ($wnd.firebase.storage());
+        var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).getDownloadURL().then(function(url){
              downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onSuccess(Ljava/lang/String;)(url);
         })['catch'](function(error){
             downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
         });
     }-*/;
+
+    public static native void remove(String bucketUrl, String refPath, DeleteCallback deleteCallback) /*-{
+        var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
+        storage.ref(refPath)['delete']().then(function(){
+             deleteCallback.@mk.gdx.firebase.callbacks.DeleteCallback::onSuccess()();
+        })['catch'](function(error){
+            deleteCallback.@mk.gdx.firebase.callbacks.DeleteCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
+        });
+    }-*/;
+
 }

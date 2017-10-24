@@ -89,9 +89,16 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, DeleteCallback callback)
+    public void delete(final String path, final DeleteCallback callback)
     {
-
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl())
+        {
+            @Override
+            public void run()
+            {
+                StorageJS.remove(scriptBucketUrl, path, callback);
+            }
+        });
     }
 
     /**

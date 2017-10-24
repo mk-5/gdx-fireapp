@@ -16,6 +16,7 @@
 
 package mk.gdx.firebase;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,6 +28,7 @@ import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.exceptions.PlatformDistributorException;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.helpers.ImageHelper;
 
 /**
@@ -129,7 +131,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * Downloads texture from Firebase storage.
      * <p>
      * Image is represented by TextureRegion because of need of size which should be power of two.<p>
-     * Remember to dispose texture when you done:
+     * Remember to dispose texture when you done with it:
      * <p>
      * {@code
      * region.getTexture().dispose();
@@ -151,8 +153,19 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
                     @Override
                     public void run()
                     {
-                        TextureRegion region = ImageHelper.createTextureFromBytes(result);
-                        callback.onSuccess(region);
+                        if (Gdx.app.getType() != Application.ApplicationType.WebGL) {
+                            TextureRegion region = ImageHelper.createTextureFromBytes(result);
+                            callback.onSuccess(region);
+                        } else {
+                            ImageHelper.createTextureFromBytes(result, new Consumer<TextureRegion>()
+                            {
+                                @Override
+                                public void accept(TextureRegion textureRegion)
+                                {
+                                    callback.onSuccess(textureRegion);
+                                }
+                            });
+                        }
                     }
                 });
             }
