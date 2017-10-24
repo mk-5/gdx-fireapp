@@ -19,6 +19,10 @@ package mk.gdx.firebase.html.storage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.gwt.typedarrays.client.Uint8ArrayNative;
+import com.google.gwt.typedarrays.shared.ArrayBuffer;
+import com.google.gwt.typedarrays.shared.TypedArrays;
+import com.google.gwt.typedarrays.shared.Uint8Array;
 
 import java.io.File;
 
@@ -39,21 +43,37 @@ public class Storage implements StorageDistribution
     private String bucketUrl = "";
 
     /**
-     * {@inheritDoc}
+     * Not supported in WEB api - you do not have access to file system.
+     *
+     * @param file     Source file
+     * @param path     Path
+     * @param callback Callback
      */
     @Override
     public void upload(FileHandle file, String path, UploadCallback callback)
     {
-
+        Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
+        // TODO - uploading internal files?
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void upload(byte[] data, String path, UploadCallback callback)
+    public void upload(final byte[] data, final String path, final UploadCallback callback)
     {
-
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl())
+        {
+            @Override
+            public void run()
+            {
+                short[] shortArr = new short[data.length];
+                for (int i = 0; i < data.length; i++)
+                    shortArr[i] = data[i];
+                Uint8ArrayNative uint8Array = Uint8ArrayNative.create(shortArr);
+                StorageJS.upload(scriptBucketUrl, path, uint8Array, callback);
+            }
+        });
     }
 
     /**
