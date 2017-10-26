@@ -219,9 +219,9 @@ public class DatabaseJS
     /**
      * Modify database data in single transaction.
      *
-     * @param reference Reference path, not null
-     * @param dataModifier
-     * @param completeCallback
+     * @param reference        Reference path, not null
+     * @param dataModifier     Json data modifier, not null
+     * @param completeCallback Complete callback, not null
      */
     public static native void transaction(String reference, JsonDataModifier dataModifier, CompleteCallback completeCallback) /*-{
         $wnd.firebase.transaction().ref(reference).transaction(function(currentData){

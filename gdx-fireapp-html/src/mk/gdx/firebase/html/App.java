@@ -21,16 +21,6 @@ import mk.gdx.firebase.html.firebase.FirebaseConfiguration;
 
 /**
  * Javascript Firebase SDK app API.
- * <p>
- * <p>
- * TODO - Reflection NOTE
- * GWT can make many problems with reflection. At this point i can run code on GWT platform without reflection errors by following script:
- * <p>
- * ./gradlew html:dist
- * <p>
- * `html:dist` is also only way in LibGDX (as far as i know) to look at IReflectionCache errors.
- * For some reason SuperDev does not respect <extend-configuration-property name="gdx.reflect.include"> and throws errors like:
- * Can't find type xxx for name "mk.gdx.firebase.xxx"
  *
  * @see AppDistribution
  */

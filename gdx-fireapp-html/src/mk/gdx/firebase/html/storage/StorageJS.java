@@ -16,13 +16,9 @@
 
 package mk.gdx.firebase.html.storage;
 
-import com.badlogic.gdx.Gdx;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.typedarrays.client.Uint8ArrayNative;
-import com.google.gwt.typedarrays.shared.Uint8Array;
-
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
+import mk.gdx.firebase.storage.FileMetadata;
 
 /**
  * Javascript calls to firebase storage api.
@@ -63,18 +59,18 @@ public class StorageJS
     }-*/;
 
     /**
-     * FIXME - does not work. Error from browser: 'Firebase Storage: Invalid argument in `put` at index 0: Expected Blob or File.'
-     * @param bucketUrl      Bucket url, may be null
-     * @param refPath        Storage reference path, not null
-     * @param byteArray      Uint8Array byte[] representation, not null
-     * @param uploadCallback Callback, not null
+     * Upload base64 encoded data to storage.
+     *
+     * @param bucketUrl        Bucket url, may be null
+     * @param refPath          Storage reference path, not null
+     * @param base64DataString Base64 data representation, not null
+     * @param uploadCallback   Callback, not null
      */
-    public static native void upload(String bucketUrl, String refPath, Uint8ArrayNative byteArray, UploadCallback uploadCallback) /*-{
+    public static native void upload(String bucketUrl, String refPath, String base64DataString, UploadCallback uploadCallback) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
-        //var blob = new Blob([byteArray]);
-        console.log(byteArray);
-        storage.ref(refPath).put(byteArray).then(function(snapshot){
-            @mk.gdx.firebase.html.storage.StorageJS::callUploadCallback(Lcom/google/gwt/core/client/JavaScriptObject;Lmk/gdx/firebase/callbacks/UploadCallback;)(snapshot, uploadCallback);
+
+        storage.ref(refPath).putString(base64DataString,'base64').then(function(snapshot){
+            @mk.gdx.firebase.html.storage.StorageJS::callUploadCallback(Lmk/gdx/firebase/html/storage/UploadTaskSnapshot;Lmk/gdx/firebase/callbacks/UploadCallback;)(snapshot, uploadCallback);
         })['catch'](function(error){
             uploadCallback.@mk.gdx.firebase.callbacks.UploadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
         });
@@ -87,8 +83,9 @@ public class StorageJS
      * @param snapshot Snapshot from firebase, not null
      * @param callback Upload callback to cal, not null
      */
-    static void callUploadCallback(JavaScriptObject snapshot, UploadCallback callback)
+    static void callUploadCallback(UploadTaskSnapshot snapshot, UploadCallback callback)
     {
-        Gdx.app.log("StorageJS", "snapshot: " + snapshot.toSource());
+        FileMetadata fileMetadata = SnapshotFileMetaDataResolver.resolve(snapshot);
+        callback.onSuccess(fileMetadata);
     }
 }

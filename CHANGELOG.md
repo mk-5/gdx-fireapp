@@ -9,5 +9,4 @@
 # 1.1.0
 
 - GWT support for Authorization, Database, Storage
-- Add email field to GdxFirebaseUser
-- Add AuthDistribution::signOut method
+- Email field in GdxFirebaseUser

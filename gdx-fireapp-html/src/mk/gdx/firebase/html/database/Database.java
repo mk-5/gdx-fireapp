@@ -172,7 +172,7 @@ public class Database implements DatabaseDistribution
             @Override
             public void run()
             {
-                // TODO - some special callback for other actions? On the other hand, no others action can be done before this if it is waiting for firebase.js
+                // TODO - some special callback for other actions? On the other hand, no others action can be done before this (if it probably is waiting for firebase.js)
                 refPath = DatabaseJS.push(scriptRefPath);
             }
         });

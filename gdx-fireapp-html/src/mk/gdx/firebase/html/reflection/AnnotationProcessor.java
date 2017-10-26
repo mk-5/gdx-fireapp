@@ -28,6 +28,14 @@ import mk.gdx.firebase.annotations.NestedGenericType;
 public class AnnotationProcessor
 {
 
+    /**
+     * Gets {@code NestedGenericType} annotation from object.
+     * <p>
+     * Looks at all object methods and returns first encountered annotation.
+     *
+     * @param object Object to deal with, not null
+     * @return Annotation, may be null
+     */
     public static NestedGenericType getNestedGenericTypeAnnotation(Object object)
     {
         NestedGenericType result = null;

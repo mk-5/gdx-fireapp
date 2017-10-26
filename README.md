@@ -18,17 +18,17 @@ Now you need to add GDX Fireapp gradle dependencies, as follow:
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core-1.0.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.0.1"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android-1.0.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.0.1"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe-1.0.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.0.1"
 ```
 
 Last step is:
@@ -37,9 +37,11 @@ Last step is:
 
 
 
-**Version 1.0.1** was built using LibGDX v1.9.6, multi-os-engine 1.3.6.  
+**Version 1.1.0** was built using LibGDX v1.9.6, multi-os-engine 1.3.12, gwt 2.8.0
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
+
+If you want to use GWT platform read this wiki page: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
 
 
 
@@ -239,11 +241,12 @@ GdxFIRCrash.log("i'm custom log.")
 
 
 
-- Wiki/documentation
-- GWT support
+- Better wiki/documentation
 - Database query flow (filtering, limiting etc..)
+- Authorization sign-out
 - Google, facebook authorization
 - Messaging
+- Upload task monitoring
 
 
 
@@ -264,7 +267,7 @@ GdxFIRCrash.log("i'm custom log.")
 
 - [x] Android
 - [x] iOS (Multi-os Engine)
-- [ ] GWT
+- [x] GWT
 
 
 

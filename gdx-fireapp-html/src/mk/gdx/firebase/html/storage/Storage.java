@@ -19,10 +19,7 @@ package mk.gdx.firebase.html.storage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.google.gwt.typedarrays.client.Uint8ArrayNative;
-import com.google.gwt.typedarrays.shared.ArrayBuffer;
-import com.google.gwt.typedarrays.shared.TypedArrays;
-import com.google.gwt.typedarrays.shared.Uint8Array;
+import com.badlogic.gdx.utils.Base64Coder;
 
 import java.io.File;
 
@@ -67,11 +64,7 @@ public class Storage implements StorageDistribution
             @Override
             public void run()
             {
-                short[] shortArr = new short[data.length];
-                for (int i = 0; i < data.length; i++)
-                    shortArr[i] = data[i];
-                Uint8ArrayNative uint8Array = Uint8ArrayNative.create(shortArr);
-                StorageJS.upload(scriptBucketUrl, path, uint8Array, callback);
+                StorageJS.upload(scriptBucketUrl, path, new String(Base64Coder.encode(data)), callback);
             }
         });
     }
