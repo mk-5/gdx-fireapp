@@ -19,6 +19,7 @@ package mk.gdx.firebase.html.auth;
 import mk.gdx.firebase.GdxFIRAuth;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.SignOutCallback;
 
 /**
  * Provides calls to firebase javascript api.
@@ -90,6 +91,21 @@ class AuthJS
         });
         $wnd.firebase.auth().signInWithCustomToken(token)['catch'](function(error) {
             callback.@mk.gdx.firebase.callbacks.AuthCallback::onFail(Ljava/lang/Exception;)(
+                @java.lang.Exception::new(Ljava/lang/String;)(error.message)
+            );
+        });
+    }-*/;
+
+    // TODO - check callbacks here
+    public static native void signOut(final SignOutCallback callback) /*-{
+        if( $wnd.firebase.auth().currentUser == null ){
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()
+            return;
+        }
+        $wnd.firebase.auth().signOut().then(function(){
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess();
+        })['catch'](function(error) {
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onFail(Ljava/lang/Exception;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });

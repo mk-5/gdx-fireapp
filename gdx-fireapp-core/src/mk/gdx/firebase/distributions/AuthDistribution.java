@@ -18,6 +18,7 @@ package mk.gdx.firebase.distributions;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.SignOutCallback;
 
 /**
  * Provides access to Firebase authorization methods.
@@ -43,7 +44,7 @@ public interface AuthDistribution
      *
      * @param email    New email address
      * @param password New password
-     * @param callback Authorization callback, cant be null.
+     * @param callback Authorization callback, not null
      * @see AuthCallback
      */
     void createUserWithEmailAndPassword(String email, char[] password, AuthCallback callback);
@@ -55,7 +56,7 @@ public interface AuthDistribution
      *
      * @param email    Firebase user email
      * @param password Firebase user password
-     * @param callback Authorization callback, cant be null.
+     * @param callback Authorization callback, not null
      * @see AuthCallback
      */
     void signInWithEmailAndPassword(String email, char[] password, AuthCallback callback);
@@ -78,7 +79,15 @@ public interface AuthDistribution
      * working with {@link mk.gdx.firebase.GdxFIRDatabase} or with {@link mk.gdx.firebase.GdxFIRStorage}<p>
      * because default Firebase requires authorization for database and storage actions.
      *
-     * @param callback Authorization callback, cant be null.
+     * @param callback Authorization callback, not null
      */
     void signInAnonymously(AuthCallback callback);
+
+    /**
+     * Sign-out current user and gives response by {@code SignOutCallback}.
+     * <p>
+     *
+     * @param callback Sign-out callback, not null
+     */
+    void signOut(SignOutCallback callback);
 }

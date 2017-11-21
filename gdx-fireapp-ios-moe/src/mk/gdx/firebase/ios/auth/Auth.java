@@ -19,11 +19,14 @@ package mk.gdx.firebase.ios.auth;
 import com.google.firebaseauth.FIRAuth;
 import com.google.firebaseauth.FIRUser;
 
+import org.moe.natj.general.ptr.Ptr;
+import org.moe.natj.general.ptr.impl.PtrFactory;
+
 import apple.foundation.NSError;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
+import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
 /**
@@ -32,7 +35,8 @@ import mk.gdx.firebase.distributions.AuthDistribution;
  *
  * @see AuthDistribution
  */
-public class Auth implements AuthDistribution {
+public class Auth implements AuthDistribution
+{
 
     /**
      * {@inheritDoc}
@@ -59,7 +63,8 @@ public class Auth implements AuthDistribution {
     @Override
     public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback)
     {
-        FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion() {
+        FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion()
+        {
             @Override
             public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
             {
@@ -75,7 +80,8 @@ public class Auth implements AuthDistribution {
     @Override
     public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback)
     {
-        FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion() {
+        FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion()
+        {
             @Override
             public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
             {
@@ -91,7 +97,8 @@ public class Auth implements AuthDistribution {
     @Override
     public void signInWithToken(String token, final AuthCallback callback)
     {
-        FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion() {
+        FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion()
+        {
             @Override
             public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
             {
@@ -107,7 +114,8 @@ public class Auth implements AuthDistribution {
     @Override
     public void signInAnonymously(final AuthCallback callback)
     {
-        FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion() {
+        FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion()
+        {
             @Override
             public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
             {
@@ -115,6 +123,22 @@ public class Auth implements AuthDistribution {
                 callback.onSuccess(getCurrentUser());
             }
         });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void signOut(SignOutCallback callback)
+    {
+        try {
+            Ptr<NSError> ptr = PtrFactory.newObjectReference(NSError.class);
+            FIRAuth.auth().signOut(ptr);
+            if (ptr.get() != null)
+                throw new Exception(ptr.get().localizedDescription());
+        } catch (Exception e) {
+            callback.onFail(e);
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
+import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
 /**
@@ -36,7 +36,8 @@ import mk.gdx.firebase.distributions.AuthDistribution;
  *
  * @see AuthDistribution
  */
-public class Auth implements AuthDistribution {
+public class Auth implements AuthDistribution
+{
 
     /**
      * {@inheritDoc}
@@ -96,12 +97,24 @@ public class Auth implements AuthDistribution {
         FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener(new AuthListener(callback));
     }
 
+    @Override
+    public void signOut(SignOutCallback callback)
+    {
+        try {
+            FirebaseAuth.getInstance().signOut();
+            callback.onSuccess();
+        } catch (Exception e) {
+            callback.onFail(e);
+        }
+    }
+
     /**
      * Listener for AuthenticationResult.
      * This class is a wrap for using of {@link AuthCallback}.
      * Result from android sdk authentication methods is wrapped by {@link Task<AuthResult>} so we need to deal with it.
      */
-    private class AuthListener implements OnCompleteListener<AuthResult> {
+    private class AuthListener implements OnCompleteListener<AuthResult>
+    {
 
         private AuthCallback callback;
 

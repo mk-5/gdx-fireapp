@@ -1,12 +1,11 @@
-# 1.0.0
+**[1.0.0]**
+\- Initial release
+\- Android: basic support for Database, Analytics, Storage, App, Authorization, Crash
+\- Ios-moe: basic support for Database, Analytics, Storage, App, Authorization, Crash
 
-- Initial release
-- Android: basic support for Database, Analytics, Storage, App, Authorization, Crash
-- Ios-moe: basic support for Database, Analytics, Storage, App, Authorization, Crash
+**[1.1.0]**
+\- GWT support for Authorization, Database, Storage
+\- Email field in GdxFirebaseUser
 
-
-
-# 1.1.0
-
-- GWT support for Authorization, Database, Storage
-- Email field in GdxFirebaseUser
+**[1.1.1]**
+\- Sign-out method in authorization api (android, ios, gwt)

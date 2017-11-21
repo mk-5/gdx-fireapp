@@ -19,6 +19,7 @@ package mk.gdx.firebase.html.auth;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
@@ -107,6 +108,22 @@ public class Auth implements AuthDistribution
             public void run()
             {
                 AuthJS.singInAnonymously(callback);
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void signOut(final SignOutCallback callback)
+    {
+        ScriptRunner.firebaseScript(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AuthJS.signOut(callback);
             }
         });
     }
