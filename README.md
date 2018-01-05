@@ -240,8 +240,8 @@ GdxFIRCrash.log("i'm custom log.")
 
 
 - Better wiki/documentation
+- Simplify ios installation
 - Database query flow (filtering, limiting etc..)
-- Authorization sign-out
 - Google, facebook authorization
 - Messaging
 - Upload task monitoring
