@@ -35,7 +35,6 @@ import mk.gdx.firebase.distributions.AnalyticsDistribution;
 public class Analytics implements AnalyticsDistribution
 {
 
-    private static final String LOG_TAG = "Analytics";
     private static FirebaseAnalytics firebaseAnalytics;
 
     /**

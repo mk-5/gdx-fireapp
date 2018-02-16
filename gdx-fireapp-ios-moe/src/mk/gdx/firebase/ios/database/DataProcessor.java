@@ -71,12 +71,16 @@ public class DataProcessor
             } else if (resultType == NSNumber.class && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) { // TODO - check isInstance
                 result = processPrimitiveData(iosObject, wantedType);
             } else if (NSArray.class.isAssignableFrom(resultType) && List.class.isAssignableFrom(wantedType)) {
+                // T is assignable from list
                 result = (T) NSArrayHelper.toList((NSArray) iosObject);
                 Class listGenericType = genericPlaceholder.getGenericGenericType();
-//                (ParameterizedType) wantedType.getGe
+                // If wanted List type has own generic and that type is not assignable from Map.
                 if (listGenericType != null && !Map.class.isAssignableFrom(listGenericType))
+                    // Go through all list elements get try to convert elements to wanted List generic type.
                     for (int i = 0; i < ((List) result).size(); i++) {
                         Object o = ((List) result).get(i);
+                        // If List element is assignable from Map do deserialization and cast object to T.
+                        // Every class-object was retrieved from DB as NSDictionary(Map), so we need to do this processing manually.
                         if (Map.class.isAssignableFrom(o.getClass())) {
                             T deserialized = (T) MapDeserializer.deserialize((Map) o, listGenericType);
                             // If deserialized was succeed - change HashMap to deserialized object
