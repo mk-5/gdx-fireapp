@@ -27,6 +27,7 @@ import apple.foundation.NSDictionary;
 import apple.foundation.NSNull;
 import apple.foundation.NSNumber;
 import apple.foundation.NSString;
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.ios.exceptions.ConvertingException;
 import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
 import mk.gdx.firebase.ios.helpers.MapDeserializer;
@@ -83,7 +84,7 @@ public class DataProcessor
                         // Every class-object was retrieved from DB as NSDictionary(Map), so we need to do this processing manually.
                         if (Map.class.isAssignableFrom(o.getClass())) {
                             T deserialized = (T) MapDeserializer.deserialize((Map) o, listGenericType);
-                            // If deserialized was succeed - change HashMap to deserialized object
+                            // If deserialized was succeed - change HashMap inside list with deserialized object
                             if (deserialized != null) {
                                 ((List) result).set(i, deserialized);
                             }
@@ -106,6 +107,7 @@ public class DataProcessor
                         + ", result data type: " + resultType);
             }
         } catch (Exception e) {
+            GdxFIRLogger.error("Can't convert " + iosObject.getClass().getSimpleName() + " to " + wantedType.getSimpleName(), e);
             throw e;
         }
         return result;
@@ -192,10 +194,11 @@ public class DataProcessor
         } else if (javaObject instanceof java.util.List) {
             return NSArrayHelper.toArray((java.util.List) javaObject);
         } else {
-            // Every other value try to serialize to Map.
+            // Every other value try to convert to Map.
             try {
                 return NSDictionaryHelper.toNSDictionary(javaObject);
             } catch (Exception e) {
+                GdxFIRLogger.error("Can't convert " + javaObject.getClass().getSimpleName() + " to NSObject", e);
                 return NSNull.alloc().init();
             }
         }

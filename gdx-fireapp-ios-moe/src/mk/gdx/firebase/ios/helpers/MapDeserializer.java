@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Json;
 
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRLogger;
+
 /**
  * Class which deserialize {@code Map<String, Object>} to POJO.
  */
@@ -32,6 +34,7 @@ public class MapDeserializer
             json.setIgnoreUnknownFields(true);
             return json.fromJson(wantedType, jsonString);
         } catch (Exception e) {
+            GdxFIRLogger.log("Can't deserialize Map to " + wantedType.getSimpleName(), e);
             return null;
         }
     }

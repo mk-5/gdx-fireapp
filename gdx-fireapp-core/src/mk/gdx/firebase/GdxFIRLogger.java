@@ -19,7 +19,7 @@ package mk.gdx.firebase;
 import com.badlogic.gdx.Gdx;
 
 /**
- * Provides GdxFireapp debug logs. Default disabled.
+ * Provides GdxFireapp logs. Default disabled.
  * <p>
  * Client can disable/enable logging by calling
  */
@@ -30,11 +30,48 @@ public class GdxFIRLogger
     private static boolean enabled;
 
     /**
+     * Logs message to the console or logcat.
+     *
      * @param msg Log message
      */
     public static void log(String msg)
     {
         if (!enabled) return;
         Gdx.app.log(LOG_TAG, msg);
+    }
+
+    /**
+     * Logs message to the console or logcat.
+     *
+     * @param msg Log message
+     * @param t   Described exception
+     */
+    public static void log(String msg, Throwable t)
+    {
+        if (!enabled) return;
+        Gdx.app.log(LOG_TAG, msg, t);
+    }
+
+    /**
+     * Logs error to the console or logcat.
+     *
+     * @param msg Log message
+     */
+    public static void error(String msg)
+    {
+        if (!enabled) return;
+        Gdx.app.error(LOG_TAG, msg);
+    }
+
+    /**
+     * Logs error to the console or logcat.
+     *
+     * @param msg Log message
+     * @param t   Described exception
+     */
+    public static void error(String msg, Throwable t)
+    {
+        if (!enabled) return;
+        Gdx.app.error(LOG_TAG, msg, t);
     }
 }
