@@ -108,7 +108,7 @@ public class Storage implements StorageDistribution
             }
         }
         if (targetFile == null)
-            throw new RuntimeException(); // TODO
+            throw new IllegalArgumentException("Target file is null and is unable to create temporary file.");
         final File finalTargetFile = targetFile;
         pathRef.getFile(targetFile)
                 .addOnFailureListener(new OnFailureListener()

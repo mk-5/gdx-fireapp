@@ -27,6 +27,7 @@ import apple.foundation.NSDictionary;
 import apple.foundation.NSNull;
 import apple.foundation.NSNumber;
 import apple.foundation.NSString;
+import mk.gdx.firebase.ios.exceptions.ConvertingException;
 import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
 import mk.gdx.firebase.ios.helpers.MapDeserializer;
 import mk.gdx.firebase.ios.helpers.NSArrayHelper;
@@ -97,8 +98,8 @@ public class DataProcessor
                 }
                 result = (T) map;
             } else {
-                throw new RuntimeException("Result data type mismatch. Wanted type: " + wantedType + ":" + List.class.isAssignableFrom(wantedType)
-                        + ", result data type: " + resultType + ":" + NSArray.class.isAssignableFrom(resultType));
+                throw new ConvertingException("Result data type mismatch. Wanted type: " + wantedType
+                        + ", result data type: " + resultType);
             }
         } catch (Exception e) {
             throw e;
@@ -137,7 +138,7 @@ public class DataProcessor
         } else if (data instanceof NSString) {
             result = (T) ObjCRuntime.createJavaString(((NSString) data).getPeerPointer());
         } else {
-            throw new RuntimeException("" + data.getClass() + " is not primitive data");
+            throw new ConvertingException("" + data.getClass() + " is not primitive data");
         }
         return result;
     }

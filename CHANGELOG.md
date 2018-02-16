@@ -11,3 +11,6 @@
 \- Sign-out method in authorization api (android, ios, gwt)
 \- LibGDX updated to version 1.9.8
 \- Multi-OS engine updated to version 1.4.1
+
+**[1.1.2]**
+
