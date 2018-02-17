@@ -24,12 +24,13 @@ import java.util.Map;
 
 import mk.gdx.firebase.annotations.NestedGenericType;
 import mk.gdx.firebase.html.exceptions.NestedGenericTypeAnnotationMissingException;
-import mk.gdx.firebase.html.reflection.AnnotationProcessor;
+import mk.gdx.firebase.reflection.AnnotationFinder;
 
 /**
  * Process json string to generic type.
  */
-public class JsonProcessor {
+public class JsonProcessor
+{
 
     /**
      * Converts json string into java object.
@@ -48,7 +49,7 @@ public class JsonProcessor {
         R result = null;
         if (ClassReflection.isAssignableFrom(List.class, wantedType)
                 || ClassReflection.isAssignableFrom(Map.class, wantedType)) {
-            NestedGenericType nestedGenericType = AnnotationProcessor.getNestedGenericTypeAnnotation(genericTypeKeeper);
+            NestedGenericType nestedGenericType = AnnotationFinder.getMethodAnnotation(NestedGenericType.class, genericTypeKeeper);
             if (nestedGenericType == null) throw new NestedGenericTypeAnnotationMissingException();
             json.setDefaultSerializer(new JsonListMapDeserializer(wantedType, nestedGenericType.value()));
             result = (R) json.fromJson(wantedType, jsonString);

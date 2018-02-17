@@ -74,4 +74,14 @@ public class GdxFIRLogger
         if (!enabled) return;
         Gdx.app.error(LOG_TAG, msg, t);
     }
+
+    public static boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public static void setEnabled(boolean enabled)
+    {
+        GdxFIRLogger.enabled = enabled;
+    }
 }

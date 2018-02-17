@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.html.reflection;
+package mk.gdx.firebase.reflection;
 
 import com.badlogic.gdx.utils.reflect.Annotation;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -25,7 +25,7 @@ import mk.gdx.firebase.annotations.NestedGenericType;
 /**
  * Gets information from annotations.
  */
-public class AnnotationProcessor
+public class AnnotationFinder
 {
 
     /**
@@ -46,6 +46,30 @@ public class AnnotationProcessor
             Annotation a = m.getDeclaredAnnotation(NestedGenericType.class);
             if (a != null) {
                 result = a.getAnnotation(NestedGenericType.class);
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Find object methods annotation.
+     * <p>
+     * Looks at all object methods and returns first encountered annotation.
+     *
+     * @param annotationType Annotation type, not null
+     * @param object         Object to deal with, not null
+     * @return Annotation, may be null
+     */
+    public static <T extends java.lang.annotation.Annotation> T getMethodAnnotation(Class<T> annotationType, Object object)
+    {
+        T result = null;
+        Method[] methods = ClassReflection.getMethods(object.getClass());
+        for (Method m : methods) {
+            Annotation[] annotations = m.getDeclaredAnnotations();
+            Annotation a = m.getDeclaredAnnotation(annotationType);
+            if (a != null) {
+                result = a.getAnnotation(annotationType);
                 break;
             }
         }

@@ -19,18 +19,21 @@ package mk.gdx.firebase.callbacks;
 /**
  * Handles response when dealing with Firebase database data.
  * <p>
- * Remember to use type which is able to create new instance.
- * For ex. for List interface you should use ArrayList or others List implementation.
+ * If you need to convert Firebase database Maps (each object is represented by Map in DB structure) you should
+ * use {@link mk.gdx.firebase.annotations.MapConversion} annotation right before {@link #onData(Object)} method.
  *
  * @param <T> Type of data you expecting to get
  */
-public interface DataCallback<T> {
+public interface DataCallback<T>
+{
 
     /**
      * Calls when everything was done without issues.
      * <p>
+     * If you need to convert Firebase database Maps (each object is represented by Map in DB structure) you should
+     * use {@link mk.gdx.firebase.annotations.MapConversion} annotation here.
      *
-     * @param data Fetched data from Firebase - data was processed and transformed to specified generic type {@code <T>}, not null.
+     * @param data Received data from Firebase - data was cast specified generic type {@code <T>}, may be null.
      */
     void onData(T data);
 

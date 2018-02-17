@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
@@ -44,7 +45,8 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution {
+public class Database implements DatabaseDistribution
+{
 
     private DatabaseReference databaseReference;
     private String databasePath;
@@ -104,7 +106,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void setValue(Object value, final CompleteCallback completeCallback)
     {
-        databaseReference().setValue(value, new DatabaseReference.CompletionListener() {
+        databaseReference().setValue(value, new DatabaseReference.CompletionListener()
+        {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
             {
@@ -125,15 +128,12 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
-        databaseReference().addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference().addListenerForSingleValueEvent(new ValueEventListener()
+        {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                if (dataType == List.class || dataType == Map.class) {
-                    callback.onData((E) dataSnapshot.getValue());
-                } else {
-                    callback.onData((E) dataSnapshot.getValue(dataType));
-                }
+                callback.onData((E) dataSnapshot.getValue());
             }
 
             @Override
@@ -193,7 +193,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void removeValue(final CompleteCallback completeCallback)
     {
-        databaseReference().removeValue(new DatabaseReference.CompletionListener() {
+        databaseReference().removeValue(new DatabaseReference.CompletionListener()
+        {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
             {
@@ -223,7 +224,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void updateChildren(Map<String, Object> data, final CompleteCallback completeCallback)
     {
-        databaseReference().updateChildren(data, new DatabaseReference.CompletionListener() {
+        databaseReference().updateChildren(data, new DatabaseReference.CompletionListener()
+        {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
             {
@@ -244,16 +246,12 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
     {
-        databaseReference().runTransaction(new Transaction.Handler() {
+        databaseReference().runTransaction(new Transaction.Handler()
+        {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData)
             {
-                R transactionData = null;
-                if (dataType == List.class || dataType == Map.class) {
-                    transactionData = (R) mutableData.getValue();
-                } else {
-                    transactionData = (R) mutableData.getValue(dataType);
-                }
+                R transactionData = (R) mutableData.getValue();
                 mutableData.setValue(transactionCallback.run(transactionData));
                 return Transaction.success(mutableData);
             }
@@ -330,7 +328,8 @@ public class Database implements DatabaseDistribution {
      * @param <T> Class of object that we want to listen for change
      * @param <R> Generic type of object that we want to listen for change. For ex. in case of List we cant put {@code List<String>.class} as dataType, so we can put it here.
      */
-    private class DataChangeValueListener<T, R extends T> implements ValueEventListener {
+    private class DataChangeValueListener<T, R extends T> implements ValueEventListener
+    {
 
         private Class<T> dataType;
         private DataChangeListener<R> dataChangeListener;
@@ -346,11 +345,7 @@ public class Database implements DatabaseDistribution {
         @SuppressWarnings("unchecked")
         public void onDataChange(DataSnapshot dataSnapshot)
         {
-            if (dataType == List.class || dataType == Map.class) {
-                dataChangeListener.onChange((R) dataSnapshot.getValue());
-            } else {
-                dataChangeListener.onChange((R) dataSnapshot.getValue(dataType));
-            }
+            dataChangeListener.onChange((R) dataSnapshot.getValue());
         }
 
         @Override
@@ -366,7 +361,8 @@ public class Database implements DatabaseDistribution {
      * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
      * and getting information from {@code .info/connected} path.
      */
-    private class ConnectionValueListener implements ValueEventListener {
+    private class ConnectionValueListener implements ValueEventListener
+    {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot)

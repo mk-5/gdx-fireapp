@@ -19,12 +19,13 @@ package mk.gdx.firebase.listeners;
 /**
  * Listens for data changing in Firebase database.
  * <p>
- * Remember to use type which is able to create new instance.
- * For ex. for List interface you should use ArrayList or others List implementation.
+ * If you need to convert Firebase database Maps (each object is represented by Map in DB structure) you should
+ * use {@link mk.gdx.firebase.annotations.MapConversion} annotation right before {@link #onChange(Object)} method.
  *
  * @param <T> Type of data you expecting to get
  */
-public interface DataChangeListener<T> {
+public interface DataChangeListener<T>
+{
     /**
      * Calls when everything was done without issues.
      *

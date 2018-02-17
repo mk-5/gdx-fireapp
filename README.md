@@ -18,24 +18,24 @@ Now you need to add GDX Fireapp gradle dependencies, as follow:
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.1.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.2.0-SNAPSHOT"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.1.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.2.0-SNAPSHOT"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.1.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.2.0-SNAPSHOT"
 ```
 
 Last step is: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
 
 
-**Version 1.1.1** was built using LibGDX 1.9.8, multi-os-engine 1.4.1, gwt 2.8.0
+**Version 1.2.0** was built using LibGDX 1.9.8, multi-os-engine 1.4.1, gwt 2.8.0
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
 
@@ -170,6 +170,8 @@ public class User{
 }
 ```
 
+Every POJO object are retreived from Firebase as java.lang.Map representation, we can simply indicate conversion beetwen Map from database to our type by **@MapConversion** annotation, let's take a look below for few examples.
+
 Put into database:
 
 ```java
@@ -182,7 +184,11 @@ Listen for data change:
 ```java
 GdxFIRDatabase.instance().inReference("users/"+userId)
 .onDataChange(User.class, new DataChangeListener<User>() {
+  
+    // @MapConversion here tells api something like this: 
+    // When Map was retrieved please make conversion to User.class type. 
     @Override
+    @MapConversion(User.class)
     public void onChange(User user)
     {
     }
@@ -200,7 +206,9 @@ Read a list:
 ```java
 GdxFIRDatabase.instance().inReference("users")
 .readValue(List.class, new DataCallback<List<User>>(){
+  
   @Override
+  @MapConversion(User.class)
   public void onData(List<User> list)
   {
     // Do something with list..

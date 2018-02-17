@@ -12,6 +12,9 @@
 \- LibGDX updated to version 1.9.8
 \- Multi-OS engine updated to version 1.4.1
 
-**[1.1.2]**
+**[1.2.0]**
 \- GdxFIRLogger for debugging
+\- *Braking change*: All database maps conversion should be provided by @MapConversion annotation
+\- Deserialization unification for all platforms
+\-  GdxFIRDatabase: Customization of database MapConversion by FirebaseMapConverter Interface
 

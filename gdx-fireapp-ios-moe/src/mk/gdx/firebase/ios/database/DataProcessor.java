@@ -30,7 +30,6 @@ import apple.foundation.NSString;
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.ios.exceptions.ConvertingException;
 import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
-import mk.gdx.firebase.ios.helpers.MapDeserializer;
 import mk.gdx.firebase.ios.helpers.NSArrayHelper;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.ios.helpers.NSNumberHelper;
@@ -69,38 +68,13 @@ public class DataProcessor
         try {
             if (resultType == NSString.class && wantedType == String.class) {
                 result = processPrimitiveData(iosObject, wantedType);
-            } else if (resultType == NSNumber.class && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) { // TODO - check isInstance
+            } else if (resultType == NSNumber.class && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) {
                 result = processPrimitiveData(iosObject, wantedType);
             } else if (NSArray.class.isAssignableFrom(resultType) && List.class.isAssignableFrom(wantedType)) {
-                // T is assignable from list
+                // T is assignable from list. Result is now ArrayList.
                 result = (T) NSArrayHelper.toList((NSArray) iosObject);
-                Class listGenericType = genericPlaceholder.getGenericGenericType();
-                // If wanted List type has own generic and that type is not assignable from Map.
-                if (listGenericType != null && !Map.class.isAssignableFrom(listGenericType))
-                    // Go through all list elements get try to convert elements to wanted List generic type.
-                    for (int i = 0; i < ((List) result).size(); i++) {
-                        Object o = ((List) result).get(i);
-                        // If List element is assignable from Map do deserialization and cast object to T.
-                        // Every class-object was retrieved from DB as NSDictionary(Map), so we need to do this processing manually.
-                        if (Map.class.isAssignableFrom(o.getClass())) {
-                            T deserialized = (T) MapDeserializer.deserialize((Map) o, listGenericType);
-                            // If deserialized was succeed - change HashMap inside list with deserialized object
-                            if (deserialized != null) {
-                                ((List) result).set(i, deserialized);
-                            }
-                        }
-                    }
-
             } else if (NSDictionary.class.isAssignableFrom(resultType)) {
-                // Few scenarios
-                // 1. Create Map<String, Object>
-                // 2. Create class
                 Map map = NSDictionaryHelper.toMap((NSDictionary<NSString, NSObject>) iosObject);
-                if (!Map.class.isAssignableFrom(wantedType)) {
-                    T deserialized = (T) MapDeserializer.deserialize(map, wantedType);
-                    if (deserialized != null)
-                        return deserialized;
-                }
                 result = (T) map;
             } else {
                 throw new ConvertingException("Result data type mismatch. Wanted type: " + wantedType

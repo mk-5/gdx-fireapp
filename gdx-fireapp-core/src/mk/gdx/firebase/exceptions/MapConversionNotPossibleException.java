@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.annotations;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package mk.gdx.firebase.exceptions;
 
 /**
- * Keeps information about Nested generic types ex. {@code doSomething(new Callback<List<User>>)}
- *
- * @deprecated You should use {@link MapConversion} instead.
+ * Throws when conversions indicated by {@link mk.gdx.firebase.annotations.MapConversion} is not possible.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-@Deprecated
-public @interface NestedGenericType
+public class MapConversionNotPossibleException extends RuntimeException
 {
-    Class<?> value();
+    public MapConversionNotPossibleException(String msg)
+    {
+        super(msg);
+    }
 }

@@ -21,6 +21,11 @@ import java.util.Map;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.deserialization.DataCallbackMitmConverter;
+import mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter;
+import mk.gdx.firebase.deserialization.FirebaseMapConverter;
+import mk.gdx.firebase.deserialization.MapConverter;
+import mk.gdx.firebase.deserialization.TransactionMitmConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.PlatformDistributorException;
 import mk.gdx.firebase.listeners.ConnectedListener;
@@ -36,6 +41,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
 {
 
     private static GdxFIRDatabase instance;
+    private FirebaseMapConverter mapConverter;
 
     /**
      * GdxFIRDatabase protected constructor.
@@ -46,6 +52,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      */
     protected GdxFIRDatabase() throws PlatformDistributorException
     {
+        mapConverter = new MapConverter();
     }
 
     /**
@@ -109,13 +116,23 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     @Override
     public <T, E extends T> void readValue(Class<T> dataType, DataCallback<E> callback)
     {
-        platformObject.readValue(dataType, callback);
+        DataCallbackMitmConverter<T, E> mitmConverter = new DataCallbackMitmConverter<T, E>(dataType, callback, mapConverter);
+        if (mitmConverter.isPojo(dataType)) {
+            platformObject.readValue(Map.class, mitmConverter.getPojoDataCallback());
+        } else {
+            platformObject.readValue(dataType, mitmConverter.getGenericDataCallback());
+        }
     }
 
     @Override
     public <T, E extends T> void onDataChange(Class<T> dataType, DataChangeListener<E> listener)
     {
-        platformObject.onDataChange(dataType, listener);
+        DataChangeListenerMitmConverter<T, E> mitmConverter = new DataChangeListenerMitmConverter<T, E>(dataType, listener, mapConverter);
+        if (mitmConverter.isPojo(dataType)) {
+            platformObject.onDataChange(Map.class, mitmConverter.getPojoListener());
+        } else {
+            platformObject.onDataChange(dataType, mitmConverter.getGenericListener());
+        }
     }
 
     /**
@@ -169,7 +186,12 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     @Override
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
-        platformObject.transaction(dataType, transactionCallback, completeCallback);
+        TransactionMitmConverter<T, R> mitmConverter = new TransactionMitmConverter<T, R>(dataType, transactionCallback, mapConverter);
+        if (mitmConverter.isPojo(dataType)) {
+            platformObject.transaction(Map.class, mitmConverter.getPojoCallback(), completeCallback);
+        } else {
+            platformObject.transaction(dataType, mitmConverter.getGenericCallback(), completeCallback);
+        }
     }
 
     /**
@@ -188,6 +210,16 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     public void keepSynced(boolean synced)
     {
         platformObject.keepSynced(synced);
+    }
+
+    /**
+     * Sets map converter which is use to do conversion between database maps into instance objects.
+     *
+     * @param mapConverter Map convert instance, not null
+     */
+    public void setMapConverter(FirebaseMapConverter mapConverter)
+    {
+        this.mapConverter = mapConverter;
     }
 
     /**

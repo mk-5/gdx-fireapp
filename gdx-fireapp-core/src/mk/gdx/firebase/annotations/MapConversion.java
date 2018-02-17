@@ -17,20 +17,39 @@
 package mk.gdx.firebase.annotations;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import mk.gdx.firebase.deserialization.FirebaseMapConverter;
+
 /**
- * Keeps information about Nested generic types ex. {@code doSomething(new Callback<List<User>>)}
- *
- * @deprecated You should use {@link MapConversion} instead.
+ * Firebase supports only the Map structure for Pojo so here you can indicate conversion from Map to POJO.
+ * <p>
+ * You can customize map conversions by {@link mk.gdx.firebase.GdxFIRDatabase#setMapConverter(FirebaseMapConverter)}
+ * Some examples:
+ * <p>
+ * List example:
+ * {@code
+ * // Convert all Map's in list to User instance.
+ * \@MapConversion(User.class)
+ * doSomething(new Callback<List<User>>){}...
+ * }
+ * <p>
+ * POJO example:
+ * {@code
+ * \@MapConversion(User.class)
+ * doSomething(new Callback<User>){}...
+ * }
+ * <p>
+ * TODO - should be PojoConversion?
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@Deprecated
-public @interface NestedGenericType
+public @interface MapConversion
 {
+    /**
+     * @return The type to which Map are converted.
+     */
     Class<?> value();
 }
