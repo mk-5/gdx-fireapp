@@ -45,10 +45,10 @@ public abstract class MapMitmConverter
      * Checks type of {@code data} and do conversion(s) from Map to type keeped by {@code mapConversionType}.
      * <p>
      * If {@code data} is a Map, convert directly.
-     * If {@code data) is a List, go through all elements and do conversion on each element.
+     * If {@code data} is a List, go through all elements and do conversion on each element.
      *
-     * @param mapConversionAnnotation Annotation holds information about wanted type, not null
-     * @param data                    Results to go through and convert founded maps, may be null
+     * @param mapConversionType Type to which map will be transformed
+     * @param data              Results to go through and convert founded maps, may be null
      * @return Converted data or same data if no Map founded, may be null.
      * @throws MapConversionNotPossibleException If can't do conversion
      */

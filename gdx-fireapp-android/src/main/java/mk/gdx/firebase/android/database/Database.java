@@ -22,18 +22,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.listeners.ConnectedListener;

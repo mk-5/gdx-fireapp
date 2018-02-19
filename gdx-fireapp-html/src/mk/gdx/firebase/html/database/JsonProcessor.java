@@ -39,7 +39,7 @@ public class JsonProcessor
      * @param genericTypeKeeper Object with wanted type inside generic argument
      * @param jsonString        Json string data
      * @param <R>               Return type
-     * @return
+     * @return Instance of wanted type parsed from given json string, not null
      */
     public static <R> R process(Class<?> wantedType, Object genericTypeKeeper, String jsonString)
     {

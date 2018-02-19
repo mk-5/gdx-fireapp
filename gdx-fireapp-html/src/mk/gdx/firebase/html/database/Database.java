@@ -46,10 +46,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  * {@code
  * public class MyCallback implements Callback<List<User>>{
  *
- * @NestedGenericType(User.class)
- * @Override public void process(List<User> data)
+ * \@NestedGenericType(User.class)
+ * \@Override public void process(List<User> data)
  * {
  * // do some stuff
+ * }
  * }
  * }
  * @see DatabaseDistribution
