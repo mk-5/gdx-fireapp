@@ -31,7 +31,6 @@ import apple.foundation.NSNumber;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
@@ -45,7 +44,8 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution {
+public class Database implements DatabaseDistribution
+{
 
     FIRDatabaseReference dbReference;
     private String databasePath;
@@ -56,7 +56,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void onConnect(final ConnectedListener connectedListener)
     {
-        FIRDatabase.database().referenceWithPath(".info/connected").observeEventTypeWithBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlock() {
+        FIRDatabase.database().referenceWithPath(".info/connected").observeEventTypeWithBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlock()
+        {
             @Override
             public void call_observeEventTypeWithBlock(FIRDataSnapshot arg0)
             {
@@ -96,7 +97,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void setValue(Object value, CompleteCallback completeCallback)
     {
-        dbReference().setValueWithCompletionBlock(DataProcessor.javaDataToIos(value), new FIRDatabaseReference.Block_setValueWithCompletionBlock() {
+        dbReference().setValueWithCompletionBlock(DataProcessor.javaDataToIos(value), new FIRDatabaseReference.Block_setValueWithCompletionBlock()
+        {
             @Override
             public void call_setValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
             {
@@ -118,7 +120,8 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback)
     {
         final GenericPlaceholder genericPlaceholder = new GenericPlaceholder(callback.getClass());
-        dbReference().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1() {
+        dbReference().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1()
+        {
             @Override
             public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
             {
@@ -135,7 +138,8 @@ public class Database implements DatabaseDistribution {
                     callback.onData((R) data);
                 }
             }
-        }, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2() {
+        }, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2()
+        {
             @Override
             public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0)
             {
@@ -153,7 +157,8 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
         final GenericPlaceholder genericPlaceholder = new GenericPlaceholder(listener.getClass());
-        dbReference().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_1() {
+        dbReference().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_1()
+        {
 
             @Override
             public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0)
@@ -171,7 +176,8 @@ public class Database implements DatabaseDistribution {
                     listener.onChange((R) data);
                 }
             }
-        }, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_2() {
+        }, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_2()
+        {
 
             @Override
             public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0)
@@ -208,7 +214,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void removeValue(CompleteCallback completeCallback)
     {
-        dbReference().removeValueWithCompletionBlock(new FIRDatabaseReference.Block_removeValueWithCompletionBlock() {
+        dbReference().removeValueWithCompletionBlock(new FIRDatabaseReference.Block_removeValueWithCompletionBlock()
+        {
             @Override
             public void call_removeValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
             {
@@ -238,7 +245,8 @@ public class Database implements DatabaseDistribution {
     @Override
     public void updateChildren(Map<String, Object> data, CompleteCallback completeCallback)
     {
-        dbReference().updateChildValuesWithCompletionBlock(NSDictionaryHelper.toNSDictionary(data), new FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock() {
+        dbReference().updateChildValuesWithCompletionBlock(NSDictionaryHelper.toNSDictionary(data), new FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock()
+        {
             @Override
             public void call_updateChildValuesWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
             {
@@ -259,7 +267,8 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
         final GenericPlaceholder genericPlaceholder = new GenericPlaceholder(transactionCallback.getClass());
-        dbReference().runTransactionBlockAndCompletionBlock(new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0() {
+        dbReference().runTransactionBlockAndCompletionBlock(new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0()
+        {
             @Override
             public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
             {
@@ -268,7 +277,8 @@ public class Database implements DatabaseDistribution {
                 arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run(transactionObject)));
                 return FIRTransactionResult.successWithValue(arg0);
             }
-        }, new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1() {
+        }, new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1()
+        {
             @Override
             public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2)
             {

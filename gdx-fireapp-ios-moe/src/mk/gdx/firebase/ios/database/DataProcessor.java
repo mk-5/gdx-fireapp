@@ -71,7 +71,7 @@ public class DataProcessor
             } else if (resultType == NSNumber.class && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) {
                 result = processPrimitiveData(iosObject, wantedType);
             } else if (NSArray.class.isAssignableFrom(resultType) && List.class.isAssignableFrom(wantedType)) {
-                // T is assignable from list. Result is now ArrayList.
+                // T is assignable from list. Result is ArrayList now.
                 result = (T) NSArrayHelper.toList((NSArray) iosObject);
             } else if (NSDictionary.class.isAssignableFrom(resultType)) {
                 Map map = NSDictionaryHelper.toMap((NSDictionary<NSString, NSObject>) iosObject);
