@@ -89,7 +89,8 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     @Override
     public DatabaseDistribution inReference(String databasePath)
     {
-        return platformObject.inReference(databasePath);
+        platformObject.inReference(databasePath);
+        return this;
     }
 
     /**
