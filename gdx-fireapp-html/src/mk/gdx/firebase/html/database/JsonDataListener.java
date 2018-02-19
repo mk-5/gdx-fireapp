@@ -29,13 +29,13 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class JsonDataListener<R> implements DataChangeListener<String>
 {
 
-    private Class<?> wantedType;
+    private Class<R> wantedType;
     private DataChangeListener dataListener;
 
     /**
      * @param dataListener Listener, not null
      */
-    public JsonDataListener(Class<?> wantedType, DataChangeListener dataListener)
+    public JsonDataListener(Class<R> wantedType, DataChangeListener dataListener)
     {
         this.wantedType = wantedType;
         this.dataListener = dataListener;
@@ -45,7 +45,7 @@ public class JsonDataListener<R> implements DataChangeListener<String>
     @SuppressWarnings("unchecked")
     public void onChange(String data)
     {
-        R result = JsonProcessor.<R>process(wantedType, dataListener, data);
+        R result = JsonProcessor.process(wantedType, data);
         dataListener.onChange(result);
     }
 

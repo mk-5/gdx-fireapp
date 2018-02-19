@@ -30,6 +30,6 @@ public class JavaCoreClassDetector
      */
     public static boolean isJavaCoreClass(Class<?> type)
     {
-        return type.getPackage().getName().startsWith("java");
+        return type.getName().startsWith("java");
     }
 }

@@ -31,28 +31,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
  * GWT Firebase API implementation.
- * <p>
- * It is throws when required annotation is missing.
- * <p>
- * Because of missing {@link java.lang.reflect.ParameterizedType} on GWT platform there is a need of
- * dealing with generic types in some other way. GdxFireapp using annotation for this.
- * <p>
- * There are two rules when you dealing with nested generic types (for ex. Callback<List<User>>) on gwt:
- * 1. Every callback must be separated class and added to reflection inside yours .gwt.xml configuration file.
- * 2. The callback method must have {@link mk.gdx.firebase.annotations.NestedGenericType} annotation with description of nested class.
- * <p>
- * Here is some example of valid declaration:
- * <p>
- * {@code
- * public class MyCallback implements Callback<List<User>>{
  *
- * \@NestedGenericType(User.class)
- * \@Override public void process(List<User> data)
- * {
- * // do some stuff
- * }
- * }
- * }
  * @see DatabaseDistribution
  */
 public class Database implements DatabaseDistribution
@@ -131,7 +110,7 @@ public class Database implements DatabaseDistribution
             @Override
             public void run()
             {
-                DatabaseJS.setNextDataCallback(new JsonDataCallback<R>(dataType, callback));
+                DatabaseJS.setNextDataCallback(new JsonDataCallback<T>(dataType, callback));
                 DatabaseJS.once(scriptRefPath);
             }
         });
@@ -152,7 +131,7 @@ public class Database implements DatabaseDistribution
             {
                 // TODO DataChangeListener::onCancelled
                 if (listener != null && !DatabaseJS.hasListener(scriptRefPath)) {
-                    DatabaseJS.addDataListener(scriptRefPath, new JsonDataListener<R>(dataType, listener));
+                    DatabaseJS.addDataListener(scriptRefPath, new JsonDataListener<T>(dataType, listener));
                     DatabaseJS.onValue(scriptRefPath);
                 } else if (listener == null) {
                     DatabaseJS.offValue(scriptRefPath);
@@ -260,7 +239,7 @@ public class Database implements DatabaseDistribution
             @Override
             public void run()
             {
-                DatabaseJS.transaction(scriptRefPath, new JsonDataModifier<R>(dataType, transactionCallback), completeCallback);
+                DatabaseJS.transaction(scriptRefPath, new JsonDataModifier<T>(dataType, transactionCallback), completeCallback);
             }
         });
         terminateOperation();

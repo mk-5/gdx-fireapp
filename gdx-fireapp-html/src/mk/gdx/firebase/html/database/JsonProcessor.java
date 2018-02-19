@@ -19,12 +19,9 @@ package mk.gdx.firebase.html.database;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import mk.gdx.firebase.annotations.NestedGenericType;
-import mk.gdx.firebase.html.exceptions.NestedGenericTypeAnnotationMissingException;
-import mk.gdx.firebase.reflection.AnnotationFinder;
 
 /**
  * Process json string to generic type.
@@ -35,13 +32,12 @@ public class JsonProcessor
     /**
      * Converts json string into java object.
      *
-     * @param wantedType        Wanted type
-     * @param genericTypeKeeper Object with wanted type inside generic argument
-     * @param jsonString        Json string data
-     * @param <R>               Return type
+     * @param wantedType Wanted type
+     * @param jsonString Json string data
+     * @param <R>        Return type
      * @return Instance of wanted type parsed from given json string, not null
      */
-    public static <R> R process(Class<?> wantedType, Object genericTypeKeeper, String jsonString)
+    public static <R> R process(Class<?> wantedType, String jsonString)
     {
         Json json = new Json();
         json.setIgnoreUnknownFields(true);
@@ -49,13 +45,15 @@ public class JsonProcessor
         R result = null;
         if (ClassReflection.isAssignableFrom(List.class, wantedType)
                 || ClassReflection.isAssignableFrom(Map.class, wantedType)) {
-            NestedGenericType nestedGenericType = AnnotationFinder.getMethodAnnotation(NestedGenericType.class, genericTypeKeeper);
-            if (nestedGenericType == null) throw new NestedGenericTypeAnnotationMissingException();
-            json.setDefaultSerializer(new JsonListMapDeserializer(wantedType, nestedGenericType.value()));
+            json.setDefaultSerializer(new JsonListMapDeserializer(wantedType, HashMap.class));
+            // FIXME - serialization exception here.
             result = (R) json.fromJson(wantedType, jsonString);
         } else {
             result = (R) json.fromJson(wantedType, jsonString);
         }
+        // Null type here, because of later Mitm conversion in core module.
+        // List/Map is default types for Json.
+//        result = json.fromJson(null, jsonString);
         return result;
     }
 }

@@ -24,9 +24,9 @@ import mk.gdx.firebase.callbacks.DataCallback;
  * On GWT platform it is not possible to use generic types inside javascript so it is a need to wrap our {@link DataCallback} and parse
  * json string from javascript to Java object.
  *
- * @param <R> Result type after json string converting process
+ * @param <T> Result type after json string converting process
  */
-class JsonDataCallback<R> implements DataCallback<String>
+class JsonDataCallback<T> implements DataCallback<String>
 {
     private Class<?> wantedType;
     private DataCallback dataCallback;
@@ -49,7 +49,7 @@ class JsonDataCallback<R> implements DataCallback<String>
     @SuppressWarnings("unchecked")
     public void onData(String data)
     {
-        R result = JsonProcessor.<R>process(wantedType, dataCallback, data);
+        T result = JsonProcessor.process(wantedType, data);
         dataCallback.onData(result);
     }
 

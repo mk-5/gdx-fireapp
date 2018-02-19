@@ -24,12 +24,12 @@ import mk.gdx.firebase.callbacks.TransactionCallback;
 /**
  * Takes JSON data from javascript, process it as java object and return back as json.
  */
-public class JsonDataModifier<R>
+public class JsonDataModifier<T>
 {
-    private Class<?> wantedType;
-    private TransactionCallback<R> transactionCallback;
+    private Class<T> wantedType;
+    private TransactionCallback transactionCallback;
 
-    public JsonDataModifier(Class<?> wantedType, TransactionCallback<R> transactionCallback)
+    public JsonDataModifier(Class<T> wantedType, TransactionCallback transactionCallback)
     {
         this.transactionCallback = transactionCallback;
     }
@@ -40,10 +40,11 @@ public class JsonDataModifier<R>
      * @param oldJsonData Old data as json string.
      * @return New data as json string
      */
+    @SuppressWarnings("unchecked")
     public String modify(String oldJsonData)
     {
-        R oldData = JsonProcessor.process(wantedType, transactionCallback, oldJsonData);
-        R newData = transactionCallback.run(oldData);
+        T oldData = JsonProcessor.process(wantedType, oldJsonData);
+        T newData = (T) transactionCallback.run(oldData);
         Json json = new Json();
         json.setTypeName(null);
         json.setQuoteLongValues(true);

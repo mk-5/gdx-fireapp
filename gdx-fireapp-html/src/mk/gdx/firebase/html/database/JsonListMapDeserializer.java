@@ -32,17 +32,17 @@ import mk.gdx.firebase.html.exceptions.WrongTypeForDeserializerException;
 class JsonListMapDeserializer extends Json.ReadOnlySerializer
 {
     protected Class<?> type;
-    protected Class<?> contentType;
+    protected Class<?> objectType;
 
     /**
      * @param type List or map value type, not null
      */
-    public JsonListMapDeserializer(Class<?> type, Class<?> contentType)
+    public JsonListMapDeserializer(Class<?> type, Class<?> objectType)
     {
         if (!(ClassReflection.isAssignableFrom(List.class, type) || ClassReflection.isAssignableFrom(Map.class, type)))
             throw new WrongTypeForDeserializerException();
         this.type = type;
-        this.contentType = contentType;
+        this.objectType = objectType;
     }
 
     /**
@@ -67,7 +67,7 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer
 
     private Object processObject(Json json, JsonValue jsonData)
     {
-        return json.fromJson(this.contentType, jsonData.toJson(JsonWriter.OutputType.json));
+        return json.fromJson(this.objectType, jsonData.toJson(JsonWriter.OutputType.json));
     }
 
     protected Object processValue(Json json, JsonValue jsonData)
