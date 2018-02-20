@@ -19,6 +19,7 @@ package mk.gdx.firebase.html.database;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,9 @@ public class JsonProcessor
 
     /**
      * Converts json string into java object.
+     * <p>
+     * If wantedType is exactly List.class, ArrayList instance will be created instead
+     * If wantedType is exactly Map.class, HashMap instance will be created instead
      *
      * @param wantedType Wanted type
      * @param jsonString Json string data
@@ -45,15 +49,16 @@ public class JsonProcessor
         R result = null;
         if (ClassReflection.isAssignableFrom(List.class, wantedType)
                 || ClassReflection.isAssignableFrom(Map.class, wantedType)) {
+            if (wantedType == List.class) {
+                wantedType = ArrayList.class;
+            } else if (wantedType == Map.class) {
+                wantedType = HashMap.class;
+            }
             json.setDefaultSerializer(new JsonListMapDeserializer(wantedType, HashMap.class));
-            // FIXME - serialization exception here.
             result = (R) json.fromJson(wantedType, jsonString);
         } else {
             result = (R) json.fromJson(wantedType, jsonString);
         }
-        // Null type here, because of later Mitm conversion in core module.
-        // List/Map is default types for Json.
-//        result = json.fromJson(null, jsonString);
         return result;
     }
 }
