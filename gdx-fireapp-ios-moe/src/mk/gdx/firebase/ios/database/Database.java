@@ -134,7 +134,12 @@ public class Database implements DatabaseDistribution
                     try {
                         data = DataProcessor.iosDataToJava(arg0.value(), dataType);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        if (callback != null) {
+                            callback.onError(e);
+                        } else {
+                            GdxFIRLogger.error(e.getLocalizedMessage(), e);
+                        }
+                        return;
                     }
                     callback.onData((R) data);
                 }
@@ -171,7 +176,12 @@ public class Database implements DatabaseDistribution
                     try {
                         data = DataProcessor.iosDataToJava(arg0.value(), dataType);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        if (listener != null) {
+                            listener.onCanceled(e);
+                        } else {
+                            GdxFIRLogger.error(e.getLocalizedMessage(), e);
+                        }
+                        return;
                     }
                     listener.onChange((R) data);
                 }
@@ -271,12 +281,12 @@ public class Database implements DatabaseDistribution
             @Override
             public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
             {
-                if( NSNull.class.isAssignableFrom(arg0.value().getClass())) {
+                if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
                     GdxFIRLogger.error("Null value retrieved from database for transaction - aborting.");
                     return FIRTransactionResult.abort();
                 }
                 T transactionObject = DataProcessor.iosDataToJava(arg0.value(), dataType);
-                arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run((R)transactionObject)));
+                arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run((R) transactionObject)));
                 return FIRTransactionResult.successWithValue(arg0);
             }
         }, new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1()
@@ -289,9 +299,9 @@ public class Database implements DatabaseDistribution
                         completeCallback.onError(new Exception(arg0.localizedDescription()));
                     }
                 } else {
-                    if( arg1 ) {
+                    if (arg1) {
                         completeCallback.onSuccess();
-                    }else{
+                    } else {
                         completeCallback.onError(new Exception("The database value at given path was not be able to update."));
                     }
                 }
