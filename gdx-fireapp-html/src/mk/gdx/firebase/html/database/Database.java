@@ -123,7 +123,6 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener)
     {
-        // TODO test, String.class value
         ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
         {
             @Override
