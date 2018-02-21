@@ -35,7 +35,6 @@ import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
-import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
@@ -307,9 +306,14 @@ public class Database implements DatabaseDistribution
                     }
                 } else {
                     if (arg1) {
-                        completeCallback.onSuccess();
+                        if (completeCallback != null)
+                            completeCallback.onSuccess();
                     } else {
-                        completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
+                        if (completeCallback != null) {
+                            completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
+                        } else {
+                            GdxFIRLogger.log(TRANSACTION_NOT_ABLE_TO_UPDATE);
+                        }
                     }
                 }
             }
