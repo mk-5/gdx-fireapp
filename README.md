@@ -18,17 +18,17 @@ Now you need to add GDX Fireapp gradle dependencies, as follow:
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.2.0-SNAPSHOT"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.2.0"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.2.0-SNAPSHOT"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.2.0"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.2.0-SNAPSHOT"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.2.0"
 ```
 
 Last step is: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
@@ -111,7 +111,7 @@ GdxFIRAuth.instance().signInAnonymously(new AuthCallback() {
 
 #### Storage
 
-If yours firebase storage requires authorization remember to do some auth first . (you can read something more about it [here](https://firebase.google.com/docs/storage/security/)). Some examples of downloading from firebase storage:
+If your firebase storage requires authorization remember to do some auth first (you can read something more about it [here](https://firebase.google.com/docs/storage/security/)). Few examples of downloading from firebase storage:
 
 Download byte data:
 
@@ -170,8 +170,6 @@ public class User{
 }
 ```
 
-Every POJO object are retreived from Firebase as java.lang.Map representation, we can simply indicate conversion beetwen Map from database to our type by **@MapConversion** annotation, let's take a look below for few examples.
-
 Put into database:
 
 ```java
@@ -185,10 +183,8 @@ Listen for data change:
 GdxFIRDatabase.instance().inReference("users/"+userId)
 .onDataChange(User.class, new DataChangeListener<User>() {
   
-    // @MapConversion here tells api something like this: 
-    // When Map was retrieved please make conversion to User.class type. 
-    @Override
     @MapConversion(User.class)
+    @Override
     public void onChange(User user)
     {
     }
@@ -207,8 +203,8 @@ Read a list:
 GdxFIRDatabase.instance().inReference("users")
 .readValue(List.class, new DataCallback<List<User>>(){
   
-  @Override
   @MapConversion(User.class)
+  @Override
   public void onData(List<User> list)
   {
     // Do something with list..
@@ -222,7 +218,9 @@ GdxFIRDatabase.instance().inReference("users")
 });
 ```
 
-If yours database requires authorization do not forget about it, more info [here](https://firebase.google.com/docs/database/security/quickstart)
+If yours database requires authorization do not forget about it, more info [here](https://firebase.google.com/docs/database/security/quickstart). 
+
+When you want to retreive POJO from database your callback success method should be provided by **@MapConversion** annotation, you can read more about it [here](https://github.com/mk-5/gdx-fireapp/wiki/Database-POJO-Conversion).
 
 
 

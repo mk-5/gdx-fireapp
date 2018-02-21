@@ -14,7 +14,7 @@
 
 **[1.2.0]**
 \- GdxFIRLogger for debugging
-\- ***Braking change***: All database maps conversion should be provided by @MapConversion annotation
+\- ***Braking change***: @MapConversion annotation - all database maps-pojo conversion should be provided by this annotation
 \- Unification of map serialization/deserialization for all platforms
 \- GdxFIRDatabase is able now to do customization of database MapConversion by FirebaseMapConverter Interface
 \- Correct frameworks paths for latest Pods in firebase.nbc
