@@ -49,6 +49,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class Database implements DatabaseDistribution
 {
 
+    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
+    private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "\"The database value at given path was not be able to update";
+    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
+    private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
+
     FIRDatabaseReference dbReference;
     private String databasePath;
 
@@ -282,7 +287,7 @@ public class Database implements DatabaseDistribution
             public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
             {
                 if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
-                    GdxFIRLogger.error("Null value retrieved from database for transaction - aborting.");
+                    GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
                     return FIRTransactionResult.abort();
                 }
                 T transactionObject = DataProcessor.iosDataToJava(arg0.value(), dataType);
@@ -297,12 +302,14 @@ public class Database implements DatabaseDistribution
                 if (arg0 != null) {
                     if (completeCallback != null) {
                         completeCallback.onError(new Exception(arg0.localizedDescription()));
+                    } else {
+                        GdxFIRLogger.error(TRANSACTION_ERROR, new Exception(arg0.localizedDescription()));
                     }
                 } else {
                     if (arg1) {
                         completeCallback.onSuccess();
                     } else {
-                        completeCallback.onError(new Exception("The database value at given path was not be able to update."));
+                        completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
                     }
                 }
             }
@@ -338,7 +345,7 @@ public class Database implements DatabaseDistribution
     private FIRDatabaseReference dbReference()
     {
         if (dbReference == null)
-            throw new DatabaseReferenceNotSetException("Please call GdxFIRDatabase#inReference() first.");
+            throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
         return dbReference;
     }
 
