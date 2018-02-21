@@ -27,7 +27,9 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 import apple.foundation.NSError;
+import apple.foundation.NSNull;
 import apple.foundation.NSNumber;
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -119,7 +121,6 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback)
     {
-        final GenericPlaceholder genericPlaceholder = new GenericPlaceholder(callback.getClass());
         dbReference().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1()
         {
             @Override
@@ -131,7 +132,7 @@ public class Database implements DatabaseDistribution
                 } else {
                     T data = null;
                     try {
-                        data = DataProcessor.iosDataToJava(arg0.value(), genericPlaceholder);
+                        data = DataProcessor.iosDataToJava(arg0.value(), dataType);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -156,7 +157,6 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
-        final GenericPlaceholder genericPlaceholder = new GenericPlaceholder(listener.getClass());
         dbReference().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_1()
         {
 
@@ -169,7 +169,7 @@ public class Database implements DatabaseDistribution
                 } else {
                     T data = null;
                     try {
-                        data = DataProcessor.iosDataToJava(arg0.value(), genericPlaceholder);
+                        data = DataProcessor.iosDataToJava(arg0.value(), dataType);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -266,15 +266,17 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
-        final GenericPlaceholder genericPlaceholder = new GenericPlaceholder(transactionCallback.getClass());
         dbReference().runTransactionBlockAndCompletionBlock(new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0()
         {
             @Override
             public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
             {
-                // arg0 - value from database.
-                R transactionObject = DataProcessor.iosDataToJava(arg0.value(), genericPlaceholder);
-                arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run(transactionObject)));
+                if( NSNull.class.isAssignableFrom(arg0.value().getClass())) {
+                    GdxFIRLogger.error("Null value retrieved from database for transaction - aborting.");
+                    return FIRTransactionResult.abort();
+                }
+                T transactionObject = DataProcessor.iosDataToJava(arg0.value(), dataType);
+                arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run((R)transactionObject)));
                 return FIRTransactionResult.successWithValue(arg0);
             }
         }, new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1()
@@ -282,11 +284,16 @@ public class Database implements DatabaseDistribution
             @Override
             public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2)
             {
-                if (completeCallback == null) return;
                 if (arg0 != null) {
-                    completeCallback.onError(new Exception(arg0.localizedDescription()));
+                    if (completeCallback != null) {
+                        completeCallback.onError(new Exception(arg0.localizedDescription()));
+                    }
                 } else {
-                    completeCallback.onSuccess();
+                    if( arg1 ) {
+                        completeCallback.onSuccess();
+                    }else{
+                        completeCallback.onError(new Exception("The database value at given path was not be able to update."));
+                    }
                 }
             }
         });

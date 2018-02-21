@@ -29,7 +29,6 @@ import apple.foundation.NSNumber;
 import apple.foundation.NSString;
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.ios.exceptions.ConvertingException;
-import mk.gdx.firebase.ios.helpers.GenericPlaceholder;
 import mk.gdx.firebase.ios.helpers.NSArrayHelper;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.ios.helpers.NSNumberHelper;
@@ -54,19 +53,20 @@ public class DataProcessor
     /**
      * Transforms ios object to java with preserved GenericType.
      *
-     * @param iosObject          iOS object, in most cases instance of {@link NSObject}
-     * @param genericPlaceholder {@link GenericPlaceholder}
-     * @param <T>                Type of object which you want to get - needed by transforming types flow.
+     * @param iosObject  iOS object, in most cases instance of {@link NSObject}
+     * @param wantedType Wanted type, not null
+     * @param <T>        Type of object which you want to get - needed by transforming types flow.
      * @return {@code iosObject} java representation. For ex. {@link NSString} was transformed to {@link String}
      */
     @SuppressWarnings("unchecked")
-    public static <T> T iosDataToJava(Object iosObject, GenericPlaceholder genericPlaceholder)
+    public static <T> T iosDataToJava(Object iosObject, Class<T> wantedType)
     {
         Class resultType = iosObject.getClass();
-        Class<T> wantedType = (Class<T>) genericPlaceholder.getGenericType();
         T result = null;
         try {
-            if (resultType == NSString.class && wantedType == String.class) {
+            if (NSNull.class.isAssignableFrom(iosObject.getClass())) {
+                return null;
+            } else if (resultType == NSString.class && wantedType == String.class) {
                 result = processPrimitiveData(iosObject, wantedType);
             } else if (resultType == NSNumber.class && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) {
                 result = processPrimitiveData(iosObject, wantedType);
@@ -81,7 +81,7 @@ public class DataProcessor
                         + ", result data type: " + resultType);
             }
         } catch (Exception e) {
-            GdxFIRLogger.error("Can't convert " + iosObject.getClass().getSimpleName() + " to " + wantedType.getSimpleName(), e);
+            GdxFIRLogger.error("Can't convert " + resultType + " to " + wantedType, e);
             throw e;
         }
         return result;
