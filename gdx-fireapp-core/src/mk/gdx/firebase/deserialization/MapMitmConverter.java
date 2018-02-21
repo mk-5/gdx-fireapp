@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import java.util.List;
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.exceptions.MapConversionNotPossibleException;
 import mk.gdx.firebase.helpers.JavaCoreClassDetector;
 
@@ -65,11 +66,14 @@ public abstract class MapMitmConverter
             data = mapConverter.convert((Map) data, mapConversionType);
         } else if (ClassReflection.isAssignableFrom(List.class, data.getClass())) {
             // Second case - List, go through all elements and convert it to map.
-            for (int i = 0; i < ((List) data).size(); i++) {
+            for (int i = ((List) data).size()-1; i >= 0; i--) {
                 Object element = ((List) data).get(i);
-                if (!ClassReflection.isAssignableFrom(Map.class, element.getClass()))
-                    throw new MapConversionNotPossibleException("One of list value are not a Map.");
-                ((List) data).set(i, mapConverter.convert((Map) element, mapConversionType));
+                if (!ClassReflection.isAssignableFrom(Map.class, element.getClass())) {
+                    GdxFIRLogger.log("@MapConversion: One of list value are not a Map - value was dropped. Element type: " + element.getClass());
+                    ((List) data).remove(i);
+                }else {
+                    ((List) data).set(i, mapConverter.convert((Map) element, mapConversionType));
+                }
             }
         }
         return data;
