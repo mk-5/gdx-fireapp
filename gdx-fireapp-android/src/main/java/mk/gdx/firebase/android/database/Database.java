@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -44,6 +45,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  */
 public class Database implements DatabaseDistribution
 {
+
+    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
+    private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "\"The database value at given path was not be able to update";
+    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
+    private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
     private DatabaseReference databaseReference;
     private String databasePath;
@@ -248,6 +254,10 @@ public class Database implements DatabaseDistribution
             @Override
             public Transaction.Result doTransaction(MutableData mutableData)
             {
+                if (mutableData.getValue() == null) {
+                    GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
+                    return Transaction.abort();
+                }
                 R transactionData = (R) mutableData.getValue();
                 mutableData.setValue(transactionCallback.run(transactionData));
                 return Transaction.success(mutableData);
@@ -256,11 +266,24 @@ public class Database implements DatabaseDistribution
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot)
             {
-                if (completeCallback == null) return;
                 if (databaseError != null) {
-                    completeCallback.onError(databaseError.toException());
+                    if (completeCallback != null) {
+                        completeCallback.onError(databaseError.toException());
+                    } else {
+                        GdxFIRLogger.error(TRANSACTION_ERROR, databaseError.toException());
+                    }
                 } else {
-                    completeCallback.onSuccess();
+                    if (b) {
+                        if (completeCallback != null) {
+                            completeCallback.onSuccess();
+                        }
+                    } else {
+                        if (completeCallback != null) {
+                            completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
+                        } else {
+                            GdxFIRLogger.error(TRANSACTION_NOT_ABLE_TO_UPDATE);
+                        }
+                    }
                 }
             }
         });
@@ -294,7 +317,7 @@ public class Database implements DatabaseDistribution
     private DatabaseReference databaseReference()
     {
         if (databaseReference == null)
-            throw new DatabaseReferenceNotSetException("Please call GdxFIRDatabase#inReference() first.");
+            throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
         return databaseReference;
     }
 
