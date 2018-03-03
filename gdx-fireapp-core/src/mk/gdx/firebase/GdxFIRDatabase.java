@@ -21,6 +21,7 @@ import java.util.Map;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.deserialization.DataCallbackMitmConverter;
 import mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
@@ -125,6 +126,9 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T, E extends T> void onDataChange(Class<T> dataType, DataChangeListener<E> listener)
     {
@@ -134,6 +138,16 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
         } else {
             platformObject.onDataChange(dataType, mitmConverter.getGenericListener());
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <V> DatabaseDistribution filter(FilterType filterType, V[] filterArguments)
+    {
+        platformObject.filter(filterType, filterArguments);
+        return this;
     }
 
     /**

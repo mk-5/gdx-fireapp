@@ -18,6 +18,7 @@ package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +27,16 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRLogger;
+import mk.gdx.firebase.android.database.proxies.DatabaseReferenceQueryProxy;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.listeners.ConnectedListener;
@@ -51,12 +56,14 @@ public class Database implements DatabaseDistribution
     private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
+    private static final String FILTER_SHOULD_BE_APPLIED_FOR_LIST = "Filter should be applied only for the List type";
 
     private DatabaseReference databaseReference;
     private String databasePath;
     private ObjectMap<String, Array<ValueEventListener>> valueEventListeners;
     private ConnectedListener connectedListener;
     private ConnectionValueListener connectionValueListener;
+    private Array<Filter> filters;
 
     /**
      * Constructor of android database distribution
@@ -64,6 +71,7 @@ public class Database implements DatabaseDistribution
     public Database()
     {
         valueEventListeners = new ObjectMap<>();
+        filters = new Array<>();
     }
 
     /**
@@ -132,7 +140,8 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
-        databaseReference().addListenerForSingleValueEvent(new ValueEventListener()
+        checkFilteringState(dataType);
+        new DatabaseReferenceQueryProxy(filters, databaseReference()).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -155,12 +164,13 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
+        checkFilteringState(dataType);
         if (listener != null) {
             DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener);
             if (!valueEventListeners.containsKey(databasePath))
                 valueEventListeners.put(databasePath, new Array<ValueEventListener>());
             valueEventListeners.get(databasePath).add(dataChangeListener);
-            databaseReference().addValueEventListener(dataChangeListener);
+            new DatabaseReferenceQueryProxy(filters, databaseReference()).addValueEventListener(dataChangeListener);
         } else {
             Array<ValueEventListener> listeners = valueEventListeners.get(databasePath);
             for (ValueEventListener v : listeners) {
@@ -168,6 +178,17 @@ public class Database implements DatabaseDistribution
             }
         }
         terminateOperation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
+    {
+        filters.add(new Filter(filterType, filterArguments));
+        return this;
     }
 
     /**
@@ -342,6 +363,18 @@ public class Database implements DatabaseDistribution
     {
         databaseReference = null;
         databasePath = null;
+        filters.clear();
+    }
+
+    /**
+     * Throws IllegalStateException when filter was applied but type of wanted data is not a list.
+     *
+     * @param wantedType The type of requested data
+     */
+    private void checkFilteringState(Class<?> wantedType)
+    {
+        if (filters.size > 0 && !ClassReflection.isAssignableFrom(List.class, wantedType))
+            throw new IllegalStateException(FILTER_SHOULD_BE_APPLIED_FOR_LIST);
     }
 
     /**

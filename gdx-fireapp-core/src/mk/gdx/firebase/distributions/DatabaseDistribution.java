@@ -21,6 +21,7 @@ import java.util.Map;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
@@ -41,7 +42,8 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  * </ul><p>
  * If you do not do this {@code RuntimeException} will be thrown.
  */
-public interface DatabaseDistribution {
+public interface DatabaseDistribution
+{
 
     /**
      * Listens for database connection events.
@@ -104,6 +106,19 @@ public interface DatabaseDistribution {
      * @see DataChangeListener
      */
     <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener);
+
+    /**
+     * Applies filter to the next database query.
+     * <p>
+     * It should be applied only before {@link #readValue(Class, DataCallback)} or {@link #onDataChange(Class, DataChangeListener)} execution.
+     * You can read more about filtering here: <a href="https://firebase.google.com/docs/database/android/lists-of-data">firebase filtering</a>
+     *
+     * @param filterType      Filter type that you want to applied
+     * @param filterArguments Arguments that will be pass to filter method
+     * @param <V>             Type of filter argument, it should be one of the following: Integer, Double, String, Boolean
+     * @return this
+     */
+    <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments);
 
     /**
      * Creates new object inside database and return {@code this instance} with reference to it set by {@code DatabaseDistribution#inReference()}

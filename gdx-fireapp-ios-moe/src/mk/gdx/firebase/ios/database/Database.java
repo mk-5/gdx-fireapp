@@ -33,6 +33,7 @@ import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
@@ -200,6 +201,17 @@ public class Database implements DatabaseDistribution
             }
         });
         terminateOperation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
+    {
+        // TODO
+        return null;
     }
 
     /**
