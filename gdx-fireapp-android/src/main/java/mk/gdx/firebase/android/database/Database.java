@@ -50,6 +50,7 @@ public class Database implements DatabaseDistribution
     private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "\"The database value at given path was not be able to update";
     private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
+    private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
 
     private DatabaseReference databaseReference;
     private String databasePath;
@@ -318,6 +319,7 @@ public class Database implements DatabaseDistribution
     {
         if (databaseReference == null)
             throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
+
         return databaseReference;
     }
 
@@ -399,7 +401,7 @@ public class Database implements DatabaseDistribution
         @Override
         public void onCancelled(DatabaseError databaseError)
         {
-
+            GdxFIRLogger.log(CONNECTION_LISTENER_CANCELED, databaseError.toException());
         }
     }
 }
