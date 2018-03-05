@@ -16,10 +16,13 @@
 
 package mk.gdx.firebase.deserialization;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.annotations.MapConversion;
-import mk.gdx.firebase.annotations.NestedGenericType;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.reflection.AnnotationFinder;
 
@@ -92,12 +95,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
         // If MapConversions was not indicated - do nothing.
         if (mapConversionAnnotation != null) {
             data = doMitmConversion(mapConversionAnnotation.value(), data);
-        } else {
-            // Depracated - will be remove in next releases.
-            NestedGenericType nestedGenericTypeAnnotation = AnnotationFinder.getMethodAnnotation(NestedGenericType.class, coveredCallback);
-            if (nestedGenericTypeAnnotation != null) {
-                data = doMitmConversion(nestedGenericTypeAnnotation.value(), data);
-            }
+            // TODO - wrap one-value result in List if user want a List?
         }
         coveredCallback.onData((E) data);
     }
