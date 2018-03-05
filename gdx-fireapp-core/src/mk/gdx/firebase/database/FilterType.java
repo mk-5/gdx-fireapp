@@ -28,5 +28,5 @@ public enum FilterType
     LIMIT_LAST,
     START_AT,
     END_AT,
-    EQUAL_TO_VALUE;
+    EQUAL_TO;
 }

@@ -16,17 +16,21 @@
 
 package mk.gdx.firebase.database;
 
+
+import mk.gdx.firebase.database.pojos.OrderByClause;
+
 /**
- * Represents ordering mode in firebase database.
- * <p>
- * Following filter types are dependent of order by mode:
- * - {@link FilterType#START_AT}
- * - {@link FilterType#END_AT}
- * - {@link FilterType#EQUAL_TO}
+ * Applies OrderByClause to the target object instance.
  */
-public enum OrderByMode
+public interface OrderByResolver<T, R>
 {
-    ORDER_BY_CHILD,
-    ORDER_BY_KEY,
-    ORDER_BY_VALUE;
+
+    /**
+     * Resolves given OrderByClause.
+     *
+     * @param orderByClause Order by clause, may be null
+     * @param target        Target object, for ex. query representation, not null
+     * @return Object with order-by applied
+     */
+    R resolve(OrderByClause orderByClause, T target);
 }
