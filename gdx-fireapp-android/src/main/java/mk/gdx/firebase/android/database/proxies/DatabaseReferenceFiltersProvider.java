@@ -21,32 +21,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.android.database.DatabaseReferenceFilterProvider;
+import mk.gdx.firebase.android.database.AndroidOrderByResolver;
 import mk.gdx.firebase.android.database.QueryFilterProvider;
 import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 
 /**
  * Provides decision between call {@code DatabaseReference} or {@code Query} based at current query context.
  */
-public class DatabaseReferenceQueryProxy implements DbRefQueryProxyMethods
+public class DatabaseReferenceFiltersProvider implements DbRefQueryProxyMethods
 {
-    private DatabaseReferenceFilterProvider refFilterProvider;
-    private QueryFilterProvider queryFilterProvider;
+    private QueryFilterProvider refFilterProvider;
     private DatabaseReference databaseReference;
     private Array<Filter> filters;
+    private OrderByClause orderByClause;
 
     /**
+     * Initialize provider and keep all filters in own array.
+     *
      * @param filters           Current filters, may empty
      * @param databaseReference DatabaseReference instance, not null
      */
-    public DatabaseReferenceQueryProxy(Array<Filter> filters, DatabaseReference databaseReference)
+    public DatabaseReferenceFiltersProvider(Array<Filter> filters, DatabaseReference databaseReference)
     {
         this.databaseReference = databaseReference;
         // The first go to the end, now i can use .pop() later.
         filters.reverse();
         this.filters = new Array<>(filters);
-        refFilterProvider = new DatabaseReferenceFilterProvider();
-        queryFilterProvider = new QueryFilterProvider();
+        refFilterProvider = new QueryFilterProvider();
     }
 
     @Override
@@ -73,13 +75,27 @@ public class DatabaseReferenceQueryProxy implements DbRefQueryProxyMethods
         }
     }
 
+    /**
+     * Adds order by clause to be processed before filters will be applied.
+     *
+     * @param orderByClause Order by clause, may be null
+     * @return this
+     */
+    public DatabaseReferenceFiltersProvider with(OrderByClause orderByClause)
+    {
+        this.orderByClause = orderByClause;
+        return this;
+    }
+
     private Query processQuery()
     {
         Filter filter;
         Query query = null;
+        if (orderByClause != null)
+            query = new AndroidOrderByResolver().resolve(orderByClause, databaseReference);
         while (filters.size > 0) {
             filter = filters.pop();
-            query = refFilterProvider.apply(filter.getFilterType(), databaseReference, filter.getFilterArguments());
+            query = refFilterProvider.apply(filter.getFilterType(), query == null ? databaseReference : query, filter.getFilterArguments());
         }
         return query;
     }

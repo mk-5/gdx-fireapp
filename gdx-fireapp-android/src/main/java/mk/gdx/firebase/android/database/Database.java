@@ -31,13 +31,14 @@ import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.android.database.proxies.DatabaseReferenceQueryProxy;
+import mk.gdx.firebase.android.database.proxies.DatabaseReferenceFiltersProvider;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.listeners.ConnectedListener;
@@ -65,6 +66,7 @@ public class Database implements DatabaseDistribution
     private ConnectedListener connectedListener;
     private ConnectionValueListener connectionValueListener;
     private Array<Filter> filters;
+    private OrderByClause orderByClause;
 
     /**
      * Constructor of android database distribution
@@ -142,7 +144,8 @@ public class Database implements DatabaseDistribution
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
         checkFilteringState(dataType);
-        new DatabaseReferenceQueryProxy(filters, databaseReference()).addListenerForSingleValueEvent(new ValueEventListener()
+        new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause)
+                .addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -171,7 +174,7 @@ public class Database implements DatabaseDistribution
             if (!valueEventListeners.containsKey(databasePath))
                 valueEventListeners.put(databasePath, new Array<ValueEventListener>());
             valueEventListeners.get(databasePath).add(dataChangeListener);
-            new DatabaseReferenceQueryProxy(filters, databaseReference()).addValueEventListener(dataChangeListener);
+            new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause).addValueEventListener(dataChangeListener);
         } else {
             Array<ValueEventListener> listeners = valueEventListeners.get(databasePath);
             for (ValueEventListener v : listeners) {
@@ -198,6 +201,7 @@ public class Database implements DatabaseDistribution
     @Override
     public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
     {
+        orderByClause = new OrderByClause(orderByMode, argument);
         return this;
     }
 
@@ -373,6 +377,7 @@ public class Database implements DatabaseDistribution
     {
         databaseReference = null;
         databasePath = null;
+        orderByClause = null;
         filters.clear();
     }
 

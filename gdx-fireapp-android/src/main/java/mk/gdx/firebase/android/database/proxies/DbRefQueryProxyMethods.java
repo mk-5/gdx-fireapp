@@ -19,7 +19,7 @@ package mk.gdx.firebase.android.database.proxies;
 import com.google.firebase.database.ValueEventListener;
 
 /**
- * Methods from {@code DatabaseReference} that can be covered by {@code Query}.
+ * Methods from {@code Query} that are filters affected.
  */
 public interface DbRefQueryProxyMethods
 {

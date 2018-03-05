@@ -22,18 +22,20 @@ import mk.gdx.firebase.database.FilterProvider;
 import mk.gdx.firebase.database.FilterType;
 
 /**
- * Provides filtering for {@code Query} instance.
+ * Provides filtering for {@code DatabaseReference} instance.
  */
 public class QueryFilterProvider implements FilterProvider<Query, Query>
 {
 
+    public static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
+    public static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
+    public static final String MISSING_FILTER_ARGUMENTS = "Missing filter arguments.";
+
     /**
-     * Apply filtering to the database Query and return same query instance.
-     *
-     * TODO - refactoring, it is now copy&paste from {@link DatabaseReferenceFilterProvider}
+     * Apply filtering to the database ref and return appropriate query instance.
      *
      * @param filterType      Filter type which will be applied
-     * @param target          Target Query instance
+     * @param target          Target DatabaseReference instance
      * @param filterArguments Arguments for filtering for ex. 100 or some String key
      * @param <V>             Type for filterArgument, one from following: Integer, String, Double, Boolean
      * @return Query with filtering applied
@@ -42,17 +44,18 @@ public class QueryFilterProvider implements FilterProvider<Query, Query>
     public <V> Query apply(FilterType filterType, Query target, V[] filterArguments)
     {
         if (filterArguments.length == 0)
-            throw new IllegalArgumentException(DatabaseReferenceFilterProvider.MISSING_FILTER_ARGUMENTS);
+            throw new IllegalArgumentException(MISSING_FILTER_ARGUMENTS);
         switch (filterType) {
             case LIMIT_FIRST:
                 if (!(filterArguments[0] instanceof Integer))
-                    throw new IllegalArgumentException(DatabaseReferenceFilterProvider.WRONG_ARGUMENT_TYPE);
+                    throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
                 return target.limitToFirst((Integer) filterArguments[0]);
             case LIMIT_LAST:
                 if (!(filterArguments[0] instanceof Integer))
-                    throw new IllegalArgumentException(DatabaseReferenceFilterProvider.WRONG_ARGUMENT_TYPE);
+                    throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
                 return target.limitToLast((Integer) filterArguments[0]);
             case START_AT:
+                // TODO - 2 arguments call
                 if (filterArguments[0] instanceof Double) {
                     return target.startAt((Double) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
@@ -60,7 +63,7 @@ public class QueryFilterProvider implements FilterProvider<Query, Query>
                 } else if (filterArguments[0] instanceof String) {
                     return target.startAt((String) filterArguments[0]);
                 } else {
-                    throw new IllegalArgumentException(DatabaseReferenceFilterProvider.WRONG_ARGUMENT_TYPE2);
+                    throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }
             case END_AT:
                 if (filterArguments[0] instanceof Double) {
@@ -70,9 +73,9 @@ public class QueryFilterProvider implements FilterProvider<Query, Query>
                 } else if (filterArguments[0] instanceof String) {
                     return target.endAt((String) filterArguments[0]);
                 } else {
-                    throw new IllegalArgumentException(DatabaseReferenceFilterProvider.WRONG_ARGUMENT_TYPE2);
+                    throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }
-            case EQUAL_TO_VALUE:
+            case EQUAL_TO:
                 if (filterArguments[0] instanceof Double) {
                     return target.equalTo((Double) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
@@ -80,7 +83,7 @@ public class QueryFilterProvider implements FilterProvider<Query, Query>
                 } else if (filterArguments[0] instanceof String) {
                     return target.equalTo((String) filterArguments[0]);
                 } else {
-                    throw new IllegalArgumentException(DatabaseReferenceFilterProvider.WRONG_ARGUMENT_TYPE2);
+                    throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }
             default:
                 throw new IllegalStateException();
