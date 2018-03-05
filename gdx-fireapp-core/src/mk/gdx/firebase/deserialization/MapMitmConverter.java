@@ -66,12 +66,12 @@ public abstract class MapMitmConverter
             data = mapConverter.convert((Map) data, mapConversionType);
         } else if (ClassReflection.isAssignableFrom(List.class, data.getClass())) {
             // Second case - List, go through all elements and convert it to map.
-            for (int i = ((List) data).size()-1; i >= 0; i--) {
+            for (int i = ((List) data).size() - 1; i >= 0; i--) {
                 Object element = ((List) data).get(i);
-                if (!ClassReflection.isAssignableFrom(Map.class, element.getClass())) {
-                    GdxFIRLogger.log("@MapConversion: One of list value are not a Map - value was dropped. Element type: " + element.getClass());
+                if (element == null || !ClassReflection.isAssignableFrom(Map.class, element.getClass())) {
+                    GdxFIRLogger.log("@MapConversion: One of list value are not a Map - value was dropped. Element type: " + (element != null ? element.getClass() : "null"));
                     ((List) data).remove(i);
-                }else {
+                } else {
                     ((List) data).set(i, mapConverter.convert((Map) element, mapConversionType));
                 }
             }
