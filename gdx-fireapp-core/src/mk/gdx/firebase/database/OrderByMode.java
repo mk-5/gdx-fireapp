@@ -17,16 +17,16 @@
 package mk.gdx.firebase.database;
 
 /**
- * The filtering types for database querying.
+ * Represents ordering mode in firebase database.
  * <p>
- *
- * @see OrderByMode
+ * Following filter types are dependent of order by mode:
+ * - {@link FilterType#START_AT}
+ * - {@link FilterType#END_AT}
+ * - {@link FilterType#EQUAL_TO_VALUE}
  */
-public enum FilterType
+public enum OrderByMode
 {
-    LIMIT_FIRST,
-    LIMIT_LAST,
-    START_AT,
-    END_AT,
-    EQUAL_TO_VALUE;
+    ORDER_BY_CHILD,
+    ORDER_BY_KEY,
+    ORDER_BY_VALUE;
 }

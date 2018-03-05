@@ -22,6 +22,7 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
@@ -113,12 +114,25 @@ public interface DatabaseDistribution
      * It should be applied only before {@link #readValue(Class, DataCallback)} or {@link #onDataChange(Class, DataChangeListener)} execution.
      * You can read more about filtering here: <a href="https://firebase.google.com/docs/database/android/lists-of-data">firebase filtering</a>
      *
-     * @param filterType      Filter type that you want to applied
+     * @param filterType      Filter type that you want to applied, not null
      * @param filterArguments Arguments that will be pass to filter method
      * @param <V>             Type of filter argument, it should be one of the following: Integer, Double, String, Boolean
      * @return this
      */
     <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments);
+
+    /**
+     * Applies order-by to the next database query.
+     * <p>
+     * Only one orderBy can be applied to one query otherwise error will be throw.
+     * <p>
+     * For now, the only mode which process argument is: {@link OrderByMode#ORDER_BY_CHILD}
+     *
+     * @param orderByMode Order-by mode, not null
+     * @param argument    Order by func argument, may be null
+     * @return this
+     */
+    DatabaseDistribution orderBy(OrderByMode orderByMode, String argument);
 
     /**
      * Creates new object inside database and return {@code this instance} with reference to it set by {@code DatabaseDistribution#inReference()}

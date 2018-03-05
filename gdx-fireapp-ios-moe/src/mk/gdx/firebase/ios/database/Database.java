@@ -34,6 +34,7 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
@@ -211,7 +212,16 @@ public class Database implements DatabaseDistribution
     public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
     {
         // TODO
-        return null;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
+    {
+        return this;
     }
 
     /**
