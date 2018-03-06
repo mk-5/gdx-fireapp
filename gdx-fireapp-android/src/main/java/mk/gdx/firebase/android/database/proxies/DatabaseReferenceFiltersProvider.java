@@ -54,7 +54,7 @@ public class DatabaseReferenceFiltersProvider implements DbRefQueryProxyMethods
     @Override
     public void addListenerForSingleValueEvent(ValueEventListener valueEventListener)
     {
-        if (filters.size > 0) {
+        if (filters.size > 0 || orderByClause != null ) {
             Query query = processQuery();
             assert query != null;
             query.addListenerForSingleValueEvent(valueEventListener);
@@ -66,7 +66,7 @@ public class DatabaseReferenceFiltersProvider implements DbRefQueryProxyMethods
     @Override
     public ValueEventListener addValueEventListener(ValueEventListener valueEventListener)
     {
-        if (filters.size > 0) {
+        if (filters.size > 0 || orderByClause != null ) {
             Query query = processQuery();
             assert query != null;
             return query.addValueEventListener(valueEventListener);
