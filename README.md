@@ -111,8 +111,6 @@ GdxFIRAuth.instance().signInAnonymously(new AuthCallback() {
 
 #### Storage
 
-If your firebase storage requires authorization remember to do some auth first (you can read something more about it [here](https://firebase.google.com/docs/storage/security/)). Few examples of downloading from firebase storage:
-
 Download byte data:
 
 ```java
@@ -151,6 +149,8 @@ GdxFIRStorage.instance().downloadImage("/img.png", new DownloadCallback<TextureR
      }
 });
 ```
+
+If your storage requires authorization do not forget about it, more info [here](https://firebase.google.com/docs/storage/security/). 
 
 
 
@@ -218,9 +218,7 @@ GdxFIRDatabase.instance().inReference("users")
 });
 ```
 
-If yours database requires authorization do not forget about it, more info [here](https://firebase.google.com/docs/database/security/quickstart). 
-
-When you want to retreive POJO from database your callback success method should be provided by **@MapConversion** annotation, you can read more about it [here](https://github.com/mk-5/gdx-fireapp/wiki/Database-POJO-Conversion).
+When you want to fetch POJO from database you should use **@MapConversion** annotation to tell the api what type do you expect instead of Map, you can read more about it [here](https://github.com/mk-5/gdx-fireapp/wiki/Database-POJO-Conversion).
 
 
 
