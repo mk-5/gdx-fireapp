@@ -18,7 +18,6 @@ package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +26,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRLogger;
@@ -36,6 +34,7 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.FilteringStateEnsurer;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
@@ -58,7 +57,6 @@ public class Database implements DatabaseDistribution
     private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
-    private static final String FILTER_SHOULD_BE_APPLIED_FOR_LIST = "Filter should be applied only for the List type";
 
     private DatabaseReference databaseReference;
     private String databasePath;
@@ -143,22 +141,22 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
-        checkFilteringState(dataType);
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause)
                 .addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                callback.onData((E) dataSnapshot.getValue());
-            }
+                {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        DataCallbackOnDataResolver.resolve(dataType, orderByClause, dataSnapshot, callback);
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                callback.onError(databaseError.toException());
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        callback.onError(databaseError.toException());
+                    }
+                });
         terminateOperation();
     }
 
@@ -168,9 +166,9 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
-        checkFilteringState(dataType);
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         if (listener != null) {
-            DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener);
+            DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener, orderByClause);
             if (!valueEventListeners.containsKey(databasePath))
                 valueEventListeners.put(databasePath, new Array<ValueEventListener>());
             valueEventListeners.get(databasePath).add(dataChangeListener);
@@ -382,17 +380,6 @@ public class Database implements DatabaseDistribution
     }
 
     /**
-     * Throws IllegalStateException when filter was applied but type of wanted data is not a list.
-     *
-     * @param wantedType The type of requested data
-     */
-    private void checkFilteringState(Class<?> wantedType)
-    {
-        if (filters.size > 0 && !ClassReflection.isAssignableFrom(List.class, wantedType))
-            throw new IllegalStateException(FILTER_SHOULD_BE_APPLIED_FOR_LIST);
-    }
-
-    /**
      * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
      *
      * @param <T> Class of object that we want to listen for change
@@ -403,11 +390,13 @@ public class Database implements DatabaseDistribution
 
         private Class<T> dataType;
         private DataChangeListener<R> dataChangeListener;
+        private OrderByClause orderByClause;
 
-        public DataChangeValueListener(Class<T> dataType, DataChangeListener<R> dataChangeListener)
+        public DataChangeValueListener(Class<T> dataType, DataChangeListener<R> dataChangeListener, OrderByClause orderByClause)
         {
             this.dataChangeListener = dataChangeListener;
             this.dataType = dataType;
+            this.orderByClause = orderByClause;
         }
 
 
@@ -415,7 +404,7 @@ public class Database implements DatabaseDistribution
         @SuppressWarnings("unchecked")
         public void onDataChange(DataSnapshot dataSnapshot)
         {
-            dataChangeListener.onChange((R) dataSnapshot.getValue());
+            DataListenerOnDataChangeResolver.resolve(dataType, orderByClause, dataSnapshot, dataChangeListener);
         }
 
         @Override
