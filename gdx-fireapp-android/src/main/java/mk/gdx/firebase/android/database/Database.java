@@ -140,20 +140,7 @@ public class Database implements DatabaseDistribution
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause)
-                .addListenerForSingleValueEvent(new ValueEventListener()
-                {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-                        DataCallbackOnDataResolver.resolve(dataType, orderByClause, dataSnapshot, callback);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError)
-                    {
-                        callback.onError(databaseError.toException());
-                    }
-                });
+                .addListenerForSingleValueEvent(new SingleValueListener<T, E>(dataType, callback, orderByClause));
         terminateOperation();
     }
 
@@ -341,8 +328,8 @@ public class Database implements DatabaseDistribution
     /**
      * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
      *
-     * @param <T> Class of object that we want to listen for change
-     * @param <R> Generic type of object that we want to listen for change. For ex. in case of List we cant put {@code List<String>.class} as dataType, so we can put it here.
+     * @param <T> Class of object that we want to listen for change. For ex. List
+     * @param <R> Return type of object that we want to listen for change. For ex. List<MyClass>
      */
     private class DataChangeValueListener<T, R extends T> implements ValueEventListener
     {
@@ -373,6 +360,39 @@ public class Database implements DatabaseDistribution
         }
 
 
+    }
+
+    /**
+     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addListenerForSingleValueEvent(ValueEventListener)}
+     *
+     * @param <T> Class of object that we want to listen for change. For ex. List
+     * @param <E> Return type of object that we want to listen for change. For ex. List<MyClass>
+     */
+    private class SingleValueListener<T, E extends T> implements ValueEventListener
+    {
+
+        private Class<T> dataType;
+        private DataCallback<E> callback;
+        private OrderByClause orderByClause;
+
+        private SingleValueListener(Class<T> dataType, DataCallback<E> callback, OrderByClause orderByClause)
+        {
+            this.dataType = dataType;
+            this.callback = callback;
+            this.orderByClause = orderByClause;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot)
+        {
+            DataCallbackOnDataResolver.resolve(dataType, orderByClause, dataSnapshot, callback);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError)
+        {
+            callback.onError(databaseError.toException());
+        }
     }
 
     /**
