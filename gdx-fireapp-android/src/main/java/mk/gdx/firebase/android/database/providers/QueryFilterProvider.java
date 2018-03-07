@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database;
+package mk.gdx.firebase.android.database.providers;
 
 import com.google.firebase.database.Query;
 

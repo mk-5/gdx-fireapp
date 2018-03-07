@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database;
+package mk.gdx.firebase.android.database.resolvers;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;

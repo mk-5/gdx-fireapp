@@ -17,19 +17,19 @@
 package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.android.database.proxies.DatabaseReferenceFiltersProvider;
+import mk.gdx.firebase.android.database.handlers.TransactionHandler;
+import mk.gdx.firebase.android.database.providers.DatabaseReferenceFiltersProvider;
+import mk.gdx.firebase.android.database.resolvers.DataCallbackOnDataResolver;
+import mk.gdx.firebase.android.database.resolvers.DataListenerOnDataChangeResolver;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -52,15 +52,12 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class Database implements DatabaseDistribution
 {
 
-    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
-    private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "\"The database value at given path was not be able to update";
-    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
 
     private DatabaseReference databaseReference;
     private String databasePath;
-    private ObjectMap<String, Array<ValueEventListener>> valueEventListeners;
+    private DataListenersManager dataListenersManager;
     private ConnectedListener connectedListener;
     private ConnectionValueListener connectionValueListener;
     private Array<Filter> filters;
@@ -71,7 +68,7 @@ public class Database implements DatabaseDistribution
      */
     public Database()
     {
-        valueEventListeners = new ObjectMap<>();
+        dataListenersManager = new DataListenersManager();
         filters = new Array<>();
     }
 
@@ -169,15 +166,14 @@ public class Database implements DatabaseDistribution
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         if (listener != null) {
             DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener, orderByClause);
-            if (!valueEventListeners.containsKey(databasePath))
-                valueEventListeners.put(databasePath, new Array<ValueEventListener>());
-            valueEventListeners.get(databasePath).add(dataChangeListener);
+            dataListenersManager.addNewListener(databasePath, dataChangeListener);
             new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause).addValueEventListener(dataChangeListener);
         } else {
-            Array<ValueEventListener> listeners = valueEventListeners.get(databasePath);
+            Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
             for (ValueEventListener v : listeners) {
                 databaseReference().removeEventListener(v);
             }
+            dataListenersManager.removeListenersForPath(databasePath);
         }
         terminateOperation();
     }
@@ -283,44 +279,7 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
     {
-        databaseReference().runTransaction(new Transaction.Handler()
-        {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData)
-            {
-                if (mutableData.getValue() == null) {
-                    GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
-                    return Transaction.abort();
-                }
-                R transactionData = (R) mutableData.getValue();
-                mutableData.setValue(transactionCallback.run(transactionData));
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot)
-            {
-                if (databaseError != null) {
-                    if (completeCallback != null) {
-                        completeCallback.onError(databaseError.toException());
-                    } else {
-                        GdxFIRLogger.error(TRANSACTION_ERROR, databaseError.toException());
-                    }
-                } else {
-                    if (b) {
-                        if (completeCallback != null) {
-                            completeCallback.onSuccess();
-                        }
-                    } else {
-                        if (completeCallback != null) {
-                            completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
-                        } else {
-                            GdxFIRLogger.error(TRANSACTION_NOT_ABLE_TO_UPDATE);
-                        }
-                    }
-                }
-            }
-        });
+        databaseReference().runTransaction(new TransactionHandler<R>(transactionCallback, completeCallback));
         terminateOperation();
     }
 

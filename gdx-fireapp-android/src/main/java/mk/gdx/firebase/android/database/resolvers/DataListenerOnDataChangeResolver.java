@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database;
+package mk.gdx.firebase.android.database.resolvers;
 
 import com.google.firebase.database.DataSnapshot;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
- * Resolves data callback with ordering preserved.
+ * Resolves data listener with ordering preserved.
  */
-public class DataCallbackOnDataResolver
+public class DataListenerOnDataChangeResolver
 {
 
     // TODO - docs
     @SuppressWarnings("unchecked")
-    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataCallback<E> dataCallback)
+    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataChangeListener<E> dataChangeListener)
     {
         if (DataSnapshotOrderByResolver.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot)) {
-            dataCallback.onData((E) DataSnapshotOrderByResolver.resolve(dataSnapshot));
+            dataChangeListener.onChange((E) DataSnapshotOrderByResolver.resolve(dataSnapshot));
         } else {
-            dataCallback.onData((E) dataSnapshot.getValue());
+            dataChangeListener.onChange((E) dataSnapshot.getValue());
         }
     }
 }

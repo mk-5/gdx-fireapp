@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database;
+package mk.gdx.firebase.android.database.resolvers;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.proxies;
+package mk.gdx.firebase.android.database.providers;
 
 import com.badlogic.gdx.utils.Array;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.android.database.AndroidOrderByResolver;
-import mk.gdx.firebase.android.database.QueryFilterProvider;
+import mk.gdx.firebase.android.database.proxies.DbRefQueryProxyMethods;
+import mk.gdx.firebase.android.database.resolvers.AndroidOrderByResolver;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 
