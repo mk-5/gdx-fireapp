@@ -20,10 +20,10 @@ package mk.gdx.firebase.database;
  * Provides filtering to object {@code T} received in methods.
  * <p>
  *
- * @param <T> It should be some instance of database reference
- * @param <R> For ex. database query instance with filtering applied
+ * @param <T> The type of target object
+ * @param <R> The type of return object
  */
 public interface FilterProvider<T, R>
 {
-    <V> R apply(FilterType filterType, T target, V[] filterArgument);
+    <V> R apply(FilterType filterType, T target, V[] filterArguments);
 }

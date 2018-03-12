@@ -16,8 +16,10 @@
 
 package mk.gdx.firebase.ios.database;
 
+import com.badlogic.gdx.utils.Array;
 import com.google.firebasedatabase.FIRDataSnapshot;
 import com.google.firebasedatabase.FIRDatabase;
+import com.google.firebasedatabase.FIRDatabaseQuery;
 import com.google.firebasedatabase.FIRDatabaseReference;
 import com.google.firebasedatabase.FIRMutableData;
 import com.google.firebasedatabase.FIRTransactionResult;
@@ -34,9 +36,13 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.FilteringStateEnsurer;
 import mk.gdx.firebase.database.OrderByMode;
+import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFiltersProvider;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
@@ -56,7 +62,14 @@ public class Database implements DatabaseDistribution
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
     FIRDatabaseReference dbReference;
+    private Array<Filter> filters;
+    private OrderByClause orderByClause;
     private String databasePath;
+
+    public Database()
+    {
+        filters = new Array<>();
+    }
 
     /**
      * {@inheritDoc}
@@ -127,7 +140,8 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback)
     {
-        dbReference().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1()
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
+        new FIRDatabaseQueryFiltersProvider(filters, orderByClause, dbReference()).observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1()
         {
             @Override
             public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
@@ -150,7 +164,7 @@ public class Database implements DatabaseDistribution
                     callback.onData((R) data);
                 }
             }
-        }, new FIRDatabaseReference.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2()
+        }, new FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2()
         {
             @Override
             public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0)
@@ -168,7 +182,10 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
-        dbReference().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_1()
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
+        // TODO - keep observe handle in some manager
+        // TODO - ordering FIRDataSnapshot
+        new FIRDatabaseQueryFiltersProvider(filters, orderByClause, dbReference()).observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1()
         {
 
             @Override
@@ -192,7 +209,7 @@ public class Database implements DatabaseDistribution
                     listener.onChange((R) data);
                 }
             }
-        }, new FIRDatabaseReference.Block_observeEventTypeWithBlockWithCancelBlock_2()
+        }, new FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2()
         {
 
             @Override
@@ -211,7 +228,7 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
     {
-        // TODO
+        filters.add(new Filter(filterType, filterArguments));
         return this;
     }
 
@@ -221,6 +238,7 @@ public class Database implements DatabaseDistribution
     @Override
     public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
     {
+        orderByClause = new OrderByClause(orderByMode, argument);
         return this;
     }
 
@@ -394,6 +412,8 @@ public class Database implements DatabaseDistribution
     {
         dbReference = null;
         databasePath = null;
+        filters.clear();
+        orderByClause = null;
     }
 
 }
