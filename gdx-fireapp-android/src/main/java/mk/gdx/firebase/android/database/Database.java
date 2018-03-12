@@ -139,7 +139,7 @@ public class Database implements DatabaseDistribution
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new DatabaseQueryFiltersProvider(filters, databaseReference()).with(orderByClause)
+        new DatabaseQueryFiltersProvider(filters, orderByClause, databaseReference())
                 .addListenerForSingleValueEvent(new SingleValueListener<T, E>(dataType, callback, orderByClause));
         terminateOperation();
     }
@@ -154,7 +154,7 @@ public class Database implements DatabaseDistribution
         if (listener != null) {
             DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener, orderByClause);
             dataListenersManager.addNewListener(databasePath, dataChangeListener);
-            new DatabaseQueryFiltersProvider(filters, databaseReference()).with(orderByClause).addValueEventListener(dataChangeListener);
+            new DatabaseQueryFiltersProvider(filters, orderByClause, databaseReference()).addValueEventListener(dataChangeListener);
         } else {
             Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
             for (ValueEventListener v : listeners) {
@@ -294,7 +294,7 @@ public class Database implements DatabaseDistribution
      * @return FirebaseSDK Database reference. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
-    private DatabaseReference databaseReference()
+    DatabaseReference databaseReference()
     {
         if (databaseReference == null)
             throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
@@ -317,7 +317,7 @@ public class Database implements DatabaseDistribution
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */
-    private void terminateOperation()
+    void terminateOperation()
     {
         databaseReference = null;
         databasePath = null;
