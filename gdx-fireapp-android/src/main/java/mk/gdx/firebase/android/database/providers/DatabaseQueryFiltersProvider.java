@@ -35,6 +35,10 @@ public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
     private Array<Filter> filters;
     private OrderByClause orderByClause;
 
+    public DatabaseQueryFiltersProvider()
+    {
+    }
+
     /**
      * Initialize provider and keep all filters in own array.
      *
@@ -46,9 +50,7 @@ public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
     {
         this.query = query;
         this.orderByClause = orderByClause;
-        // The first go to the end, now i can use .pop() later.
-        filters.reverse();
-        this.filters = new Array<>(filters);
+        setFilters(filters);
         refFilterProvider = new QueryFilterProvider();
     }
 
@@ -64,6 +66,26 @@ public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
     {
         query = processQuery();
         return query.addValueEventListener(valueEventListener);
+    }
+
+    public DatabaseQueryFiltersProvider setQuery(Query query)
+    {
+        this.query = query;
+        return this;
+    }
+
+    public DatabaseQueryFiltersProvider setFilters(Array<Filter> filters)
+    {
+        this.filters = new Array<>(filters);
+        // The first go to the end, now i can use .pop() later.
+        filters.reverse();
+        return this;
+    }
+
+    public DatabaseQueryFiltersProvider setOrderByClause(OrderByClause orderByClause)
+    {
+        this.orderByClause = orderByClause;
+        return this;
     }
 
     private Query processQuery()
