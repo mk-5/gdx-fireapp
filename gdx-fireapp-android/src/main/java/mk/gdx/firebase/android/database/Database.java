@@ -27,7 +27,7 @@ import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.android.database.handlers.TransactionHandler;
-import mk.gdx.firebase.android.database.providers.DatabaseReferenceFiltersProvider;
+import mk.gdx.firebase.android.database.providers.DatabaseQueryFiltersProvider;
 import mk.gdx.firebase.android.database.resolvers.DataCallbackOnDataResolver;
 import mk.gdx.firebase.android.database.resolvers.DataListenerOnDataChangeResolver;
 import mk.gdx.firebase.callbacks.CompleteCallback;
@@ -139,7 +139,7 @@ public class Database implements DatabaseDistribution
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause)
+        new DatabaseQueryFiltersProvider(filters, databaseReference()).with(orderByClause)
                 .addListenerForSingleValueEvent(new SingleValueListener<T, E>(dataType, callback, orderByClause));
         terminateOperation();
     }
@@ -154,7 +154,7 @@ public class Database implements DatabaseDistribution
         if (listener != null) {
             DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener, orderByClause);
             dataListenersManager.addNewListener(databasePath, dataChangeListener);
-            new DatabaseReferenceFiltersProvider(filters, databaseReference()).with(orderByClause).addValueEventListener(dataChangeListener);
+            new DatabaseQueryFiltersProvider(filters, databaseReference()).with(orderByClause).addValueEventListener(dataChangeListener);
         } else {
             Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
             for (ValueEventListener v : listeners) {

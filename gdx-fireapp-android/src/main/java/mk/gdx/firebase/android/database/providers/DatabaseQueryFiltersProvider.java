@@ -17,11 +17,10 @@
 package mk.gdx.firebase.android.database.providers;
 
 import com.badlogic.gdx.utils.Array;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.android.database.proxies.DbRefQueryProxyMethods;
+import mk.gdx.firebase.android.database.proxies.FiltersAffectedQuery;
 import mk.gdx.firebase.android.database.resolvers.AndroidOrderByResolver;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
@@ -29,22 +28,24 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Provides decision between call {@code DatabaseReference} or {@code Query} based at current query context.
  */
-public class DatabaseReferenceFiltersProvider implements DbRefQueryProxyMethods
+public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
 {
     private QueryFilterProvider refFilterProvider;
-    private DatabaseReference databaseReference;
+    private Query query;
     private Array<Filter> filters;
     private OrderByClause orderByClause;
 
     /**
      * Initialize provider and keep all filters in own array.
      *
-     * @param filters           Current filters, may empty
-     * @param databaseReference DatabaseReference instance, not null
+     * @param filters       Current filters, may empty
+     * @param orderByClause Order-by clause, may be null
+     * @param query         DatabaseReference instance, not null
      */
-    public DatabaseReferenceFiltersProvider(Array<Filter> filters, DatabaseReference databaseReference)
+    public DatabaseQueryFiltersProvider(Array<Filter> filters, OrderByClause orderByClause, Query query)
     {
-        this.databaseReference = databaseReference;
+        this.query = query;
+        this.orderByClause = orderByClause;
         // The first go to the end, now i can use .pop() later.
         filters.reverse();
         this.filters = new Array<>(filters);
@@ -54,48 +55,25 @@ public class DatabaseReferenceFiltersProvider implements DbRefQueryProxyMethods
     @Override
     public void addListenerForSingleValueEvent(ValueEventListener valueEventListener)
     {
-        if (filters.size > 0 || orderByClause != null ) {
-            Query query = processQuery();
-            assert query != null;
-            query.addListenerForSingleValueEvent(valueEventListener);
-        } else {
-            databaseReference.addListenerForSingleValueEvent(valueEventListener);
-        }
+        query = processQuery();
+        query.addListenerForSingleValueEvent(valueEventListener);
     }
 
     @Override
     public ValueEventListener addValueEventListener(ValueEventListener valueEventListener)
     {
-        if (filters.size > 0 || orderByClause != null ) {
-            Query query = processQuery();
-            assert query != null;
-            return query.addValueEventListener(valueEventListener);
-        } else {
-            return databaseReference.addValueEventListener(valueEventListener);
-        }
-    }
-
-    /**
-     * Adds order by clause to be processed before filters will be applied.
-     *
-     * @param orderByClause Order by clause, may be null
-     * @return this
-     */
-    public DatabaseReferenceFiltersProvider with(OrderByClause orderByClause)
-    {
-        this.orderByClause = orderByClause;
-        return this;
+        query = processQuery();
+        return query.addValueEventListener(valueEventListener);
     }
 
     private Query processQuery()
     {
-        Filter filter;
-        Query query = null;
+        Filter filter = null;
         if (orderByClause != null)
-            query = new AndroidOrderByResolver().resolve(orderByClause, databaseReference);
+            query = new AndroidOrderByResolver().resolve(orderByClause, query);
         while (filters.size > 0) {
             filter = filters.pop();
-            query = refFilterProvider.apply(filter.getFilterType(), query == null ? databaseReference : query, filter.getFilterArguments());
+            query = refFilterProvider.apply(filter.getFilterType(), query, filter.getFilterArguments());
         }
         return query;
     }

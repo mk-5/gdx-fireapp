@@ -22,7 +22,7 @@ import mk.gdx.firebase.database.FilterProvider;
 import mk.gdx.firebase.database.FilterType;
 
 /**
- * Provides filtering for {@code DatabaseReference} instance.
+ * Provides filtering for {@code Query} instance.
  */
 public class QueryFilterProvider implements FilterProvider<Query, Query>
 {

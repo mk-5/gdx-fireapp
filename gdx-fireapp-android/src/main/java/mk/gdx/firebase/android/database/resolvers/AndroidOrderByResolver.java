@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.android.database.resolvers;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
 import mk.gdx.firebase.database.OrderByResolver;
@@ -25,10 +24,10 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Applies OrderByClause to the Query instance.
  */
-public class AndroidOrderByResolver implements OrderByResolver<DatabaseReference, Query>
+public class AndroidOrderByResolver implements OrderByResolver<Query, Query>
 {
     @Override
-    public Query resolve(OrderByClause orderByClause, DatabaseReference target)
+    public Query resolve(OrderByClause orderByClause, Query target)
     {
         switch (orderByClause.getOrderByMode()) {
             case ORDER_BY_CHILD:

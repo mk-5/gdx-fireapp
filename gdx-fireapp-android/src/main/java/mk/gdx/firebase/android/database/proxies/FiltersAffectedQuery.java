@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * Methods from {@code Query} that are filters affected.
  */
-public interface DbRefQueryProxyMethods
+public interface FiltersAffectedQuery
 {
 
     /**
