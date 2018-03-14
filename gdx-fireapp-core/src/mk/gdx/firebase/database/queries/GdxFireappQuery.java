@@ -26,6 +26,9 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
  * Abstraction for firebase database query.
  * <p>
  * Holds basic shared features of all queries: filtering and terminate operation after each query.
+ *
+ * TODO - should be GdxFireappCall or some CallProvider?
+ * TODO - Distribution here? or in 'execute'
  */
 public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
 {

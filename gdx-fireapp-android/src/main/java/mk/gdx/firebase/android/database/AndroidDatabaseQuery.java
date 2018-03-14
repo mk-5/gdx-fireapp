@@ -18,7 +18,7 @@ package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.Query;
 
-import mk.gdx.firebase.android.database.providers.DatabaseQueryFiltersProvider;
+import mk.gdx.firebase.android.database.providers.DatabaseQueryFilteringProvider;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 /**
@@ -26,19 +26,21 @@ import mk.gdx.firebase.database.queries.GdxFireappQuery;
  */
 public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R>
 {
+    protected String databasePath;
     protected Query query;
-    protected DatabaseQueryFiltersProvider filtersProvider;
+    protected DatabaseQueryFilteringProvider filtersProvider;
 
     public AndroidDatabaseQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
-        filtersProvider = new DatabaseQueryFiltersProvider();
+        filtersProvider = new DatabaseQueryFilteringProvider();
     }
 
     @Override
     protected void prepare()
     {
         query = databaseDistribution.databaseReference();
+        databasePath = databaseDistribution.getDatabasePath();
     }
 
     @Override

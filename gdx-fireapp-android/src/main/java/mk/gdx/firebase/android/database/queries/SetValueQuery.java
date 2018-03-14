@@ -22,7 +22,7 @@ import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
 
 /**
- * TODO docs
+ * Provides setValue execution with firebase database reference.
  */
 public class SetValueQuery extends AndroidDatabaseQuery<Void>
 {
@@ -40,7 +40,13 @@ public class SetValueQuery extends AndroidDatabaseQuery<Void>
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
         // TODO - validate arguments.
-        ((DatabaseReference) query).setValue(arguments.get(0));
+        if (arguments.size == 1) {
+            ((DatabaseReference) query).setValue(arguments.get(0));
+        } else if (arguments.size == 2 && arguments.get(1) instanceof DatabaseReference.CompletionListener) {
+            ((DatabaseReference) query).setValue(arguments.get(0), (DatabaseReference.CompletionListener) arguments.get(1));
+        } else {
+            throw new IllegalStateException();
+        }
         return null;
     }
 }

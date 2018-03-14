@@ -26,16 +26,16 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 
 /**
- * Provides decision between call {@code DatabaseReference} or {@code Query} based at current query context.
+ * Provides filter and order-by application into given {@code Query} instance.
  */
-public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
+public class DatabaseQueryFilteringProvider implements FiltersAffectedQuery
 {
     private QueryFilterProvider refFilterProvider;
     private Query query;
     private Array<Filter> filters;
     private OrderByClause orderByClause;
 
-    public DatabaseQueryFiltersProvider()
+    public DatabaseQueryFilteringProvider()
     {
     }
 
@@ -46,7 +46,7 @@ public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
      * @param orderByClause Order-by clause, may be null
      * @param query         DatabaseReference instance, not null
      */
-    public DatabaseQueryFiltersProvider(Array<Filter> filters, OrderByClause orderByClause, Query query)
+    public DatabaseQueryFilteringProvider(Array<Filter> filters, OrderByClause orderByClause, Query query)
     {
         this.query = query;
         this.orderByClause = orderByClause;
@@ -68,13 +68,13 @@ public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
         return query.addValueEventListener(valueEventListener);
     }
 
-    public DatabaseQueryFiltersProvider setQuery(Query query)
+    public DatabaseQueryFilteringProvider setQuery(Query query)
     {
         this.query = query;
         return this;
     }
 
-    public DatabaseQueryFiltersProvider setFilters(Array<Filter> filters)
+    public DatabaseQueryFilteringProvider setFilters(Array<Filter> filters)
     {
         this.filters = new Array<>(filters);
         // The first go to the end, now i can use .pop() later.
@@ -82,7 +82,7 @@ public class DatabaseQueryFiltersProvider implements FiltersAffectedQuery
         return this;
     }
 
-    public DatabaseQueryFiltersProvider setOrderByClause(OrderByClause orderByClause)
+    public DatabaseQueryFilteringProvider setOrderByClause(OrderByClause orderByClause)
     {
         this.orderByClause = orderByClause;
         return this;

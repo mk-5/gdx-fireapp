@@ -27,9 +27,9 @@ import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.android.database.handlers.TransactionHandler;
-import mk.gdx.firebase.android.database.providers.DatabaseQueryFiltersProvider;
-import mk.gdx.firebase.android.database.resolvers.DataCallbackOnDataResolver;
-import mk.gdx.firebase.android.database.resolvers.DataListenerOnDataChangeResolver;
+import mk.gdx.firebase.android.database.queries.OnDataChangeQuery;
+import mk.gdx.firebase.android.database.queries.ReadValueQuery;
+import mk.gdx.firebase.android.database.queries.SetValueQuery;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -57,18 +57,17 @@ public class Database implements DatabaseDistribution
 
     private DatabaseReference databaseReference;
     private String databasePath;
-    private DataListenersManager dataListenersManager;
     private ConnectedListener connectedListener;
     private ConnectionValueListener connectionValueListener;
     private Array<Filter> filters;
     private OrderByClause orderByClause;
+
 
     /**
      * Constructor of android database distribution
      */
     public Database()
     {
-        dataListenersManager = new DataListenersManager();
         filters = new Array<>();
     }
 
@@ -106,8 +105,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(Object value)
     {
-        databaseReference().setValue(value);
-        terminateOperation();
+        new SetValueQuery(this).with(value).execute();
     }
 
     /**
@@ -116,19 +114,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(Object value, final CompleteCallback completeCallback)
     {
-        databaseReference().setValue(value, new DatabaseReference.CompletionListener()
-        {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
-            {
-                if (databaseError != null) {
-                    completeCallback.onError(databaseError.toException());
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new SetValueQuery(this).with(value, completeCallback).execute();
     }
 
     /**
@@ -139,9 +125,7 @@ public class Database implements DatabaseDistribution
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new DatabaseQueryFiltersProvider(filters, orderByClause, databaseReference())
-                .addListenerForSingleValueEvent(new SingleValueListener<T, E>(dataType, callback, orderByClause));
-        terminateOperation();
+        new ReadValueQuery(this).with(filters).with(orderByClause).with(dataType, callback).execute();
     }
 
     /**
@@ -151,18 +135,7 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        if (listener != null) {
-            DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener, orderByClause);
-            dataListenersManager.addNewListener(databasePath, dataChangeListener);
-            new DatabaseQueryFiltersProvider(filters, orderByClause, databaseReference()).addValueEventListener(dataChangeListener);
-        } else {
-            Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
-            for (ValueEventListener v : listeners) {
-                databaseReference().removeEventListener(v);
-            }
-            dataListenersManager.removeListenersForPath(databasePath);
-        }
-        terminateOperation();
+        new OnDataChangeQuery(this).with(filters).with(orderByClause).with(dataType, listener).execute();
     }
 
     /**
@@ -326,73 +299,13 @@ public class Database implements DatabaseDistribution
     }
 
     /**
-     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
+     * Getter for databasePath.
      *
-     * @param <T> Class of object that we want to listen for change. For ex. List
-     * @param <R> Return type of object that we want to listen for change. For ex. List<MyClass>
+     * @return Database path, may be null
      */
-    private class DataChangeValueListener<T, R extends T> implements ValueEventListener
+    String getDatabasePath()
     {
-
-        private Class<T> dataType;
-        private DataChangeListener<R> dataChangeListener;
-        private OrderByClause orderByClause;
-
-        public DataChangeValueListener(Class<T> dataType, DataChangeListener<R> dataChangeListener, OrderByClause orderByClause)
-        {
-            this.dataChangeListener = dataChangeListener;
-            this.dataType = dataType;
-            this.orderByClause = orderByClause;
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
-            DataListenerOnDataChangeResolver.resolve(dataType, orderByClause, dataSnapshot, dataChangeListener);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
-            dataChangeListener.onCanceled(databaseError.toException());
-        }
-
-
-    }
-
-    /**
-     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addListenerForSingleValueEvent(ValueEventListener)}
-     *
-     * @param <T> Class of object that we want to listen for change. For ex. List
-     * @param <E> Return type of object that we want to listen for change. For ex. List<MyClass>
-     */
-    private class SingleValueListener<T, E extends T> implements ValueEventListener
-    {
-
-        private Class<T> dataType;
-        private DataCallback<E> callback;
-        private OrderByClause orderByClause;
-
-        private SingleValueListener(Class<T> dataType, DataCallback<E> callback, OrderByClause orderByClause)
-        {
-            this.dataType = dataType;
-            this.callback = callback;
-            this.orderByClause = orderByClause;
-        }
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
-            DataCallbackOnDataResolver.resolve(dataType, orderByClause, dataSnapshot, callback);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
-            callback.onError(databaseError.toException());
-        }
+        return databasePath;
     }
 
     /**
