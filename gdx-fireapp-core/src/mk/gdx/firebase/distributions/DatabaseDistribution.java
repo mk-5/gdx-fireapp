@@ -51,7 +51,7 @@ public interface DatabaseDistribution
      * <p>
      * Catch moment when application is going to to be connected or disconnected to the database.
      *
-     * @param connectedListener Listener that handles moments when connection status into database was change
+     * @param connectedListener Listener that handles moments when connection status was change, if null: connection listeners will be detached.
      */
     void onConnect(ConnectedListener connectedListener);
 

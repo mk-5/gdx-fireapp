@@ -45,13 +45,13 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
         arguments = new Array<>();
     }
 
-    public GdxFireappQuery with(Object... arguments)
+    public GdxFireappQuery withArgs(Object... arguments)
     {
         this.arguments.addAll(arguments);
         return this;
     }
 
-    public GdxFireappQuery with(Filter... filters)
+    public GdxFireappQuery with(Array<Filter> filters)
     {
         this.filters.addAll(filters);
         return this;

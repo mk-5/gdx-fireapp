@@ -19,16 +19,18 @@ package mk.gdx.firebase.android.database.queries;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.Map;
+
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 
 /**
- * Provides setValue execution with firebase database reference.
+ * Provides {@link DatabaseReference#updateChildren(Map)} execution with firebase database reference.
  */
-public class SetValueQuery extends AndroidDatabaseQuery<Void>
+public class UpdateChildrenQuery extends AndroidDatabaseQuery<Void>
 {
-    public SetValueQuery(Database databaseDistribution)
+    public UpdateChildrenQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
     }
@@ -37,19 +39,24 @@ public class SetValueQuery extends AndroidDatabaseQuery<Void>
     protected void prepare()
     {
         super.prepare();
+        if (arguments.size < 1)
+            throw new IllegalStateException();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
+        if (arguments.get(0) != null && !(arguments.get(0) instanceof Map))
+            throw new IllegalArgumentException();
         if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof CompleteCallback))
             throw new IllegalArgumentException();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected Void run()
     {
         if (arguments.size == 1) {
-            ((DatabaseReference) query).setValue(arguments.get(0));
+            ((DatabaseReference) query).updateChildren((Map<String, Object>) arguments.get(0));
         } else if (arguments.size == 2) {
-            ((DatabaseReference) query).setValue(arguments.get(0), new DatabaseReference.CompletionListener()
+            ((DatabaseReference) query).updateChildren((Map<String, Object>) arguments.get(0), new DatabaseReference.CompletionListener()
             {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)

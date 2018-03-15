@@ -39,6 +39,11 @@ public class TransactionHandler<R> implements Transaction.Handler
     private TransactionCallback<R> transactionCallback;
     private CompleteCallback completeCallback;
 
+
+    /**
+     * @param transactionCallback Transaction callback, not null
+     * @param completeCallback Complete callback, may be null
+     */
     public TransactionHandler(TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
         this.transactionCallback = transactionCallback;

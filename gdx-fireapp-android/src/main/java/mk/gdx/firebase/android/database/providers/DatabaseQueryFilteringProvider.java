@@ -88,6 +88,14 @@ public class DatabaseQueryFilteringProvider implements FiltersAffectedQuery
         return this;
     }
 
+    public void clear()
+    {
+        if (filters != null)
+            filters.clear();
+        query = null;
+        orderByClause = null;
+    }
+
     private Query processQuery()
     {
         Filter filter = null;

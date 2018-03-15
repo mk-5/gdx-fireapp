@@ -22,10 +22,21 @@ import mk.gdx.firebase.android.database.providers.DatabaseQueryFilteringProvider
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 /**
- * TODO docs
+ * Provides flow for android firebase call.
+ * <p>
+ * Flow is as follow:
+ * <p>
+ * - Gets {@code Query} instance and databasePath from DatabaseDistribution.
+ * - Applies filters if needed it
+ * - Do some action on db
+ * - Terminate query by clear given filters - if any - and call {@link Database#terminateOperation()}
+ *
+ * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
 public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R>
 {
+    protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with DatabaseReference instance.";
+
     protected String databasePath;
     protected Query query;
     protected DatabaseQueryFilteringProvider filtersProvider;
@@ -57,8 +68,6 @@ public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, 
     protected void terminate()
     {
         ((Database) databaseDistribution).terminateOperation();
-        filtersProvider.setFilters(null)
-                .setOrderByClause(null)
-                .setQuery(null);
+        filtersProvider.clear();
     }
 }

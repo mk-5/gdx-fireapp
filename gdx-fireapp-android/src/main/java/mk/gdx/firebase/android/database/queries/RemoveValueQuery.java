@@ -24,11 +24,11 @@ import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 
 /**
- * Provides setValue execution with firebase database reference.
+ * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
  */
-public class SetValueQuery extends AndroidDatabaseQuery<Void>
+public class RemoveValueQuery extends AndroidDatabaseQuery<Void>
 {
-    public SetValueQuery(Database databaseDistribution)
+    public RemoveValueQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
     }
@@ -39,25 +39,26 @@ public class SetValueQuery extends AndroidDatabaseQuery<Void>
         super.prepare();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
-        if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof CompleteCallback))
+        if (arguments.size > 0  && arguments.get(0) != null && !(arguments.get(0) instanceof CompleteCallback))
             throw new IllegalArgumentException();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected Void run()
     {
-        if (arguments.size == 1) {
-            ((DatabaseReference) query).setValue(arguments.get(0));
-        } else if (arguments.size == 2) {
-            ((DatabaseReference) query).setValue(arguments.get(0), new DatabaseReference.CompletionListener()
+        if (arguments.size == 0) {
+            ((DatabaseReference) query).removeValue();
+        } else if (arguments.size == 1) {
+            ((DatabaseReference) query).removeValue(new DatabaseReference.CompletionListener()
             {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
                 {
                     if (databaseError != null) {
-                        ((CompleteCallback) arguments.get(1)).onError(databaseError.toException());
+                        ((CompleteCallback) arguments.get(0)).onError(databaseError.toException());
                     } else {
-                        ((CompleteCallback) arguments.get(1)).onSuccess();
+                        ((CompleteCallback) arguments.get(0)).onSuccess();
                     }
                 }
             });
@@ -66,4 +67,5 @@ public class SetValueQuery extends AndroidDatabaseQuery<Void>
         }
         return null;
     }
+
 }

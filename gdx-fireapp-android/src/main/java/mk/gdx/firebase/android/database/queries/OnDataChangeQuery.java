@@ -36,12 +36,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
 {
 
-    private DataListenersManager dataListenersManager;
+    private final static DataListenersManager dataListenersManager = new DataListenersManager();
 
     public OnDataChangeQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
-        dataListenersManager = new DataListenersManager();
     }
 
     @Override
@@ -60,16 +59,18 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        if (arguments.get(1) != null) {
-            DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (DataChangeListener) arguments.get(1), orderByClause);
-            dataListenersManager.addNewListener(databasePath, dataChangeListener);
-            new DatabaseQueryFilteringProvider(filters, orderByClause, query).addValueEventListener(dataChangeListener);
-        } else {
-            Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
-            for (ValueEventListener v : listeners) {
-                query.removeEventListener(v);
+        synchronized (dataListenersManager) {
+            if (arguments.get(1) != null) {
+                DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (DataChangeListener) arguments.get(1), orderByClause);
+                dataListenersManager.addNewListener(databasePath, dataChangeListener);
+                new DatabaseQueryFilteringProvider(filters, orderByClause, query).addValueEventListener(dataChangeListener);
+            } else {
+                Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
+                for (ValueEventListener v : listeners) {
+                    query.removeEventListener(v);
+                }
+                dataListenersManager.removeListenersForPath(databasePath);
             }
-            dataListenersManager.removeListenersForPath(databasePath);
         }
         return null;
     }
