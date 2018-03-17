@@ -25,9 +25,10 @@ import com.google.firebase.database.ValueEventListener;
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.DataListenersManager;
 import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.providers.DatabaseQueryFilteringProvider;
 import mk.gdx.firebase.android.database.resolvers.DataListenerOnDataChangeResolver;
 import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
@@ -46,13 +47,13 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
     @Override
     protected void prepare()
     {
-        if (arguments.size != 2)
-            throw new IllegalStateException();
-        if (!(arguments.get(0) instanceof Class))
-            throw new IllegalArgumentException();
-        if (arguments.get(1) != null && !(arguments.get(1) instanceof DataChangeListener))
-            throw new IllegalArgumentException();
         super.prepare();
+    }
+
+    @Override
+    protected ArgumentsValidator createArgumentsValidator()
+    {
+        return new OnDataValidator();
     }
 
     @Override
@@ -63,7 +64,7 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
             if (arguments.get(1) != null) {
                 DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (DataChangeListener) arguments.get(1), orderByClause);
                 dataListenersManager.addNewListener(databasePath, dataChangeListener);
-                new DatabaseQueryFilteringProvider(filters, orderByClause, query).addValueEventListener(dataChangeListener);
+                filtersProvider.applyFiltering().addValueEventListener(dataChangeListener);
             } else {
                 Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
                 for (ValueEventListener v : listeners) {

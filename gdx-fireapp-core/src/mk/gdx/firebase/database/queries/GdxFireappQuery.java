@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 
 /**
@@ -27,8 +28,8 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
  * <p>
  * Holds basic shared features of all queries: filtering and terminate operation after each query.
  *
- * TODO - should be GdxFireappCall or some CallProvider?
- * TODO - Distribution here? or in 'execute'
+ * @param <T> Target DatabaseDistribution
+ * @param <R> Query execution return type
  */
 public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
 {
@@ -37,12 +38,14 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
     protected Array<Filter> filters;
     protected OrderByClause orderByClause;
     protected Array<Object> arguments;
+    protected ArgumentsValidator argumentsValidator;
 
     public GdxFireappQuery(T databaseDistribution)
     {
         this.databaseDistribution = databaseDistribution;
         filters = new Array<>();
         arguments = new Array<>();
+        argumentsValidator = createArgumentsValidator();
     }
 
     public GdxFireappQuery withArgs(Object... arguments)
@@ -65,8 +68,11 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
 
     public final R execute()
     {
+        if (argumentsValidator != null)
+            argumentsValidator.validate(arguments);
         prepare();
-        applyFilters();
+        if (filters.size > 0 || orderByClause != null)
+            applyFilters();
         R result = run();
         terminate();
         filters.clear();
@@ -79,6 +85,14 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
         // To overwrite
     }
 
+    /**
+     * @return ArgumentsValidator, may be null
+     */
+    protected abstract ArgumentsValidator createArgumentsValidator();
+
+    /**
+     * Applies the filters/order-by only if they are present.
+     */
     protected abstract void applyFilters();
 
     protected abstract R run();

@@ -23,6 +23,8 @@ import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.android.database.handlers.TransactionHandler;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.RunTransactionValidator;
 
 /**
  * Provides setValue execution with firebase database reference.
@@ -38,16 +40,14 @@ public class RunTransactionQuery extends AndroidDatabaseQuery<Void>
     protected void prepare()
     {
         super.prepare();
-        if (arguments.size < 2)
-            throw new IllegalStateException();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
-        if (!(arguments.get(0) instanceof Class))
-            throw new IllegalArgumentException();
-        if (!(arguments.get(1) instanceof TransactionCallback))
-            throw new IllegalArgumentException();
-        if (arguments.size > 2 && arguments.get(2) != null && !(arguments.get(2) instanceof CompleteCallback))
-            throw new IllegalArgumentException();
+    }
+
+    @Override
+    protected ArgumentsValidator createArgumentsValidator()
+    {
+        return new RunTransactionValidator();
     }
 
     @Override

@@ -24,6 +24,8 @@ import java.util.Map;
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 
 /**
  * Provides {@link DatabaseReference#updateChildren(Map)} execution with firebase database reference.
@@ -39,14 +41,14 @@ public class UpdateChildrenQuery extends AndroidDatabaseQuery<Void>
     protected void prepare()
     {
         super.prepare();
-        if (arguments.size < 1)
-            throw new IllegalStateException();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
-        if (arguments.get(0) != null && !(arguments.get(0) instanceof Map))
-            throw new IllegalArgumentException();
-        if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof CompleteCallback))
-            throw new IllegalArgumentException();
+    }
+
+    @Override
+    protected ArgumentsValidator createArgumentsValidator()
+    {
+        return new UpdateChildrenValidator();
     }
 
     @Override

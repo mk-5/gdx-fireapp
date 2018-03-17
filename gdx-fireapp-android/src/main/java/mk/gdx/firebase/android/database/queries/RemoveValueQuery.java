@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.RemoveValueValidator;
 
 /**
  * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
@@ -39,8 +41,12 @@ public class RemoveValueQuery extends AndroidDatabaseQuery<Void>
         super.prepare();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
-        if (arguments.size > 0  && arguments.get(0) != null && !(arguments.get(0) instanceof CompleteCallback))
-            throw new IllegalArgumentException();
+    }
+
+    @Override
+    protected ArgumentsValidator createArgumentsValidator()
+    {
+        return new RemoveValueValidator();
     }
 
     @Override

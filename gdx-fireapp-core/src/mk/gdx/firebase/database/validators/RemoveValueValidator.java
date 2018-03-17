@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.database;
+package mk.gdx.firebase.database.validators;
 
-/**
- * Provides filtering to object {@code T} received in methods.
- * <p>
- *
- * @param <T> The type of target object
- * @param <R> The type of return object
- */
-public interface FilterProvider<T, R>
+
+import com.badlogic.gdx.utils.Array;
+
+import mk.gdx.firebase.callbacks.CompleteCallback;
+
+public class RemoveValueValidator implements ArgumentsValidator
 {
-    <V> R apply(FilterType filterType, T target, V[] filterArguments);
+    @Override
+    public void validate(Array<Object> arguments)
+    {
+        if (arguments.size > 0  && arguments.get(0) != null && !(arguments.get(0) instanceof CompleteCallback))
+            throw new IllegalArgumentException();
+    }
 }

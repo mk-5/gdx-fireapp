@@ -23,10 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.providers.DatabaseQueryFilteringProvider;
 import mk.gdx.firebase.android.database.resolvers.DataCallbackOnDataResolver;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.ReadValueValidator;
 
 /**
  * Provides call to {@link com.google.firebase.database.Query#addListenerForSingleValueEvent(ValueEventListener)}.
@@ -42,20 +43,20 @@ public class ReadValueQuery extends AndroidDatabaseQuery<Void>
     @Override
     protected void prepare()
     {
-        if (arguments.size != 2)
-            throw new IllegalStateException();
-        if (!(arguments.get(0) instanceof Class))
-            throw new IllegalArgumentException();
-        if (!(arguments.get(1) instanceof DataCallback))
-            throw new IllegalArgumentException();
         super.prepare();
+    }
+
+    @Override
+    protected ArgumentsValidator createArgumentsValidator()
+    {
+        return new ReadValueValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        new DatabaseQueryFilteringProvider(filters, orderByClause, query)
+        filtersProvider.applyFiltering()
                 .addListenerForSingleValueEvent(new SingleValueListener((Class) arguments.get(0), (DataCallback) arguments.get(1), orderByClause));
         return null;
     }

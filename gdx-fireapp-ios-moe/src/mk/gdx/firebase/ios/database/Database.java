@@ -19,19 +19,13 @@ package mk.gdx.firebase.ios.database;
 import com.badlogic.gdx.utils.Array;
 import com.google.firebasedatabase.FIRDataSnapshot;
 import com.google.firebasedatabase.FIRDatabase;
-import com.google.firebasedatabase.FIRDatabaseQuery;
 import com.google.firebasedatabase.FIRDatabaseReference;
-import com.google.firebasedatabase.FIRMutableData;
-import com.google.firebasedatabase.FIRTransactionResult;
 import com.google.firebasedatabase.enums.FIRDataEventType;
 
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 import apple.foundation.NSError;
-import apple.foundation.NSNull;
 import apple.foundation.NSNumber;
-import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -42,7 +36,9 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
-import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFiltersProvider;
+import mk.gdx.firebase.ios.database.queries.OnDataChangeQuery;
+import mk.gdx.firebase.ios.database.queries.ReadValueQuery;
+import mk.gdx.firebase.ios.database.queries.RunTransactionQuery;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
@@ -56,9 +52,6 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class Database implements DatabaseDistribution
 {
 
-    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
-    private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "\"The database value at given path was not be able to update";
-    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
     FIRDatabaseReference dbReference;
@@ -141,38 +134,7 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback)
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new FIRDatabaseQueryFiltersProvider(filters, orderByClause, dbReference()).observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1()
-        {
-            @Override
-            public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
-            {
-                if (arg0.value() == null) {
-                    // TODO - ::onFileNotFound
-                    callback.onError(new FileNotFoundException());
-                } else {
-                    T data = null;
-                    try {
-                        data = DataProcessor.iosDataToJava(arg0.value(), dataType);
-                    } catch (Exception e) {
-                        if (callback != null) {
-                            callback.onError(e);
-                        } else {
-                            GdxFIRLogger.error(e.getLocalizedMessage(), e);
-                        }
-                        return;
-                    }
-                    callback.onData((R) data);
-                }
-            }
-        }, new FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2()
-        {
-            @Override
-            public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0)
-            {
-                callback.onError(new Exception(arg0.localizedDescription()));
-            }
-        });
-        terminateOperation();
+        new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
@@ -183,42 +145,7 @@ public class Database implements DatabaseDistribution
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        // TODO - keep observe handle in some manager
-        // TODO - ordering FIRDataSnapshot
-        new FIRDatabaseQueryFiltersProvider(filters, orderByClause, dbReference()).observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1()
-        {
-
-            @Override
-            public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0)
-            {
-                if (arg0.value() == null) {
-                    // TODO - onFileNotFound
-                    listener.onCanceled(new FileNotFoundException());
-                } else {
-                    T data = null;
-                    try {
-                        data = DataProcessor.iosDataToJava(arg0.value(), dataType);
-                    } catch (Exception e) {
-                        if (listener != null) {
-                            listener.onCanceled(e);
-                        } else {
-                            GdxFIRLogger.error(e.getLocalizedMessage(), e);
-                        }
-                        return;
-                    }
-                    listener.onChange((R) data);
-                }
-            }
-        }, new FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2()
-        {
-
-            @Override
-            public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0)
-            {
-                listener.onCanceled(new Exception(arg0.localizedDescription()));
-            }
-        });
-        terminateOperation();
+        new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
     }
 
     /**
@@ -320,45 +247,7 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
     {
-        dbReference().runTransactionBlockAndCompletionBlock(new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0()
-        {
-            @Override
-            public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
-            {
-                if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
-                    GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
-                    return FIRTransactionResult.abort();
-                }
-                T transactionObject = DataProcessor.iosDataToJava(arg0.value(), dataType);
-                arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run((R) transactionObject)));
-                return FIRTransactionResult.successWithValue(arg0);
-            }
-        }, new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1()
-        {
-            @Override
-            public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2)
-            {
-                if (arg0 != null) {
-                    if (completeCallback != null) {
-                        completeCallback.onError(new Exception(arg0.localizedDescription()));
-                    } else {
-                        GdxFIRLogger.error(TRANSACTION_ERROR, new Exception(arg0.localizedDescription()));
-                    }
-                } else {
-                    if (arg1) {
-                        if (completeCallback != null)
-                            completeCallback.onSuccess();
-                    } else {
-                        if (completeCallback != null) {
-                            completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
-                        } else {
-                            GdxFIRLogger.log(TRANSACTION_NOT_ABLE_TO_UPDATE);
-                        }
-                    }
-                }
-            }
-        });
-        terminateOperation();
+        new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
     /**
@@ -386,7 +275,7 @@ public class Database implements DatabaseDistribution
      * @return FirebaseSDK Database reference. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
-    private FIRDatabaseReference dbReference()
+    FIRDatabaseReference dbReference()
     {
         if (dbReference == null)
             throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
@@ -408,7 +297,7 @@ public class Database implements DatabaseDistribution
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */
-    private void terminateOperation()
+    void terminateOperation()
     {
         dbReference = null;
         databasePath = null;

@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.resolvers;
+package mk.gdx.firebase.ios.database.resolvers;
 
-import com.google.firebase.database.Query;
+import com.google.firebasedatabase.FIRDatabaseQuery;
 
 import mk.gdx.firebase.database.OrderByResolver;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 
 /**
- * Applies OrderByClause to the Query instance.
+ * Applies OrderByClause to the FIRDatabaseQuery instance.
  */
-public class AndroidOrderByResolver implements OrderByResolver<Query, Query>
+public class FIRQueryOrderByResolver implements OrderByResolver<FIRDatabaseQuery, FIRDatabaseQuery>
 {
     @Override
-    public Query resolve(OrderByClause orderByClause, Query target)
+    public FIRDatabaseQuery resolve(OrderByClause orderByClause, FIRDatabaseQuery target)
     {
         switch (orderByClause.getOrderByMode()) {
             case ORDER_BY_CHILD:
-                return target.orderByChild(orderByClause.getArgument());
+                return target.queryOrderedByChild(orderByClause.getArgument());
             case ORDER_BY_KEY:
-                return target.orderByKey();
+                return target.queryOrderedByKey();
             case ORDER_BY_VALUE:
-                return target.orderByValue();
+                return target.queryOrderedByValue();
             default:
                 throw new IllegalStateException();
         }

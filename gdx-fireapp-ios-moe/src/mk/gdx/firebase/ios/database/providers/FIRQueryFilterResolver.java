@@ -14,74 +14,63 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.providers;
+package mk.gdx.firebase.ios.database.providers;
 
-import com.google.firebase.database.Query;
+import com.google.firebasedatabase.FIRDatabaseQuery;
 
-import mk.gdx.firebase.database.FilterProvider;
+import mk.gdx.firebase.database.FilterResolver;
 import mk.gdx.firebase.database.FilterType;
 
 /**
- * Provides filtering for {@code Query} instance.
+ * Provides filtering for {@code DatabaseReference} instance.
  */
-public class QueryFilterProvider implements FilterProvider<Query, Query>
+public class FIRQueryFilterResolver implements FilterResolver<FIRDatabaseQuery, FIRDatabaseQuery>
 {
 
     public static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
     public static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
     public static final String MISSING_FILTER_ARGUMENTS = "Missing filter arguments.";
 
-    /**
-     * Apply filtering to the database ref and return appropriate query instance.
-     *
-     * @param filterType      Filter type which will be applied
-     * @param target          Target DatabaseReference instance
-     * @param filterArguments Arguments for filtering for ex. 100 or some String key
-     * @param <V>             Type for filterArgument, one from following: Integer, String, Double, Boolean
-     * @return Query with filtering applied
-     */
+
     @Override
-    public <V> Query apply(FilterType filterType, Query target, V[] filterArguments)
+    public <V> FIRDatabaseQuery resolve(FilterType filterType, FIRDatabaseQuery target, V[] filterArguments)
     {
-        if (filterArguments.length == 0)
-            throw new IllegalArgumentException(MISSING_FILTER_ARGUMENTS);
         switch (filterType) {
             case LIMIT_FIRST:
                 if (!(filterArguments[0] instanceof Integer))
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
-                return target.limitToFirst((Integer) filterArguments[0]);
+                return target.queryLimitedToFirst((Long) filterArguments[0]);
             case LIMIT_LAST:
                 if (!(filterArguments[0] instanceof Integer))
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
-                return target.limitToLast((Integer) filterArguments[0]);
+                return target.queryLimitedToLast((Long) filterArguments[0]);
             case START_AT:
-                // TODO - 2 arguments call
                 if (filterArguments[0] instanceof Double) {
-                    return target.startAt((Double) filterArguments[0]);
+                    return target.queryStartingAtValue((Double) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
-                    return target.startAt((Boolean) filterArguments[0]);
+                    return target.queryStartingAtValue((Boolean) filterArguments[0]);
                 } else if (filterArguments[0] instanceof String) {
-                    return target.startAt((String) filterArguments[0]);
+                    return target.queryStartingAtValue((String) filterArguments[0]);
                 } else {
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }
             case END_AT:
                 if (filterArguments[0] instanceof Double) {
-                    return target.endAt((Double) filterArguments[0]);
+                    return target.queryEndingAtValue((Double) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
-                    return target.endAt((Boolean) filterArguments[0]);
+                    return target.queryEndingAtValue((Boolean) filterArguments[0]);
                 } else if (filterArguments[0] instanceof String) {
-                    return target.endAt((String) filterArguments[0]);
+                    return target.queryEndingAtValue((String) filterArguments[0]);
                 } else {
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }
             case EQUAL_TO:
                 if (filterArguments[0] instanceof Double) {
-                    return target.equalTo((Double) filterArguments[0]);
+                    return target.queryEqualToValue((Double) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
-                    return target.equalTo((Boolean) filterArguments[0]);
+                    return target.queryEqualToValue((Boolean) filterArguments[0]);
                 } else if (filterArguments[0] instanceof String) {
-                    return target.equalTo((String) filterArguments[0]);
+                    return target.queryEqualToValue((String) filterArguments[0]);
                 } else {
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }

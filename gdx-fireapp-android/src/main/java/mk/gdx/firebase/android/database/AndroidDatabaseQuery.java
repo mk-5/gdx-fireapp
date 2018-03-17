@@ -18,7 +18,10 @@ package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.Query;
 
-import mk.gdx.firebase.android.database.providers.DatabaseQueryFilteringProvider;
+import mk.gdx.firebase.android.database.providers.QueryFilteringProvider;
+import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
+import mk.gdx.firebase.android.database.resolvers.QueryFilterResolver;
+import mk.gdx.firebase.database.FilteringProvider;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 /**
@@ -26,7 +29,7 @@ import mk.gdx.firebase.database.queries.GdxFireappQuery;
  * <p>
  * Flow is as follow:
  * <p>
- * - Gets {@code Query} instance and databasePath from DatabaseDistribution.
+ * - Gets {@code Query} instance and databasePath from {@link Database}.
  * - Applies filters if needed it
  * - Do some action on db
  * - Terminate query by clear given filters - if any - and call {@link Database#terminateOperation()}
@@ -39,12 +42,12 @@ public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, 
 
     protected String databasePath;
     protected Query query;
-    protected DatabaseQueryFilteringProvider filtersProvider;
+    protected FilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> filtersProvider;
 
     public AndroidDatabaseQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
-        filtersProvider = new DatabaseQueryFilteringProvider();
+        filtersProvider = new QueryFilteringProvider();
     }
 
     @Override
@@ -55,19 +58,19 @@ public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void applyFilters()
     {
-        if (filters.size > 0 || orderByClause != null) {
-            filtersProvider.setFilters(filters)
-                    .setOrderByClause(orderByClause)
-                    .setQuery(query);
-        }
+        filtersProvider.setFilters(filters)
+                .setOrderByClause(orderByClause)
+                .setQuery(query);
     }
 
     @Override
     protected void terminate()
     {
-        ((Database) databaseDistribution).terminateOperation();
+        databaseDistribution.terminateOperation();
+        orderByClause = null;
         filtersProvider.clear();
     }
 }

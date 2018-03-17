@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
+import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.OnConnectionValidator;
 import mk.gdx.firebase.listeners.ConnectedListener;
 
 /**
@@ -46,9 +48,13 @@ public class ConnectionQuery extends AndroidDatabaseQuery<Void>
     @Override
     protected void prepare()
     {
-        if (arguments.get(0) != null && arguments.get(0) instanceof ConnectedListener)
-            throw new IllegalArgumentException();
         query = FirebaseDatabase.getInstance().getReference(CONNECTED_REFERENCE);
+    }
+
+    @Override
+    protected ArgumentsValidator createArgumentsValidator()
+    {
+        return new OnConnectionValidator();
     }
 
     @Override
