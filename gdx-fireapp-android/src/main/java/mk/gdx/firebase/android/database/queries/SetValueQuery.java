@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
+import mk.gdx.firebase.android.database.listeners.QueryCompletionListener;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
@@ -55,18 +56,7 @@ public class SetValueQuery extends AndroidDatabaseQuery<Void>
         if (arguments.size == 1) {
             ((DatabaseReference) query).setValue(arguments.get(0));
         } else if (arguments.size == 2) {
-            ((DatabaseReference) query).setValue(arguments.get(0), new DatabaseReference.CompletionListener()
-            {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
-                {
-                    if (databaseError != null) {
-                        ((CompleteCallback) arguments.get(1)).onError(databaseError.toException());
-                    } else {
-                        ((CompleteCallback) arguments.get(1)).onSuccess();
-                    }
-                }
-            });
+            ((DatabaseReference) query).setValue(arguments.get(0), new QueryCompletionListener((CompleteCallback) arguments.get(1)));
         } else {
             throw new IllegalStateException();
         }

@@ -17,7 +17,6 @@
 package mk.gdx.firebase.ios.database.queries;
 
 import com.google.firebasedatabase.FIRDataSnapshot;
-import com.google.firebasedatabase.FIRDatabaseQuery;
 import com.google.firebasedatabase.FIRDatabaseReference;
 import com.google.firebasedatabase.FIRMutableData;
 import com.google.firebasedatabase.FIRTransactionResult;
@@ -34,7 +33,7 @@ import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
 
 /**
- * Provides call to {@link FIRDatabaseQuery#observeEventTypeWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2)}.
+ * Provides call to {@link FIRDatabaseReference#runTransactionBlockAndCompletionBlock(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0, FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1)}.
  */
 public class RunTransactionQuery extends IosDatabaseQuery<Void>
 {
@@ -65,44 +64,68 @@ public class RunTransactionQuery extends IosDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        ((FIRDatabaseReference) query).runTransactionBlockAndCompletionBlock(new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0()
-        {
-            @Override
-            public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
-            {
-                if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
-                    GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
-                    return FIRTransactionResult.abort();
-                }
-                Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), (Class) arguments.get(0));
-                arg0.setValue(DataProcessor.javaDataToIos(((TransactionCallback) arguments.get(1)).run(transactionObject)));
-                return FIRTransactionResult.successWithValue(arg0);
-            }
-        }, new FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1()
-        {
-            @Override
-            public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2)
-            {
-                if (arg0 != null) {
-                    if (arguments.get(2) != null) {
-                        ((CompleteCallback) arguments.get(2)).onError(new Exception(arg0.localizedDescription()));
-                    } else {
-                        GdxFIRLogger.error(TRANSACTION_ERROR, new Exception(arg0.localizedDescription()));
-                    }
-                } else {
-                    if (arg1) {
-                        if (arguments.get(2) != null)
-                            ((CompleteCallback) arguments.get(2)).onSuccess();
-                    } else {
-                        if (arguments.get(2) != null) {
-                            ((CompleteCallback) arguments.get(2)).onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
-                        } else {
-                            GdxFIRLogger.log(TRANSACTION_NOT_ABLE_TO_UPDATE);
-                        }
-                    }
-                }
-            }
-        });
+        ((FIRDatabaseReference) query).runTransactionBlockAndCompletionBlock(
+                new RunTransactionBlock((Class) arguments.get(0), (TransactionCallback) arguments.get(1)),
+                new TransactionCompleteBlock(arguments.size == 3 ? (CompleteCallback) arguments.get(2) : null));
         return null;
+    }
+
+    private class RunTransactionBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0
+    {
+
+        private Class type;
+        private TransactionCallback transactionCallback;
+
+        private RunTransactionBlock(Class type, TransactionCallback transactionCallback)
+        {
+            this.type = type;
+            this.transactionCallback = transactionCallback;
+        }
+
+        @Override
+        public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
+        {
+            if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
+                GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
+                return FIRTransactionResult.abort();
+            }
+            Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), type);
+            arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run(transactionObject)));
+            return FIRTransactionResult.successWithValue(arg0);
+        }
+    }
+
+    private class TransactionCompleteBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1
+    {
+
+        private CompleteCallback completeCallback;
+
+        private TransactionCompleteBlock(CompleteCallback completeCallback)
+        {
+            this.completeCallback = completeCallback;
+        }
+
+        @Override
+        public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2)
+        {
+            if (arg0 != null) {
+                if (completeCallback != null) {
+                    completeCallback.onError(new Exception(arg0.localizedDescription()));
+                } else {
+                    GdxFIRLogger.error(TRANSACTION_ERROR, new Exception(arg0.localizedDescription()));
+                }
+            } else {
+                if (arg1) {
+                    if (completeCallback != null)
+                        completeCallback.onSuccess();
+                } else {
+                    if (completeCallback != null) {
+                        completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
+                    } else {
+                        GdxFIRLogger.log(TRANSACTION_NOT_ABLE_TO_UPDATE);
+                    }
+                }
+            }
+        }
     }
 }

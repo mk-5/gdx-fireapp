@@ -95,6 +95,13 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
      */
     protected abstract void applyFilters();
 
+    /**
+     * Do some operations on Firebase Database.
+     * <p>
+     * Only flow here, every validation should be in {@link #prepare()}.
+     *
+     * @return Results of query execution
+     */
     protected abstract R run();
 
     protected abstract void terminate();

@@ -23,7 +23,6 @@ import com.google.firebasedatabase.enums.FIRDataEventType;
 import java.io.FileNotFoundException;
 
 import apple.foundation.NSError;
-import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
@@ -57,37 +56,59 @@ public class ReadValueQuery extends IosDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        filtersProvider.applyFiltering().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1()
-        {
-            @Override
-            public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
-            {
-                if (arg0.value() == null) {
-                    if (arguments.get(1) != null)
-                        ((DataCallback) arguments.get(1)).onError(new FileNotFoundException());
-                } else {
-                    Object data = null;
-                    try {
-                        data = DataProcessor.iosDataToJava(arg0.value(), (Class) arguments.get(0));
-                    } catch (Exception e) {
-                        if (arguments.get(1) != null) {
-                            ((DataCallback) arguments.get(1)).onError(e);
-                        } else {
-                            GdxFIRLogger.error(e.getLocalizedMessage(), e);
-                        }
-                        return;
-                    }
-                    ((DataCallback) arguments.get(1)).onData(data);
-                }
-            }
-        }, new FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2()
-        {
-            @Override
-            public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0)
-            {
-                ((DataCallback) arguments.get(1)).onError(new Exception(arg0.localizedDescription()));
-            }
-        });
+        filtersProvider.applyFiltering().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value,
+                new ReadValueBlock((Class) arguments.get(0), (DataCallback) arguments.get(1)),
+                new ReadValueCancelBlock((DataCallback) arguments.get(1)));
         return null;
+    }
+
+    /**
+     * Observer read value block. Wraps {@code DataCallback}
+     */
+    private class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1
+    {
+
+        private Class type;
+        private DataCallback dataCallback;
+
+        private ReadValueBlock(Class type, DataCallback dataCallback)
+        {
+            this.type = type;
+            this.dataCallback = dataCallback;
+        }
+
+        @Override
+        public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
+        {
+            if (arg0.value() == null) {
+                dataCallback.onError(new FileNotFoundException());
+            } else {
+                Object data = null;
+                try {
+                    data = DataProcessor.iosDataToJava(arg0.value(), type);
+                } catch (Exception e) {
+                    dataCallback.onError(e);
+                    return;
+                }
+                dataCallback.onData(data);
+            }
+        }
+    }
+
+    private class ReadValueCancelBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2
+    {
+
+        private DataCallback dataCallback;
+
+        private ReadValueCancelBlock(DataCallback dataCallback)
+        {
+            this.dataCallback = dataCallback;
+        }
+
+        @Override
+        public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0)
+        {
+            dataCallback.onError(new Exception(arg0.localizedDescription()));
+        }
     }
 }

@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Map;
 
-import mk.gdx.firebase.android.database.queries.ConnectionQuery;
+import mk.gdx.firebase.android.database.queries.ConnectionStatusQuery;
 import mk.gdx.firebase.android.database.queries.OnDataChangeQuery;
 import mk.gdx.firebase.android.database.queries.ReadValueQuery;
 import mk.gdx.firebase.android.database.queries.RemoveValueQuery;
@@ -73,7 +73,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void onConnect(final ConnectedListener listener)
     {
-        new ConnectionQuery(this).withArgs(listener).execute();
+        new ConnectionStatusQuery(this).withArgs(listener).execute();
     }
 
     /**

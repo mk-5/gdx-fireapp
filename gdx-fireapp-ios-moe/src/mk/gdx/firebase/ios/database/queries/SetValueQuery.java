@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.ios.database.queries;
 
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebasedatabase.FIRDatabaseReference;
 
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.listeners.QueryCompletionListener;
+import apple.foundation.NSError;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.RemoveValueValidator;
+import mk.gdx.firebase.database.validators.SetValueValidator;
+import mk.gdx.firebase.ios.database.Database;
+import mk.gdx.firebase.ios.database.IosDatabaseQuery;
+import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserver;
 
 /**
- * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
+ * Provides call to {@link FIRDatabaseReference#setValue(Object)} ()}.
  */
-public class RemoveValueQuery extends AndroidDatabaseQuery<Void>
+public class SetValueQuery extends IosDatabaseQuery<Void>
 {
-    public RemoveValueQuery(Database databaseDistribution)
+    public SetValueQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
     }
@@ -40,14 +40,14 @@ public class RemoveValueQuery extends AndroidDatabaseQuery<Void>
     protected void prepare()
     {
         super.prepare();
-        if (!(query instanceof DatabaseReference))
+        if (!(query instanceof FIRDatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
     protected ArgumentsValidator createArgumentsValidator()
     {
-        return new RemoveValueValidator();
+        return new SetValueValidator();
     }
 
     @Override
@@ -55,11 +55,9 @@ public class RemoveValueQuery extends AndroidDatabaseQuery<Void>
     protected Void run()
     {
         if (arguments.size == 0) {
-            ((DatabaseReference) query).removeValue();
+            ((FIRDatabaseReference) query).setValue(arguments.get(0));
         } else if (arguments.size == 1) {
-            ((DatabaseReference) query).removeValue(new QueryCompletionListener((CompleteCallback) arguments.get(0)));
-        } else {
-            throw new IllegalStateException();
+            ((FIRDatabaseReference) query).setValueWithCompletionBlock(arguments.get(0), new FIRDatabaseReferenceCompleteObserver((CompleteCallback) arguments.get(1)));
         }
         return null;
     }

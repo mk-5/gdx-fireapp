@@ -33,14 +33,14 @@ import mk.gdx.firebase.listeners.ConnectedListener;
 /**
  * Provides asking for connection status.
  */
-public class ConnectionQuery extends AndroidDatabaseQuery<Void>
+public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void>
 {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
 
     private static final Array<ConnectionValueListener> listeners = new Array<>();
 
-    public ConnectionQuery(Database databaseDistribution)
+    public ConnectionStatusQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
     }

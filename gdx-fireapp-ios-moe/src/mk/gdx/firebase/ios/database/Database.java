@@ -17,15 +17,11 @@
 package mk.gdx.firebase.ios.database;
 
 import com.badlogic.gdx.utils.Array;
-import com.google.firebasedatabase.FIRDataSnapshot;
 import com.google.firebasedatabase.FIRDatabase;
 import com.google.firebasedatabase.FIRDatabaseReference;
-import com.google.firebasedatabase.enums.FIRDataEventType;
 
 import java.util.Map;
 
-import apple.foundation.NSError;
-import apple.foundation.NSNumber;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -36,9 +32,13 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.ios.database.queries.ConnectionStatusQuery;
 import mk.gdx.firebase.ios.database.queries.OnDataChangeQuery;
 import mk.gdx.firebase.ios.database.queries.ReadValueQuery;
+import mk.gdx.firebase.ios.database.queries.RemoveValueQuery;
 import mk.gdx.firebase.ios.database.queries.RunTransactionQuery;
+import mk.gdx.firebase.ios.database.queries.SetValueQuery;
+import mk.gdx.firebase.ios.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
@@ -68,20 +68,9 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void onConnect(final ConnectedListener connectedListener)
+    public void onConnect(ConnectedListener connectedListener)
     {
-        FIRDatabase.database().referenceWithPath(".info/connected").observeEventTypeWithBlock(FIRDataEventType.Value, new FIRDatabaseReference.Block_observeEventTypeWithBlock()
-        {
-            @Override
-            public void call_observeEventTypeWithBlock(FIRDataSnapshot arg0)
-            {
-                boolean connected = ((NSNumber) arg0.value()).boolValue();
-                if (connected)
-                    connectedListener.onConnect();
-                else
-                    connectedListener.onDisconnect();
-            }
-        });
+        new ConnectionStatusQuery(this).withArgs(connectedListener).execute();
     }
 
     /**
@@ -101,8 +90,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(Object value)
     {
-        dbReference().setValue(DataProcessor.javaDataToIos(value));
-        terminateOperation();
+        new SetValueQuery(this).withArgs(value).execute();
     }
 
     /**
@@ -111,19 +99,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(Object value, CompleteCallback completeCallback)
     {
-        dbReference().setValueWithCompletionBlock(DataProcessor.javaDataToIos(value), new FIRDatabaseReference.Block_setValueWithCompletionBlock()
-        {
-            @Override
-            public void call_setValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
-            {
-                if (arg0 != null) {
-                    completeCallback.onError(new Exception(arg0.localizedDescription()));
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new SetValueQuery(this).withArgs(value, completeCallback).execute();
     }
 
     /**
@@ -185,8 +161,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue()
     {
-        dbReference().removeValue();
-        terminateOperation();
+        new RemoveValueQuery(this).execute();
     }
 
     /**
@@ -195,19 +170,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue(CompleteCallback completeCallback)
     {
-        dbReference().removeValueWithCompletionBlock(new FIRDatabaseReference.Block_removeValueWithCompletionBlock()
-        {
-            @Override
-            public void call_removeValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
-            {
-                if (arg0 != null) {
-                    completeCallback.onError(new Exception(arg0.localizedDescription()));
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new RemoveValueQuery(this).withArgs(completeCallback).execute();
     }
 
     /**
@@ -216,8 +179,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(Map<String, Object> data)
     {
-        dbReference().updateChildValues(NSDictionaryHelper.toNSDictionary(data));
-        terminateOperation();
+        new UpdateChildrenQuery(this).withArgs(data).execute();
     }
 
     /**
@@ -226,19 +188,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(Map<String, Object> data, CompleteCallback completeCallback)
     {
-        dbReference().updateChildValuesWithCompletionBlock(NSDictionaryHelper.toNSDictionary(data), new FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock()
-        {
-            @Override
-            public void call_updateChildValuesWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
-            {
-                if (arg0 != null) {
-                    completeCallback.onError(new Exception(arg0.localizedDescription()));
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new UpdateChildrenQuery(this).withArgs(data, completeCallback).execute();
     }
 
     /**

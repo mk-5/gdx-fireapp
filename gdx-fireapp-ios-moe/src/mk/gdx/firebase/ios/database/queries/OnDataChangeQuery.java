@@ -23,10 +23,8 @@ import com.google.firebasedatabase.enums.FIRDataEventType;
 import java.io.FileNotFoundException;
 
 import apple.foundation.NSError;
-import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
-import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.ios.database.DataProcessor;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
@@ -60,38 +58,60 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
     {
         // TODO - keep observe handle in some manager
         // TODO - ordering FIRDataSnapshot
-        filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value, new FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1()
-        {
-            @Override
-            public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0)
-            {
-                if (arg0.value() == null) {
-                    if (arguments.get(1) != null)
-                        ((DataChangeListener) arguments.get(1)).onCanceled(new FileNotFoundException());
-                } else {
-                    Object data = null;
-                    try {
-                        data = DataProcessor.iosDataToJava(arg0.value(), (Class) arguments.get(0));
-                    } catch (Exception e) {
-                        if (arguments.get(1) != null) {
-                            ((DataChangeListener) arguments.get(1)).onCanceled(e);
-                        } else {
-                            GdxFIRLogger.error(e.getLocalizedMessage(), e);
-                        }
-                        return;
-                    }
-                    ((DataChangeListener) arguments.get(1)).onChange(data);
-                }
-            }
-        }, new FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2()
-        {
-
-            @Override
-            public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0)
-            {
-                ((DataChangeListener) arguments.get(1)).onCanceled(new Exception(arg0.localizedDescription()));
-            }
-        });
+        filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
+                new DataChangeBlock((Class) arguments.get(0), (DataChangeListener) arguments.get(1)),
+                new DataChangeCancelBlock((DataChangeListener) arguments.get(1)));
         return null;
+    }
+
+    /**
+     * Observer read value block. Wraps {@code DataChangeListener}
+     */
+    private class DataChangeBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1
+    {
+
+        private Class type;
+        private DataChangeListener dataChangeListener;
+
+        private DataChangeBlock(Class type, DataChangeListener dataChangeListener)
+        {
+            this.type = type;
+            this.dataChangeListener = dataChangeListener;
+        }
+
+
+        @Override
+        public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0)
+        {
+            if (arg0.value() == null) {
+                dataChangeListener.onCanceled(new FileNotFoundException());
+            } else {
+                Object data = null;
+                try {
+                    data = DataProcessor.iosDataToJava(arg0.value(), type);
+                } catch (Exception e) {
+                    dataChangeListener.onCanceled(e);
+                    return;
+                }
+                dataChangeListener.onChange(data);
+            }
+        }
+    }
+
+    private class DataChangeCancelBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2
+    {
+
+        private DataChangeListener dataChangeListener;
+
+        private DataChangeCancelBlock(DataChangeListener dataChangeListener)
+        {
+            this.dataChangeListener = dataChangeListener;
+        }
+
+        @Override
+        public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0)
+        {
+            dataChangeListener.onCanceled(new Exception(arg0.localizedDescription()));
+        }
     }
 }
