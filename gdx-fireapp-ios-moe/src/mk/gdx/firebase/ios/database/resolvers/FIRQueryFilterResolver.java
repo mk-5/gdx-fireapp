@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.ios.database.providers;
+package mk.gdx.firebase.ios.database.resolvers;
 
 import com.google.firebasedatabase.FIRDatabaseQuery;
 
@@ -39,11 +39,11 @@ public class FIRQueryFilterResolver implements FilterResolver<FIRDatabaseQuery, 
             case LIMIT_FIRST:
                 if (!(filterArguments[0] instanceof Integer))
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
-                return target.queryLimitedToFirst((Long) filterArguments[0]);
+                return target.queryLimitedToFirst(((Integer) filterArguments[0]).longValue());
             case LIMIT_LAST:
                 if (!(filterArguments[0] instanceof Integer))
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
-                return target.queryLimitedToLast((Long) filterArguments[0]);
+                return target.queryLimitedToLast(((Integer) filterArguments[0]).longValue());
             case START_AT:
                 if (filterArguments[0] instanceof Double) {
                     return target.queryStartingAtValue((Double) filterArguments[0]);
