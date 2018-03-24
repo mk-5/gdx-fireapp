@@ -20,6 +20,7 @@ import com.google.firebasedatabase.FIRDatabaseQuery;
 
 import mk.gdx.firebase.database.FilteringProvider;
 import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.ios.database.resolvers.FIRQueryFilterResolver;
 import mk.gdx.firebase.ios.database.resolvers.FIRQueryOrderByResolver;
 
 /**
