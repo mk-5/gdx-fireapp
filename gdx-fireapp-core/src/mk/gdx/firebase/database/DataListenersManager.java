@@ -14,39 +14,49 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database;
+package mk.gdx.firebase.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * Menages data listeners for db.
  * <p>
  * Keeps all current listeners inside {@link #listeners}
+ *
+ * @param <T> Data listener type
  */
-public class DataListenersManager
+public class DataListenersManager<T>
 {
-    private ObjectMap<String, Array<ValueEventListener>> listeners;
+    private final ObjectMap<String, Array<T>> listeners;
 
     public DataListenersManager()
     {
         listeners = new ObjectMap<>();
     }
 
-    public void addNewListener(String databasePath, ValueEventListener listener)
+    public void addNewListener(String databasePath, T listener)
     {
-        if (!listeners.containsKey(databasePath))
-            listeners.put(databasePath, new Array<ValueEventListener>());
-        listeners.get(databasePath).add(listener);
+        synchronized (listeners) {
+            if (!listeners.containsKey(databasePath))
+                listeners.put(databasePath, new Array<T>());
+            listeners.get(databasePath).add(listener);
+        }
     }
 
     public void removeListenersForPath(String databasePath)
     {
-        listeners.get(databasePath).clear();
+        synchronized (listeners) {
+            listeners.get(databasePath).clear();
+        }
     }
 
-    public Array<ValueEventListener> getListeners(String databasePath)
+    public boolean hasListeners(String databasePath)
+    {
+        return listeners.containsKey(databasePath);
+    }
+
+    public Array<T> getListeners(String databasePath)
     {
         return new Array<>(listeners.get(databasePath));
     }

@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.android.database.queries;
 
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Map;

@@ -18,7 +18,6 @@ package mk.gdx.firebase.android.crash;
 
 import com.google.firebase.crash.FirebaseCrash;
 
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
 import mk.gdx.firebase.distributions.CrashDistribution;
 
 /**

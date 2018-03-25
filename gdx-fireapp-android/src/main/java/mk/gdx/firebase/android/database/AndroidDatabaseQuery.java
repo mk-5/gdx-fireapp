@@ -19,8 +19,8 @@ package mk.gdx.firebase.android.database;
 import com.google.firebase.database.Query;
 
 import mk.gdx.firebase.android.database.providers.QueryFilteringProvider;
-import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
 import mk.gdx.firebase.android.database.resolvers.QueryFilterResolver;
+import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
 import mk.gdx.firebase.database.FilteringProvider;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 

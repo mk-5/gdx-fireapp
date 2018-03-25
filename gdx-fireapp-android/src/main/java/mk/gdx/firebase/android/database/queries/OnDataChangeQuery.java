@@ -23,9 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.DataListenersManager;
 import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.android.database.resolvers.DataListenerOnDataChangeResolver;
+import mk.gdx.firebase.database.DataListenersManager;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
@@ -37,7 +37,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
 {
 
-    private final static DataListenersManager dataListenersManager = new DataListenersManager();
+    private final static DataListenersManager<ValueEventListener> dataListenersManager = new DataListenersManager<>();
 
     public OnDataChangeQuery(Database databaseDistribution)
     {
@@ -60,18 +60,16 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        synchronized (dataListenersManager) {
-            if (arguments.get(1) != null) {
-                DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (DataChangeListener) arguments.get(1), orderByClause);
-                dataListenersManager.addNewListener(databasePath, dataChangeListener);
-                filtersProvider.applyFiltering().addValueEventListener(dataChangeListener);
-            } else {
-                Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
-                for (ValueEventListener v : listeners) {
-                    query.removeEventListener(v);
-                }
-                dataListenersManager.removeListenersForPath(databasePath);
+        if (arguments.get(1) != null) {
+            DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (DataChangeListener) arguments.get(1), orderByClause);
+            dataListenersManager.addNewListener(databasePath, dataChangeListener);
+            filtersProvider.applyFiltering().addValueEventListener(dataChangeListener);
+        } else {
+            Array<ValueEventListener> listeners = dataListenersManager.getListeners(databasePath);
+            for (ValueEventListener v : listeners) {
+                query.removeEventListener(v);
             }
+            dataListenersManager.removeListenersForPath(databasePath);
         }
         return null;
     }
