@@ -65,7 +65,7 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
     }
 
     /**
-     * Observer read value block. Wraps {@code DataChangeListener}
+     * Observer for data change. Wraps {@code DataChangeListener}
      */
     private class DataChangeBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1
     {
@@ -98,6 +98,9 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
         }
     }
 
+    /**
+     * Observer for data change cancel. Wraps {@code DataChangeListener}
+     */
     private class DataChangeCancelBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2
     {
 
