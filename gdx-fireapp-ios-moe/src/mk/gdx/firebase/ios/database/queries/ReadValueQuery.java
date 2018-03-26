@@ -29,6 +29,7 @@ import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.ios.database.DataProcessor;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
+import mk.gdx.firebase.ios.database.resolvers.FIRDataSnapshotOrderByResolver;
 
 /**
  * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
@@ -81,11 +82,15 @@ public class ReadValueQuery extends IosDatabaseQuery<Void>
         public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
         {
             if (arg0.value() == null) {
-                dataCallback.onError(new FileNotFoundException());
+                dataCallback.onError(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
                 Object data = null;
                 try {
-                    data = DataProcessor.iosDataToJava(arg0.value(), type);
+                    if (!FIRDataSnapshotOrderByResolver.shouldResolveOrderBy(orderByClause, type, arg0)) {
+                        data = DataProcessor.iosDataToJava(arg0.value(), type);
+                    } else {
+                        data = FIRDataSnapshotOrderByResolver.resolve(arg0);
+                    }
                 } catch (Exception e) {
                     dataCallback.onError(e);
                     return;

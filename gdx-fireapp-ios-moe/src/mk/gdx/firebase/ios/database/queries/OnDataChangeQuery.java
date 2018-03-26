@@ -92,7 +92,7 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
         public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0)
         {
             if (arg0.value() == null) {
-                dataChangeListener.onCanceled(new FileNotFoundException());
+                dataChangeListener.onCanceled(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
                 Object data = null;
                 try {

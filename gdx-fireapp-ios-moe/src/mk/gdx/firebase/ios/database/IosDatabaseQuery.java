@@ -27,6 +27,7 @@ import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFilteringProvider;
 public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
 {
     protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with FIRDatabaseReference instance.";
+    protected static final String GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE = "Given database path returned null value";
 
     protected FIRDatabaseQuery query;
     protected FIRDatabaseQueryFilteringProvider filtersProvider;
