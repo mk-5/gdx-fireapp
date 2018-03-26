@@ -84,6 +84,8 @@ public interface DatabaseDistribution
 
     /**
      * Reads value from path given by {@code inReference(String)} and gives response by {@code DataCallback}.
+     * <p>
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataCallbackMitmConverter}
      *
      * @param dataType Class you want to retrieve
      * @param callback Callback that handles response
@@ -98,6 +100,8 @@ public interface DatabaseDistribution
      * Handles value changes for path given by {@code inReference(String)} and gives response by {@code DataChangeListener}.
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
+     * <p>
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter}
      *
      * @param dataType Class you want to retrieve
      * @param listener Listener, may by null - if null all listeners for specified database reference will be removed.
