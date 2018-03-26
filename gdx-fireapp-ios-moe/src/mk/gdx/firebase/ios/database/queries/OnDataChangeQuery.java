@@ -30,6 +30,7 @@ import mk.gdx.firebase.ios.database.DataProcessor;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
 import mk.gdx.firebase.ios.database.observers.DataObserversManager;
+import mk.gdx.firebase.ios.database.resolvers.FIRDataSnapshotOrderByResolver;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
@@ -95,7 +96,11 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
             } else {
                 Object data = null;
                 try {
-                    data = DataProcessor.iosDataToJava(arg0.value(), type);
+                    if (!FIRDataSnapshotOrderByResolver.shouldResolveOrderBy(orderByClause, type, arg0)) {
+                        data = DataProcessor.iosDataToJava(arg0.value(), type);
+                    } else {
+                        data = FIRDataSnapshotOrderByResolver.resolve(arg0);
+                    }
                 } catch (Exception e) {
                     dataChangeListener.onCanceled(e);
                     return;
