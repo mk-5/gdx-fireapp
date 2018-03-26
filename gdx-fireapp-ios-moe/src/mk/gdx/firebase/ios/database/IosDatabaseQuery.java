@@ -30,6 +30,7 @@ public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
 
     protected FIRDatabaseQuery query;
     protected FIRDatabaseQueryFilteringProvider filtersProvider;
+    protected String databasePath;
 
     public IosDatabaseQuery(Database databaseDistribution)
     {
@@ -40,6 +41,7 @@ public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
     protected void prepare()
     {
         query = databaseDistribution.dbReference();
+        databasePath = databaseDistribution.databasePath;
     }
 
     @Override

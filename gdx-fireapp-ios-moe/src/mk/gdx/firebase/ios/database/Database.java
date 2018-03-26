@@ -55,9 +55,9 @@ public class Database implements DatabaseDistribution
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
     FIRDatabaseReference dbReference;
+    String databasePath;
     private final Array<Filter> filters;
     private OrderByClause orderByClause;
-    private String databasePath;
 
     public Database()
     {

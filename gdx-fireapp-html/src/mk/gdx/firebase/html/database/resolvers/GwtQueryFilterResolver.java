@@ -26,7 +26,7 @@ public class GwtQueryFilterResolver
 
     }
 
-    public static native void addGlobalFilters()  /*-{
+    public static native void applyFilter(String filterType, Object arg)  /*-{
         var filters = $wnd.fireappFilters || [];
 
     }-*/;

@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -120,6 +121,7 @@ public class Database implements DatabaseDistribution
     public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
     {
         filters.add(new Filter(filterType, filterArguments));
+        GdxFIRLogger.log("GWT does not support filtering yet.");
         return this;
     }
 
@@ -130,6 +132,7 @@ public class Database implements DatabaseDistribution
     public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
     {
         orderByClause = new OrderByClause(orderByMode, argument);
+        GdxFIRLogger.log("GWT does not support order-by yet.");
         return this;
     }
 

@@ -16,6 +16,7 @@
 
 package mk.gdx.firebase.ios.database.queries;
 
+import com.badlogic.gdx.utils.Array;
 import com.google.firebasedatabase.FIRDataSnapshot;
 import com.google.firebasedatabase.FIRDatabaseQuery;
 import com.google.firebasedatabase.enums.FIRDataEventType;
@@ -28,6 +29,7 @@ import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.ios.database.DataProcessor;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
+import mk.gdx.firebase.ios.database.observers.DataObserversManager;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
@@ -35,15 +37,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  */
 public class OnDataChangeQuery extends IosDatabaseQuery<Void>
 {
+    private static final DataObserversManager observersManager = new DataObserversManager();
+
     public OnDataChangeQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
-    }
-
-    @Override
-    protected void prepare()
-    {
-        super.prepare();
     }
 
     @Override
@@ -56,11 +54,20 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        // TODO - keep observe handle in some manager
-        // TODO - ordering FIRDataSnapshot
-        filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
-                new DataChangeBlock((Class) arguments.get(0), (DataChangeListener) arguments.get(1)),
-                new DataChangeCancelBlock((DataChangeListener) arguments.get(1)));
+        // TODO - ordering FIRDataSnapsho
+        if (arguments.get(1) != null) {
+            long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
+                    new DataChangeBlock((Class) arguments.get(0), (DataChangeListener) arguments.get(1)),
+                    new DataChangeCancelBlock((DataChangeListener) arguments.get(1)));
+            observersManager.addNewListener(databasePath, handle);
+        } else {
+            if (observersManager.hasListeners(databasePath)) {
+                Array<Long> handles = observersManager.getListeners(databasePath);
+                for (Long handle : handles)
+                    query.removeObserverWithHandle(handle);
+                observersManager.removeListenersForPath(databasePath);
+            }
+        }
         return null;
     }
 
