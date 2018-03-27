@@ -56,7 +56,7 @@ public class DataSnapshotOrderByResolver
      */
     public static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, DataSnapshot dataSnapshot)
     {
-        return ClassReflection.isAssignableFrom(List.class, dataType)
+        return orderByClause != null && ClassReflection.isAssignableFrom(List.class, dataType)
                 && dataSnapshot.getChildrenCount() > 0;
     }
 }
