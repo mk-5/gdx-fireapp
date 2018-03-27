@@ -71,8 +71,7 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
         if (argumentsValidator != null)
             argumentsValidator.validate(arguments);
         prepare();
-        if (filters.size > 0 || orderByClause != null)
-            applyFilters();
+        applyFilters();
         R result = run();
         terminate();
         filters.clear();

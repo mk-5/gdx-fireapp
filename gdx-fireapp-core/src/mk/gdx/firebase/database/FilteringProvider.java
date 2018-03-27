@@ -33,11 +33,12 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
     protected E filterResolver;
     protected K orderByResolver;
     protected T query;
-    protected Array<Filter> filters;
+    protected final Array<Filter> filters;
     protected OrderByClause orderByClause;
 
     public FilteringProvider()
     {
+        filters = new Array<>();
         filterResolver = createFilterResolver();
         orderByResolver = createOrderByResolver();
     }
@@ -62,7 +63,9 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
      */
     public FilteringProvider setFilters(Array<Filter> filters)
     {
-        this.filters = new Array<>(filters);
+        if( filters == null ) return this;
+        this.filters.clear();
+        this.filters.addAll(filters);
         // The first go to the end, now i can use .pop() later.
         filters.reverse();
         return this;
@@ -76,8 +79,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
 
     public void clear()
     {
-        if (filters != null)
-            filters.clear();
+        filters.clear();
         query = null;
         orderByClause = null;
     }
