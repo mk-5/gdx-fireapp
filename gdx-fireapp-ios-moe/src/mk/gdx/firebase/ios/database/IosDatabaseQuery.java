@@ -36,6 +36,7 @@ public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
     public IosDatabaseQuery(Database databaseDistribution)
     {
         super(databaseDistribution);
+        filtersProvider = new FIRDatabaseQueryFilteringProvider();
     }
 
     @Override
