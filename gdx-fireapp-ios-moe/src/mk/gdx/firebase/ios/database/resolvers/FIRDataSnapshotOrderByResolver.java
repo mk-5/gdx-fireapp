@@ -44,7 +44,11 @@ public class FIRDataSnapshotOrderByResolver
         List result = new ArrayList<>();
         NSArray nsArray = dataSnapshot.children().allObjects();
         for (Object object : nsArray) {
-            result.add(DataProcessor.iosDataToJava(object));
+            if( object instanceof FIRDataSnapshot ){
+                result.add(DataProcessor.iosDataToJava(((FIRDataSnapshot)object).value()));
+            }else {
+                result.add(DataProcessor.iosDataToJava(object));
+            }
         }
         return result;
     }
@@ -59,7 +63,7 @@ public class FIRDataSnapshotOrderByResolver
      */
     public static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, FIRDataSnapshot dataSnapshot)
     {
-        return ClassReflection.isAssignableFrom(List.class, dataType)
+        return orderByClause != null && ClassReflection.isAssignableFrom(List.class, dataType)
                 && dataSnapshot.childrenCount() > 0;
     }
 }
