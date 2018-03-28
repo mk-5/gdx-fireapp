@@ -42,7 +42,7 @@ public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, 
 
     protected String databasePath;
     protected Query query;
-    protected FilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> filtersProvider;
+    protected QueryFilteringProvider filtersProvider;
 
     public AndroidDatabaseQuery(Database databaseDistribution)
     {
