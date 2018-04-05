@@ -19,5 +19,5 @@
 \- GdxFIRDatabase is able now to do customization of database MapConversion by FirebaseMapConverter Interface
 \- Correct frameworks paths for latest Pods in firebase.nbc
 
-**[1.2.1]**
-\- Database ordering&filtering API
+**[1.3.0]**
+\- Database ordering&filtering API for Android and iOS

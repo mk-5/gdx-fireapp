@@ -18,38 +18,38 @@ Now you need to add GDX Fireapp gradle dependencies, as follow:
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.2.0"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.3.0"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.2.0"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.3.0"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.2.0"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.3.0"
 ```
 
-Last step is: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
+The last step is: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
 
 
-**Version 1.2.0** was built using LibGDX 1.9.8, multi-os-engine 1.4.1, gwt 2.8.0
+**Version 1.3.0** was built using LibGDX 1.9.8, multi-os-engine 1.4.1, gwt 2.8.0
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
 
-If you want to use GWT platform read this wiki page: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
+If you want to use GWT platform read this wiki page first: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
 
 
 
 ## Basics
 
-API is something like bridge beetwen LibGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this api should be intuitive for you.
+API is something like bridge between libGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this API should be intuitive for you.
 
 
 
-To initialize Firebase SDK  just put this line  somewhere in your app initialization code:
+To initialize Firebase SDK  just put this line somewhere in your app initialization code:
 
 ```java
 GdxFIRApp.instance().configure();
@@ -59,9 +59,7 @@ GdxFIRApp.instance().configure();
 
 
 
-## Examples
-
-To deal with Firebase SDK you have to use following classes:
+Firebase SDK communication is done with following classes:
 
 - **[GdxFIRApp](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRApp.html)**
 - **[GdxFIRAnalytics](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRAnalytics.html)**
@@ -73,168 +71,16 @@ To deal with Firebase SDK you have to use following classes:
 
 
 
-#### Analytics
+## Examples
 
-Log some button tap event
-
-```java
-Map<String, String> params = new HashMap<String, String>();
-params.put(AnalyticsParam.CONTENT_TYPE, "button");
-params.put(AnalyticsParam.ITEM_ID, "my super button");
-GdxFIRAnalytics.instance().logEvent(AnalyticsEvent.SELECT_CONTENT, params);
-```
-
-
-
-#### Auth
-
-Sign-in anonymously 
-
-```java
-GdxFIRAuth.instance().signInAnonymously(new AuthCallback() {
-  @Override
-  public void onSuccess(GdxFirebaseUser user)
-  {
-    // Deal with with current user.
-    String userDisplayName = user.getUserInfo().getDisplayName();
-  }
- 
-  @Override
-  public void onFail(Exception e)
-  {
-    // handle failure
-  }
-});
-```
-
-
-
-#### Storage
-
-Download byte data:
-
-```java
-GdxFIRStorage.instance().download("/file.data", Long.MAX_VALUE, new DownloadCallback<byte[]>() {
-  @Override
-  public void onSuccess(byte[] result)
-  {
-    // Process just downloaded byte[] data.
-  }
-
-  @Override
-  public void onFail(Exception e)
-  {
-    e.printStackTrace();
-  }
-});
-```
-
-Download texture:
-
-```java
-GdxFIRStorage.instance().downloadImage("/img.png", new DownloadCallback<TextureRegion>() {
-    @Override
-    public void onSuccess(TextureRegion region)
-    {
-        // Do something with region.
-        // ....
-        // Remember to dispose texture when you done! (now or later)
-        region.getTexture().dispose();
-    }
-
-     @Override
-     public void onFail(Exception e)
-     {
-       e.printStackTrace();
-     }
-});
-```
-
-If your storage requires authorization do not forget about it, more info [here](https://firebase.google.com/docs/storage/security/). 
-
-
-
-#### Realtime Database
-
-Sample database usage, with following POJO class
-
-```java
-public class User{
-  public String username;
-  public String email;
-  public User(){}
-  public User(String username, String email){
-    this.username = username;
-    this.email = email;
-  }
-}
-```
-
-Put into database:
-
-```java
-GdxFIRDatabase.instance().inReference("users/"+userId)
-.setValue(new User("Bob", "bob@bob.com"));
-```
-
-Listen for data change:
-
-```java
-GdxFIRDatabase.instance().inReference("users/"+userId)
-.onDataChange(User.class, new DataChangeListener<User>() {
-  
-    @MapConversion(User.class)
-    @Override
-    public void onChange(User user)
-    {
-    }
-            
-    @Override
-    public void onCanceled(Exception e)
-    {
-    
-    }
-});
-```
-
-Read a list:
-
-```java
-GdxFIRDatabase.instance().inReference("users")
-.readValue(List.class, new DataCallback<List<User>>(){
-  
-  @MapConversion(User.class)
-  @Override
-  public void onData(List<User> list)
-  {
-    // Do something with list..
-  }
-  
-  @Override
-  public void onError(Exception e)
-  {
-    // Handle failure
-  }
-});
-```
-
-When you want to fetch POJO from database you should use **@MapConversion** annotation to tell the api what type do you expect instead of Map, you can read more about it [here](https://github.com/mk-5/gdx-fireapp/wiki/Database-POJO-Conversion).
-
-
-
-#### Crash raporting
-
-Any custom errors or logs you can report as follow:
-
-```java
-GdxFIRCrash.log("i'm custom log.")
-```
+For some examples please look at [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
 
 
 
 ## Useful links
 
 - [Javadoc](http://fireappdocs.mk5.pl)
+- [Filtering API wiki](https://github.com/mk-5/gdx-fireapp/wiki/Filtering-API)
 
 
 
@@ -245,7 +91,6 @@ GdxFIRCrash.log("i'm custom log.")
 
 - Better wiki/documentation
 - Simplify ios installation
-- Database query flow (filtering, limiting etc..)
 - Google, facebook authorization
 - Messaging
 - Upload task monitoring
