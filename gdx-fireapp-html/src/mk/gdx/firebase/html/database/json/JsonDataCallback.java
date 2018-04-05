@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.html.database;
+package mk.gdx.firebase.html.database.json;
 
 import mk.gdx.firebase.callbacks.DataCallback;
+import mk.gdx.firebase.html.database.json.JsonProcessor;
 
 /**
  * Wraps data callback into callback with String as return type.
@@ -26,7 +27,7 @@ import mk.gdx.firebase.callbacks.DataCallback;
  *
  * @param <T> Result type after json string converting process
  */
-class JsonDataCallback<T> implements DataCallback<String>
+public class JsonDataCallback<T> implements DataCallback<String>
 {
     private Class<?> wantedType;
     private DataCallback dataCallback;

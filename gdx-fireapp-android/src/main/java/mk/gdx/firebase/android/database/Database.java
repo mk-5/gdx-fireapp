@@ -17,21 +17,26 @@
 package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
-import mk.gdx.firebase.GdxFIRLogger;
+import mk.gdx.firebase.android.database.queries.ConnectionStatusQuery;
+import mk.gdx.firebase.android.database.queries.OnDataChangeQuery;
+import mk.gdx.firebase.android.database.queries.ReadValueQuery;
+import mk.gdx.firebase.android.database.queries.RemoveValueQuery;
+import mk.gdx.firebase.android.database.queries.RunTransactionQuery;
+import mk.gdx.firebase.android.database.queries.SetValueQuery;
+import mk.gdx.firebase.android.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.FilteringStateEnsurer;
+import mk.gdx.firebase.database.OrderByMode;
+import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.listeners.ConnectedListener;
@@ -46,23 +51,20 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class Database implements DatabaseDistribution
 {
 
-    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
-    private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "\"The database value at given path was not be able to update";
-    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
     private DatabaseReference databaseReference;
     private String databasePath;
-    private ObjectMap<String, Array<ValueEventListener>> valueEventListeners;
-    private ConnectedListener connectedListener;
-    private ConnectionValueListener connectionValueListener;
+    private final Array<Filter> filters;
+    private OrderByClause orderByClause;
+
 
     /**
      * Constructor of android database distribution
      */
     public Database()
     {
-        valueEventListeners = new ObjectMap<>();
+        filters = new Array<>();
     }
 
     /**
@@ -71,15 +73,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void onConnect(final ConnectedListener listener)
     {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(".info/connected");
-        if (connectionValueListener == null && listener != null) {
-            connectionValueListener = new ConnectionValueListener();
-            ref.addValueEventListener(connectionValueListener);
-        } else if (connectionValueListener != null && listener == null) {
-            ref.removeEventListener(connectionValueListener);
-            connectionValueListener = null;
-        }
-        connectedListener = listener;
+        new ConnectionStatusQuery(this).withArgs(listener).execute();
     }
 
     /**
@@ -99,8 +93,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(Object value)
     {
-        databaseReference().setValue(value);
-        terminateOperation();
+        new SetValueQuery(this).withArgs(value).execute();
     }
 
     /**
@@ -109,19 +102,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void setValue(Object value, final CompleteCallback completeCallback)
     {
-        databaseReference().setValue(value, new DatabaseReference.CompletionListener()
-        {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
-            {
-                if (databaseError != null) {
-                    completeCallback.onError(databaseError.toException());
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new SetValueQuery(this).withArgs(value, completeCallback).execute();
     }
 
     /**
@@ -131,21 +112,8 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
     {
-        databaseReference().addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                callback.onData((E) dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-                callback.onError(databaseError.toException());
-            }
-        });
-        terminateOperation();
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
+        new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
@@ -154,19 +122,29 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
     {
-        if (listener != null) {
-            DataChangeValueListener<T, R> dataChangeListener = new DataChangeValueListener<>(dataType, listener);
-            if (!valueEventListeners.containsKey(databasePath))
-                valueEventListeners.put(databasePath, new Array<ValueEventListener>());
-            valueEventListeners.get(databasePath).add(dataChangeListener);
-            databaseReference().addValueEventListener(dataChangeListener);
-        } else {
-            Array<ValueEventListener> listeners = valueEventListeners.get(databasePath);
-            for (ValueEventListener v : listeners) {
-                databaseReference().removeEventListener(v);
-            }
-        }
-        terminateOperation();
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
+        new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
+    {
+        filters.add(new Filter(filterType, filterArguments));
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
+    {
+        orderByClause = new OrderByClause(orderByMode, argument);
+        return this;
     }
 
     /**
@@ -186,8 +164,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue()
     {
-        databaseReference().removeValue();
-        terminateOperation();
+        new RemoveValueQuery(this).execute();
     }
 
     /**
@@ -196,19 +173,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue(final CompleteCallback completeCallback)
     {
-        databaseReference().removeValue(new DatabaseReference.CompletionListener()
-        {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
-            {
-                if (databaseError != null) {
-                    completeCallback.onError(databaseError.toException());
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new RemoveValueQuery(this).withArgs(completeCallback).execute();
     }
 
     /**
@@ -217,8 +182,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(Map<String, Object> data)
     {
-        databaseReference().updateChildren(data);
-        terminateOperation();
+        new UpdateChildrenQuery(this).withArgs(data).execute();
     }
 
     /**
@@ -227,19 +191,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(Map<String, Object> data, final CompleteCallback completeCallback)
     {
-        databaseReference().updateChildren(data, new DatabaseReference.CompletionListener()
-        {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
-            {
-                if (databaseError != null) {
-                    completeCallback.onError(databaseError.toException());
-                } else {
-                    completeCallback.onSuccess();
-                }
-            }
-        });
-        terminateOperation();
+        new UpdateChildrenQuery(this).withArgs(data, completeCallback).execute();
     }
 
     /**
@@ -249,45 +201,7 @@ public class Database implements DatabaseDistribution
     @SuppressWarnings("unchecked")
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
     {
-        databaseReference().runTransaction(new Transaction.Handler()
-        {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData)
-            {
-                if (mutableData.getValue() == null) {
-                    GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
-                    return Transaction.abort();
-                }
-                R transactionData = (R) mutableData.getValue();
-                mutableData.setValue(transactionCallback.run(transactionData));
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot)
-            {
-                if (databaseError != null) {
-                    if (completeCallback != null) {
-                        completeCallback.onError(databaseError.toException());
-                    } else {
-                        GdxFIRLogger.error(TRANSACTION_ERROR, databaseError.toException());
-                    }
-                } else {
-                    if (b) {
-                        if (completeCallback != null) {
-                            completeCallback.onSuccess();
-                        }
-                    } else {
-                        if (completeCallback != null) {
-                            completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
-                        } else {
-                            GdxFIRLogger.error(TRANSACTION_NOT_ABLE_TO_UPDATE);
-                        }
-                    }
-                }
-            }
-        });
-        terminateOperation();
+        new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
     /**
@@ -314,10 +228,11 @@ public class Database implements DatabaseDistribution
      * @return FirebaseSDK Database reference. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
-    private DatabaseReference databaseReference()
+    DatabaseReference databaseReference()
     {
         if (databaseReference == null)
             throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
+
         return databaseReference;
     }
 
@@ -336,70 +251,21 @@ public class Database implements DatabaseDistribution
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */
-    private void terminateOperation()
+    void terminateOperation()
     {
         databaseReference = null;
         databasePath = null;
+        orderByClause = null;
+        filters.clear();
     }
 
     /**
-     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
+     * Getter for databasePath.
      *
-     * @param <T> Class of object that we want to listen for change
-     * @param <R> Generic type of object that we want to listen for change. For ex. in case of List we cant put {@code List<String>.class} as dataType, so we can put it here.
+     * @return Database path, may be null
      */
-    private class DataChangeValueListener<T, R extends T> implements ValueEventListener
+    String getDatabasePath()
     {
-
-        private Class<T> dataType;
-        private DataChangeListener<R> dataChangeListener;
-
-        public DataChangeValueListener(Class<T> dataType, DataChangeListener<R> dataChangeListener)
-        {
-            this.dataChangeListener = dataChangeListener;
-            this.dataType = dataType;
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
-            dataChangeListener.onChange((R) dataSnapshot.getValue());
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
-            dataChangeListener.onCanceled(databaseError.toException());
-        }
-
-
-    }
-
-    /**
-     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
-     * and getting information from {@code .info/connected} path.
-     */
-    private class ConnectionValueListener implements ValueEventListener
-    {
-
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
-            if (connectedListener == null) return;
-            boolean connected = dataSnapshot.getValue(Boolean.class);
-            if (connected) {
-                connectedListener.onConnect();
-            } else {
-                connectedListener.onDisconnect();
-            }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
-
-        }
+        return databasePath;
     }
 }

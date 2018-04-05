@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 /**
  * Transforms data to string.
  */
-class StringGenerator
+public class StringGenerator
 {
     /**
      * Returns JSON string representation of object.

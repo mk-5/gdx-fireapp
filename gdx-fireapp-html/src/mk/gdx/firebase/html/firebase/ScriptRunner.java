@@ -26,7 +26,7 @@ public class ScriptRunner
      *
      * @param action Action with firebase.js script
      */
-    public static void firebaseScript(Runnable action)
+    public static synchronized void firebaseScript(Runnable action)
     {
         if (FirebaseScriptInformant.isFirebaseScriptLoaded())
             action.run();

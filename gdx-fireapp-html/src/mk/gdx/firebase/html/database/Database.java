@@ -17,15 +17,27 @@
 package mk.gdx.firebase.html.database;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.OrderByMode;
+import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
-import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.html.database.queries.ConnectionStatusQuery;
+import mk.gdx.firebase.html.database.queries.OnDataChangeQuery;
+import mk.gdx.firebase.html.database.queries.PushQuery;
+import mk.gdx.firebase.html.database.queries.RemoveValueQuery;
+import mk.gdx.firebase.html.database.queries.RunTransactionQuery;
+import mk.gdx.firebase.html.database.queries.SetValueQuery;
+import mk.gdx.firebase.html.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
@@ -38,6 +50,13 @@ public class Database implements DatabaseDistribution
 {
 
     private String refPath;
+    private final Array<Filter> filters;
+    private OrderByClause orderByClause;
+
+    public Database()
+    {
+        filters = new Array<>();
+    }
 
     /**
      * {@inheritDoc}
@@ -45,14 +64,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void onConnect(final ConnectedListener connectedListener)
     {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.onConnect(connectedListener);
-            }
-        });
+        new ConnectionStatusQuery(this).withArgs(connectedListener).execute();
     }
 
     /**
@@ -69,34 +81,18 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setValue(final Object value)
+    public void setValue(Object value)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.set(scriptRefPath, StringGenerator.dataToString(value));
-            }
-        });
-        terminateOperation();
+        new SetValueQuery(this).withArgs(value).execute();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setValue(final Object value, final CompleteCallback completeCallback)
+    public void setValue(Object value, CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.setWithCallback(scriptRefPath, StringGenerator.dataToString(value), completeCallback);
-            }
-        });
-        terminateOperation();
+        new SetValueQuery(this).withArgs(value, completeCallback).execute();
     }
 
     /**
@@ -105,16 +101,7 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.setNextDataCallback(new JsonDataCallback<T>(dataType, callback));
-                DatabaseJS.once(scriptRefPath);
-            }
-        });
-        terminateOperation();
+        new RemoveValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
@@ -123,21 +110,30 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                // TODO DataChangeListener::onCancelled
-                if (listener != null && !DatabaseJS.hasListener(scriptRefPath)) {
-                    DatabaseJS.addDataListener(scriptRefPath, new JsonDataListener<T>(dataType, listener));
-                    DatabaseJS.onValue(scriptRefPath);
-                } else if (listener == null) {
-                    DatabaseJS.offValue(scriptRefPath);
-                }
-            }
-        });
-        terminateOperation();
+        new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
+    {
+        filters.add(new Filter(filterType, filterArguments));
+        GdxFIRLogger.log("GWT does not support filtering yet.");
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
+    {
+        orderByClause = new OrderByClause(orderByMode, argument);
+        GdxFIRLogger.log("GWT does not support order-by yet.");
+        return this;
     }
 
     /**
@@ -146,15 +142,7 @@ public class Database implements DatabaseDistribution
     @Override
     public DatabaseDistribution push()
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                // TODO - some special callback for other actions? On the other hand, no others action can be done before this (if it probably is waiting for firebase.js)
-                refPath = DatabaseJS.push(scriptRefPath);
-            }
-        });
+        new PushQuery(this).execute();
         return this;
     }
 
@@ -164,15 +152,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue()
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.remove(scriptRefPath);
-            }
-        });
-        terminateOperation();
+        new RemoveValueQuery(this).execute();
     }
 
     /**
@@ -181,15 +161,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void removeValue(final CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.removeWithCallback(scriptRefPath, completeCallback);
-            }
-        });
-        terminateOperation();
+        new RemoveValueQuery(this).withArgs(completeCallback).execute();
     }
 
     /**
@@ -198,15 +170,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(final Map<String, Object> data)
     {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.update(scriptRefPath, MapTransformer.mapToJSON(data));
-            }
-        });
-        terminateOperation();
+        new UpdateChildrenQuery(this).withArgs(data).execute();
     }
 
     /**
@@ -215,15 +179,7 @@ public class Database implements DatabaseDistribution
     @Override
     public void updateChildren(final Map<String, Object> data, final CompleteCallback completeCallback)
     {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.updateWithCallback(databaseReference(), MapTransformer.mapToJSON(data), completeCallback);
-            }
-        });
-        terminateOperation();
+        new UpdateChildrenQuery(this).withArgs(data, completeCallback).execute();
     }
 
     /**
@@ -232,16 +188,7 @@ public class Database implements DatabaseDistribution
     @Override
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
     {
-        // TODO test
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference())
-        {
-            @Override
-            public void run()
-            {
-                DatabaseJS.transaction(scriptRefPath, new JsonDataModifier<T>(dataType, transactionCallback), completeCallback);
-            }
-        });
-        terminateOperation();
+        new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
     /**
@@ -273,7 +220,7 @@ public class Database implements DatabaseDistribution
      * @return Database reference path. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
-    private String databaseReference()
+    String databaseReference()
     {
         if (refPath == null)
             throw new DatabaseReferenceNotSetException("Please call GdxFIRDatabase#inReference() first.");
@@ -296,9 +243,11 @@ public class Database implements DatabaseDistribution
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */
-    private void terminateOperation()
+    void terminateOperation()
     {
         refPath = null;
+        filters.clear();
+        orderByClause = null;
     }
 
 }

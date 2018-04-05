@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.html.database;
+package mk.gdx.firebase.html.database.json;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.html.database.json.JsonProcessor;
 
 /**
  * Takes JSON data from javascript, process it as java object and return back as json.
@@ -32,6 +33,7 @@ public class JsonDataModifier<T>
     public JsonDataModifier(Class<T> wantedType, TransactionCallback transactionCallback)
     {
         this.transactionCallback = transactionCallback;
+        this.wantedType = wantedType;
     }
 
     /**

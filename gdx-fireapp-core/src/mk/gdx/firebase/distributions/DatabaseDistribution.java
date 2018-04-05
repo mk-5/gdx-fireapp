@@ -21,6 +21,8 @@ import java.util.Map;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
@@ -41,14 +43,15 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  * </ul><p>
  * If you do not do this {@code RuntimeException} will be thrown.
  */
-public interface DatabaseDistribution {
+public interface DatabaseDistribution
+{
 
     /**
      * Listens for database connection events.
      * <p>
      * Catch moment when application is going to to be connected or disconnected to the database.
      *
-     * @param connectedListener Listener that handles moments when connection status into database was change
+     * @param connectedListener Listener that handles moments when connection status was change, if null: connection listeners will be detached.
      */
     void onConnect(ConnectedListener connectedListener);
 
@@ -81,6 +84,8 @@ public interface DatabaseDistribution {
 
     /**
      * Reads value from path given by {@code inReference(String)} and gives response by {@code DataCallback}.
+     * <p>
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataCallbackMitmConverter}
      *
      * @param dataType Class you want to retrieve
      * @param callback Callback that handles response
@@ -95,6 +100,8 @@ public interface DatabaseDistribution {
      * Handles value changes for path given by {@code inReference(String)} and gives response by {@code DataChangeListener}.
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
+     * <p>
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter}
      *
      * @param dataType Class you want to retrieve
      * @param listener Listener, may by null - if null all listeners for specified database reference will be removed.
@@ -104,6 +111,32 @@ public interface DatabaseDistribution {
      * @see DataChangeListener
      */
     <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener);
+
+    /**
+     * Applies filter to the next database query.
+     * <p>
+     * It should be applied only before {@link #readValue(Class, DataCallback)} or {@link #onDataChange(Class, DataChangeListener)} execution.
+     * You can read more about filtering here: <a href="https://firebase.google.com/docs/database/android/lists-of-data">firebase filtering</a>
+     *
+     * @param filterType      Filter type that you want to applied, not null
+     * @param filterArguments Arguments that will be pass to filter method
+     * @param <V>             Type of filter argument, it should be one of the following: Integer, Double, String, Boolean
+     * @return this
+     */
+    <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments);
+
+    /**
+     * Applies order-by to the next database query.
+     * <p>
+     * Only one orderBy can be applied to one query otherwise error will be throw.
+     * <p>
+     * For now, the only mode which process argument is: {@link OrderByMode#ORDER_BY_CHILD}
+     *
+     * @param orderByMode Order-by mode, not null
+     * @param argument    Order by func argument, may be null
+     * @return this
+     */
+    DatabaseDistribution orderBy(OrderByMode orderByMode, String argument);
 
     /**
      * Creates new object inside database and return {@code this instance} with reference to it set by {@code DatabaseDistribution#inReference()}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.html.database;
+package mk.gdx.firebase.html.database.json;
 
 import mk.gdx.firebase.listeners.DataChangeListener;
 

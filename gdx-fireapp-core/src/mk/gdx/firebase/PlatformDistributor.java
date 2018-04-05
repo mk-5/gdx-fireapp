@@ -112,7 +112,9 @@ public abstract class PlatformDistributor<T>
     protected abstract String getAndroidClassName();
 
     /**
-     * @return Class name
+     * Gives class name of object that will be create when application running on gwt platform.
+     *
+     * @return Class name with package of the gwt module distribution object.
      */
     protected abstract String getWebGLClassName();
 }
