@@ -18,7 +18,7 @@ package mk.gdx.firebase.deserialization;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ import mk.gdx.firebase.reflection.AnnotationFinder;
  * DataCallbackMitmConverter means: Data callback man-in-the-middle converter.
  * We call {@code DataCallback<T>} because of nested generic type. For ex. it can be List<User> and we can't do such conversion directly to into the database.
  * {@code coveredCallback} data will be cast to {@code <E>} after conversion.
- * TODO - get mapConverter from GdxFIRDatabase instance? When someone change convert in-fly it can make wrong results.
+ * TODO - get mapConverter from GdxFIRDatabase instance? After converter change it may occur invalid result.
  *
  * @param <T> Result type of callback
  */
@@ -46,6 +46,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
     {
         super(mapConverter);
         this.coveredCallback = coveredCallback;
+        this.dataType = dataType;
     }
 
     /**
@@ -95,7 +96,9 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
         // If MapConversions was not indicated - do nothing.
         if (mapConversionAnnotation != null) {
             data = doMitmConversion(mapConversionAnnotation.value(), data);
-            // TODO - wrap one-value result in List if user want a List?
+            if (ClassReflection.isAssignableFrom(List.class, dataType) && data.getClass() == mapConversionAnnotation.value()) {
+                data = Collections.singletonList(data);
+            }
         }
         coveredCallback.onData((E) data);
     }
