@@ -55,7 +55,7 @@ public class RunTransactionQuery extends GwtDatabaseQuery
      * @param completeCallback Complete callback, not null
      */
     public static native void transaction(String reference, JsonDataModifier dataModifier, CompleteCallback completeCallback) /*-{
-        $wnd.firebase.transaction().ref(reference).transaction(function(currentData){
+        $wnd.firebase.database().ref(reference).transaction(function(currentData){
             var newData = dataModifier.@mk.gdx.firebase.html.database.json.JsonDataModifier::modify(Ljava/lang/String;)(JSON.stringify(currentData));
             var val;
             try{
