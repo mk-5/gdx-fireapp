@@ -54,9 +54,9 @@ public class SetValueQuery extends IosDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        if (arguments.size == 0) {
+        if (arguments.size == 1) {
             ((FIRDatabaseReference) query).setValue(arguments.get(0));
-        } else if (arguments.size == 1) {
+        } else if (arguments.size == 2) {
             ((FIRDatabaseReference) query).setValueWithCompletionBlock(arguments.get(0), new FIRDatabaseReferenceCompleteObserver((CompleteCallback) arguments.get(1)));
         }
         return null;
