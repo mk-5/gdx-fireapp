@@ -22,6 +22,7 @@ import apple.foundation.NSError;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
+import mk.gdx.firebase.ios.database.DataProcessor;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
 import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserver;
@@ -55,9 +56,9 @@ public class SetValueQuery extends IosDatabaseQuery<Void>
     protected Void run()
     {
         if (arguments.size == 1) {
-            ((FIRDatabaseReference) query).setValue(arguments.get(0));
+            ((FIRDatabaseReference) query).setValue(DataProcessor.javaDataToIos(arguments.get(0)));
         } else if (arguments.size == 2) {
-            ((FIRDatabaseReference) query).setValueWithCompletionBlock(arguments.get(0), new FIRDatabaseReferenceCompleteObserver((CompleteCallback) arguments.get(1)));
+            ((FIRDatabaseReference) query).setValueWithCompletionBlock(DataProcessor.javaDataToIos(arguments.get(0)), new FIRDatabaseReferenceCompleteObserver((CompleteCallback) arguments.get(1)));
         }
         return null;
     }
