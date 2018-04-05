@@ -23,7 +23,7 @@ import mk.gdx.firebase.html.database.GwtDatabaseQuery;
 import mk.gdx.firebase.listeners.ConnectedListener;
 
 /**
- * Provides connection-status javascript execution.
+ * Provides connection-status ask javascript execution.
  */
 public class ConnectionStatusQuery extends GwtDatabaseQuery
 {
@@ -39,6 +39,11 @@ public class ConnectionStatusQuery extends GwtDatabaseQuery
     }
 
     @Override
+    protected void prepare()
+    {
+    }
+
+    @Override
     protected ArgumentsValidator createArgumentsValidator()
     {
         return new OnConnectionValidator();
@@ -49,7 +54,7 @@ public class ConnectionStatusQuery extends GwtDatabaseQuery
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state">https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state</a>
      *
-     * @param listener
+     * @param listener Connected listener, not null
      */
     public static native void onConnect(ConnectedListener listener) /*-{
         $wnd.firebase.database().ref(".info/connected").on("value", function(snap){
