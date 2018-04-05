@@ -32,7 +32,7 @@ public class TransactionHandler<R> implements Transaction.Handler
 {
 
     private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
-    private static final String TRANSACTION_NOT_ABLE_TO_UPDATE = "The database value at given path was not be able to update";
+    private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
     private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
 
 
@@ -79,9 +79,9 @@ public class TransactionHandler<R> implements Transaction.Handler
                 }
             } else {
                 if (completeCallback != null) {
-                    completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_UPDATE));
+                    completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_COMMIT));
                 } else {
-                    GdxFIRLogger.error(TRANSACTION_NOT_ABLE_TO_UPDATE);
+                    GdxFIRLogger.error(TRANSACTION_NOT_ABLE_TO_COMMIT);
                 }
             }
         }
