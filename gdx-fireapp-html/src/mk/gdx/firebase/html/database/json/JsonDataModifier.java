@@ -33,6 +33,7 @@ public class JsonDataModifier<T>
     public JsonDataModifier(Class<T> wantedType, TransactionCallback transactionCallback)
     {
         this.transactionCallback = transactionCallback;
+        this.wantedType = wantedType;
     }
 
     /**
