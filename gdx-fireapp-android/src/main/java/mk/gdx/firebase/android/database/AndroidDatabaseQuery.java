@@ -25,14 +25,14 @@ import mk.gdx.firebase.database.FilteringProvider;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 /**
- * Provides flow for android firebase call.
+ * Provides flow for android firebase database call.
  * <p>
  * Flow is as follow:
  * <p>
  * - Gets {@code Query} instance and databasePath from {@link Database}.
  * - Applies filters if needed it
  * - Do some action on db
- * - Terminate query by clear given filters - if any - and call {@link Database#terminateOperation()}
+ * - Terminate query: clear given filters - if any - and call {@link Database#terminateOperation()}
  *
  * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */

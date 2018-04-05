@@ -27,6 +27,8 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
  * Abstraction for firebase database query.
  * <p>
  * Holds basic shared features of all queries: filtering and terminate operation after each query.
+ * <p>
+ * Keeps order of each query part execution inside {@link #execute()} so it will be the same for each platform.
  *
  * @param <T> Target DatabaseDistribution
  * @param <R> Query execution return type
@@ -85,12 +87,14 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
     }
 
     /**
+     * Creates arguments validator instance.
+     *
      * @return ArgumentsValidator, may be null
      */
     protected abstract ArgumentsValidator createArgumentsValidator();
 
     /**
-     * Applies the filters/order-by only if they are present.
+     * Applies filters/order-by only if they are present.
      */
     protected abstract void applyFilters();
 
@@ -103,5 +107,10 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
      */
     protected abstract R run();
 
+    /**
+     * Terminates query.
+     * <p>
+     * It is means clear all artifacts created by this query execution so next execution will be run with clear state.
+     */
     protected abstract void terminate();
 }

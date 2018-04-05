@@ -22,7 +22,16 @@ import mk.gdx.firebase.database.queries.GdxFireappQuery;
 import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFilteringProvider;
 
 /**
+ * Provides flow for ios firebase database call.
+ * <p>
+ * Flow is as follow:
+ * <p>
+ * - Gets {@code FIRDatabaseQuery} instance and databasePath from {@link Database}.
+ * - Applies filters if needed it
+ * - Do some action on db
+ * - Terminate query: clear given filters - if any - and call {@link Database#terminateOperation()}
  *
+ * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
 public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
 {
