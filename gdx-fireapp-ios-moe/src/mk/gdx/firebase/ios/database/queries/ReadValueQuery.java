@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 
 import apple.foundation.NSError;
 import mk.gdx.firebase.callbacks.DataCallback;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.ios.database.DataProcessor;
@@ -58,7 +59,7 @@ public class ReadValueQuery extends IosDatabaseQuery<Void>
     protected Void run()
     {
         filtersProvider.applyFiltering().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value,
-                new ReadValueBlock((Class) arguments.get(0), (DataCallback) arguments.get(1)),
+                new ReadValueBlock((Class) arguments.get(0), orderByClause, (DataCallback) arguments.get(1)),
                 new ReadValueCancelBlock((DataCallback) arguments.get(1)));
         return null;
     }
@@ -71,10 +72,12 @@ public class ReadValueQuery extends IosDatabaseQuery<Void>
 
         private Class type;
         private DataCallback dataCallback;
+        private OrderByClause orderByClause;
 
-        private ReadValueBlock(Class type, DataCallback dataCallback)
+        private ReadValueBlock(Class type, OrderByClause orderByClause, DataCallback dataCallback)
         {
             this.type = type;
+            this.orderByClause = orderByClause;
             this.dataCallback = dataCallback;
         }
 

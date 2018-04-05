@@ -24,6 +24,7 @@ import com.google.firebasedatabase.enums.FIRDataEventType;
 import java.io.FileNotFoundException;
 
 import apple.foundation.NSError;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.ios.database.DataProcessor;
@@ -55,10 +56,9 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
     @SuppressWarnings("unchecked")
     protected Void run()
     {
-        // TODO - ordering FIRDataSnapsho
         if (arguments.get(1) != null) {
             long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
-                    new DataChangeBlock((Class) arguments.get(0), (DataChangeListener) arguments.get(1)),
+                    new DataChangeBlock((Class) arguments.get(0), orderByClause, (DataChangeListener) arguments.get(1)),
                     new DataChangeCancelBlock((DataChangeListener) arguments.get(1)));
             observersManager.addNewListener(databasePath, handle);
         } else {
@@ -80,10 +80,12 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
 
         private Class type;
         private DataChangeListener dataChangeListener;
+        private OrderByClause orderByClause;
 
-        private DataChangeBlock(Class type, DataChangeListener dataChangeListener)
+        private DataChangeBlock(Class type, OrderByClause orderByClause, DataChangeListener dataChangeListener)
         {
             this.type = type;
+            this.orderByClause = orderByClause;
             this.dataChangeListener = dataChangeListener;
         }
 
