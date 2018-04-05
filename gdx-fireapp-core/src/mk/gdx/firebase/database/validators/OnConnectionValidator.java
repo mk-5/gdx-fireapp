@@ -26,7 +26,7 @@ public class OnConnectionValidator implements ArgumentsValidator
     @Override
     public void validate(Array<Object> arguments)
     {
-        if (arguments.get(0) != null && arguments.get(0) instanceof ConnectedListener)
+        if (arguments.get(0) != null && !(arguments.get(0) instanceof ConnectedListener))
             throw new IllegalArgumentException();
     }
 }
