@@ -28,7 +28,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
 public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implements CrashDistribution
 {
 
-    private static GdxFIRCrash instance;
+    private static volatile GdxFIRCrash instance;
 
     /**
      * GdxFIRCrash protected constructor.
@@ -37,7 +37,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    protected GdxFIRCrash() throws PlatformDistributorException
+    private GdxFIRCrash() throws PlatformDistributorException
     {
     }
 
@@ -46,18 +46,20 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      */
     public static GdxFIRCrash instance()
     {
-        if (instance == null) {
+        GdxFIRCrash result = instance;
+        if (result == null) {
             synchronized (GdxFIRCrash.class) {
-                if (instance == null) {
+                result = instance;
+                if (result == null) {
                     try {
-                        instance = new GdxFIRCrash();
+                        instance = result = new GdxFIRCrash();
                     } catch (PlatformDistributorException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**

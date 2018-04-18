@@ -80,8 +80,7 @@ public abstract class PlatformDistributor<T>
             Class objClass = ClassReflection.forName(className);
             platformObject = (T) ClassReflection.getConstructor(objClass).newInstance();
         } catch (ReflectionException e) {
-            e.printStackTrace();
-            throw new PlatformDistributorException("Something wrong with environment");
+            throw new PlatformDistributorException("Something wrong with environment", e);
         }
     }
 

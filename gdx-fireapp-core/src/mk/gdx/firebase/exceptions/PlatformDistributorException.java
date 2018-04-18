@@ -23,8 +23,8 @@ package mk.gdx.firebase.exceptions;
  */
 public class PlatformDistributorException extends Exception
 {
-    public PlatformDistributorException(String msg)
+    public PlatformDistributorException(String msg, Throwable t)
     {
-        super(msg);
+        super(msg, t);
     }
 }

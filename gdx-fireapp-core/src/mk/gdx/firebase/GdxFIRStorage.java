@@ -40,7 +40,7 @@ import mk.gdx.firebase.helpers.ImageHelper;
 public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> implements StorageDistribution
 {
 
-    private static GdxFIRStorage instance;
+    private static volatile GdxFIRStorage instance;
 
     /**
      * GdxFIRStorage protected constructor.
@@ -49,7 +49,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    protected GdxFIRStorage() throws PlatformDistributorException
+    private GdxFIRStorage() throws PlatformDistributorException
     {
     }
 
@@ -58,18 +58,20 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      */
     public static GdxFIRStorage instance()
     {
-        if (instance == null) {
-            synchronized (GdxFIRAnalytics.class) {
-                if (instance == null) {
+        GdxFIRStorage result = instance;
+        if (result == null) {
+            synchronized (GdxFIRStorage.class) {
+                result = instance;
+                if (result == null) {
                     try {
-                        instance = new GdxFIRStorage();
+                        instance = result = new GdxFIRStorage();
                     } catch (PlatformDistributorException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**
