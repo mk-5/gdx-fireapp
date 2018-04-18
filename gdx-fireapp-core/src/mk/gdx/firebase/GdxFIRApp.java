@@ -28,7 +28,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
 public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution
 {
 
-    private static GdxFIRApp instance;
+    private volatile static GdxFIRApp instance;
     private static boolean ignoreExceptions;
 
     /**
@@ -38,7 +38,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    protected GdxFIRApp() throws PlatformDistributorException
+    private GdxFIRApp() throws PlatformDistributorException
     {
     }
 
@@ -48,18 +48,20 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      */
     public static GdxFIRApp instance()
     {
-        if (instance == null) {
+        GdxFIRApp result = instance;
+        if (result == null) {
             synchronized (GdxFIRApp.class) {
-                if (instance == null) {
+                result = instance;
+                if (result == null) {
                     try {
-                        instance = new GdxFIRApp();
+                        instance = result = new GdxFIRApp();
                     } catch (PlatformDistributorException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**

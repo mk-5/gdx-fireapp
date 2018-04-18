@@ -29,7 +29,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  */
 public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> implements AnalyticsDistribution
 {
-    private static GdxFIRAnalytics instance;
+    private volatile static GdxFIRAnalytics instance;
 
     /**
      * GdxFIRAnalytics protected constructor.
@@ -38,7 +38,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    protected GdxFIRAnalytics() throws PlatformDistributorException
+    private GdxFIRAnalytics() throws PlatformDistributorException
     {
     }
 
@@ -48,18 +48,20 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      */
     public static GdxFIRAnalytics instance()
     {
-        if (instance == null) {
+        GdxFIRAnalytics result = instance;
+        if (result == null) {
             synchronized (GdxFIRAnalytics.class) {
-                if (instance == null) {
+                result = instance;
+                if (result == null) {
                     try {
-                        instance = new GdxFIRAnalytics();
+                        instance = result = new GdxFIRAnalytics();
                     } catch (PlatformDistributorException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**

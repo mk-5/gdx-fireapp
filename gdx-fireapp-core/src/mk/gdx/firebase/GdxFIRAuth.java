@@ -29,7 +29,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
 public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements AuthDistribution
 {
 
-    private static GdxFIRAuth instance;
+    private static volatile GdxFIRAuth instance;
 
     /**
      * GdxFIRAuth protected constructor.
@@ -38,7 +38,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    protected GdxFIRAuth() throws PlatformDistributorException
+    private GdxFIRAuth() throws PlatformDistributorException
     {
     }
 
@@ -47,18 +47,20 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      */
     public static GdxFIRAuth instance()
     {
-        if (instance == null) {
-            synchronized (GdxFIRAnalytics.class) {
-                if (instance == null) {
+        GdxFIRAuth result = instance;
+        if (result == null) {
+            synchronized (GdxFIRAuth.class) {
+                result = instance;
+                if (result == null) {
                     try {
-                        instance = new GdxFIRAuth();
+                        instance = result = new GdxFIRAuth();
                     } catch (PlatformDistributorException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**

@@ -42,7 +42,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> implements DatabaseDistribution
 {
 
-    private static GdxFIRDatabase instance;
+    private static volatile GdxFIRDatabase instance;
     private FirebaseMapConverter mapConverter;
 
     /**
@@ -52,7 +52,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    protected GdxFIRDatabase() throws PlatformDistributorException
+    private GdxFIRDatabase() throws PlatformDistributorException
     {
         mapConverter = new MapConverter();
     }
@@ -62,18 +62,20 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      */
     public static GdxFIRDatabase instance()
     {
-        if (instance == null) {
-            synchronized (GdxFIRAnalytics.class) {
-                if (instance == null) {
+        GdxFIRDatabase result = instance;
+        if (result == null) {
+            synchronized (GdxFIRDatabase.class) {
+                result = instance;
+                if (result == null) {
                     try {
-                        instance = new GdxFIRDatabase();
+                        instance = result = new GdxFIRDatabase();
                     } catch (PlatformDistributorException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**
