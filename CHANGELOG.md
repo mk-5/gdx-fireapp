@@ -23,4 +23,4 @@
 \- Database ordering&filtering API for Android and iOS
 
 **[1.3.1]**
-\- fix: TS in distributions singletons.
+\- fix: TS in distributions singletons
