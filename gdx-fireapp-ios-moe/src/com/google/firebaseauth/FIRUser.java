@@ -12,7 +12,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -29,7 +28,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseAuth")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRUser extends NSObject implements FIRUserInfo {
@@ -72,10 +70,6 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -112,28 +106,55 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 	public native String email();
 
 	@Generated
-	@Selector("getTokenForcingRefresh:completion:")
-	public native void getTokenForcingRefreshCompletion(
+	@Selector("getIDTokenForcingRefresh:completion:")
+	public native void getIDTokenForcingRefreshCompletion(
 			boolean forceRefresh,
-			@ObjCBlock(name = "call_getTokenForcingRefreshCompletion") Block_getTokenForcingRefreshCompletion completion);
+			@ObjCBlock(name = "call_getIDTokenForcingRefreshCompletion") Block_getIDTokenForcingRefreshCompletion completion);
 
 	@Runtime(ObjCRuntime.class)
 	@Generated
-	public interface Block_getTokenForcingRefreshCompletion {
+	public interface Block_getIDTokenForcingRefreshCompletion {
 		@Generated
-		void call_getTokenForcingRefreshCompletion(String arg0, NSError arg1);
+		void call_getIDTokenForcingRefreshCompletion(String arg0, NSError arg1);
 	}
 
 	@Generated
-	@Selector("getTokenWithCompletion:")
-	public native void getTokenWithCompletion(
-			@ObjCBlock(name = "call_getTokenWithCompletion") Block_getTokenWithCompletion completion);
+	@Selector("getIDTokenResultForcingRefresh:completion:")
+	public native void getIDTokenResultForcingRefreshCompletion(
+			boolean forceRefresh,
+			@ObjCBlock(name = "call_getIDTokenResultForcingRefreshCompletion") Block_getIDTokenResultForcingRefreshCompletion completion);
 
 	@Runtime(ObjCRuntime.class)
 	@Generated
-	public interface Block_getTokenWithCompletion {
+	public interface Block_getIDTokenResultForcingRefreshCompletion {
 		@Generated
-		void call_getTokenWithCompletion(String arg0, NSError arg1);
+		void call_getIDTokenResultForcingRefreshCompletion(
+				FIRAuthTokenResult arg0, NSError arg1);
+	}
+
+	@Generated
+	@Selector("getIDTokenResultWithCompletion:")
+	public native void getIDTokenResultWithCompletion(
+			@ObjCBlock(name = "call_getIDTokenResultWithCompletion") Block_getIDTokenResultWithCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_getIDTokenResultWithCompletion {
+		@Generated
+		void call_getIDTokenResultWithCompletion(FIRAuthTokenResult arg0,
+				NSError arg1);
+	}
+
+	@Generated
+	@Selector("getIDTokenWithCompletion:")
+	public native void getIDTokenWithCompletion(
+			@ObjCBlock(name = "call_getIDTokenWithCompletion") Block_getIDTokenWithCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_getIDTokenWithCompletion {
+		@Generated
+		void call_getIDTokenWithCompletion(String arg0, NSError arg1);
 	}
 
 	@Generated
@@ -144,10 +165,6 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 	@Generated
 	@Selector("init")
 	public native FIRUser init();
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -182,6 +199,21 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 			String key);
 
 	@Generated
+	@Selector("linkAndRetrieveDataWithCredential:completion:")
+	public native void linkAndRetrieveDataWithCredentialCompletion(
+			FIRAuthCredential credential,
+			@ObjCBlock(name = "call_linkAndRetrieveDataWithCredentialCompletion") Block_linkAndRetrieveDataWithCredentialCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_linkAndRetrieveDataWithCredentialCompletion {
+		@Generated
+		void call_linkAndRetrieveDataWithCredentialCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
+
+	@Generated
+	@Deprecated
 	@Selector("linkWithCredential:completion:")
 	public native void linkWithCredentialCompletion(
 			FIRAuthCredential credential,
@@ -195,14 +227,18 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 	}
 
 	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
+	@Selector("metadata")
+	public native FIRUserMetadata metadata();
 
 	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
 	public static native Object new_objc();
+
+	@Generated
+	@Selector("phoneNumber")
+	public native String phoneNumber();
 
 	@Generated
 	@Selector("photoURL")
@@ -221,6 +257,21 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 	public native String providerID();
 
 	@Generated
+	@Selector("reauthenticateAndRetrieveDataWithCredential:completion:")
+	public native void reauthenticateAndRetrieveDataWithCredentialCompletion(
+			FIRAuthCredential credential,
+			@ObjCBlock(name = "call_reauthenticateAndRetrieveDataWithCredentialCompletion") Block_reauthenticateAndRetrieveDataWithCredentialCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_reauthenticateAndRetrieveDataWithCredentialCompletion {
+		@Generated
+		void call_reauthenticateAndRetrieveDataWithCredentialCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
+
+	@Generated
+	@Deprecated
 	@Selector("reauthenticateWithCredential:completion:")
 	public native void reauthenticateWithCredentialCompletion(
 			FIRAuthCredential credential,
@@ -256,6 +307,20 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 	@Generated
 	@Selector("resolveInstanceMethod:")
 	public static native boolean resolveInstanceMethod(SEL sel);
+
+	@Generated
+	@Selector("sendEmailVerificationWithActionCodeSettings:completion:")
+	public native void sendEmailVerificationWithActionCodeSettingsCompletion(
+			FIRActionCodeSettings actionCodeSettings,
+			@ObjCBlock(name = "call_sendEmailVerificationWithActionCodeSettingsCompletion") Block_sendEmailVerificationWithActionCodeSettingsCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_sendEmailVerificationWithActionCodeSettingsCompletion {
+		@Generated
+		void call_sendEmailVerificationWithActionCodeSettingsCompletion(
+				NSError arg0);
+	}
 
 	@Generated
 	@Selector("sendEmailVerificationWithCompletion:")
@@ -318,6 +383,19 @@ public class FIRUser extends NSObject implements FIRUserInfo {
 	public interface Block_updatePasswordCompletion {
 		@Generated
 		void call_updatePasswordCompletion(NSError arg0);
+	}
+
+	@Generated
+	@Selector("updatePhoneNumberCredential:completion:")
+	public native void updatePhoneNumberCredentialCompletion(
+			FIRPhoneAuthCredential phoneNumberCredential,
+			@ObjCBlock(name = "call_updatePhoneNumberCredentialCompletion") Block_updatePhoneNumberCredentialCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_updatePhoneNumberCredentialCompletion {
+		@Generated
+		void call_updatePhoneNumberCredentialCompletion(NSError arg0);
 	}
 
 	@Generated

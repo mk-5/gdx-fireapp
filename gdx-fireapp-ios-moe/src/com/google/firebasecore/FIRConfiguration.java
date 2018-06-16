@@ -9,7 +9,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -25,7 +24,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseCore")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRConfiguration extends NSObject {
@@ -72,10 +70,6 @@ public class FIRConfiguration extends NSObject {
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -99,10 +93,6 @@ public class FIRConfiguration extends NSObject {
 	@Generated
 	@Selector("init")
 	public native FIRConfiguration init();
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -129,16 +119,6 @@ public class FIRConfiguration extends NSObject {
 			String key);
 
 	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
-
-	@Generated
-	@Deprecated
-	@Selector("logLevel")
-	@NInt
-	public native long logLevel();
-
-	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
@@ -157,9 +137,8 @@ public class FIRConfiguration extends NSObject {
 	public native void setAnalyticsConfiguration(FIRAnalyticsConfiguration value);
 
 	@Generated
-	@Deprecated
-	@Selector("setLogLevel:")
-	public native void setLogLevel(@NInt long value);
+	@Selector("setLoggerLevel:")
+	public native void setLoggerLevel(@NInt long loggerLevel);
 
 	@Generated
 	@Selector("setVersion:")

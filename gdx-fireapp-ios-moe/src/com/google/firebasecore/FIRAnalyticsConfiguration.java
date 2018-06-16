@@ -9,7 +9,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -25,7 +24,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseCore")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRAnalyticsConfiguration extends NSObject {
@@ -68,10 +66,6 @@ public class FIRAnalyticsConfiguration extends NSObject {
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -95,10 +89,6 @@ public class FIRAnalyticsConfiguration extends NSObject {
 	@Generated
 	@Selector("init")
 	public native FIRAnalyticsConfiguration init();
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -125,10 +115,6 @@ public class FIRAnalyticsConfiguration extends NSObject {
 			String key);
 
 	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
-
-	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
@@ -146,11 +132,6 @@ public class FIRAnalyticsConfiguration extends NSObject {
 	@Selector("setAnalyticsCollectionEnabled:")
 	public native void setAnalyticsCollectionEnabled(
 			boolean analyticsCollectionEnabled);
-
-	@Generated
-	@Deprecated
-	@Selector("setIsEnabled:")
-	public native void setIsEnabled(boolean isEnabled);
 
 	@Generated
 	@Selector("setMinimumSessionInterval:")

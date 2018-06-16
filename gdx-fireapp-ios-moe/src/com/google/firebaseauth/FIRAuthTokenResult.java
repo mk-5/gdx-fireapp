@@ -3,13 +3,14 @@ package com.google.firebaseauth;
 
 import apple.NSObject;
 import apple.foundation.NSArray;
+import apple.foundation.NSDate;
+import apple.foundation.NSDictionary;
 import apple.foundation.NSMethodSignature;
 import apple.foundation.NSSet;
 import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -25,16 +26,15 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseAuth")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
-public class FIREmailPasswordAuthProvider extends NSObject {
+public class FIRAuthTokenResult extends NSObject {
 	static {
 		NatJ.register();
 	}
 
 	@Generated
-	protected FIREmailPasswordAuthProvider(Pointer peer) {
+	protected FIRAuthTokenResult(Pointer peer) {
 		super(peer);
 	}
 
@@ -45,12 +45,16 @@ public class FIREmailPasswordAuthProvider extends NSObject {
 	@Generated
 	@Owned
 	@Selector("alloc")
-	public static native FIREmailPasswordAuthProvider alloc();
+	public static native FIRAuthTokenResult alloc();
 
 	@Generated
 	@Selector("allocWithZone:")
 	@MappedReturn(ObjCObjectMapper.class)
 	public static native Object allocWithZone(VoidPtr zone);
+
+	@Generated
+	@Selector("authDate")
+	public native NSDate authDate();
 
 	@Generated
 	@Selector("automaticallyNotifiesObserversForKey:")
@@ -68,8 +72,8 @@ public class FIREmailPasswordAuthProvider extends NSObject {
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
+	@Selector("claims")
+	public native NSDictionary<String, ?> claims();
 
 	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
@@ -80,11 +84,6 @@ public class FIREmailPasswordAuthProvider extends NSObject {
 	public static native Class classForKeyedUnarchiver();
 
 	@Generated
-	@Selector("credentialWithEmail:password:")
-	public static native FIRAuthCredential credentialWithEmailPassword(
-			String email, String password);
-
-	@Generated
 	@Selector("debugDescription")
 	public static native String debugDescription_static();
 
@@ -93,17 +92,17 @@ public class FIREmailPasswordAuthProvider extends NSObject {
 	public static native String description_static();
 
 	@Generated
+	@Selector("expirationDate")
+	public native NSDate expirationDate();
+
+	@Generated
 	@Selector("hash")
 	@NUInt
 	public static native long hash_static();
 
 	@Generated
 	@Selector("init")
-	public native FIREmailPasswordAuthProvider init();
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
+	public native FIRAuthTokenResult init();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -125,13 +124,13 @@ public class FIREmailPasswordAuthProvider extends NSObject {
 	public static native boolean isSubclassOfClass(Class aClass);
 
 	@Generated
+	@Selector("issuedAtDate")
+	public native NSDate issuedAtDate();
+
+	@Generated
 	@Selector("keyPathsForValuesAffectingValueForKey:")
 	public static native NSSet<String> keyPathsForValuesAffectingValueForKey(
 			String key);
-
-	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
 
 	@Generated
 	@Owned
@@ -152,8 +151,16 @@ public class FIREmailPasswordAuthProvider extends NSObject {
 	public static native void setVersion(@NInt long aVersion);
 
 	@Generated
+	@Selector("signInProvider")
+	public native String signInProvider();
+
+	@Generated
 	@Selector("superclass")
 	public static native Class superclass_static();
+
+	@Generated
+	@Selector("token")
+	public native String token();
 
 	@Generated
 	@Selector("version")

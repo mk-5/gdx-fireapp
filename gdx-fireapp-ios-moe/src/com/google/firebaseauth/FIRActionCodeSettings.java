@@ -1,13 +1,11 @@
-package com.google.firebasestorage;
+package com.google.firebaseauth;
 
 
 import apple.NSObject;
 import apple.foundation.NSArray;
-import apple.foundation.NSDate;
-import apple.foundation.NSDictionary;
 import apple.foundation.NSMethodSignature;
 import apple.foundation.NSSet;
-import apple.foundation.protocol.NSCopying;
+import apple.foundation.NSURL;
 import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
@@ -29,15 +27,19 @@ import org.moe.natj.objc.map.ObjCObjectMapper;
 @Generated
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
-public class FIRStorageMetadata extends NSObject implements NSCopying {
+public class FIRActionCodeSettings extends NSObject {
 	static {
 		NatJ.register();
 	}
 
 	@Generated
-	protected FIRStorageMetadata(Pointer peer) {
+	protected FIRActionCodeSettings(Pointer peer) {
 		super(peer);
 	}
+
+	@Generated
+	@Selector("URL")
+	public native NSURL URL();
 
 	@Generated
 	@Selector("accessInstanceVariablesDirectly")
@@ -46,7 +48,7 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	@Generated
 	@Owned
 	@Selector("alloc")
-	public static native FIRStorageMetadata alloc();
+	public static native FIRActionCodeSettings alloc();
 
 	@Generated
 	@Selector("allocWithZone:")
@@ -54,16 +56,20 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native Object allocWithZone(VoidPtr zone);
 
 	@Generated
+	@Selector("androidInstallIfNotAvailable")
+	public native boolean androidInstallIfNotAvailable();
+
+	@Generated
+	@Selector("androidMinimumVersion")
+	public native String androidMinimumVersion();
+
+	@Generated
+	@Selector("androidPackageName")
+	public native String androidPackageName();
+
+	@Generated
 	@Selector("automaticallyNotifiesObserversForKey:")
 	public static native boolean automaticallyNotifiesObserversForKey(String key);
-
-	@Generated
-	@Selector("bucket")
-	public native String bucket();
-
-	@Generated
-	@Selector("cacheControl")
-	public native String cacheControl();
 
 	@Generated
 	@Selector("cancelPreviousPerformRequestsWithTarget:")
@@ -85,32 +91,6 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native Class classForKeyedUnarchiver();
 
 	@Generated
-	@Selector("contentDisposition")
-	public native String contentDisposition();
-
-	@Generated
-	@Selector("contentEncoding")
-	public native String contentEncoding();
-
-	@Generated
-	@Selector("contentLanguage")
-	public native String contentLanguage();
-
-	@Generated
-	@Selector("contentType")
-	public native String contentType();
-
-	@Generated
-	@Owned
-	@Selector("copyWithZone:")
-	@MappedReturn(ObjCObjectMapper.class)
-	public native Object copyWithZone(VoidPtr zone);
-
-	@Generated
-	@Selector("customMetadata")
-	public native NSDictionary<String, String> customMetadata();
-
-	@Generated
 	@Selector("debugDescription")
 	public static native String debugDescription_static();
 
@@ -119,12 +99,8 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native String description_static();
 
 	@Generated
-	@Selector("dictionaryRepresentation")
-	public native NSDictionary<String, ?> dictionaryRepresentation();
-
-	@Generated
-	@Selector("generation")
-	public native long generation();
+	@Selector("handleCodeInApp")
+	public native boolean handleCodeInApp();
 
 	@Generated
 	@Selector("hash")
@@ -132,13 +108,12 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native long hash_static();
 
 	@Generated
-	@Selector("init")
-	public native FIRStorageMetadata init();
+	@Selector("iOSBundleID")
+	public native String iOSBundleID();
 
 	@Generated
-	@Selector("initWithDictionary:")
-	public native FIRStorageMetadata initWithDictionary(
-			NSDictionary<String, ?> dictionary);
+	@Selector("init")
+	public native FIRActionCodeSettings init();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -156,14 +131,6 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native boolean instancesRespondToSelector(SEL aSelector);
 
 	@Generated
-	@Selector("isFile")
-	public native boolean isFile();
-
-	@Generated
-	@Selector("isFolder")
-	public native boolean isFolder();
-
-	@Generated
 	@Selector("isSubclassOfClass:")
 	public static native boolean isSubclassOfClass(Class aClass);
 
@@ -173,26 +140,10 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 			String key);
 
 	@Generated
-	@Selector("md5Hash")
-	public native String md5Hash();
-
-	@Generated
-	@Selector("metageneration")
-	public native long metageneration();
-
-	@Generated
-	@Selector("name")
-	public native String name();
-
-	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
 	public static native Object new_objc();
-
-	@Generated
-	@Selector("path")
-	public native String path();
 
 	@Generated
 	@Selector("resolveClassMethod:")
@@ -203,52 +154,30 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native boolean resolveInstanceMethod(SEL sel);
 
 	@Generated
-	@Selector("setCacheControl:")
-	public native void setCacheControl(String value);
+	@Selector("setAndroidPackageName:installIfNotAvailable:minimumVersion:")
+	public native void setAndroidPackageNameInstallIfNotAvailableMinimumVersion(
+			String androidPackageName, boolean installIfNotAvailable,
+			String minimumVersion);
 
 	@Generated
-	@Selector("setContentDisposition:")
-	public native void setContentDisposition(String value);
+	@Selector("setHandleCodeInApp:")
+	public native void setHandleCodeInApp(boolean value);
 
 	@Generated
-	@Selector("setContentEncoding:")
-	public native void setContentEncoding(String value);
+	@Selector("setIOSBundleID:")
+	public native void setIOSBundleID(String iOSBundleID);
 
 	@Generated
-	@Selector("setContentLanguage:")
-	public native void setContentLanguage(String value);
-
-	@Generated
-	@Selector("setContentType:")
-	public native void setContentType(String value);
-
-	@Generated
-	@Selector("setCustomMetadata:")
-	public native void setCustomMetadata(NSDictionary<String, String> value);
+	@Selector("setURL:")
+	public native void setURL(NSURL value);
 
 	@Generated
 	@Selector("setVersion:")
 	public static native void setVersion(@NInt long aVersion);
 
 	@Generated
-	@Selector("size")
-	public native long size();
-
-	@Generated
-	@Selector("storageReference")
-	public native FIRStorageReference storageReference();
-
-	@Generated
 	@Selector("superclass")
 	public static native Class superclass_static();
-
-	@Generated
-	@Selector("timeCreated")
-	public native NSDate timeCreated();
-
-	@Generated
-	@Selector("updated")
-	public native NSDate updated();
 
 	@Generated
 	@Selector("version")

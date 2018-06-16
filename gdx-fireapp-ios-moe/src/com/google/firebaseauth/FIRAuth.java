@@ -3,15 +3,17 @@ package com.google.firebaseauth;
 
 import apple.NSObject;
 import apple.foundation.NSArray;
+import apple.foundation.NSData;
+import apple.foundation.NSDictionary;
 import apple.foundation.NSError;
 import apple.foundation.NSMethodSignature;
 import apple.foundation.NSSet;
+import apple.foundation.NSURL;
 import com.google.firebasecore.FIRApp;
 import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -30,7 +32,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseAuth")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRAuth extends NSObject {
@@ -42,6 +43,10 @@ public class FIRAuth extends NSObject {
 	protected FIRAuth(Pointer peer) {
 		super(peer);
 	}
+
+	@Generated
+	@Selector("APNSToken")
+	public native NSData APNSToken();
 
 	@Generated
 	@Selector("accessInstanceVariablesDirectly")
@@ -58,6 +63,19 @@ public class FIRAuth extends NSObject {
 	public interface Block_addAuthStateDidChangeListener {
 		@Generated
 		void call_addAuthStateDidChangeListener(FIRAuth arg0, FIRUser arg1);
+	}
+
+	@Generated
+	@Selector("addIDTokenDidChangeListener:")
+	@MappedReturn(ObjCObjectMapper.class)
+	public native apple.protocol.NSObject addIDTokenDidChangeListener(
+			@ObjCBlock(name = "call_addIDTokenDidChangeListener") Block_addIDTokenDidChangeListener listener);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_addIDTokenDidChangeListener {
+		@Generated
+		void call_addIDTokenDidChangeListener(FIRAuth arg0, FIRUser arg1);
 	}
 
 	@Generated
@@ -100,6 +118,14 @@ public class FIRAuth extends NSObject {
 	public static native boolean automaticallyNotifiesObserversForKey(String key);
 
 	@Generated
+	@Selector("canHandleNotification:")
+	public native boolean canHandleNotification(NSDictionary<?, ?> userInfo);
+
+	@Generated
+	@Selector("canHandleURL:")
+	public native boolean canHandleURL(NSURL URL);
+
+	@Generated
 	@Selector("cancelPreviousPerformRequestsWithTarget:")
 	public static native void cancelPreviousPerformRequestsWithTarget(
 			@Mapped(ObjCObjectMapper.class) Object aTarget);
@@ -124,10 +150,6 @@ public class FIRAuth extends NSObject {
 	}
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -150,6 +172,22 @@ public class FIRAuth extends NSObject {
 	}
 
 	@Generated
+	@Deprecated
+	@Selector("createUserAndRetrieveDataWithEmail:password:completion:")
+	public native void createUserAndRetrieveDataWithEmailPasswordCompletion(
+			String email,
+			String password,
+			@ObjCBlock(name = "call_createUserAndRetrieveDataWithEmailPasswordCompletion") Block_createUserAndRetrieveDataWithEmailPasswordCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_createUserAndRetrieveDataWithEmailPasswordCompletion {
+		@Generated
+		void call_createUserAndRetrieveDataWithEmailPasswordCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
+
+	@Generated
 	@Selector("createUserWithEmail:password:completion:")
 	public native void createUserWithEmailPasswordCompletion(
 			String email,
@@ -160,7 +198,7 @@ public class FIRAuth extends NSObject {
 	@Generated
 	public interface Block_createUserWithEmailPasswordCompletion {
 		@Generated
-		void call_createUserWithEmailPasswordCompletion(FIRUser arg0,
+		void call_createUserWithEmailPasswordCompletion(FIRAuthDataResult arg0,
 				NSError arg1);
 	}
 
@@ -191,6 +229,20 @@ public class FIRAuth extends NSObject {
 	}
 
 	@Generated
+	@Selector("fetchSignInMethodsForEmail:completion:")
+	public native void fetchSignInMethodsForEmailCompletion(
+			String email,
+			@ObjCBlock(name = "call_fetchSignInMethodsForEmailCompletion") Block_fetchSignInMethodsForEmailCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_fetchSignInMethodsForEmailCompletion {
+		@Generated
+		void call_fetchSignInMethodsForEmailCompletion(NSArray<String> arg0,
+				NSError arg1);
+	}
+
+	@Generated
 	@Selector("hash")
 	@NUInt
 	public static native long hash_static();
@@ -198,10 +250,6 @@ public class FIRAuth extends NSObject {
 	@Generated
 	@Selector("init")
 	public native FIRAuth init();
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -219,6 +267,10 @@ public class FIRAuth extends NSObject {
 	public static native boolean instancesRespondToSelector(SEL aSelector);
 
 	@Generated
+	@Selector("isSignInWithEmailLink:")
+	public native boolean isSignInWithEmailLink(String link);
+
+	@Generated
 	@Selector("isSubclassOfClass:")
 	public static native boolean isSubclassOfClass(Class aClass);
 
@@ -228,8 +280,8 @@ public class FIRAuth extends NSObject {
 			String key);
 
 	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
+	@Selector("languageCode")
+	public native String languageCode();
 
 	@Generated
 	@Owned
@@ -243,12 +295,32 @@ public class FIRAuth extends NSObject {
 			@Mapped(ObjCObjectMapper.class) apple.protocol.NSObject listenerHandle);
 
 	@Generated
+	@Selector("removeIDTokenDidChangeListener:")
+	public native void removeIDTokenDidChangeListener(
+			@Mapped(ObjCObjectMapper.class) apple.protocol.NSObject listenerHandle);
+
+	@Generated
 	@Selector("resolveClassMethod:")
 	public static native boolean resolveClassMethod(SEL sel);
 
 	@Generated
 	@Selector("resolveInstanceMethod:")
 	public static native boolean resolveInstanceMethod(SEL sel);
+
+	@Generated
+	@Selector("sendPasswordResetWithEmail:actionCodeSettings:completion:")
+	public native void sendPasswordResetWithEmailActionCodeSettingsCompletion(
+			String email,
+			FIRActionCodeSettings actionCodeSettings,
+			@ObjCBlock(name = "call_sendPasswordResetWithEmailActionCodeSettingsCompletion") Block_sendPasswordResetWithEmailActionCodeSettingsCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_sendPasswordResetWithEmailActionCodeSettingsCompletion {
+		@Generated
+		void call_sendPasswordResetWithEmailActionCodeSettingsCompletion(
+				NSError arg0);
+	}
 
 	@Generated
 	@Selector("sendPasswordResetWithEmail:completion:")
@@ -264,8 +336,101 @@ public class FIRAuth extends NSObject {
 	}
 
 	@Generated
+	@Selector("sendSignInLinkToEmail:actionCodeSettings:completion:")
+	public native void sendSignInLinkToEmailActionCodeSettingsCompletion(
+			String email,
+			FIRActionCodeSettings actionCodeSettings,
+			@ObjCBlock(name = "call_sendSignInLinkToEmailActionCodeSettingsCompletion") Block_sendSignInLinkToEmailActionCodeSettingsCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_sendSignInLinkToEmailActionCodeSettingsCompletion {
+		@Generated
+		void call_sendSignInLinkToEmailActionCodeSettingsCompletion(NSError arg0);
+	}
+
+	@Generated
+	@Selector("setAPNSToken:")
+	public native void setAPNSToken(NSData value);
+
+	@Generated
+	@Selector("setAPNSToken:type:")
+	public native void setAPNSTokenType(NSData token, @NInt long type);
+
+	@Generated
+	@Selector("setLanguageCode:")
+	public native void setLanguageCode(String value);
+
+	@Generated
+	@Selector("setSettings:")
+	public native void setSettings(FIRAuthSettings value);
+
+	@Generated
 	@Selector("setVersion:")
 	public static native void setVersion(@NInt long aVersion);
+
+	@Generated
+	@Selector("settings")
+	public native FIRAuthSettings settings();
+
+	@Generated
+	@Selector("signInAndRetrieveDataWithCredential:completion:")
+	public native void signInAndRetrieveDataWithCredentialCompletion(
+			FIRAuthCredential credential,
+			@ObjCBlock(name = "call_signInAndRetrieveDataWithCredentialCompletion") Block_signInAndRetrieveDataWithCredentialCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_signInAndRetrieveDataWithCredentialCompletion {
+		@Generated
+		void call_signInAndRetrieveDataWithCredentialCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
+
+	@Generated
+	@Deprecated
+	@Selector("signInAndRetrieveDataWithCustomToken:completion:")
+	public native void signInAndRetrieveDataWithCustomTokenCompletion(
+			String token,
+			@ObjCBlock(name = "call_signInAndRetrieveDataWithCustomTokenCompletion") Block_signInAndRetrieveDataWithCustomTokenCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_signInAndRetrieveDataWithCustomTokenCompletion {
+		@Generated
+		void call_signInAndRetrieveDataWithCustomTokenCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
+
+	@Generated
+	@Deprecated
+	@Selector("signInAndRetrieveDataWithEmail:password:completion:")
+	public native void signInAndRetrieveDataWithEmailPasswordCompletion(
+			String email,
+			String password,
+			@ObjCBlock(name = "call_signInAndRetrieveDataWithEmailPasswordCompletion") Block_signInAndRetrieveDataWithEmailPasswordCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_signInAndRetrieveDataWithEmailPasswordCompletion {
+		@Generated
+		void call_signInAndRetrieveDataWithEmailPasswordCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
+
+	@Generated
+	@Deprecated
+	@Selector("signInAnonymouslyAndRetrieveDataWithCompletion:")
+	public native void signInAnonymouslyAndRetrieveDataWithCompletion(
+			@ObjCBlock(name = "call_signInAnonymouslyAndRetrieveDataWithCompletion") Block_signInAnonymouslyAndRetrieveDataWithCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_signInAnonymouslyAndRetrieveDataWithCompletion {
+		@Generated
+		void call_signInAnonymouslyAndRetrieveDataWithCompletion(
+				FIRAuthDataResult arg0, NSError arg1);
+	}
 
 	@Generated
 	@Selector("signInAnonymouslyWithCompletion:")
@@ -276,10 +441,12 @@ public class FIRAuth extends NSObject {
 	@Generated
 	public interface Block_signInAnonymouslyWithCompletion {
 		@Generated
-		void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1);
+		void call_signInAnonymouslyWithCompletion(FIRAuthDataResult arg0,
+				NSError arg1);
 	}
 
 	@Generated
+	@Deprecated
 	@Selector("signInWithCredential:completion:")
 	public native void signInWithCredentialCompletion(
 			FIRAuthCredential credential,
@@ -302,7 +469,23 @@ public class FIRAuth extends NSObject {
 	@Generated
 	public interface Block_signInWithCustomTokenCompletion {
 		@Generated
-		void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1);
+		void call_signInWithCustomTokenCompletion(FIRAuthDataResult arg0,
+				NSError arg1);
+	}
+
+	@Generated
+	@Selector("signInWithEmail:link:completion:")
+	public native void signInWithEmailLinkCompletion(
+			String email,
+			String link,
+			@ObjCBlock(name = "call_signInWithEmailLinkCompletion") Block_signInWithEmailLinkCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_signInWithEmailLinkCompletion {
+		@Generated
+		void call_signInWithEmailLinkCompletion(FIRAuthDataResult arg0,
+				NSError arg1);
 	}
 
 	@Generated
@@ -316,7 +499,8 @@ public class FIRAuth extends NSObject {
 	@Generated
 	public interface Block_signInWithEmailPasswordCompletion {
 		@Generated
-		void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1);
+		void call_signInWithEmailPasswordCompletion(FIRAuthDataResult arg0,
+				NSError arg1);
 	}
 
 	@Generated
@@ -327,6 +511,23 @@ public class FIRAuth extends NSObject {
 	@Generated
 	@Selector("superclass")
 	public static native Class superclass_static();
+
+	@Generated
+	@Selector("updateCurrentUser:completion:")
+	public native void updateCurrentUserCompletion(
+			FIRUser user,
+			@ObjCBlock(name = "call_updateCurrentUserCompletion") Block_updateCurrentUserCompletion completion);
+
+	@Runtime(ObjCRuntime.class)
+	@Generated
+	public interface Block_updateCurrentUserCompletion {
+		@Generated
+		void call_updateCurrentUserCompletion(NSError arg0);
+	}
+
+	@Generated
+	@Selector("useAppLanguage")
+	public native void useAppLanguage();
 
 	@Generated
 	@Selector("verifyPasswordResetCode:completion:")

@@ -10,7 +10,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -27,7 +26,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseStorage")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRStorageUploadTask extends FIRStorageObservableTask implements
@@ -76,10 +74,6 @@ public class FIRStorageUploadTask extends FIRStorageObservableTask implements
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -109,10 +103,6 @@ public class FIRStorageUploadTask extends FIRStorageObservableTask implements
 	public native FIRStorageUploadTask init();
 
 	@Generated
-	@Selector("initialize")
-	public static native void initialize();
-
-	@Generated
 	@Selector("instanceMethodForSelector:")
 	@FunctionPtr(name = "call_instanceMethodForSelector_ret")
 	public static native NSObject.Function_instanceMethodForSelector_ret instanceMethodForSelector(
@@ -135,10 +125,6 @@ public class FIRStorageUploadTask extends FIRStorageObservableTask implements
 	@Selector("keyPathsForValuesAffectingValueForKey:")
 	public static native NSSet<String> keyPathsForValuesAffectingValueForKey(
 			String key);
-
-	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
 
 	@Generated
 	@Owned

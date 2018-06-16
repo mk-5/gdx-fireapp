@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'org.multi-os-engine:moe-gradle:1.4.1'
+        classpath 'org.multi-os-engine:moe-gradle:1.4.3'
         classpath 'com.google.gms:google-services:3.1.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
@@ -19,7 +19,7 @@ allprojects {
     apply plugin: "idea"
     apply plugin: "maven-publish"
     group 'pl.mk5.gdx-fireapp'
-    version = '1.3.1'
+    version = '1.4.1-SNAPSHOT'
 
     ext {
         appName = 'GDX Fireapp'

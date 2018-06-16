@@ -56,6 +56,10 @@ public class FIRAnalytics extends NSObject {
 	public static native Object allocWithZone(VoidPtr zone);
 
 	@Generated
+	@Selector("appInstanceID")
+	public static native String appInstanceID();
+
+	@Generated
 	@Selector("automaticallyNotifiesObserversForKey:")
 	public static native boolean automaticallyNotifiesObserversForKey(String key);
 
@@ -69,10 +73,6 @@ public class FIRAnalytics extends NSObject {
 	public static native void cancelPreviousPerformRequestsWithTargetSelectorObject(
 			@Mapped(ObjCObjectMapper.class) Object aTarget, SEL aSelector,
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
-
-	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
 
 	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
@@ -122,10 +122,6 @@ public class FIRAnalytics extends NSObject {
 	public native FIRAnalytics init();
 
 	@Generated
-	@Selector("initialize")
-	public static native void initialize();
-
-	@Generated
 	@Selector("instanceMethodForSelector:")
 	@FunctionPtr(name = "call_instanceMethodForSelector_ret")
 	public static native NSObject.Function_instanceMethodForSelector_ret instanceMethodForSelector(
@@ -150,19 +146,19 @@ public class FIRAnalytics extends NSObject {
 			String key);
 
 	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
-
-	@Generated
 	@Selector("logEventWithName:parameters:")
 	public static native void logEventWithNameParameters(String name,
-			NSDictionary<String, ? extends NSObject> parameters);
+			NSDictionary<String, ?> parameters);
 
 	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
 	public static native Object new_objc();
+
+	@Generated
+	@Selector("resetAnalyticsData")
+	public static native void resetAnalyticsData();
 
 	@Generated
 	@Selector("resolveClassMethod:")

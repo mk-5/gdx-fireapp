@@ -10,7 +10,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -27,7 +26,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseDatabase")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRDatabaseQuery extends NSObject {
@@ -70,10 +68,6 @@ public class FIRDatabaseQuery extends NSObject {
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -97,10 +91,6 @@ public class FIRDatabaseQuery extends NSObject {
 	@Generated
 	@Selector("init")
 	public native FIRDatabaseQuery init();
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -129,10 +119,6 @@ public class FIRDatabaseQuery extends NSObject {
 	@Selector("keyPathsForValuesAffectingValueForKey:")
 	public static native NSSet<String> keyPathsForValuesAffectingValueForKey(
 			String key);
-
-	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
 
 	@Generated
 	@Owned

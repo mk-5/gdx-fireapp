@@ -10,7 +10,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -26,7 +25,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseDatabase")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRDatabase extends NSObject {
@@ -77,10 +75,6 @@ public class FIRDatabase extends NSObject {
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
 
 	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
-
-	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
 	public static native NSArray<String> classFallbacksForKeyedArchiver();
 
@@ -95,6 +89,14 @@ public class FIRDatabase extends NSObject {
 	@Generated
 	@Selector("databaseForApp:")
 	public static native FIRDatabase databaseForApp(FIRApp app);
+
+	@Generated
+	@Selector("databaseForApp:URL:")
+	public static native FIRDatabase databaseForAppURL(FIRApp app, String url);
+
+	@Generated
+	@Selector("databaseWithURL:")
+	public static native FIRDatabase databaseWithURL(String url);
 
 	@Generated
 	@Selector("debugDescription")
@@ -122,10 +124,6 @@ public class FIRDatabase extends NSObject {
 	public native FIRDatabase init();
 
 	@Generated
-	@Selector("initialize")
-	public static native void initialize();
-
-	@Generated
 	@Selector("instanceMethodForSelector:")
 	@FunctionPtr(name = "call_instanceMethodForSelector_ret")
 	public static native NSObject.Function_instanceMethodForSelector_ret instanceMethodForSelector(
@@ -148,10 +146,6 @@ public class FIRDatabase extends NSObject {
 	@Selector("keyPathsForValuesAffectingValueForKey:")
 	public static native NSSet<String> keyPathsForValuesAffectingValueForKey(
 			String key);
-
-	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
 
 	@Generated
 	@Owned

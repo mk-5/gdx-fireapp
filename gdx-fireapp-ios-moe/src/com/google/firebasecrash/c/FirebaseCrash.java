@@ -24,6 +24,7 @@ public final class FirebaseCrash {
 	}
 
 	@Generated
+	@Deprecated
 	@CFunction
 	public static native void FIRCrashLogv(
 			@Mapped(ObjCStringMapper.class) String format, BytePtr ap);

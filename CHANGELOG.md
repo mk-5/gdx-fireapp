@@ -24,3 +24,7 @@
 
 **[1.3.1]**
 \- fix: TS in distributions singletons
+
+**[1.4.1]**
+\- FileMetaData - support for async downloadUrl get
+\- fix: #6 ios firebase sdk 5.x

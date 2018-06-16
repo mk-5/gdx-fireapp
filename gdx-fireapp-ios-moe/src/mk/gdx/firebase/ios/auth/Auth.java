@@ -17,6 +17,7 @@
 package mk.gdx.firebase.ios.auth;
 
 import com.google.firebaseauth.FIRAuth;
+import com.google.firebaseauth.FIRAuthDataResult;
 import com.google.firebaseauth.FIRUser;
 
 import org.moe.natj.general.ptr.Ptr;
@@ -66,11 +67,19 @@ public class Auth implements AuthDistribution
         FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion()
         {
             @Override
-            public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
+            public void call_createUserWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1)
             {
                 if (handleError(arg1, callback)) return;
+                // TODO - arg0 was chacnged from FIRUser to FIRAuthDataResult - need to adopt it
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -83,11 +92,19 @@ public class Auth implements AuthDistribution
         FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion()
         {
             @Override
-            public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
+            public void call_signInWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1)
             {
                 if (handleError(arg1, callback)) return;
+                // TODO
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -100,11 +117,19 @@ public class Auth implements AuthDistribution
         FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion()
         {
             @Override
-            public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
+            public void call_signInWithCustomTokenCompletion(FIRAuthDataResult arg0, NSError arg1)
             {
                 if (handleError(arg1, callback)) return;
+                // TODO
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -117,11 +142,18 @@ public class Auth implements AuthDistribution
         FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion()
         {
             @Override
-            public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
+            public void call_signInAnonymouslyWithCompletion(FIRAuthDataResult arg0, NSError arg1)
             {
                 if (handleError(arg1, callback)) return;
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 

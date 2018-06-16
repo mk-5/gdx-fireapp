@@ -1,13 +1,12 @@
-package com.google.firebasestorage;
+package com.google.firebaseauth;
 
 
 import apple.NSObject;
 import apple.foundation.NSArray;
-import apple.foundation.NSDate;
-import apple.foundation.NSDictionary;
+import apple.foundation.NSError;
 import apple.foundation.NSMethodSignature;
 import apple.foundation.NSSet;
-import apple.foundation.protocol.NSCopying;
+import com.google.firebaseauth.protocol.FIRAuthUIDelegate;
 import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
@@ -22,6 +21,7 @@ import org.moe.natj.general.ptr.VoidPtr;
 import org.moe.natj.objc.Class;
 import org.moe.natj.objc.ObjCRuntime;
 import org.moe.natj.objc.SEL;
+import org.moe.natj.objc.ann.ObjCBlock;
 import org.moe.natj.objc.ann.ObjCClassBinding;
 import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
@@ -29,13 +29,13 @@ import org.moe.natj.objc.map.ObjCObjectMapper;
 @Generated
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
-public class FIRStorageMetadata extends NSObject implements NSCopying {
+public class FIRPhoneAuthProvider extends NSObject {
 	static {
 		NatJ.register();
 	}
 
 	@Generated
-	protected FIRStorageMetadata(Pointer peer) {
+	protected FIRPhoneAuthProvider(Pointer peer) {
 		super(peer);
 	}
 
@@ -46,7 +46,7 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	@Generated
 	@Owned
 	@Selector("alloc")
-	public static native FIRStorageMetadata alloc();
+	public static native FIRPhoneAuthProvider alloc();
 
 	@Generated
 	@Selector("allocWithZone:")
@@ -56,14 +56,6 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	@Generated
 	@Selector("automaticallyNotifiesObserversForKey:")
 	public static native boolean automaticallyNotifiesObserversForKey(String key);
-
-	@Generated
-	@Selector("bucket")
-	public native String bucket();
-
-	@Generated
-	@Selector("cacheControl")
-	public native String cacheControl();
 
 	@Generated
 	@Selector("cancelPreviousPerformRequestsWithTarget:")
@@ -85,30 +77,9 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native Class classForKeyedUnarchiver();
 
 	@Generated
-	@Selector("contentDisposition")
-	public native String contentDisposition();
-
-	@Generated
-	@Selector("contentEncoding")
-	public native String contentEncoding();
-
-	@Generated
-	@Selector("contentLanguage")
-	public native String contentLanguage();
-
-	@Generated
-	@Selector("contentType")
-	public native String contentType();
-
-	@Generated
-	@Owned
-	@Selector("copyWithZone:")
-	@MappedReturn(ObjCObjectMapper.class)
-	public native Object copyWithZone(VoidPtr zone);
-
-	@Generated
-	@Selector("customMetadata")
-	public native NSDictionary<String, String> customMetadata();
+	@Selector("credentialWithVerificationID:verificationCode:")
+	public native FIRPhoneAuthCredential credentialWithVerificationIDVerificationCode(
+			String verificationID, String verificationCode);
 
 	@Generated
 	@Selector("debugDescription")
@@ -119,26 +90,13 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native String description_static();
 
 	@Generated
-	@Selector("dictionaryRepresentation")
-	public native NSDictionary<String, ?> dictionaryRepresentation();
-
-	@Generated
-	@Selector("generation")
-	public native long generation();
-
-	@Generated
 	@Selector("hash")
 	@NUInt
 	public static native long hash_static();
 
 	@Generated
 	@Selector("init")
-	public native FIRStorageMetadata init();
-
-	@Generated
-	@Selector("initWithDictionary:")
-	public native FIRStorageMetadata initWithDictionary(
-			NSDictionary<String, ?> dictionary);
+	public native FIRPhoneAuthProvider init();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -156,14 +114,6 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native boolean instancesRespondToSelector(SEL aSelector);
 
 	@Generated
-	@Selector("isFile")
-	public native boolean isFile();
-
-	@Generated
-	@Selector("isFolder")
-	public native boolean isFolder();
-
-	@Generated
 	@Selector("isSubclassOfClass:")
 	public static native boolean isSubclassOfClass(Class aClass);
 
@@ -173,26 +123,18 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 			String key);
 
 	@Generated
-	@Selector("md5Hash")
-	public native String md5Hash();
-
-	@Generated
-	@Selector("metageneration")
-	public native long metageneration();
-
-	@Generated
-	@Selector("name")
-	public native String name();
-
-	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
 	public static native Object new_objc();
 
 	@Generated
-	@Selector("path")
-	public native String path();
+	@Selector("provider")
+	public static native FIRPhoneAuthProvider provider();
+
+	@Generated
+	@Selector("providerWithAuth:")
+	public static native FIRPhoneAuthProvider providerWithAuth(FIRAuth auth);
 
 	@Generated
 	@Selector("resolveClassMethod:")
@@ -203,52 +145,27 @@ public class FIRStorageMetadata extends NSObject implements NSCopying {
 	public static native boolean resolveInstanceMethod(SEL sel);
 
 	@Generated
-	@Selector("setCacheControl:")
-	public native void setCacheControl(String value);
-
-	@Generated
-	@Selector("setContentDisposition:")
-	public native void setContentDisposition(String value);
-
-	@Generated
-	@Selector("setContentEncoding:")
-	public native void setContentEncoding(String value);
-
-	@Generated
-	@Selector("setContentLanguage:")
-	public native void setContentLanguage(String value);
-
-	@Generated
-	@Selector("setContentType:")
-	public native void setContentType(String value);
-
-	@Generated
-	@Selector("setCustomMetadata:")
-	public native void setCustomMetadata(NSDictionary<String, String> value);
-
-	@Generated
 	@Selector("setVersion:")
 	public static native void setVersion(@NInt long aVersion);
-
-	@Generated
-	@Selector("size")
-	public native long size();
-
-	@Generated
-	@Selector("storageReference")
-	public native FIRStorageReference storageReference();
 
 	@Generated
 	@Selector("superclass")
 	public static native Class superclass_static();
 
 	@Generated
-	@Selector("timeCreated")
-	public native NSDate timeCreated();
+	@Selector("verifyPhoneNumber:UIDelegate:completion:")
+	public native void verifyPhoneNumberUIDelegateCompletion(
+			String phoneNumber,
+			@Mapped(ObjCObjectMapper.class) FIRAuthUIDelegate UIDelegate,
+			@ObjCBlock(name = "call_verifyPhoneNumberUIDelegateCompletion") Block_verifyPhoneNumberUIDelegateCompletion completion);
 
+	@Runtime(ObjCRuntime.class)
 	@Generated
-	@Selector("updated")
-	public native NSDate updated();
+	public interface Block_verifyPhoneNumberUIDelegateCompletion {
+		@Generated
+		void call_verifyPhoneNumberUIDelegateCompletion(String arg0,
+				NSError arg1);
+	}
 
 	@Generated
 	@Selector("version")

@@ -10,7 +10,6 @@ import org.moe.natj.c.ann.FunctionPtr;
 import org.moe.natj.general.NatJ;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.Generated;
-import org.moe.natj.general.ann.Library;
 import org.moe.natj.general.ann.Mapped;
 import org.moe.natj.general.ann.MappedReturn;
 import org.moe.natj.general.ann.NInt;
@@ -26,7 +25,6 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseCore")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIROptions extends NSObject implements NSCopying {
@@ -70,6 +68,10 @@ public class FIROptions extends NSObject implements NSCopying {
 	public static native boolean automaticallyNotifiesObserversForKey(String key);
 
 	@Generated
+	@Selector("bundleID")
+	public native String bundleID();
+
+	@Generated
 	@Selector("cancelPreviousPerformRequestsWithTarget:")
 	public static native void cancelPreviousPerformRequestsWithTarget(
 			@Mapped(ObjCObjectMapper.class) Object aTarget);
@@ -79,10 +81,6 @@ public class FIROptions extends NSObject implements NSCopying {
 	public static native void cancelPreviousPerformRequestsWithTargetSelectorObject(
 			@Mapped(ObjCObjectMapper.class) Object aTarget, SEL aSelector,
 			@Mapped(ObjCObjectMapper.class) Object anArgument);
-
-	@Generated
-	@Selector("class")
-	public static native Class class_objc_static();
 
 	@Generated
 	@Selector("classFallbacksForKeyedArchiver")
@@ -140,16 +138,9 @@ public class FIROptions extends NSObject implements NSCopying {
 	public native FIROptions initWithContentsOfFile(String plistPath);
 
 	@Generated
-	@Selector("initWithGoogleAppID:bundleID:GCMSenderID:APIKey:clientID:trackingID:androidClientID:databaseURL:storageBucket:deepLinkURLScheme:")
-	public native FIROptions initWithGoogleAppIDBundleIDGCMSenderIDAPIKeyClientIDTrackingIDAndroidClientIDDatabaseURLStorageBucketDeepLinkURLScheme(
-			String googleAppID, String bundleID, String GCMSenderID,
-			String APIKey, String clientID, String trackingID,
-			String androidClientID, String databaseURL, String storageBucket,
-			String deepLinkURLScheme);
-
-	@Generated
-	@Selector("initialize")
-	public static native void initialize();
+	@Selector("initWithGoogleAppID:GCMSenderID:")
+	public native FIROptions initWithGoogleAppIDGCMSenderID(String googleAppID,
+			String GCMSenderID);
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -176,14 +167,14 @@ public class FIROptions extends NSObject implements NSCopying {
 			String key);
 
 	@Generated
-	@Selector("load")
-	public static native void load_objc_static();
-
-	@Generated
 	@Owned
 	@Selector("new")
 	@MappedReturn(ObjCObjectMapper.class)
 	public static native Object new_objc();
+
+	@Generated
+	@Selector("projectID")
+	public native String projectID();
 
 	@Generated
 	@Selector("resolveClassMethod:")
@@ -194,8 +185,48 @@ public class FIROptions extends NSObject implements NSCopying {
 	public static native boolean resolveInstanceMethod(SEL sel);
 
 	@Generated
+	@Selector("setAPIKey:")
+	public native void setAPIKey(String value);
+
+	@Generated
+	@Selector("setAndroidClientID:")
+	public native void setAndroidClientID(String value);
+
+	@Generated
+	@Selector("setBundleID:")
+	public native void setBundleID(String value);
+
+	@Generated
+	@Selector("setClientID:")
+	public native void setClientID(String value);
+
+	@Generated
+	@Selector("setDatabaseURL:")
+	public native void setDatabaseURL(String value);
+
+	@Generated
 	@Selector("setDeepLinkURLScheme:")
 	public native void setDeepLinkURLScheme(String value);
+
+	@Generated
+	@Selector("setGCMSenderID:")
+	public native void setGCMSenderID(String value);
+
+	@Generated
+	@Selector("setGoogleAppID:")
+	public native void setGoogleAppID(String value);
+
+	@Generated
+	@Selector("setProjectID:")
+	public native void setProjectID(String value);
+
+	@Generated
+	@Selector("setStorageBucket:")
+	public native void setStorageBucket(String value);
+
+	@Generated
+	@Selector("setTrackingID:")
+	public native void setTrackingID(String value);
 
 	@Generated
 	@Selector("setVersion:")
