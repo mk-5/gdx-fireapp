@@ -28,8 +28,7 @@ import mk.gdx.firebase.callbacks.TransactionCallback;
 /**
  * Provides transaction invocation
  */
-public class TransactionHandler<R> implements Transaction.Handler
-{
+public class TransactionHandler<R> implements Transaction.Handler {
 
     private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
@@ -42,18 +41,16 @@ public class TransactionHandler<R> implements Transaction.Handler
 
     /**
      * @param transactionCallback Transaction callback, not null
-     * @param completeCallback Complete callback, may be null
+     * @param completeCallback    Complete callback, may be null
      */
-    public TransactionHandler(TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
-    {
+    public TransactionHandler(TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
         this.transactionCallback = transactionCallback;
         this.completeCallback = completeCallback;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Transaction.Result doTransaction(MutableData mutableData)
-    {
+    public Transaction.Result doTransaction(MutableData mutableData) {
         if (mutableData.getValue() == null) {
             GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
             return Transaction.abort();
@@ -64,8 +61,7 @@ public class TransactionHandler<R> implements Transaction.Handler
     }
 
     @Override
-    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot)
-    {
+    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
         if (databaseError != null) {
             if (completeCallback != null) {
                 completeCallback.onError(databaseError.toException());

@@ -29,8 +29,7 @@ import mk.gdx.firebase.ios.database.DataProcessor;
 /**
  * Gets data from FIRDataSnapshot with ordering preserved.
  */
-public class FIRDataSnapshotOrderByResolver
-{
+public class FIRDataSnapshotOrderByResolver {
 
     /**
      * Gets children's from FIRDataSnapshot and puts them into new ArrayList.
@@ -39,14 +38,13 @@ public class FIRDataSnapshotOrderByResolver
      * @return New instance of List with ordering preserved from DataSnapshot
      */
     @SuppressWarnings("unchecked")
-    public static List resolve(FIRDataSnapshot dataSnapshot)
-    {
+    public static List resolve(FIRDataSnapshot dataSnapshot) {
         List result = new ArrayList<>();
         NSArray nsArray = dataSnapshot.children().allObjects();
         for (Object object : nsArray) {
-            if( object instanceof FIRDataSnapshot ){
-                result.add(DataProcessor.iosDataToJava(((FIRDataSnapshot)object).value()));
-            }else {
+            if (object instanceof FIRDataSnapshot) {
+                result.add(DataProcessor.iosDataToJava(((FIRDataSnapshot) object).value()));
+            } else {
                 result.add(DataProcessor.iosDataToJava(object));
             }
         }
@@ -61,8 +59,7 @@ public class FIRDataSnapshotOrderByResolver
      * @param dataSnapshot  FIRDataSnapshot to check, not null
      * @return True if ordering should be preserved
      */
-    public static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, FIRDataSnapshot dataSnapshot)
-    {
+    public static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, FIRDataSnapshot dataSnapshot) {
         return orderByClause != null && ClassReflection.isAssignableFrom(List.class, dataType)
                 && dataSnapshot.childrenCount() > 0;
     }

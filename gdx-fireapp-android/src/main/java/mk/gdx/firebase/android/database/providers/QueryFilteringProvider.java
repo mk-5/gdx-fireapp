@@ -26,12 +26,10 @@ import mk.gdx.firebase.database.pojos.Filter;
 /**
  * Provides filter and order-by application into given {@code Query} instance.
  */
-public class QueryFilteringProvider extends FilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver>
-{
+public class QueryFilteringProvider extends FilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> {
 
     @Override
-    public Query applyFiltering()
-    {
+    public Query applyFiltering() {
         Filter filter = null;
         if (orderByClause != null)
             query = orderByResolver.resolve(orderByClause, query);
@@ -43,14 +41,12 @@ public class QueryFilteringProvider extends FilteringProvider<Query, QueryFilter
     }
 
     @Override
-    public QueryFilterResolver createFilterResolver()
-    {
+    public QueryFilterResolver createFilterResolver() {
         return new QueryFilterResolver();
     }
 
     @Override
-    public QueryOrderByResolver createOrderByResolver()
-    {
+    public QueryOrderByResolver createOrderByResolver() {
         return new QueryOrderByResolver();
     }
 }

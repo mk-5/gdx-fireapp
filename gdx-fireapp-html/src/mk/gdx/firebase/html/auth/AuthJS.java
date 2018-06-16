@@ -24,8 +24,7 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
 /**
  * Provides calls to firebase javascript api.
  */
-class AuthJS
-{
+class AuthJS {
     public static native FirebaseUserJSON firebaseUser() /*-{
         if( typeof $wnd.firebase == 'undefined') return { isNULL : true };
         var user = $wnd.firebase.auth().currentUser;
@@ -114,8 +113,7 @@ class AuthJS
     /**
      * @return Simplest way for javascript to get GdxFirebaseUser.
      */
-    public static GdxFirebaseUser getUserBridge()
-    {
+    public static GdxFirebaseUser getUserBridge() {
         return GdxFIRAuth.instance().getCurrentUser();
     }
 }

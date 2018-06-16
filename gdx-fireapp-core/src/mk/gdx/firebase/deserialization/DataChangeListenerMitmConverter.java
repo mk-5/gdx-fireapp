@@ -31,14 +31,12 @@ import mk.gdx.firebase.reflection.AnnotationFinder;
  *
  * @param <T> Result type of listener
  */
-public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConverter
-{
+public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConverter {
 
     private DataChangeListener<E> coveredListener;
     private Class<T> dataType;
 
-    public DataChangeListenerMitmConverter(Class<T> dataType, DataChangeListener<E> coveredListener, FirebaseMapConverter mapConverter)
-    {
+    public DataChangeListenerMitmConverter(Class<T> dataType, DataChangeListener<E> coveredListener, FirebaseMapConverter mapConverter) {
         super(mapConverter);
         this.coveredListener = coveredListener;
     }
@@ -51,8 +49,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      *
      * @return DataChangeListener which retrieves data from database, not null.
      */
-    public DataChangeListener<?> get()
-    {
+    public DataChangeListener<?> get() {
         return isPojo(dataType) ? getPojoListener() : getGenericListener();
     }
 
@@ -61,8 +58,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      *
      * @return New Pojo data callback instance, not null.
      */
-    public DataChangeListener<Map> getPojoListener()
-    {
+    public DataChangeListener<Map> getPojoListener() {
         return new PojoDataChangeListener();
     }
 
@@ -71,8 +67,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      *
      * @return New Pojo data callback instance, not null.
      */
-    public DataChangeListener<T> getGenericListener()
-    {
+    public DataChangeListener<T> getGenericListener() {
         return new GenericDataChangeListener();
     }
 
@@ -83,8 +78,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      * @see #doMitmConversion(Class, Object)
      */
     @SuppressWarnings("unchecked")
-    public void onChange(Object data)
-    {
+    public void onChange(Object data) {
         MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, coveredListener);
         // If MapConversions was not indicated - do nothing.
         if (mapConversionAnnotation != null) {
@@ -104,26 +98,22 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      *
      * @param e Exception with description what was wrong.
      */
-    public void onCanceled(Exception e)
-    {
+    public void onCanceled(Exception e) {
         coveredListener.onCanceled(e);
     }
 
     /**
      * Retrieve map from database and pass to {@link #onChange(Object)}
      */
-    private class PojoDataChangeListener implements DataChangeListener<Map>
-    {
+    private class PojoDataChangeListener implements DataChangeListener<Map> {
 
         @Override
-        public void onChange(Map data)
-        {
+        public void onChange(Map data) {
             DataChangeListenerMitmConverter.this.onChange(data);
         }
 
         @Override
-        public void onCanceled(Exception e)
-        {
+        public void onCanceled(Exception e) {
             DataChangeListenerMitmConverter.this.onCanceled(e);
         }
     }
@@ -131,18 +121,15 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
     /**
      * Retrieve {@code T} object from database and pass to  {@link #onChange(Object)}
      */
-    private class GenericDataChangeListener implements DataChangeListener<T>
-    {
+    private class GenericDataChangeListener implements DataChangeListener<T> {
 
         @Override
-        public void onChange(T data)
-        {
+        public void onChange(T data) {
             DataChangeListenerMitmConverter.this.onChange(data);
         }
 
         @Override
-        public void onCanceled(Exception e)
-        {
+        public void onCanceled(Exception e) {
             DataChangeListenerMitmConverter.this.onCanceled(e);
         }
     }

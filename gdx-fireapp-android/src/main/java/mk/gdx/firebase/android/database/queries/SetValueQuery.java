@@ -28,30 +28,25 @@ import mk.gdx.firebase.database.validators.SetValueValidator;
 /**
  * Provides setValue execution with firebase database reference.
  */
-public class SetValueQuery extends AndroidDatabaseQuery<Void>
-{
-    public SetValueQuery(Database databaseDistribution)
-    {
+public class SetValueQuery extends AndroidDatabaseQuery<Void> {
+    public SetValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new SetValueValidator();
     }
 
     @Override
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.size == 1) {
             ((DatabaseReference) query).setValue(arguments.get(0));
         } else if (arguments.size == 2) {

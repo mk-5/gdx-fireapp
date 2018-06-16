@@ -24,8 +24,7 @@ import mk.gdx.firebase.database.FilterType;
 /**
  * Provides filtering for {@code Query} instance.
  */
-public class QueryFilterResolver implements FilterResolver<Query, Query>
-{
+public class QueryFilterResolver implements FilterResolver<Query, Query> {
 
     public static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
     public static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
@@ -41,8 +40,7 @@ public class QueryFilterResolver implements FilterResolver<Query, Query>
      * @return Query with filtering applied
      */
     @Override
-    public <V> Query resolve(FilterType filterType, Query target, V[] filterArguments)
-    {
+    public <V> Query resolve(FilterType filterType, Query target, V[] filterArguments) {
         if (filterArguments.length == 0)
             throw new IllegalArgumentException(MISSING_FILTER_ARGUMENTS);
         switch (filterType) {

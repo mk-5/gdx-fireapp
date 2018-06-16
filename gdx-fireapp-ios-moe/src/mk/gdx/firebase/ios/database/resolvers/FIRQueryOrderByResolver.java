@@ -24,11 +24,9 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Applies OrderByClause to the FIRDatabaseQuery instance.
  */
-public class FIRQueryOrderByResolver implements OrderByResolver<FIRDatabaseQuery, FIRDatabaseQuery>
-{
+public class FIRQueryOrderByResolver implements OrderByResolver<FIRDatabaseQuery, FIRDatabaseQuery> {
     @Override
-    public FIRDatabaseQuery resolve(OrderByClause orderByClause, FIRDatabaseQuery target)
-    {
+    public FIRDatabaseQuery resolve(OrderByClause orderByClause, FIRDatabaseQuery target) {
         switch (orderByClause.getOrderByMode()) {
             case ORDER_BY_CHILD:
                 return target.queryOrderedByChild(orderByClause.getArgument());

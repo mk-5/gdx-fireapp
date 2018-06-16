@@ -43,8 +43,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  * </ul><p>
  * If you do not do this {@code RuntimeException} will be thrown.
  */
-public interface DatabaseDistribution
-{
+public interface DatabaseDistribution {
 
     /**
      * Listens for database connection events.

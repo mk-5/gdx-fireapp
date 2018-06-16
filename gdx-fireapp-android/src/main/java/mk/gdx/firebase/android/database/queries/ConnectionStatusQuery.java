@@ -33,33 +33,28 @@ import mk.gdx.firebase.listeners.ConnectedListener;
 /**
  * Provides asking for connection status.
  */
-public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void>
-{
+public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
 
     private static final Array<ConnectionValueListener> listeners = new Array<>();
 
-    public ConnectionStatusQuery(Database databaseDistribution)
-    {
+    public ConnectionStatusQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         query = FirebaseDatabase.getInstance().getReference(CONNECTED_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new OnConnectionValidator();
     }
 
     @Override
-    protected Void run()
-    {
+    protected Void run() {
         synchronized (listeners) {
             if (arguments.get(0) != null) {
                 listeners.add(new ConnectionValueListener((ConnectedListener) arguments.get(0)));
@@ -77,19 +72,16 @@ public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void>
      * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
      * and getting information from {@code .info/connected} path.
      */
-    private class ConnectionValueListener implements ValueEventListener
-    {
+    private class ConnectionValueListener implements ValueEventListener {
 
         private ConnectedListener connectedListener;
 
-        public ConnectionValueListener(ConnectedListener connectedListener)
-        {
+        public ConnectionValueListener(ConnectedListener connectedListener) {
             this.connectedListener = connectedListener;
         }
 
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
+        public void onDataChange(DataSnapshot dataSnapshot) {
             if (connectedListener == null) return;
             boolean connected = dataSnapshot.getValue(Boolean.class);
             if (connected) {
@@ -100,8 +92,7 @@ public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void>
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
+        public void onCancelled(DatabaseError databaseError) {
             GdxFIRLogger.log(CONNECTION_LISTENER_CANCELED, databaseError.toException());
         }
     }

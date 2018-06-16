@@ -21,38 +21,31 @@ import mk.gdx.firebase.database.FilterType;
 /**
  * Keeps information about filter.
  */
-public class Filter
-{
+public class Filter {
     private FilterType filterType;
     private Object[] filterArguments;
 
-    public Filter()
-    {
+    public Filter() {
     }
 
-    public Filter(FilterType filterType, Object[] filterArguments)
-    {
+    public Filter(FilterType filterType, Object[] filterArguments) {
         this.filterType = filterType;
         this.filterArguments = filterArguments;
     }
 
-    public FilterType getFilterType()
-    {
+    public FilterType getFilterType() {
         return filterType;
     }
 
-    public void setFilterType(FilterType filterType)
-    {
+    public void setFilterType(FilterType filterType) {
         this.filterType = filterType;
     }
 
-    public Object[] getFilterArguments()
-    {
+    public Object[] getFilterArguments() {
         return filterArguments;
     }
 
-    public void setFilterArguments(Object[] filterArguments)
-    {
+    public void setFilterArguments(Object[] filterArguments) {
         this.filterArguments = filterArguments;
     }
 }

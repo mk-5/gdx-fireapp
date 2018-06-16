@@ -21,8 +21,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Validates arguments given as Object array.
  */
-public interface ArgumentsValidator
-{
+public interface ArgumentsValidator {
 
     /**
      * Validates given arguments and throws exception when someone is wrong.

@@ -27,23 +27,19 @@ import mk.gdx.firebase.html.database.json.JsonDataModifier;
 /**
  * Provides transaction javascript execution.
  */
-public class RunTransactionQuery extends GwtDatabaseQuery
-{
-    public RunTransactionQuery(Database databaseDistribution)
-    {
+public class RunTransactionQuery extends GwtDatabaseQuery {
+    public RunTransactionQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void runJS()
-    {
+    protected void runJS() {
         transaction(databaseReference, new JsonDataModifier((Class) arguments.get(0), (TransactionCallback) arguments.get(1)), (CompleteCallback) arguments.get(2));
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new RunTransactionValidator();
     }
 

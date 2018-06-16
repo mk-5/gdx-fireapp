@@ -21,11 +21,9 @@ import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 
-public class SetValueValidator implements ArgumentsValidator
-{
+public class SetValueValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
+    public void validate(Array<Object> arguments) {
         if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof CompleteCallback))
             throw new IllegalArgumentException();
     }

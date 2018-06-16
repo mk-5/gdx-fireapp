@@ -25,8 +25,7 @@ import mk.gdx.firebase.annotations.NestedGenericType;
 /**
  * Gets information from annotations.
  */
-public class AnnotationFinder
-{
+public class AnnotationFinder {
 
     /**
      * Gets {@code NestedGenericType} annotation from object.
@@ -36,8 +35,7 @@ public class AnnotationFinder
      * @param object Object to deal with, not null
      * @return Annotation, may be null
      */
-    public static NestedGenericType getNestedGenericTypeAnnotation(Object object)
-    {
+    public static NestedGenericType getNestedGenericTypeAnnotation(Object object) {
         NestedGenericType result = null;
         Method[] methods = ClassReflection.getMethods(object.getClass());
         // TODO - use type annotation, not method?
@@ -61,8 +59,7 @@ public class AnnotationFinder
      * @param object         Object to deal with, not null
      * @return Annotation, may be null
      */
-    public static <T extends java.lang.annotation.Annotation> T getMethodAnnotation(Class<T> annotationType, Object object)
-    {
+    public static <T extends java.lang.annotation.Annotation> T getMethodAnnotation(Class<T> annotationType, Object object) {
         T result = null;
         Method[] methods = ClassReflection.getMethods(object.getClass());
         for (Method m : methods) {

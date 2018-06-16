@@ -26,17 +26,14 @@ import com.badlogic.gdx.utils.ObjectMap;
  *
  * @param <T> Data listener type
  */
-public class DataListenersManager<T>
-{
+public class DataListenersManager<T> {
     private final ObjectMap<String, Array<T>> listeners;
 
-    public DataListenersManager()
-    {
+    public DataListenersManager() {
         listeners = new ObjectMap<>();
     }
 
-    public void addNewListener(String databasePath, T listener)
-    {
+    public void addNewListener(String databasePath, T listener) {
         synchronized (listeners) {
             if (!listeners.containsKey(databasePath))
                 listeners.put(databasePath, new Array<T>());
@@ -44,20 +41,17 @@ public class DataListenersManager<T>
         }
     }
 
-    public void removeListenersForPath(String databasePath)
-    {
+    public void removeListenersForPath(String databasePath) {
         synchronized (listeners) {
             listeners.get(databasePath).clear();
         }
     }
 
-    public boolean hasListeners(String databasePath)
-    {
+    public boolean hasListeners(String databasePath) {
         return listeners.containsKey(databasePath);
     }
 
-    public Array<T> getListeners(String databasePath)
-    {
+    public Array<T> getListeners(String databasePath) {
         return new Array<>(listeners.get(databasePath));
     }
 }

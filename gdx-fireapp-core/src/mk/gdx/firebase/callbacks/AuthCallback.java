@@ -21,8 +21,7 @@ import mk.gdx.firebase.auth.GdxFirebaseUser;
 /**
  * Handles response from authorization actions.
  */
-public interface AuthCallback
-{
+public interface AuthCallback {
     /**
      * Calls when everything was done without issues.
      *

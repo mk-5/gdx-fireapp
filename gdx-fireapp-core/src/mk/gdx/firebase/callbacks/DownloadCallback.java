@@ -21,8 +21,7 @@ package mk.gdx.firebase.callbacks;
  *
  * @param <R> Expected data type, should be {@code File} or {@code byte[]}
  */
-public interface DownloadCallback<R>
-{
+public interface DownloadCallback<R> {
     /**
      * Calls when everything was done without issues.
      *

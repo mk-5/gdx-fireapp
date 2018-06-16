@@ -26,8 +26,7 @@ import mk.gdx.firebase.functional.Consumer;
 /**
  * Helper for dealing with transforming {@code byte[]} to {@code TextureRegion}.
  */
-public class ImageHelper
-{
+public class ImageHelper {
     /**
      * Transforms byte[] to Texture Region.
      * <p>
@@ -38,8 +37,7 @@ public class ImageHelper
      * @param bytes Byte array with image description
      * @return Texture region representation of given byte array
      */
-    public static TextureRegion createTextureFromBytes(byte[] bytes)
-    {
+    public static TextureRegion createTextureFromBytes(byte[] bytes) {
         Pixmap pixmap = new Pixmap(bytes, 0, bytes.length);
         final int orgWidth = pixmap.getWidth();
         final int orgHeight = pixmap.getHeight();
@@ -61,8 +59,7 @@ public class ImageHelper
      * @param bytes    Image byte[] representation, not null
      * @param consumer Consumer where you should deal with region, not null
      */
-    public static void createTextureFromBytes(byte[] bytes, final Consumer<TextureRegion> consumer)
-    {
+    public static void createTextureFromBytes(byte[] bytes, final Consumer<TextureRegion> consumer) {
         consumer.accept(createTextureFromBytes(bytes));
     }
 }

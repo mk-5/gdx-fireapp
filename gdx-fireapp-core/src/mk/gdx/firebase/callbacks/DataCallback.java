@@ -24,8 +24,7 @@ package mk.gdx.firebase.callbacks;
  *
  * @param <T> Type of data you expecting to get
  */
-public interface DataCallback<T>
-{
+public interface DataCallback<T> {
 
     /**
      * Calls when everything was done without issues.

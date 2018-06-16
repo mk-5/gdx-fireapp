@@ -7,21 +7,18 @@ import org.junit.Test;
 
 import mk.gdx.firebase.utils.TestApp;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 
-public class GdxFIRDatabaseTest
-{
+public class GdxFIRDatabaseTest {
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         Gdx.app = new TestApp();
     }
 
     @Test
-    public void instance() throws Exception
-    {
+    public void instance() throws Exception {
         GdxFIRDatabase instance = GdxFIRDatabase.instance();
         assertTrue(instance != null);
     }

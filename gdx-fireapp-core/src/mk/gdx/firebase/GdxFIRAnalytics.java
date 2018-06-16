@@ -27,8 +27,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  * @see AnalyticsDistribution
  * @see PlatformDistributor
  */
-public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> implements AnalyticsDistribution
-{
+public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> implements AnalyticsDistribution {
     private volatile static GdxFIRAnalytics instance;
 
     /**
@@ -38,16 +37,14 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRAnalytics() throws PlatformDistributorException
-    {
+    private GdxFIRAnalytics() throws PlatformDistributorException {
     }
 
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
-    public static GdxFIRAnalytics instance()
-    {
+    public static GdxFIRAnalytics instance() {
         GdxFIRAnalytics result = instance;
         if (result == null) {
             synchronized (GdxFIRAnalytics.class) {
@@ -68,8 +65,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    public void logEvent(String name, Map<String, String> params)
-    {
+    public void logEvent(String name, Map<String, String> params) {
         platformObject.logEvent(name, params);
     }
 
@@ -77,8 +73,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    public void setScreen(String name, Class<?> screenClass)
-    {
+    public void setScreen(String name, Class<?> screenClass) {
         platformObject.setScreen(name, screenClass);
     }
 
@@ -86,8 +81,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    public void setUserProperty(String name, String value)
-    {
+    public void setUserProperty(String name, String value) {
         platformObject.setUserProperty(name, value);
     }
 
@@ -95,8 +89,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    public void setUserId(String id)
-    {
+    public void setUserId(String id) {
         platformObject.setUserId(id);
     }
 
@@ -104,8 +97,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    protected String getIOSClassName()
-    {
+    protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.analytics.Analytics";
     }
 
@@ -113,8 +105,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    protected String getAndroidClassName()
-    {
+    protected String getAndroidClassName() {
         return "mk.gdx.firebase.android.analytics.Analytics";
     }
 
@@ -122,8 +113,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * {@inheritDoc}
      */
     @Override
-    protected String getWebGLClassName()
-    {
+    protected String getWebGLClassName() {
         return "mk.gdx.firebase.html.analytics.Analytics";
     }
 }

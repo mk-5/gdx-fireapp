@@ -22,24 +22,20 @@ import com.google.gwt.core.client.Callback;
 /**
  *
  */
-public class ScriptLoadedCallback implements Callback<Void, Exception>
-{
+public class ScriptLoadedCallback implements Callback<Void, Exception> {
     private FirebaseConfigParser configParser;
 
-    public ScriptLoadedCallback(FirebaseConfigParser configParser)
-    {
+    public ScriptLoadedCallback(FirebaseConfigParser configParser) {
         this.configParser = configParser;
     }
 
     @Override
-    public void onFailure(Exception reason)
-    {
+    public void onFailure(Exception reason) {
         Gdx.app.error("GdxFireapp", "Something goes wrong while loading firebase script. Message: " + reason.getLocalizedMessage());
     }
 
     @Override
-    public void onSuccess(Void result)
-    {
+    public void onSuccess(Void result) {
         if (!FirebaseScriptInformant.isFirebaseScriptLoaded()) {
             FirebaseJS.initializeFirebase(configParser.getInitializationScript().replaceFirst("firebase.initializeApp", "$wnd.firebase.initializeApp"));
         }

@@ -17,13 +17,11 @@
 package mk.gdx.firebase.ios.database.proxies;
 
 import com.google.firebasedatabase.FIRDatabaseQuery;
-import com.google.firebasedatabase.FIRDatabaseReference;
 
 /**
  * Methods from {@code FIRDatabaseQuery} that are filters affected.
  */
-public interface FiltersAffectedQuery
-{
+public interface FiltersAffectedQuery {
     long observeEventTypeWithBlockWithCancelBlock(
             long eventType,
             FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1 block,

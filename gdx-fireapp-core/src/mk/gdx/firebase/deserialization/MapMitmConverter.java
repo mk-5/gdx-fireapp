@@ -28,8 +28,7 @@ import mk.gdx.firebase.helpers.JavaCoreClassDetector;
 /**
  * Abstract for man-in-the-middle converters.
  */
-public abstract class MapMitmConverter
-{
+public abstract class MapMitmConverter {
     public static final String CANT_DO_MAP_CONVERSION_FROM_TYPE = "Can't do map conversion from type: ";
 
     protected FirebaseMapConverter mapConverter;
@@ -37,8 +36,7 @@ public abstract class MapMitmConverter
     /**
      * @param mapConverter Map converter implementation, not null
      */
-    public MapMitmConverter(FirebaseMapConverter mapConverter)
-    {
+    public MapMitmConverter(FirebaseMapConverter mapConverter) {
         this.mapConverter = mapConverter;
     }
 
@@ -54,8 +52,7 @@ public abstract class MapMitmConverter
      * @throws MapConversionNotPossibleException If can't do conversion
      */
     @SuppressWarnings("unchecked")
-    protected Object doMitmConversion(Class<?> mapConversionType, Object data)
-    {
+    protected Object doMitmConversion(Class<?> mapConversionType, Object data) {
         if (data == null) return null;
         // If client tell us to do map conversion and is not possible - throw exception.
         if (!isConversionPossible(data))
@@ -85,8 +82,7 @@ public abstract class MapMitmConverter
      * @param data Source data
      * @return True if conversions is possible.
      */
-    protected boolean isConversionPossible(Object data)
-    {
+    protected boolean isConversionPossible(Object data) {
         return ClassReflection.isAssignableFrom(Map.class, data.getClass()) || ClassReflection.isAssignableFrom(List.class, data.getClass());
     }
 
@@ -96,8 +92,7 @@ public abstract class MapMitmConverter
      * @param type Type to examinable
      * @return True if type is not Java type or List or Map.
      */
-    public boolean isPojo(Class<?> type)
-    {
+    public boolean isPojo(Class<?> type) {
         return !JavaCoreClassDetector.isJavaCoreClass(type)
                 && !ClassReflection.isAssignableFrom(List.class, type)
                 && !ClassReflection.isAssignableFrom(Map.class, type);

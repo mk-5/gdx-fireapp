@@ -10,19 +10,16 @@ public class DownloadUrl<T> {
 
     private Consumer<Consumer<String>> urlConsumer;
 
-    public DownloadUrl(final String url)
-    {
+    public DownloadUrl(final String url) {
         urlConsumer = new Consumer<Consumer<String>>() {
             @Override
-            public void accept(Consumer<String> stringConsumer)
-            {
+            public void accept(Consumer<String> stringConsumer) {
                 stringConsumer.accept(url);
             }
         };
     }
 
-    public DownloadUrl(Consumer<Consumer<String>> urlConsumer)
-    {
+    public DownloadUrl(Consumer<Consumer<String>> urlConsumer) {
         this.urlConsumer = urlConsumer;
     }
 
@@ -31,8 +28,7 @@ public class DownloadUrl<T> {
      *
      * @param urlConsumer The url consumer, not null
      */
-    public void getUrl(Consumer<String> urlConsumer)
-    {
+    public void getUrl(Consumer<String> urlConsumer) {
         this.urlConsumer.accept(urlConsumer);
     }
 }

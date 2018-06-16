@@ -25,14 +25,12 @@ import java.util.Map;
 /**
  * Transforms {@link java.util.Map} to JSON string.
  */
-public class MapTransformer
-{
+public class MapTransformer {
     /**
      * @param map Map, not null
      * @return JSON representation of given map
      */
-    public static String mapToJSON(Map<String, Object> map)
-    {
+    public static String mapToJSON(Map<String, Object> map) {
         Json json = new Json();
         json.setTypeName(null);
         json.setQuoteLongValues(true);

@@ -11,11 +11,11 @@ import org.moe.natj.general.ann.Runtime;
 @Library("FirebaseAnalytics")
 @Runtime(CRuntime.class)
 public final class FirebaseAnalytics {
-	static {
-		NatJ.register();
-	}
+    static {
+        NatJ.register();
+    }
 
-	@Generated
-	private FirebaseAnalytics() {
-	}
+    @Generated
+    private FirebaseAnalytics() {
+    }
 }

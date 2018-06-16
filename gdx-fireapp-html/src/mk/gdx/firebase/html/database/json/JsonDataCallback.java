@@ -17,7 +17,6 @@
 package mk.gdx.firebase.html.database.json;
 
 import mk.gdx.firebase.callbacks.DataCallback;
-import mk.gdx.firebase.html.database.json.JsonProcessor;
 
 /**
  * Wraps data callback into callback with String as return type.
@@ -27,16 +26,14 @@ import mk.gdx.firebase.html.database.json.JsonProcessor;
  *
  * @param <T> Result type after json string converting process
  */
-public class JsonDataCallback<T> implements DataCallback<String>
-{
+public class JsonDataCallback<T> implements DataCallback<String> {
     private Class<?> wantedType;
     private DataCallback dataCallback;
 
     /**
      * @param dataCallback Callback, not null
      */
-    public JsonDataCallback(Class<?> wantedType, DataCallback dataCallback)
-    {
+    public JsonDataCallback(Class<?> wantedType, DataCallback dataCallback) {
         this.wantedType = wantedType;
         this.dataCallback = dataCallback;
     }
@@ -48,15 +45,13 @@ public class JsonDataCallback<T> implements DataCallback<String>
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void onData(String data)
-    {
+    public void onData(String data) {
         T result = JsonProcessor.process(wantedType, data);
         dataCallback.onData(result);
     }
 
     @Override
-    public void onError(Exception e)
-    {
+    public void onError(Exception e) {
         dataCallback.onError(e);
     }
 }

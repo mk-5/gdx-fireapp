@@ -21,10 +21,8 @@ package mk.gdx.firebase.exceptions;
  * <p>
  * For ex. can't find class given by {@link mk.gdx.firebase.PlatformDistributor#getIOSClassName()} or {@link mk.gdx.firebase.PlatformDistributor#getAndroidClassName()}
  */
-public class PlatformDistributorException extends Exception
-{
-    public PlatformDistributorException(String msg, Throwable t)
-    {
+public class PlatformDistributorException extends Exception {
+    public PlatformDistributorException(String msg, Throwable t) {
         super(msg, t);
     }
 }

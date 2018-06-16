@@ -23,23 +23,19 @@ import mk.gdx.firebase.html.database.GwtDatabaseQuery;
 /**
  * Provides push javascript execution.
  */
-public class PushQuery extends GwtDatabaseQuery
-{
-    public PushQuery(Database databaseDistribution)
-    {
+public class PushQuery extends GwtDatabaseQuery {
+    public PushQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void runJS()
-    {
+    protected void runJS() {
         // TODO - update db distribution databaseReference
         push(databaseReference);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return null;
     }
 

@@ -21,10 +21,8 @@ package mk.gdx.firebase.html.exceptions;
  *
  * @see mk.gdx.firebase.html.database.Database for more info.
  */
-public class NestedGenericTypeAnnotationMissingException extends RuntimeException
-{
-    public NestedGenericTypeAnnotationMissingException()
-    {
+public class NestedGenericTypeAnnotationMissingException extends RuntimeException {
+    public NestedGenericTypeAnnotationMissingException() {
         super("You forgot about NestedGenericType annotation. Please read wiki for more info.");
     }
 }

@@ -33,33 +33,28 @@ import mk.gdx.firebase.listeners.ConnectedListener;
 /**
  * Provides call to {@link FIRDatabaseReference#observeEventTypeWithBlock(long, FIRDatabaseReference.Block_observeEventTypeWithBlock)}  ()} for "".info/connected""
  */
-public class ConnectionStatusQuery extends IosDatabaseQuery<Void>
-{
+public class ConnectionStatusQuery extends IosDatabaseQuery<Void> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final LongArray handles = new LongArray();
 
 
-    public ConnectionStatusQuery(Database databaseDistribution)
-    {
+    public ConnectionStatusQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         query = FIRDatabase.database().referenceWithPath(CONNECTED_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new OnConnectionValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         synchronized (handles) {
             if (arguments.get(0) != null) {
                 handles.add(query.observeEventTypeWithBlock(FIRDataEventType.Value, new ConnectionBlock((ConnectedListener) arguments.get(0))));
@@ -76,19 +71,16 @@ public class ConnectionStatusQuery extends IosDatabaseQuery<Void>
     /**
      * Wraps {@link ConnectedListener} with ios connection callback.
      */
-    private class ConnectionBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlock
-    {
+    private class ConnectionBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlock {
 
         private ConnectedListener connectedListener;
 
-        private ConnectionBlock(ConnectedListener connectedListener)
-        {
+        private ConnectionBlock(ConnectedListener connectedListener) {
             this.connectedListener = connectedListener;
         }
 
         @Override
-        public void call_observeEventTypeWithBlock(FIRDataSnapshot arg0)
-        {
+        public void call_observeEventTypeWithBlock(FIRDataSnapshot arg0) {
             boolean connected = ((NSNumber) arg0.value()).boolValue();
             if (connected) {
                 connectedListener.onConnect();

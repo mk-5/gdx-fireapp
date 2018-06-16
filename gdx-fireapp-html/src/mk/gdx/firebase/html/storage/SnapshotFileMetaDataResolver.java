@@ -22,8 +22,7 @@ import mk.gdx.firebase.storage.functional.DownloadUrl;
 /**
  * Resolves transformation from UploadTaskSnapshot to FileMetadata
  */
-public class SnapshotFileMetaDataResolver
-{
+public class SnapshotFileMetaDataResolver {
 
     /**
      * Resolves conversion from UploadTaskSnapshot to FileMetadata resolve.
@@ -31,8 +30,7 @@ public class SnapshotFileMetaDataResolver
      * @param snapshot UploadTaskSnapshot from javascript, not null
      * @return FileMetadata object filled with data
      */
-    public static FileMetadata resolve(UploadTaskSnapshot snapshot)
-    {
+    public static FileMetadata resolve(UploadTaskSnapshot snapshot) {
         FileMetadata.Builder builder = new FileMetadata.Builder()
                 .setDownloadUrl(new DownloadUrl(snapshot.getDownloadURL()));
         FullMetaData metaData = snapshot.getMetaData();

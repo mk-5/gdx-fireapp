@@ -19,8 +19,7 @@ package mk.gdx.firebase.callbacks;
 /**
  * Handles response when removing something from Firebase storage.
  */
-public interface DeleteCallback
-{
+public interface DeleteCallback {
     /**
      * Calls when everything was done without issues.
      */

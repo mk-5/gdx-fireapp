@@ -19,15 +19,13 @@ package mk.gdx.firebase.auth;
 /**
  * Multi-module Firebase user representation.
  */
-public class GdxFirebaseUser
-{
+public class GdxFirebaseUser {
     private UserInfo userInfo;
 
     /**
      * @param userInfo User information wrapped by POJO object.
      */
-    private GdxFirebaseUser(UserInfo userInfo)
-    {
+    private GdxFirebaseUser(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
 
@@ -35,16 +33,14 @@ public class GdxFirebaseUser
      * @param userInfo Information about user.
      * @return New Firebase user representation, not null.
      */
-    public static GdxFirebaseUser create(UserInfo userInfo)
-    {
+    public static GdxFirebaseUser create(UserInfo userInfo) {
         return new GdxFirebaseUser(userInfo);
     }
 
     /**
      * @return Information about Firebase user wrapped by POJO class.
      */
-    public UserInfo getUserInfo()
-    {
+    public UserInfo getUserInfo() {
         return userInfo;
     }
 }

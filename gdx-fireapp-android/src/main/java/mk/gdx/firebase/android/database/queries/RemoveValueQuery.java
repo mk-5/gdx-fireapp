@@ -28,31 +28,26 @@ import mk.gdx.firebase.database.validators.RemoveValueValidator;
 /**
  * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
  */
-public class RemoveValueQuery extends AndroidDatabaseQuery<Void>
-{
-    public RemoveValueQuery(Database databaseDistribution)
-    {
+public class RemoveValueQuery extends AndroidDatabaseQuery<Void> {
+    public RemoveValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new RemoveValueValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.size == 0) {
             ((DatabaseReference) query).removeValue();
         } else if (arguments.size == 1) {

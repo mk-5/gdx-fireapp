@@ -29,31 +29,26 @@ import mk.gdx.firebase.database.validators.RunTransactionValidator;
 /**
  * Provides setValue execution with firebase database reference.
  */
-public class RunTransactionQuery extends AndroidDatabaseQuery<Void>
-{
-    public RunTransactionQuery(Database databaseDistribution)
-    {
+public class RunTransactionQuery extends AndroidDatabaseQuery<Void> {
+    public RunTransactionQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new RunTransactionValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         ((DatabaseReference) query).runTransaction(new TransactionHandler((TransactionCallback) arguments.get(1), arguments.get(2) != null ? (CompleteCallback) arguments.get(2) : null));
         return null;
     }

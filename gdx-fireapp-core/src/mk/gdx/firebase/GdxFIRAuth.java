@@ -26,8 +26,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  * @see AuthDistribution
  * @see PlatformDistributor
  */
-public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements AuthDistribution
-{
+public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements AuthDistribution {
 
     private static volatile GdxFIRAuth instance;
 
@@ -38,15 +37,13 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRAuth() throws PlatformDistributorException
-    {
+    private GdxFIRAuth() throws PlatformDistributorException {
     }
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
-    public static GdxFIRAuth instance()
-    {
+    public static GdxFIRAuth instance() {
         GdxFIRAuth result = instance;
         if (result == null) {
             synchronized (GdxFIRAuth.class) {
@@ -67,8 +64,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    public GdxFirebaseUser getCurrentUser()
-    {
+    public GdxFirebaseUser getCurrentUser() {
         return platformObject.getCurrentUser();
     }
 
@@ -76,8 +72,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, AuthCallback callback)
-    {
+    public void createUserWithEmailAndPassword(String email, char[] password, AuthCallback callback) {
         platformObject.createUserWithEmailAndPassword(email, password, callback);
     }
 
@@ -85,8 +80,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, AuthCallback callback)
-    {
+    public void signInWithEmailAndPassword(String email, char[] password, AuthCallback callback) {
         platformObject.signInWithEmailAndPassword(email, password, callback);
     }
 
@@ -94,8 +88,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(String token, AuthCallback callback)
-    {
+    public void signInWithToken(String token, AuthCallback callback) {
         platformObject.signInWithToken(token, callback);
     }
 
@@ -103,14 +96,12 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(AuthCallback callback)
-    {
+    public void signInAnonymously(AuthCallback callback) {
         platformObject.signInAnonymously(callback);
     }
 
     @Override
-    public void signOut(SignOutCallback callback)
-    {
+    public void signOut(SignOutCallback callback) {
         platformObject.signOut(callback);
     }
 
@@ -118,8 +109,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    protected String getIOSClassName()
-    {
+    protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.auth.Auth";
     }
 
@@ -127,8 +117,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    protected String getAndroidClassName()
-    {
+    protected String getAndroidClassName() {
         return "mk.gdx.firebase.android.auth.Auth";
     }
 
@@ -136,8 +125,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    protected String getWebGLClassName()
-    {
+    protected String getWebGLClassName() {
         return "mk.gdx.firebase.html.auth.Auth";
     }
 }

@@ -9,17 +9,14 @@ import mk.gdx.firebase.utils.TestApp;
 
 import static org.junit.Assert.assertTrue;
 
-public class GdxFIRAuthTest
-{
+public class GdxFIRAuthTest {
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         Gdx.app = new TestApp();
     }
 
     @Test
-    public void instance() throws Exception
-    {
+    public void instance() throws Exception {
         GdxFIRAuth instance = GdxFIRAuth.instance();
         assertTrue(instance != null);
     }

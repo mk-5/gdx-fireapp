@@ -22,30 +22,24 @@ import mk.gdx.firebase.html.firebase.ScriptRunner;
 /**
  * Provides flow for html firebase call.
  */
-public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void>
-{
+public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
 
     protected String databaseReference;
 
-    public GwtDatabaseQuery(Database databaseDistribution)
-    {
+    public GwtDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         databaseReference = databaseDistribution.databaseReference();
     }
 
     @Override
-    protected Void run()
-    {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference)
-        {
+    protected Void run() {
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference) {
             @Override
-            public void run()
-            {
+            public void run() {
                 runJS();
             }
         });
@@ -53,14 +47,12 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void>
     }
 
     @Override
-    protected void applyFilters()
-    {
+    protected void applyFilters() {
 
     }
 
     @Override
-    protected void terminate()
-    {
+    protected void terminate() {
         databaseDistribution.terminateOperation();
         databaseReference = null;
     }

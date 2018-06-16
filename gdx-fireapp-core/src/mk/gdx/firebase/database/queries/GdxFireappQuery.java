@@ -33,8 +33,7 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
  * @param <T> Target DatabaseDistribution
  * @param <R> Query execution return type
  */
-public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
-{
+public abstract class GdxFireappQuery<T extends DatabaseDistribution, R> {
 
     protected T databaseDistribution;
     protected Array<Filter> filters;
@@ -42,34 +41,29 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
     protected Array<Object> arguments;
     protected ArgumentsValidator argumentsValidator;
 
-    public GdxFireappQuery(T databaseDistribution)
-    {
+    public GdxFireappQuery(T databaseDistribution) {
         this.databaseDistribution = databaseDistribution;
         filters = new Array<>();
         arguments = new Array<>();
         argumentsValidator = createArgumentsValidator();
     }
 
-    public GdxFireappQuery withArgs(Object... arguments)
-    {
+    public GdxFireappQuery withArgs(Object... arguments) {
         this.arguments.addAll(arguments);
         return this;
     }
 
-    public GdxFireappQuery with(Array<Filter> filters)
-    {
+    public GdxFireappQuery with(Array<Filter> filters) {
         this.filters.addAll(filters);
         return this;
     }
 
-    public GdxFireappQuery with(OrderByClause orderByClause)
-    {
+    public GdxFireappQuery with(OrderByClause orderByClause) {
         this.orderByClause = orderByClause;
         return this;
     }
 
-    public final R execute()
-    {
+    public final R execute() {
         if (argumentsValidator != null)
             argumentsValidator.validate(arguments);
         prepare();
@@ -81,8 +75,7 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R>
         return result;
     }
 
-    protected void prepare()
-    {
+    protected void prepare() {
         // To overwrite
     }
 

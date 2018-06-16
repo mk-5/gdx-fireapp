@@ -19,8 +19,7 @@ package mk.gdx.firebase.auth;
 /**
  * POJO class that holds information about Firebase user.
  */
-public class UserInfo
-{
+public class UserInfo {
     private String providerId;
     private String uid;
     private String displayName;
@@ -29,8 +28,7 @@ public class UserInfo
     private boolean isEmailVerified;
     private boolean isAnonymous;
 
-    private UserInfo()
-    {
+    private UserInfo() {
     }
 
     /**
@@ -38,8 +36,7 @@ public class UserInfo
      *
      * @return True if user sign-in in anonymous way
      */
-    public boolean isAnonymous()
-    {
+    public boolean isAnonymous() {
         return isAnonymous;
     }
 
@@ -48,8 +45,7 @@ public class UserInfo
      *
      * @return True if email was verified
      */
-    public boolean isEmailVerified()
-    {
+    public boolean isEmailVerified() {
         return isEmailVerified;
     }
 
@@ -58,8 +54,7 @@ public class UserInfo
      *
      * @return Provider id, may be null
      */
-    public String getProviderId()
-    {
+    public String getProviderId() {
         return providerId;
     }
 
@@ -68,8 +63,7 @@ public class UserInfo
      *
      * @return Firebase user UID, may be null
      */
-    public String getUid()
-    {
+    public String getUid() {
         return uid;
     }
 
@@ -78,8 +72,7 @@ public class UserInfo
      *
      * @return Firebase user display name, may be null
      */
-    public String getDisplayName()
-    {
+    public String getDisplayName() {
         return displayName;
     }
 
@@ -88,8 +81,7 @@ public class UserInfo
      *
      * @return Firebase user photo url, may be null
      */
-    public String getPhotoUrl()
-    {
+    public String getPhotoUrl() {
         return photoUrl;
     }
 
@@ -98,23 +90,20 @@ public class UserInfo
      *
      * @return Firebase user email, may be null
      */
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
     /**
      * Builder pattern for {@code UserInfo}.
      */
-    public static class Builder
-    {
+    public static class Builder {
         private UserInfo inst;
 
         /**
          * Default {@code Builder} constructor.
          */
-        public Builder()
-        {
+        public Builder() {
             inst = new UserInfo();
         }
 
@@ -124,8 +113,7 @@ public class UserInfo
          * @param providerId Provider id, for ex. {@code facebook.com}
          * @return this {@code Builder} instance
          */
-        public Builder setProviderId(String providerId)
-        {
+        public Builder setProviderId(String providerId) {
             inst.providerId = providerId;
             return this;
         }
@@ -136,8 +124,7 @@ public class UserInfo
          * @param uid User UID
          * @return this {@code Builder} instance
          */
-        public Builder setUid(String uid)
-        {
+        public Builder setUid(String uid) {
             inst.uid = uid;
             return this;
         }
@@ -148,8 +135,7 @@ public class UserInfo
          * @param displayName Display name
          * @return this {@code Builder} instance
          */
-        public Builder setDisplayName(String displayName)
-        {
+        public Builder setDisplayName(String displayName) {
             inst.displayName = displayName;
             return this;
         }
@@ -160,8 +146,7 @@ public class UserInfo
          * @param photoUrl Photo url
          * @return this {@code Builder} instance
          */
-        public Builder setPhotoUrl(String photoUrl)
-        {
+        public Builder setPhotoUrl(String photoUrl) {
             inst.photoUrl = photoUrl;
             return this;
         }
@@ -172,8 +157,7 @@ public class UserInfo
          * @param isEmailVerified True if email was verified
          * @return this {@code Builder} instance
          */
-        public Builder setIsEmailVerified(boolean isEmailVerified)
-        {
+        public Builder setIsEmailVerified(boolean isEmailVerified) {
             inst.isEmailVerified = isEmailVerified;
             return this;
         }
@@ -184,8 +168,7 @@ public class UserInfo
          * @param email Firebase user email
          * @return this {@code Builder} instance
          */
-        public Builder setEmail(String email)
-        {
+        public Builder setEmail(String email) {
             inst.email = email;
             return this;
         }
@@ -196,8 +179,7 @@ public class UserInfo
          * @param isAnonymous True if user sign-in in anonymous way
          * @return this {@code Builder} instance
          */
-        public Builder setIsAnonymous(boolean isAnonymous)
-        {
+        public Builder setIsAnonymous(boolean isAnonymous) {
             inst.isAnonymous = isAnonymous;
             return this;
         }
@@ -207,8 +189,7 @@ public class UserInfo
          *
          * @return {@code UserInfo} instance created by given properties
          */
-        public UserInfo build()
-        {
+        public UserInfo build() {
             return inst;
         }
     }

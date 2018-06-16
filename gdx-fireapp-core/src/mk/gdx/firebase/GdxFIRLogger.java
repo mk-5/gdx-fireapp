@@ -23,8 +23,7 @@ import com.badlogic.gdx.Gdx;
  * <p>
  * Client can disable/enable logging by calling
  */
-public class GdxFIRLogger
-{
+public class GdxFIRLogger {
     private static final String LOG_TAG = "GdxFireapp Api";
 
     private static boolean enabled;
@@ -34,8 +33,7 @@ public class GdxFIRLogger
      *
      * @param msg Log message
      */
-    public static void log(String msg)
-    {
+    public static void log(String msg) {
         if (!enabled) return;
         Gdx.app.log(LOG_TAG, msg);
     }
@@ -46,8 +44,7 @@ public class GdxFIRLogger
      * @param msg Log message
      * @param t   Described exception
      */
-    public static void log(String msg, Throwable t)
-    {
+    public static void log(String msg, Throwable t) {
         if (!enabled) return;
         Gdx.app.log(LOG_TAG, msg, t);
     }
@@ -57,8 +54,7 @@ public class GdxFIRLogger
      *
      * @param msg Log message
      */
-    public static void error(String msg)
-    {
+    public static void error(String msg) {
         if (!enabled) return;
         Gdx.app.error(LOG_TAG, msg);
     }
@@ -69,19 +65,16 @@ public class GdxFIRLogger
      * @param msg Log message
      * @param t   Described exception
      */
-    public static void error(String msg, Throwable t)
-    {
+    public static void error(String msg, Throwable t) {
         if (!enabled) return;
         Gdx.app.error(LOG_TAG, msg, t);
     }
 
-    public static boolean isEnabled()
-    {
+    public static boolean isEnabled() {
         return enabled;
     }
 
-    public static void setEnabled(boolean enabled)
-    {
+    public static void setEnabled(boolean enabled) {
         GdxFIRLogger.enabled = enabled;
     }
 }

@@ -22,11 +22,9 @@ import com.badlogic.gdx.utils.Array;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 
-public class RunTransactionValidator implements ArgumentsValidator
-{
+public class RunTransactionValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
+    public void validate(Array<Object> arguments) {
         if (arguments.size < 2)
             throw new IllegalStateException();
         if (!(arguments.get(0) instanceof Class))

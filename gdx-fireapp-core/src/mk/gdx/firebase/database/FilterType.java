@@ -22,8 +22,7 @@ package mk.gdx.firebase.database;
  *
  * @see OrderByMode
  */
-public enum FilterType
-{
+public enum FilterType {
     LIMIT_FIRST,
     LIMIT_LAST,
     START_AT,

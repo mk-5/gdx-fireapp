@@ -12,36 +12,36 @@ import org.moe.natj.objc.map.ObjCStringMapper;
 @Generated
 @Runtime(CRuntime.class)
 public final class Globals {
-	static {
-		NatJ.register();
-	}
+    static {
+        NatJ.register();
+    }
 
-	@Generated
-	private Globals() {
-	}
+    @Generated
+    private Globals() {
+    }
 
-	@Generated
-	@CVariable()
-	@MappedReturn(ObjCStringMapper.class)
-	public static native String FIRMessagingSendSuccessNotification();
+    @Generated
+    @CVariable()
+    @MappedReturn(ObjCStringMapper.class)
+    public static native String FIRMessagingSendSuccessNotification();
 
-	@Generated
-	@CVariable()
-	@MappedReturn(ObjCStringMapper.class)
-	public static native String FIRMessagingSendErrorNotification();
+    @Generated
+    @CVariable()
+    @MappedReturn(ObjCStringMapper.class)
+    public static native String FIRMessagingSendErrorNotification();
 
-	@Generated
-	@CVariable()
-	@MappedReturn(ObjCStringMapper.class)
-	public static native String FIRMessagingMessagesDeletedNotification();
+    @Generated
+    @CVariable()
+    @MappedReturn(ObjCStringMapper.class)
+    public static native String FIRMessagingMessagesDeletedNotification();
 
-	@Generated
-	@CVariable()
-	@MappedReturn(ObjCStringMapper.class)
-	public static native String FIRMessagingConnectionStateChangedNotification();
+    @Generated
+    @CVariable()
+    @MappedReturn(ObjCStringMapper.class)
+    public static native String FIRMessagingConnectionStateChangedNotification();
 
-	@Generated
-	@CVariable()
-	@MappedReturn(ObjCStringMapper.class)
-	public static native String FIRMessagingRegistrationTokenRefreshedNotification();
+    @Generated
+    @CVariable()
+    @MappedReturn(ObjCStringMapper.class)
+    public static native String FIRMessagingRegistrationTokenRefreshedNotification();
 }

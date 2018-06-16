@@ -24,8 +24,7 @@ import mk.gdx.firebase.distributions.AppDistribution;
  *
  * @see AppDistribution
  */
-public class App implements AppDistribution
-{
+public class App implements AppDistribution {
 
     /**
      * {@inheritDoc}
@@ -34,8 +33,7 @@ public class App implements AppDistribution
      * everything is configured automatically after app is started.
      */
     @Override
-    public void configure()
-    {
+    public void configure() {
         //
     }
 }

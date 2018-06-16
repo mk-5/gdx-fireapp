@@ -15,17 +15,17 @@ import org.moe.natj.objc.ann.Selector;
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
 public class FIRAuthErrors extends ObjCObject {
-	static {
-		NatJ.register();
-	}
+    static {
+        NatJ.register();
+    }
 
-	@Generated
-	protected FIRAuthErrors(Pointer peer) {
-		super(peer);
-	}
+    @Generated
+    protected FIRAuthErrors(Pointer peer) {
+        super(peer);
+    }
 
-	@Generated
-	@Owned
-	@Selector("alloc")
-	public static native FIRAuthErrors alloc();
+    @Generated
+    @Owned
+    @Selector("alloc")
+    public static native FIRAuthErrors alloc();
 }

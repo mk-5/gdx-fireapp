@@ -19,10 +19,8 @@ package mk.gdx.firebase.ios.exceptions;
 /**
  * Throws when can't convert data from ios to java object or opposite way.
  */
-public class ConvertingException extends RuntimeException
-{
-    public ConvertingException(String msg)
-    {
+public class ConvertingException extends RuntimeException {
+    public ConvertingException(String msg) {
         super(msg);
     }
 }

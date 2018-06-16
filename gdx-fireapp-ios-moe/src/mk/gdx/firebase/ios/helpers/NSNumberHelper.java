@@ -15,8 +15,7 @@ public class NSNumberHelper {
      * @param nsNumber {@code NSNumber} that you want to transform.
      * @return Transformed value, default value is {@link NSNumber#integerValue()}
      */
-    public static Object getNSNumberPrimitive(NSNumber nsNumber)
-    {
+    public static Object getNSNumberPrimitive(NSNumber nsNumber) {
         String cType = nsNumber.objCType();
         switch (cType) {
             case "c":

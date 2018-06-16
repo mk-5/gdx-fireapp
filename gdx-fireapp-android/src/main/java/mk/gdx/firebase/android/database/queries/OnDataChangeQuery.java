@@ -34,32 +34,27 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Provides call to {@link com.google.firebase.database.Query#addValueEventListener(ValueEventListener)}.
  */
-public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
-{
+public class OnDataChangeQuery extends AndroidDatabaseQuery<Void> {
 
     private final static DataListenersManager<ValueEventListener> dataListenersManager = new DataListenersManager<>();
 
-    public OnDataChangeQuery(Database databaseDistribution)
-    {
+    public OnDataChangeQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new OnDataValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.get(1) != null) {
             DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (DataChangeListener) arguments.get(1), orderByClause);
             dataListenersManager.addNewListener(databasePath, dataChangeListener);
@@ -80,15 +75,13 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
      * @param <T> Class of object that we want to listen for change. For ex. List
      * @param <R> Return type of object that we want to listen for change. For ex. List<MyClass>
      */
-    private class DataChangeValueListener<T, R extends T> implements ValueEventListener
-    {
+    private class DataChangeValueListener<T, R extends T> implements ValueEventListener {
 
         private Class<T> dataType;
         private DataChangeListener<R> dataChangeListener;
         private OrderByClause orderByClause;
 
-        public DataChangeValueListener(Class<T> dataType, DataChangeListener<R> dataChangeListener, OrderByClause orderByClause)
-        {
+        public DataChangeValueListener(Class<T> dataType, DataChangeListener<R> dataChangeListener, OrderByClause orderByClause) {
             this.dataChangeListener = dataChangeListener;
             this.dataType = dataType;
             this.orderByClause = orderByClause;
@@ -97,14 +90,12 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void>
 
         @Override
         @SuppressWarnings("unchecked")
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
+        public void onDataChange(DataSnapshot dataSnapshot) {
             DataListenerOnDataChangeResolver.resolve(dataType, orderByClause, dataSnapshot, dataChangeListener);
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
+        public void onCancelled(DatabaseError databaseError) {
             dataChangeListener.onCanceled(databaseError.toException());
         }
 

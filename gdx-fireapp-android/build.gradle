@@ -37,7 +37,7 @@ android {
 
 }
 
-ext{
+ext {
     appModuleName = 'GDX Fireapp Android'
 }
 

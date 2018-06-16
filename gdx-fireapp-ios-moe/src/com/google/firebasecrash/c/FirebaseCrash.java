@@ -15,17 +15,17 @@ import org.moe.natj.objc.map.ObjCStringMapper;
 @Library("FirebaseCrash")
 @Runtime(CRuntime.class)
 public final class FirebaseCrash {
-	static {
-		NatJ.register();
-	}
+    static {
+        NatJ.register();
+    }
 
-	@Generated
-	private FirebaseCrash() {
-	}
+    @Generated
+    private FirebaseCrash() {
+    }
 
-	@Generated
-	@Deprecated
-	@CFunction
-	public static native void FIRCrashLogv(
-			@Mapped(ObjCStringMapper.class) String format, BytePtr ap);
+    @Generated
+    @Deprecated
+    @CFunction
+    public static native void FIRCrashLogv(
+            @Mapped(ObjCStringMapper.class) String format, BytePtr ap);
 }

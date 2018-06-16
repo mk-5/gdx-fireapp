@@ -33,8 +33,7 @@ import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFilteringProvider;
  *
  * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
-public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
-{
+public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with FIRDatabaseReference instance.";
     protected static final String GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE = "Given database path returned null value";
 
@@ -42,31 +41,27 @@ public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R>
     protected FIRDatabaseQueryFilteringProvider filtersProvider;
     protected String databasePath;
 
-    public IosDatabaseQuery(Database databaseDistribution)
-    {
+    public IosDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
         filtersProvider = new FIRDatabaseQueryFilteringProvider();
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         query = databaseDistribution.dbReference();
         databasePath = databaseDistribution.databasePath;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void applyFilters()
-    {
+    protected void applyFilters() {
         filtersProvider.setFilters(filters)
                 .setOrderByClause(orderByClause)
                 .setQuery(query);
     }
 
     @Override
-    protected void terminate()
-    {
+    protected void terminate() {
         databaseDistribution.terminateOperation();
         filters.clear();
         orderByClause = null;

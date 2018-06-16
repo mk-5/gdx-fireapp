@@ -21,8 +21,7 @@ import java.util.Map;
 /**
  * Covers interface for converting database Maps to POJO
  */
-public interface FirebaseMapConverter
-{
+public interface FirebaseMapConverter {
 
     /**
      * Transforms {@code Map<String,Object>} to {@code T object}.

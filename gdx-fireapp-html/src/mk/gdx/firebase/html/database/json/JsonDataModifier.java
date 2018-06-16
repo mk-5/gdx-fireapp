@@ -20,18 +20,15 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
 import mk.gdx.firebase.callbacks.TransactionCallback;
-import mk.gdx.firebase.html.database.json.JsonProcessor;
 
 /**
  * Takes JSON data from javascript, process it as java object and return back as json.
  */
-public class JsonDataModifier<T>
-{
+public class JsonDataModifier<T> {
     private Class<T> wantedType;
     private TransactionCallback transactionCallback;
 
-    public JsonDataModifier(Class<T> wantedType, TransactionCallback transactionCallback)
-    {
+    public JsonDataModifier(Class<T> wantedType, TransactionCallback transactionCallback) {
         this.transactionCallback = transactionCallback;
         this.wantedType = wantedType;
     }
@@ -43,8 +40,7 @@ public class JsonDataModifier<T>
      * @return New data as json string
      */
     @SuppressWarnings("unchecked")
-    public String modify(String oldJsonData)
-    {
+    public String modify(String oldJsonData) {
         T oldData = JsonProcessor.process(wantedType, oldJsonData);
         T newData = (T) transactionCallback.run(oldData);
         Json json = new Json();

@@ -19,10 +19,8 @@ package mk.gdx.firebase.html.exceptions;
 /**
  * It is thrown when wrong type was passed inside {@code JsonListMapDeserializer}
  */
-public class WrongTypeForDeserializerException extends IllegalArgumentException
-{
-    public WrongTypeForDeserializerException()
-    {
+public class WrongTypeForDeserializerException extends IllegalArgumentException {
+    public WrongTypeForDeserializerException() {
         super("Class type should be instance of List or Map.");
     }
 }

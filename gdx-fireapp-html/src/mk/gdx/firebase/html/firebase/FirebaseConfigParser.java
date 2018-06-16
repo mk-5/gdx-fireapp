@@ -27,8 +27,7 @@ import java.util.regex.Pattern;
  * Gets firebase sdk api .js file and initialization script from raw Firebase configuration html.
  * <p>
  */
-public class FirebaseConfigParser
-{
+public class FirebaseConfigParser {
 
     private String rawHtml;
     private String firebaseScriptSrc;
@@ -39,28 +38,24 @@ public class FirebaseConfigParser
      *
      * @param rawHtml HTML from firebase console
      */
-    public FirebaseConfigParser(String rawHtml)
-    {
+    public FirebaseConfigParser(String rawHtml) {
         this.rawHtml = rawHtml;
         firebaseScriptSrc = parseFirebaseScriptSrc();
         initializationScript = parseFirebaseInitializationScript();
     }
 
-    public String getFirebaseScriptSrc()
-    {
+    public String getFirebaseScriptSrc() {
         return firebaseScriptSrc;
     }
 
-    public String getInitializationScript()
-    {
+    public String getInitializationScript() {
         return initializationScript;
     }
 
     /**
      * @return Laz firebase initialization script.
      */
-    public String getLazyLoadingInitializationScript()
-    {
+    public String getLazyLoadingInitializationScript() {
         return "(function(){\n" +
                 "var script = document.createElement(\"script\");\n" +
                 "script.src = \"" + getFirebaseScriptSrc() + "\";\n" +
@@ -72,8 +67,7 @@ public class FirebaseConfigParser
     }
 
 
-    private String parseFirebaseInitializationScript()
-    {
+    private String parseFirebaseInitializationScript() {
         Pattern pattern = Pattern.compile("<script>((.|\\n|\\rn|\\r)*?)</script>");
         Matcher matcher = pattern.matcher(rawHtml);
         if (matcher.find()) {
@@ -84,8 +78,7 @@ public class FirebaseConfigParser
         return null;
     }
 
-    private String parseFirebaseScriptSrc()
-    {
+    private String parseFirebaseScriptSrc() {
         Pattern pattern = Pattern.compile("script\\s+src=\"(.*?)\"");
         Matcher matcher = pattern.matcher(rawHtml);
         if (matcher.find()) {

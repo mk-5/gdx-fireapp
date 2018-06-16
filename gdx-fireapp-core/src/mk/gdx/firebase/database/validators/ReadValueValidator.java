@@ -23,11 +23,9 @@ import mk.gdx.firebase.callbacks.DataCallback;
 /**
  * Validates arguments given to {@link mk.gdx.firebase.distributions.DatabaseDistribution#readValue(Class, DataCallback)}
  */
-public class ReadValueValidator implements ArgumentsValidator
-{
+public class ReadValueValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
+    public void validate(Array<Object> arguments) {
         if (arguments.size != 2)
             throw new IllegalStateException();
         if (!(arguments.get(0) instanceof Class))

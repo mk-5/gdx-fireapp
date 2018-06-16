@@ -46,15 +46,13 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution
-{
+public class Database implements DatabaseDistribution {
 
     private String refPath;
     private final Array<Filter> filters;
     private OrderByClause orderByClause;
 
-    public Database()
-    {
+    public Database() {
         filters = new Array<>();
     }
 
@@ -62,8 +60,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void onConnect(final ConnectedListener connectedListener)
-    {
+    public void onConnect(final ConnectedListener connectedListener) {
         new ConnectionStatusQuery(this).withArgs(connectedListener).execute();
     }
 
@@ -71,8 +68,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution inReference(String databasePath)
-    {
+    public DatabaseDistribution inReference(String databasePath) {
         refPath = databasePath;
         return this;
     }
@@ -81,8 +77,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         new SetValueQuery(this).withArgs(value).execute();
     }
 
@@ -90,8 +85,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value, CompleteCallback completeCallback)
-    {
+    public void setValue(Object value, CompleteCallback completeCallback) {
         new SetValueQuery(this).withArgs(value, completeCallback).execute();
     }
 
@@ -99,8 +93,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback)
-    {
+    public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback) {
         new RemoveValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
@@ -108,8 +101,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener)
-    {
+    public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener) {
         new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
     }
 
@@ -118,8 +110,7 @@ public class Database implements DatabaseDistribution
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
-    {
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments) {
         filters.add(new Filter(filterType, filterArguments));
         GdxFIRLogger.log("GWT does not support filtering yet.");
         return this;
@@ -129,8 +120,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
-    {
+    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument) {
         orderByClause = new OrderByClause(orderByMode, argument);
         GdxFIRLogger.log("GWT does not support order-by yet.");
         return this;
@@ -140,8 +130,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution push()
-    {
+    public DatabaseDistribution push() {
         new PushQuery(this).execute();
         return this;
     }
@@ -150,8 +139,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void removeValue()
-    {
+    public void removeValue() {
         new RemoveValueQuery(this).execute();
     }
 
@@ -159,8 +147,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void removeValue(final CompleteCallback completeCallback)
-    {
+    public void removeValue(final CompleteCallback completeCallback) {
         new RemoveValueQuery(this).withArgs(completeCallback).execute();
     }
 
@@ -168,8 +155,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(final Map<String, Object> data)
-    {
+    public void updateChildren(final Map<String, Object> data) {
         new UpdateChildrenQuery(this).withArgs(data).execute();
     }
 
@@ -177,8 +163,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(final Map<String, Object> data, final CompleteCallback completeCallback)
-    {
+    public void updateChildren(final Map<String, Object> data, final CompleteCallback completeCallback) {
         new UpdateChildrenQuery(this).withArgs(data, completeCallback).execute();
     }
 
@@ -186,8 +171,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
-    {
+    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback) {
         new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
@@ -198,8 +182,7 @@ public class Database implements DatabaseDistribution
      * @param enabled If true persistence will be enabled.
      */
     @Override
-    public void setPersistenceEnabled(boolean enabled)
-    {
+    public void setPersistenceEnabled(boolean enabled) {
         Gdx.app.log("GdxFireapp", "No such feature on firebase web platform.");
     }
 
@@ -209,8 +192,7 @@ public class Database implements DatabaseDistribution
      * @param synced If true sync for specified database path will be enabled
      */
     @Override
-    public void keepSynced(boolean synced)
-    {
+    public void keepSynced(boolean synced) {
         Gdx.app.log("GdxFireapp", "No such feature on firebase web platform.");
     }
 
@@ -220,8 +202,7 @@ public class Database implements DatabaseDistribution
      * @return Database reference path. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
-    String databaseReference()
-    {
+    String databaseReference() {
         if (refPath == null)
             throw new DatabaseReferenceNotSetException("Please call GdxFIRDatabase#inReference() first.");
         return refPath;
@@ -243,8 +224,7 @@ public class Database implements DatabaseDistribution
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */
-    void terminateOperation()
-    {
+    void terminateOperation() {
         refPath = null;
         filters.clear();
         orderByClause = null;

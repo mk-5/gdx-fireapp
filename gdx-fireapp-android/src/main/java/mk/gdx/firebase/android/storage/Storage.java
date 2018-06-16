@@ -43,8 +43,7 @@ import mk.gdx.firebase.storage.functional.DownloadUrl;
  *
  * @see StorageDistribution
  */
-public class Storage implements StorageDistribution
-{
+public class Storage implements StorageDistribution {
 
     private FirebaseStorage firebaseStorage;
 
@@ -52,8 +51,7 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void upload(FileHandle file, String path, UploadCallback callback)
-    {
+    public void upload(FileHandle file, String path, UploadCallback callback) {
         StorageReference dataRef = firebaseStorage().getReference().child(path);
         UploadTask uploadTask = dataRef.putFile(Uri.fromFile(file.file()));
         processUpload(uploadTask, callback);
@@ -63,8 +61,7 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void upload(byte[] data, String path, @NonNull final UploadCallback callback)
-    {
+    public void upload(byte[] data, String path, @NonNull final UploadCallback callback) {
         StorageReference dataRef = firebaseStorage().getReference().child(path);
         UploadTask uploadTask = dataRef.putBytes(data);
         processUpload(uploadTask, callback);
@@ -74,21 +71,16 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, long bytesLimit, @NonNull final DownloadCallback<byte[]> callback)
-    {
+    public void download(String path, long bytesLimit, @NonNull final DownloadCallback<byte[]> callback) {
         StorageReference pathRef = firebaseStorage().getReference().child(path);
-        pathRef.getBytes(bytesLimit).addOnFailureListener(new OnFailureListener()
-        {
+        pathRef.getBytes(bytesLimit).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e)
-            {
+            public void onFailure(@NonNull Exception e) {
                 callback.onFail(e);
             }
-        }).addOnSuccessListener(new OnSuccessListener<byte[]>()
-        {
+        }).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
-            public void onSuccess(byte[] bytes)
-            {
+            public void onSuccess(byte[] bytes) {
                 callback.onSuccess(bytes);
             }
         });
@@ -98,8 +90,7 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, @NonNull final DownloadCallback<File> callback)
-    {
+    public void download(String path, File targetFile, @NonNull final DownloadCallback<File> callback) {
         StorageReference pathRef = firebaseStorage().getReference().child(path);
         if (targetFile == null) {
             try {
@@ -112,18 +103,14 @@ public class Storage implements StorageDistribution
             throw new IllegalArgumentException("Target file is null and is unable to create temporary file.");
         final File finalTargetFile = targetFile;
         pathRef.getFile(targetFile)
-                .addOnFailureListener(new OnFailureListener()
-                {
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e)
-                    {
+                    public void onFailure(@NonNull Exception e) {
                         callback.onFail(e);
                     }
-                }).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
-        {
+                }).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot)
-            {
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
                 callback.onSuccess(finalTargetFile);
             }
@@ -134,21 +121,16 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, @NonNull final DeleteCallback callback)
-    {
+    public void delete(String path, @NonNull final DeleteCallback callback) {
         StorageReference pathRef = firebaseStorage().getReference().child(path);
-        pathRef.delete().addOnFailureListener(new OnFailureListener()
-        {
+        pathRef.delete().addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e)
-            {
+            public void onFailure(@NonNull Exception e) {
                 callback.onFail(e);
             }
-        }).addOnSuccessListener(new OnSuccessListener<Void>()
-        {
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onSuccess(Void aVoid)
-            {
+            public void onSuccess(Void aVoid) {
                 callback.onSuccess();
             }
         });
@@ -158,8 +140,7 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public StorageDistribution inBucket(String url)
-    {
+    public StorageDistribution inBucket(String url) {
         firebaseStorage = FirebaseStorage.getInstance(url);
         return this;
     }
@@ -167,8 +148,7 @@ public class Storage implements StorageDistribution
     /**
      * @return Lazy loaded instance of {@link FirebaseStorage}. It should be only one instance for one instance of {@link Storage}
      */
-    private FirebaseStorage firebaseStorage()
-    {
+    private FirebaseStorage firebaseStorage() {
         if (firebaseStorage == null)
             firebaseStorage = FirebaseStorage.getInstance();
         return firebaseStorage;
@@ -180,20 +160,15 @@ public class Storage implements StorageDistribution
      * @param uploadTask Upload task which we want to deal with.
      * @param callback   Callback which will be call from {@link UploadTask#addOnFailureListener(OnFailureListener)} and {@link UploadTask#addOnSuccessListener(OnSuccessListener)}
      */
-    private void processUpload(UploadTask uploadTask, final UploadCallback callback)
-    {
-        uploadTask.addOnFailureListener(new OnFailureListener()
-        {
+    private void processUpload(UploadTask uploadTask, final UploadCallback callback) {
+        uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e)
-            {
+            public void onFailure(@NonNull Exception e) {
                 callback.onFail(e);
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
-        {
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-            {
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 FileMetadata fileMetadata = buildMetadata(taskSnapshot);
                 callback.onSuccess(fileMetadata);
             }
@@ -208,10 +183,9 @@ public class Storage implements StorageDistribution
      * @param taskSnapshot Snapshot of just uploaded data
      * @return Firebase storage file metadata wrapped by {@link FileMetadata}
      */
-    private FileMetadata buildMetadata(UploadTask.TaskSnapshot taskSnapshot)
-    {
+    private FileMetadata buildMetadata(UploadTask.TaskSnapshot taskSnapshot) {
         FileMetadata.Builder builder = new FileMetadata.Builder()
-                .setDownloadUrl(new DownloadUrl(taskSnapshot.getDownloadUrl() != null ? taskSnapshot.getDownloadUrl().toString(): null));
+                .setDownloadUrl(new DownloadUrl(taskSnapshot.getDownloadUrl() != null ? taskSnapshot.getDownloadUrl().toString() : null));
         if (taskSnapshot.getMetadata() != null) {
             builder.setMd5Hash(taskSnapshot.getMetadata().getMd5Hash())
                     .setName(taskSnapshot.getMetadata().getName())

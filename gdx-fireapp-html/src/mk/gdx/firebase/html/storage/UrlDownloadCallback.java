@@ -27,20 +27,17 @@ import mk.gdx.firebase.callbacks.DownloadCallback;
 /**
  * Provides access to download url of firebase storage file.
  */
-public class UrlDownloadCallback implements DownloadCallback<String>
-{
+public class UrlDownloadCallback implements DownloadCallback<String> {
 
     private DownloadCallback originalCallback;
 
-    public UrlDownloadCallback(DownloadCallback originalCallback)
-    {
+    public UrlDownloadCallback(DownloadCallback originalCallback) {
         this.originalCallback = originalCallback;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onSuccess(String downloadUrl)
-    {
+    public void onSuccess(String downloadUrl) {
         xmlHttpRequest(downloadUrl);
     }
 
@@ -48,25 +45,21 @@ public class UrlDownloadCallback implements DownloadCallback<String>
      * @param e Exception describes what was wrong during authorization.
      */
     @Override
-    public void onFail(Exception e)
-    {
+    public void onFail(Exception e) {
         originalCallback.onFail(e);
     }
 
     @SuppressWarnings("unchecked")
-    private void xmlHttpRequest(String downloadUrl)
-    {
+    private void xmlHttpRequest(String downloadUrl) {
         final XMLHttpRequest xmlHttpRequest = XMLHttpRequest.create();
         xmlHttpRequest.setResponseType(XMLHttpRequest.ResponseType.ArrayBuffer);
         String[] urlParts = downloadUrl.split("token=");
         if (urlParts.length < 2)
             throw new IllegalStateException("Download url should contains token variable.");
         String accessToken = urlParts[1];
-        xmlHttpRequest.setOnReadyStateChange(new ReadyStateChangeHandler()
-        {
+        xmlHttpRequest.setOnReadyStateChange(new ReadyStateChangeHandler() {
             @Override
-            public void onReadyStateChange(XMLHttpRequest xhr)
-            {
+            public void onReadyStateChange(XMLHttpRequest xhr) {
                 if (xhr.getReadyState() == XMLHttpRequest.DONE &&
                         (xhr.getStatus() >= 200 && xhr.getStatus() < 300)) {
                     ArrayBuffer arrayBuffer = xhr.getResponseArrayBuffer();

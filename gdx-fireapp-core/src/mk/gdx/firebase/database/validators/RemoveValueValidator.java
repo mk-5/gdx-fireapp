@@ -21,12 +21,10 @@ import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 
-public class RemoveValueValidator implements ArgumentsValidator
-{
+public class RemoveValueValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
-        if (arguments.size > 0  && arguments.get(0) != null && !(arguments.get(0) instanceof CompleteCallback))
+    public void validate(Array<Object> arguments) {
+        if (arguments.size > 0 && arguments.get(0) != null && !(arguments.get(0) instanceof CompleteCallback))
             throw new IllegalArgumentException();
     }
 }

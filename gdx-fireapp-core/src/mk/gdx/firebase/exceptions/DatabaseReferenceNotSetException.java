@@ -19,10 +19,8 @@ package mk.gdx.firebase.exceptions;
 /**
  * Throws when database reference has not been set yet.
  */
-public class DatabaseReferenceNotSetException extends RuntimeException
-{
-    public DatabaseReferenceNotSetException(String msg)
-    {
+public class DatabaseReferenceNotSetException extends RuntimeException {
+    public DatabaseReferenceNotSetException(String msg) {
         super(msg);
     }
 }

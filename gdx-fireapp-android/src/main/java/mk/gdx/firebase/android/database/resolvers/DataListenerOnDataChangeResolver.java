@@ -24,13 +24,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Resolves data listener with ordering preserved.
  */
-public class DataListenerOnDataChangeResolver
-{
+public class DataListenerOnDataChangeResolver {
 
     // TODO - docs
     @SuppressWarnings("unchecked")
-    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataChangeListener<E> dataChangeListener)
-    {
+    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataChangeListener<E> dataChangeListener) {
         if (DataSnapshotOrderByResolver.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot)) {
             dataChangeListener.onChange((E) DataSnapshotOrderByResolver.resolve(dataSnapshot));
         } else {

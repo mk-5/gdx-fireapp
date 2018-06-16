@@ -24,19 +24,16 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 /**
  * Wraps {@link CompleteCallback} with {@link DatabaseReference.CompletionListener}
  */
-public class QueryCompletionListener implements DatabaseReference.CompletionListener
-{
+public class QueryCompletionListener implements DatabaseReference.CompletionListener {
 
     private CompleteCallback completeCallback;
 
-    public QueryCompletionListener(CompleteCallback completeCallback)
-    {
+    public QueryCompletionListener(CompleteCallback completeCallback) {
         this.completeCallback = completeCallback;
     }
 
     @Override
-    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
-    {
+    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
         if (databaseError != null) {
             completeCallback.onError(databaseError.toException());
         } else {

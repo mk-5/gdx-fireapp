@@ -23,8 +23,7 @@ import mk.gdx.firebase.distributions.AnalyticsDistribution;
 /**
  * @see AnalyticsDistribution
  */
-public class Analytics implements AnalyticsDistribution
-{
+public class Analytics implements AnalyticsDistribution {
 
     /**
      * Do nothing, firebase javascript api do not support analytics
@@ -33,8 +32,7 @@ public class Analytics implements AnalyticsDistribution
      * @param params Event params, default params are defined here {@link mk.gdx.firebase.analytics.AnalyticsParam}
      */
     @Override
-    public void logEvent(String name, Map<String, String> params)
-    {
+    public void logEvent(String name, Map<String, String> params) {
     }
 
     /**
@@ -44,8 +42,7 @@ public class Analytics implements AnalyticsDistribution
      * @param screenClass Screen class, here you can give your scene/screen/state class. For ex. {@code MenuScreen.class}
      */
     @Override
-    public void setScreen(String name, Class<?> screenClass)
-    {
+    public void setScreen(String name, Class<?> screenClass) {
 
     }
 
@@ -56,8 +53,7 @@ public class Analytics implements AnalyticsDistribution
      * @param value Property value
      */
     @Override
-    public void setUserProperty(String name, String value)
-    {
+    public void setUserProperty(String name, String value) {
 
     }
 
@@ -67,8 +63,7 @@ public class Analytics implements AnalyticsDistribution
      * @param id Current user id
      */
     @Override
-    public void setUserId(String id)
-    {
+    public void setUserId(String id) {
 
     }
 }

@@ -27,7 +27,7 @@ eclipse.project {
     name = "gdx-fireapp-core"
 }
 
-ext{
+ext {
     appModuleName = 'GDX Fireapp Core'
 }
 

@@ -23,8 +23,7 @@ package mk.gdx.firebase.distributions;
  * On iOS it is possible that your logs will be only information about ios-moe 'kill signal', then you
  * should implement {@link Thread#setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler)} inside {@code ios-moe} module.
  */
-public interface CrashDistribution
-{
+public interface CrashDistribution {
 
     /**
      * Logs custom message to Firebase.

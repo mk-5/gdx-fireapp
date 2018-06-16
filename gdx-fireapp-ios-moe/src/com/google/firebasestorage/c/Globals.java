@@ -13,21 +13,21 @@ import org.moe.natj.objc.map.ObjCStringMapper;
 @Generated
 @Runtime(CRuntime.class)
 public final class Globals {
-	static {
-		NatJ.register();
-	}
+    static {
+        NatJ.register();
+    }
 
-	@Generated
-	private Globals() {
-	}
+    @Generated
+    private Globals() {
+    }
 
-	@Generated
-	@CVariable()
-	@MappedReturn(ObjCStringMapper.class)
-	public static native String FIRStorageErrorDomain();
+    @Generated
+    @CVariable()
+    @MappedReturn(ObjCStringMapper.class)
+    public static native String FIRStorageErrorDomain();
 
-	@Generated
-	@CVariable()
-	@UncertainReturn("Options: java.string, c.const-byte-ptr Fallback: java.string")
-	public static native String FIRStorageVersionString();
+    @Generated
+    @CVariable()
+    @UncertainReturn("Options: java.string, c.const-byte-ptr Fallback: java.string")
+    public static native String FIRStorageVersionString();
 }

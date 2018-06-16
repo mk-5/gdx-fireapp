@@ -21,8 +21,7 @@ import mk.gdx.firebase.callbacks.DataCallback;
 /**
  * Javascript calls to firebase database api.
  */
-public class DatabaseJS
-{
+public class DatabaseJS {
     private static DataCallback nextDataCallback;
 
     /**
@@ -47,8 +46,7 @@ public class DatabaseJS
      *
      * @param callback Callback, not null
      */
-    static void setNextDataCallback(DataCallback callback)
-    {
+    static void setNextDataCallback(DataCallback callback) {
         DatabaseJS.nextDataCallback = callback;
     }
 
@@ -59,8 +57,7 @@ public class DatabaseJS
      * @param value Value passed to original callback, not null
      */
     @SuppressWarnings("unchecked")
-    static void callCallback(String value)
-    {
+    static void callCallback(String value) {
         if (DatabaseJS.nextDataCallback == null)
             throw new IllegalStateException();
         nextDataCallback.onData(value);

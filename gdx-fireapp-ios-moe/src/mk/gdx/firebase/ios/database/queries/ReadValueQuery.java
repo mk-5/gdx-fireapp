@@ -20,8 +20,6 @@ import com.google.firebasedatabase.FIRDataSnapshot;
 import com.google.firebasedatabase.FIRDatabaseQuery;
 import com.google.firebasedatabase.enums.FIRDataEventType;
 
-import java.io.FileNotFoundException;
-
 import apple.foundation.NSError;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
@@ -35,29 +33,24 @@ import mk.gdx.firebase.ios.database.resolvers.FIRDataSnapshotOrderByResolver;
 /**
  * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
  */
-public class ReadValueQuery extends IosDatabaseQuery<Void>
-{
-    public ReadValueQuery(Database databaseDistribution)
-    {
+public class ReadValueQuery extends IosDatabaseQuery<Void> {
+    public ReadValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new ReadValueValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         filtersProvider.applyFiltering().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value,
                 new ReadValueBlock((Class) arguments.get(0), orderByClause, (DataCallback) arguments.get(1)),
                 new ReadValueCancelBlock((DataCallback) arguments.get(1)));
@@ -67,23 +60,20 @@ public class ReadValueQuery extends IosDatabaseQuery<Void>
     /**
      * Observer read value block. Wraps {@code DataCallback}
      */
-    private class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1
-    {
+    private class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1 {
 
         private Class type;
         private DataCallback dataCallback;
         private OrderByClause orderByClause;
 
-        private ReadValueBlock(Class type, OrderByClause orderByClause, DataCallback dataCallback)
-        {
+        private ReadValueBlock(Class type, OrderByClause orderByClause, DataCallback dataCallback) {
             this.type = type;
             this.orderByClause = orderByClause;
             this.dataCallback = dataCallback;
         }
 
         @Override
-        public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1)
-        {
+        public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1) {
             if (arg0.value() == null) {
                 dataCallback.onError(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
@@ -103,19 +93,16 @@ public class ReadValueQuery extends IosDatabaseQuery<Void>
         }
     }
 
-    private class ReadValueCancelBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2
-    {
+    private class ReadValueCancelBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2 {
 
         private DataCallback dataCallback;
 
-        private ReadValueCancelBlock(DataCallback dataCallback)
-        {
+        private ReadValueCancelBlock(DataCallback dataCallback) {
             this.dataCallback = dataCallback;
         }
 
         @Override
-        public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0)
-        {
+        public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0) {
             dataCallback.onError(new Exception(arg0.localizedDescription()));
         }
     }

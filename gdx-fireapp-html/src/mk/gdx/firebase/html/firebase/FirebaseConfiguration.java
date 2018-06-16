@@ -24,16 +24,14 @@ import com.google.gwt.core.client.ScriptInjector;
 /**
  * Loads firebase configuration from {@code android/assets/firebase-config.html}.
  */
-public class FirebaseConfiguration
-{
+public class FirebaseConfiguration {
 
     private static boolean scriptIsLoaded;
 
     private String rawHtml;
     private FirebaseConfigParser configParser;
 
-    public FirebaseConfiguration()
-    {
+    public FirebaseConfiguration() {
     }
 
     /**
@@ -41,8 +39,7 @@ public class FirebaseConfiguration
      *
      * @return self
      */
-    public FirebaseConfiguration load()
-    {
+    public FirebaseConfiguration load() {
         Gdx.app.log("GdxFireapp", "Loading firebase config...");
         if (!Gdx.files.internal("firebase-config.html").exists()) {
             Gdx.app.error("GdxFireapp", "Can't find firebase-config.html file.");
@@ -56,8 +53,7 @@ public class FirebaseConfiguration
     /**
      * Injects lazy firebase loading inside GWT application.
      */
-    public void init()
-    {
+    public void init() {
         if (rawHtml == null) {
             Gdx.app.error("GdxFireapp", "You forgot about calling FirebaseConfiguration#init() first.");
             return;
@@ -72,8 +68,7 @@ public class FirebaseConfiguration
     /**
      * @return Config parser, may be null.
      */
-    public FirebaseConfigParser getConfigParser()
-    {
+    public FirebaseConfigParser getConfigParser() {
         return configParser;
     }
 

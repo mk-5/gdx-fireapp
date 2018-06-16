@@ -26,15 +26,13 @@ import mk.gdx.firebase.distributions.AppDistribution;
  *
  * @see AppDistribution
  */
-public class App implements AppDistribution
-{
+public class App implements AppDistribution {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void configure()
-    {
+    public void configure() {
         if (FIRApp.defaultApp() == null)
             FIRApp.configure();
     }

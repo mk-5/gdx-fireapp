@@ -25,8 +25,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  * @see CrashDistribution
  * @see PlatformDistributor
  */
-public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implements CrashDistribution
-{
+public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implements CrashDistribution {
 
     private static volatile GdxFIRCrash instance;
 
@@ -37,15 +36,13 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRCrash() throws PlatformDistributorException
-    {
+    private GdxFIRCrash() throws PlatformDistributorException {
     }
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
-    public static GdxFIRCrash instance()
-    {
+    public static GdxFIRCrash instance() {
         GdxFIRCrash result = instance;
         if (result == null) {
             synchronized (GdxFIRCrash.class) {
@@ -66,8 +63,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * {@inheritDoc}
      */
     @Override
-    public void log(String message)
-    {
+    public void log(String message) {
         platformObject.log(message);
     }
 
@@ -75,8 +71,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * {@inheritDoc}
      */
     @Override
-    protected String getIOSClassName()
-    {
+    protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.crash.Crash";
     }
 
@@ -84,8 +79,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * {@inheritDoc}
      */
     @Override
-    protected String getAndroidClassName()
-    {
+    protected String getAndroidClassName() {
         return "mk.gdx.firebase.android.crash.Crash";
     }
 
@@ -93,8 +87,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * {@inheritDoc}
      */
     @Override
-    protected String getWebGLClassName()
-    {
+    protected String getWebGLClassName() {
         return "mk.gdx.firebase.html.crash.Crash";
     }
 }

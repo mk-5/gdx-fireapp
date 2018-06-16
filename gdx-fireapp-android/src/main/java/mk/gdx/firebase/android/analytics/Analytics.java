@@ -32,24 +32,21 @@ import mk.gdx.firebase.distributions.AnalyticsDistribution;
  *
  * @see AnalyticsDistribution
  */
-public class Analytics implements AnalyticsDistribution
-{
+public class Analytics implements AnalyticsDistribution {
 
     private static FirebaseAnalytics firebaseAnalytics;
 
     /**
      * Analytics class constructor.
      */
-    public Analytics()
-    {
+    public Analytics() {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void logEvent(String name, Map<String, String> params)
-    {
+    public void logEvent(String name, Map<String, String> params) {
         Bundle bundle = null;
         if (params != null) {
             bundle = new Bundle();
@@ -69,8 +66,7 @@ public class Analytics implements AnalyticsDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setScreen(String name, Class<?> screenClass)
-    {
+    public void setScreen(String name, Class<?> screenClass) {
         getFirebaseAnalytics().setCurrentScreen((AndroidApplication) Gdx.app, name, screenClass.getSimpleName());
     }
 
@@ -78,8 +74,7 @@ public class Analytics implements AnalyticsDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setUserProperty(String name, String value)
-    {
+    public void setUserProperty(String name, String value) {
         getFirebaseAnalytics().setUserProperty(name, value);
     }
 
@@ -87,8 +82,7 @@ public class Analytics implements AnalyticsDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setUserId(String id)
-    {
+    public void setUserId(String id) {
         getFirebaseAnalytics().setUserId(id);
     }
 
@@ -97,8 +91,7 @@ public class Analytics implements AnalyticsDistribution
      *
      * @return Instance of FirebaseAnalytics class. This instance should be use later to do some analytics actions.
      */
-    protected FirebaseAnalytics getFirebaseAnalytics()
-    {
+    protected FirebaseAnalytics getFirebaseAnalytics() {
         if (firebaseAnalytics == null)
             firebaseAnalytics = FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app);
         return firebaseAnalytics;
@@ -112,8 +105,7 @@ public class Analytics implements AnalyticsDistribution
      * @param key    Bundle key where you want to put the new value.
      * @param number String which should contain numeric value.
      */
-    private void putNumberParam(Bundle bundle, String key, String number)
-    {
+    private void putNumberParam(Bundle bundle, String key, String number) {
         String[] types = {"int", "long", "float", "double"};
         String type;
         for (int i = 0; i < types.length; i++) {

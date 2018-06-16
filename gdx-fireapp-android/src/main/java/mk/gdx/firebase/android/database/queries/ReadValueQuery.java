@@ -32,30 +32,25 @@ import mk.gdx.firebase.database.validators.ReadValueValidator;
 /**
  * Provides call to {@link com.google.firebase.database.Query#addListenerForSingleValueEvent(ValueEventListener)}.
  */
-public class ReadValueQuery extends AndroidDatabaseQuery<Void>
-{
+public class ReadValueQuery extends AndroidDatabaseQuery<Void> {
 
-    public ReadValueQuery(Database databaseDistribution)
-    {
+    public ReadValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new ReadValueValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         filtersProvider.applyFiltering()
                 .addListenerForSingleValueEvent(new SingleValueListener((Class) arguments.get(0), (DataCallback) arguments.get(1), orderByClause));
         return null;
@@ -67,29 +62,25 @@ public class ReadValueQuery extends AndroidDatabaseQuery<Void>
      * @param <T> Class of object that we want to listen for change. For ex. List
      * @param <E> Return type of object that we want to listen for change. For ex. List<MyClass>
      */
-    private class SingleValueListener<T, E extends T> implements ValueEventListener
-    {
+    private class SingleValueListener<T, E extends T> implements ValueEventListener {
 
         private Class<T> dataType;
         private DataCallback<E> callback;
         private OrderByClause orderByClause;
 
-        private SingleValueListener(Class<T> dataType, DataCallback<E> callback, OrderByClause orderByClause)
-        {
+        private SingleValueListener(Class<T> dataType, DataCallback<E> callback, OrderByClause orderByClause) {
             this.dataType = dataType;
             this.callback = callback;
             this.orderByClause = orderByClause;
         }
 
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot)
-        {
+        public void onDataChange(DataSnapshot dataSnapshot) {
             DataCallbackOnDataResolver.resolve(dataType, orderByClause, dataSnapshot, callback);
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError)
-        {
+        public void onCancelled(DatabaseError databaseError) {
             callback.onError(databaseError.toException());
         }
     }

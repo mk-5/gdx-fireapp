@@ -24,8 +24,7 @@ import mk.gdx.firebase.database.FilterType;
 /**
  * Provides filtering for {@code DatabaseReference} instance.
  */
-public class FIRQueryFilterResolver implements FilterResolver<FIRDatabaseQuery, FIRDatabaseQuery>
-{
+public class FIRQueryFilterResolver implements FilterResolver<FIRDatabaseQuery, FIRDatabaseQuery> {
 
     public static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
     public static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
@@ -33,8 +32,7 @@ public class FIRQueryFilterResolver implements FilterResolver<FIRDatabaseQuery, 
 
 
     @Override
-    public <V> FIRDatabaseQuery resolve(FilterType filterType, FIRDatabaseQuery target, V[] filterArguments)
-    {
+    public <V> FIRDatabaseQuery resolve(FilterType filterType, FIRDatabaseQuery target, V[] filterArguments) {
         switch (filterType) {
             case LIMIT_FIRST:
                 if (!(filterArguments[0] instanceof Integer))

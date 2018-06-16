@@ -21,10 +21,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * GWT implementation of <a href="https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot">UploadTaskSnapshot</a>
  */
-class UploadTaskSnapshot extends JavaScriptObject
-{
-    protected UploadTaskSnapshot()
-    {
+class UploadTaskSnapshot extends JavaScriptObject {
+    protected UploadTaskSnapshot() {
     }
 
     /**

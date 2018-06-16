@@ -29,16 +29,14 @@ import mk.gdx.firebase.html.exceptions.WrongTypeForDeserializerException;
 /**
  * Abstraction for deserializers of json string without class type inside each doc.
  */
-class JsonListMapDeserializer extends Json.ReadOnlySerializer
-{
+class JsonListMapDeserializer extends Json.ReadOnlySerializer {
     protected Class<?> type;
     protected Class<?> objectType;
 
     /**
      * @param type List or map value type, not null
      */
-    public JsonListMapDeserializer(Class<?> type, Class<?> objectType)
-    {
+    public JsonListMapDeserializer(Class<?> type, Class<?> objectType) {
         if (!(ClassReflection.isAssignableFrom(List.class, type) || ClassReflection.isAssignableFrom(Map.class, type)))
             throw new WrongTypeForDeserializerException();
         this.type = type;
@@ -49,13 +47,11 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer
      * {@inheritDoc}
      */
     @Override
-    public Object read(Json json, JsonValue jsonData, Class type)
-    {
+    public Object read(Json json, JsonValue jsonData, Class type) {
         return processJsonValue(json, jsonData);
     }
 
-    protected Object processJsonValue(Json json, JsonValue jsonData)
-    {
+    protected Object processJsonValue(Json json, JsonValue jsonData) {
         if (jsonData.isObject()) {
             return processObject(json, jsonData);
         } else if (jsonData.isValue()) {
@@ -65,13 +61,11 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer
         }
     }
 
-    private Object processObject(Json json, JsonValue jsonData)
-    {
+    private Object processObject(Json json, JsonValue jsonData) {
         return json.fromJson(this.objectType, jsonData.toJson(JsonWriter.OutputType.json));
     }
 
-    protected Object processValue(Json json, JsonValue jsonData)
-    {
+    protected Object processValue(Json json, JsonValue jsonData) {
         if (jsonData.isBoolean())
             return jsonData.asBoolean();
         else if (jsonData.isDouble())

@@ -23,7 +23,6 @@ import java.util.Map;
 import apple.foundation.NSDictionary;
 import apple.foundation.NSMutableDictionary;
 import apple.foundation.NSString;
-import mk.gdx.firebase.GdxFIRApp;
 import mk.gdx.firebase.distributions.AnalyticsDistribution;
 
 /**
@@ -32,16 +31,14 @@ import mk.gdx.firebase.distributions.AnalyticsDistribution;
  *
  * @see AnalyticsDistribution
  */
-public class Analytics implements AnalyticsDistribution
-{
+public class Analytics implements AnalyticsDistribution {
 
     /**
      * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void logEvent(String name, Map<String, String> params)
-    {
+    public void logEvent(String name, Map<String, String> params) {
         NSDictionary<String, NSString> dictionaryParams;
         if (params != null) {
             dictionaryParams = (NSDictionary<String, NSString>) NSMutableDictionary.alloc().init();
@@ -59,8 +56,7 @@ public class Analytics implements AnalyticsDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setScreen(String name, Class<?> screenClass)
-    {
+    public void setScreen(String name, Class<?> screenClass) {
         FIRAnalytics.setScreenNameScreenClass(name, screenClass.getSimpleName());
     }
 
@@ -68,8 +64,7 @@ public class Analytics implements AnalyticsDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setUserProperty(String name, String value)
-    {
+    public void setUserProperty(String name, String value) {
         FIRAnalytics.setUserPropertyStringForName(value, name);
     }
 
@@ -77,8 +72,7 @@ public class Analytics implements AnalyticsDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setUserId(String id)
-    {
+    public void setUserId(String id) {
         FIRAnalytics.setUserID(id);
     }
 

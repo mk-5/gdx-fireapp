@@ -41,8 +41,7 @@ public class NSArrayHelper {
      * @return {@code nsArray} object  transformed to {@code List} with normal java Object instances inside, not null.
      */
     @SuppressWarnings("unchecked")
-    public static List toList(NSArray<NSObject> nsArray)
-    {
+    public static List toList(NSArray<NSObject> nsArray) {
         List list = new ArrayList();
         for (Object value : nsArray) {
             list.add(DataProcessor.iosDataToJava(value));
@@ -59,8 +58,7 @@ public class NSArrayHelper {
      * @return {@code list} object transformed to {@code NSMutableArray} with NSObject instances inside, not null.
      */
     @SuppressWarnings("unchecked")
-    public static NSMutableArray<? extends NSObject> toArray(List list)
-    {
+    public static NSMutableArray<? extends NSObject> toArray(List list) {
         NSMutableArray<NSObject> nsMutableArray = (NSMutableArray<NSObject>) NSMutableArray.alloc().init();
         for (Object value : list) {
             nsMutableArray.add(DataProcessor.javaDataToIos(value));

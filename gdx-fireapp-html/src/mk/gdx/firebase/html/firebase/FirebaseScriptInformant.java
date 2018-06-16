@@ -21,8 +21,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Keeps information about Firebase .js script was loaded or not.
  */
-public class FirebaseScriptInformant
-{
+public class FirebaseScriptInformant {
     private static boolean isLoaded;
 
     /**
@@ -30,13 +29,11 @@ public class FirebaseScriptInformant
      */
     private static Array<Runnable> waitingActions = new Array<Runnable>();
 
-    public static boolean isFirebaseScriptLoaded()
-    {
+    public static boolean isFirebaseScriptLoaded() {
         return isLoaded;
     }
 
-    static void addWaitingAction(Runnable action)
-    {
+    static void addWaitingAction(Runnable action) {
         if (!waitingActions.contains(action, true))
             waitingActions.add(action);
     }
@@ -46,8 +43,7 @@ public class FirebaseScriptInformant
      *
      * @param isLoaded Firebase.js loading status.
      */
-    static void setIsLoaded(boolean isLoaded)
-    {
+    static void setIsLoaded(boolean isLoaded) {
         if (FirebaseScriptInformant.isLoaded == isLoaded) return;
         FirebaseScriptInformant.isLoaded = isLoaded;
         if (isLoaded) {

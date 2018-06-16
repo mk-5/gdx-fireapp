@@ -23,8 +23,7 @@ import mk.gdx.firebase.storage.FileMetadata;
 /**
  * Javascript calls to firebase storage api.
  */
-public class StorageJS
-{
+public class StorageJS {
 
     /**
      * Downloads file given at {@code refPath} and convert it to base64 string.
@@ -83,8 +82,7 @@ public class StorageJS
      * @param snapshot Snapshot from firebase, not null
      * @param callback Upload callback to cal, not null
      */
-    static void callUploadCallback(UploadTaskSnapshot snapshot, UploadCallback callback)
-    {
+    static void callUploadCallback(UploadTaskSnapshot snapshot, UploadCallback callback) {
         FileMetadata fileMetadata = SnapshotFileMetaDataResolver.resolve(snapshot);
         callback.onSuccess(fileMetadata);
     }

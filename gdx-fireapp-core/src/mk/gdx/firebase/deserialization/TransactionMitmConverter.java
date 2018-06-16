@@ -33,14 +33,12 @@ import mk.gdx.firebase.reflection.AnnotationFinder;
  *
  * @param <T> Result type of callback
  */
-public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter implements TransactionCallback<T>
-{
+public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter implements TransactionCallback<T> {
 
     private TransactionCallback<R> coveredCallback;
     private Class<T> dataType;
 
-    public TransactionMitmConverter(Class<T> dataType, TransactionCallback<R> coveredCallback, FirebaseMapConverter mapConverter)
-    {
+    public TransactionMitmConverter(Class<T> dataType, TransactionCallback<R> coveredCallback, FirebaseMapConverter mapConverter) {
         super(mapConverter);
         this.coveredCallback = coveredCallback;
     }
@@ -53,8 +51,7 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
      *
      * @return DataCallback which retrieves data from database, not null.
      */
-    public TransactionCallback<?> get()
-    {
+    public TransactionCallback<?> get() {
         return isPojo(dataType) ? getPojoCallback() : getGenericCallback();
     }
 
@@ -63,8 +60,7 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
      *
      * @return New Pojo data callback instance, not null.
      */
-    public TransactionCallback<Map> getPojoCallback()
-    {
+    public TransactionCallback<Map> getPojoCallback() {
         return new PojoTransactionCallback();
     }
 
@@ -73,8 +69,7 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
      *
      * @return New Pojo data callback instance, not null.
      */
-    public TransactionCallback<T> getGenericCallback()
-    {
+    public TransactionCallback<T> getGenericCallback() {
         return new GenericTransactionCallback();
     }
 
@@ -86,8 +81,7 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Object run(Object transactionData)
-    {
+    public Object run(Object transactionData) {
         MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, coveredCallback);
         // If user not indicated to do MapConversion.
         if (mapConversionAnnotation == null) {
@@ -107,11 +101,9 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
     /**
      * Retrieve map pass to {@link #run(Object)}
      */
-    private class PojoTransactionCallback implements TransactionCallback<Map>
-    {
+    private class PojoTransactionCallback implements TransactionCallback<Map> {
         @Override
-        public Map run(Map transactionData)
-        {
+        public Map run(Map transactionData) {
             return (Map) TransactionMitmConverter.this.run(transactionData);
         }
     }
@@ -119,13 +111,11 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
     /**
      * Retrieve {@code T} object and pass to  {@link #run(Object)}
      */
-    private class GenericTransactionCallback implements TransactionCallback<T>
-    {
+    private class GenericTransactionCallback implements TransactionCallback<T> {
 
         @Override
         @SuppressWarnings("unchecked")
-        public T run(T transactionData)
-        {
+        public T run(T transactionData) {
             return (T) TransactionMitmConverter.this.run(transactionData);
         }
     }

@@ -20,7 +20,6 @@ import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.RemoveValueValidator;
 import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 import mk.gdx.firebase.html.database.Database;
 import mk.gdx.firebase.html.database.GwtDatabaseQuery;
@@ -29,17 +28,14 @@ import mk.gdx.firebase.html.database.MapTransformer;
 /**
  * Provides update javascript execution.
  */
-public class UpdateChildrenQuery extends GwtDatabaseQuery
-{
-    public UpdateChildrenQuery(Database databaseDistribution)
-    {
+public class UpdateChildrenQuery extends GwtDatabaseQuery {
+    public UpdateChildrenQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void runJS()
-    {
+    protected void runJS() {
         if (arguments.size == 1) {
             update(databaseReference, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)));
         } else if (arguments.size == 2) {
@@ -50,8 +46,7 @@ public class UpdateChildrenQuery extends GwtDatabaseQuery
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new UpdateChildrenValidator();
     }
 

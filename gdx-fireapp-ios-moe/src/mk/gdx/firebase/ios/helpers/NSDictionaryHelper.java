@@ -32,12 +32,10 @@ import mk.gdx.firebase.ios.database.DataProcessor;
  * Transforms {@code NSDictionary} and {@code Map}.
  * <p>
  */
-public class NSDictionaryHelper
-{
+public class NSDictionaryHelper {
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> toMap(NSDictionary<NSString, NSObject> nsDictionary)
-    {
+    public static Map<String, Object> toMap(NSDictionary<NSString, NSObject> nsDictionary) {
         Map<String, Object> map = new HashMap<String, Object>();
         for (Object key : nsDictionary.keySet()) {
             Object value = nsDictionary.get(key);
@@ -47,8 +45,7 @@ public class NSDictionaryHelper
     }
 
     @SuppressWarnings("unchecked")
-    public static NSDictionary toNSDictionary(Map<String, Object> map)
-    {
+    public static NSDictionary toNSDictionary(Map<String, Object> map) {
         NSMutableDictionary<NSString, NSObject> dictionary = (NSMutableDictionary<NSString, NSObject>) NSMutableDictionary.alloc().init();
         Set<String> keySet = map.keySet();
         for (String key : keySet) {
@@ -60,8 +57,7 @@ public class NSDictionaryHelper
 
     // TODO - check type erasure error occur?
     @SuppressWarnings("unchecked")
-    public static NSDictionary toNSDictionary(Object object)
-    {
+    public static NSDictionary toNSDictionary(Object object) {
         if (object instanceof Map) {
             return toNSDictionary((Map) object);
         } else {

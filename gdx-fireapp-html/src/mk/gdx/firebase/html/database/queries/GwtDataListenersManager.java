@@ -24,16 +24,14 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Keeps reference do DataListenersManager and provides static methods for javascript calls.
  */
-public class GwtDataListenersManager
-{
+public class GwtDataListenersManager {
     private static final DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<DataChangeListener>();
 
     /**
      * @param refPath  Reference path, not null
      * @param listener Listener, may be null
      */
-    static void addDataListener(String refPath, DataChangeListener listener)
-    {
+    static void addDataListener(String refPath, DataChangeListener listener) {
         if (listenersManager.hasListeners(refPath)) {
             if (listener == null) {
                 listenersManager.removeListenersForPath(refPath);
@@ -50,8 +48,7 @@ public class GwtDataListenersManager
      * @param referencePath Reference path, not null
      * @return True if listener is already attached.
      */
-    public static boolean hasListener(String referencePath)
-    {
+    public static boolean hasListener(String referencePath) {
         return listenersManager.hasListeners(referencePath);
     }
 
@@ -61,8 +58,7 @@ public class GwtDataListenersManager
      * @param refPath  Database ref path
      * @param newValue New value as json string
      */
-    static void callListener(String refPath, String newValue)
-    {
+    static void callListener(String refPath, String newValue) {
         if (!listenersManager.hasListeners(refPath))
 //            throw new IllegalStateException();
             return;
@@ -76,8 +72,7 @@ public class GwtDataListenersManager
      *
      * @param refPath Database reference path
      */
-    static void removeDataListener(String refPath)
-    {
+    static void removeDataListener(String refPath) {
         if (listenersManager.hasListeners(refPath))
             listenersManager.removeListenersForPath(refPath);
     }

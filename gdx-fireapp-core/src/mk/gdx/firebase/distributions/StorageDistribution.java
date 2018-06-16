@@ -27,8 +27,7 @@ import mk.gdx.firebase.callbacks.UploadCallback;
 /**
  * Provides access to Firebase Storage methods.
  */
-public interface StorageDistribution
-{
+public interface StorageDistribution {
     /**
      * Uploads file data to storage.
      *

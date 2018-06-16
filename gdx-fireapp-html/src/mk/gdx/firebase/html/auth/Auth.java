@@ -26,15 +26,13 @@ import mk.gdx.firebase.html.firebase.ScriptRunner;
 /**
  * @see AuthDistribution
  */
-public class Auth implements AuthDistribution
-{
+public class Auth implements AuthDistribution {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GdxFirebaseUser getCurrentUser()
-    {
+    public GdxFirebaseUser getCurrentUser() {
         FirebaseUserJSON userFromApi = AuthJS.firebaseUser();
         if (userFromApi.isNULL()) return null;
         UserInfo.Builder builder = new UserInfo.Builder();
@@ -52,13 +50,10 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback)
-    {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
+    public void createUserWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback) {
+        ScriptRunner.firebaseScript(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 AuthJS.createUserWithEmailAndPassword(email, new String(password), callback);
             }
         });
@@ -68,13 +63,10 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback)
-    {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
+    public void signInWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback) {
+        ScriptRunner.firebaseScript(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 AuthJS.signInWithEmailAndPassword(email, new String(password), callback);
             }
         });
@@ -84,13 +76,10 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(final String token, final AuthCallback callback)
-    {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
+    public void signInWithToken(final String token, final AuthCallback callback) {
+        ScriptRunner.firebaseScript(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 AuthJS.signInWithToken(token, callback);
             }
         });
@@ -100,13 +89,10 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(final AuthCallback callback)
-    {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
+    public void signInAnonymously(final AuthCallback callback) {
+        ScriptRunner.firebaseScript(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 AuthJS.singInAnonymously(callback);
             }
         });
@@ -116,13 +102,10 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signOut(final SignOutCallback callback)
-    {
-        ScriptRunner.firebaseScript(new Runnable()
-        {
+    public void signOut(final SignOutCallback callback) {
+        ScriptRunner.firebaseScript(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 AuthJS.signOut(callback);
             }
         });

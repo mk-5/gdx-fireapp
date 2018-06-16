@@ -19,9 +19,6 @@ package mk.gdx.firebase.android.database;
 import com.google.firebase.database.Query;
 
 import mk.gdx.firebase.android.database.providers.QueryFilteringProvider;
-import mk.gdx.firebase.android.database.resolvers.QueryFilterResolver;
-import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
-import mk.gdx.firebase.database.FilteringProvider;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 /**
@@ -36,39 +33,34 @@ import mk.gdx.firebase.database.queries.GdxFireappQuery;
  *
  * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
-public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R>
-{
+public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with DatabaseReference instance.";
 
     protected String databasePath;
     protected Query query;
     protected QueryFilteringProvider filtersProvider;
 
-    public AndroidDatabaseQuery(Database databaseDistribution)
-    {
+    public AndroidDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
         filtersProvider = new QueryFilteringProvider();
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         query = databaseDistribution.databaseReference();
         databasePath = databaseDistribution.getDatabasePath();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void applyFilters()
-    {
+    protected void applyFilters() {
         filtersProvider.setFilters(filters)
                 .setOrderByClause(orderByClause)
                 .setQuery(query);
     }
 
     @Override
-    protected void terminate()
-    {
+    protected void terminate() {
         databaseDistribution.terminateOperation();
         orderByClause = null;
         filtersProvider.clear();
