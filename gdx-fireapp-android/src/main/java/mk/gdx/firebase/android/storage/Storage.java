@@ -35,6 +35,7 @@ import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.storage.FileMetadata;
 import mk.gdx.firebase.storage.functional.DownloadUrl;
 
@@ -183,16 +184,26 @@ public class Storage implements StorageDistribution {
      * @param taskSnapshot Snapshot of just uploaded data
      * @return Firebase storage file metadata wrapped by {@link FileMetadata}
      */
-    private FileMetadata buildMetadata(UploadTask.TaskSnapshot taskSnapshot) {
-        FileMetadata.Builder builder = new FileMetadata.Builder()
-                .setDownloadUrl(new DownloadUrl(taskSnapshot.getDownloadUrl() != null ? taskSnapshot.getDownloadUrl().toString() : null));
+    private FileMetadata buildMetadata(final UploadTask.TaskSnapshot taskSnapshot) {
+        FileMetadata.Builder builder = new FileMetadata.Builder();
         if (taskSnapshot.getMetadata() != null) {
             builder.setMd5Hash(taskSnapshot.getMetadata().getMd5Hash())
                     .setName(taskSnapshot.getMetadata().getName())
                     .setPath(taskSnapshot.getMetadata().getPath())
                     .setSizeBytes(taskSnapshot.getMetadata().getSizeBytes())
                     .setUpdatedTimeMillis(taskSnapshot.getMetadata().getUpdatedTimeMillis())
-                    .setCreationTimeMillis(taskSnapshot.getMetadata().getCreationTimeMillis());
+                    .setCreationTimeMillis(taskSnapshot.getMetadata().getCreationTimeMillis())
+                    .setDownloadUrl(new DownloadUrl(new Consumer<Consumer<String>>() {
+                        @Override
+                        public void accept(final Consumer<String> stringConsumer) {
+                            firebaseStorage().getReference(taskSnapshot.getMetadata().getPath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    stringConsumer.accept(uri.toString());
+                                }
+                            });
+                        }
+                    }));
         }
         return builder.build();
     }

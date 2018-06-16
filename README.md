@@ -35,7 +35,7 @@ The last step is: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wi
 
 
 
-**Version 1.4.1** was built using LibGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 11.0.2
+**Version 1.4.1** was built using LibGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
 
