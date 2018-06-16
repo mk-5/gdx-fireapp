@@ -27,8 +27,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
  * @param <T> Firebase database Query type
  * @param <E> Filter resolver instance
  */
-public abstract class FilteringProvider<T, E extends FilterResolver, K extends OrderByResolver>
-{
+public abstract class FilteringProvider<T, E extends FilterResolver, K extends OrderByResolver> {
 
     protected E filterResolver;
     protected K orderByResolver;
@@ -36,8 +35,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
     protected final Array<Filter> filters;
     protected OrderByClause orderByClause;
 
-    public FilteringProvider()
-    {
+    public FilteringProvider() {
         filters = new Array<>();
         filterResolver = createFilterResolver();
         orderByResolver = createOrderByResolver();
@@ -49,8 +47,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
 
     public abstract K createOrderByResolver();
 
-    public FilteringProvider setQuery(T query)
-    {
+    public FilteringProvider setQuery(T query) {
         this.query = query;
         return this;
     }
@@ -61,9 +58,8 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
      * @param filters Filters array, not null
      * @return this
      */
-    public FilteringProvider setFilters(Array<Filter> filters)
-    {
-        if( filters == null ) return this;
+    public FilteringProvider setFilters(Array<Filter> filters) {
+        if (filters == null) return this;
         this.filters.clear();
         this.filters.addAll(filters);
         // The first go to the end, now i can use .pop() later.
@@ -71,14 +67,12 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
         return this;
     }
 
-    public FilteringProvider setOrderByClause(OrderByClause orderByClause)
-    {
+    public FilteringProvider setOrderByClause(OrderByClause orderByClause) {
         this.orderByClause = orderByClause;
         return this;
     }
 
-    public void clear()
-    {
+    public void clear() {
         filters.clear();
         query = null;
         orderByClause = null;

@@ -16,12 +16,13 @@
 
 package mk.gdx.firebase.storage;
 
+import mk.gdx.firebase.storage.functional.DownloadUrl;
+
 /**
- * POJO class that holds information about file from Firebase storage.
+ * POJO class that holds information about the file from Firebase storage.
  */
-public class FileMetadata
-{
-    private String downloadUrl;
+public class FileMetadata {
+    private DownloadUrl downloadUrl;
     private String name;
     private String path;
     private String md5Hash;
@@ -34,8 +35,7 @@ public class FileMetadata
      *
      * @return Url with which you can download file
      */
-    public String getDownloadUrl()
-    {
+    public DownloadUrl getDownloadUrl() {
         return downloadUrl;
     }
 
@@ -44,8 +44,7 @@ public class FileMetadata
      *
      * @return Firebase file name, may be null
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -54,8 +53,7 @@ public class FileMetadata
      *
      * @return Firebase file path, may be null
      */
-    public String getPath()
-    {
+    public String getPath() {
         return path;
     }
 
@@ -64,8 +62,7 @@ public class FileMetadata
      *
      * @return Firebase file md5 hash, may be null
      */
-    public String getMd5Hash()
-    {
+    public String getMd5Hash() {
         return md5Hash;
     }
 
@@ -74,8 +71,7 @@ public class FileMetadata
      *
      * @return Firebase file size in bytes
      */
-    public long getSizeBytes()
-    {
+    public long getSizeBytes() {
         return sizeBytes;
     }
 
@@ -84,8 +80,7 @@ public class FileMetadata
      *
      * @return Firebase file creation time in unix timestamp milliseconds
      */
-    public long getCreationTimeMillis()
-    {
+    public long getCreationTimeMillis() {
         return creationTimeMillis;
     }
 
@@ -94,16 +89,14 @@ public class FileMetadata
      *
      * @return Firebase file update time in unix timestamp milliseconds
      */
-    public long getUpdatedTimeMillis()
-    {
+    public long getUpdatedTimeMillis() {
         return updatedTimeMillis;
     }
 
     /**
      * Builder pattern for {@code FileMetadata}.
      */
-    public static class Builder
-    {
+    public static class Builder {
         private FileMetadata inst = new FileMetadata();
 
         /**
@@ -112,8 +105,7 @@ public class FileMetadata
          * @param downloadUrl Firebase download url
          * @return this {@code Builder} instance
          */
-        public Builder setDownloadUrl(String downloadUrl)
-        {
+        public Builder setDownloadUrl(DownloadUrl downloadUrl) {
             inst.downloadUrl = downloadUrl;
             return this;
         }
@@ -124,8 +116,7 @@ public class FileMetadata
          * @param name Firebase file name
          * @return this {@code Builder} instance
          */
-        public Builder setName(String name)
-        {
+        public Builder setName(String name) {
             inst.name = name;
             return this;
         }
@@ -136,8 +127,7 @@ public class FileMetadata
          * @param path Firebase file path
          * @return this {@code Builder} instance
          */
-        public Builder setPath(String path)
-        {
+        public Builder setPath(String path) {
             inst.path = path;
             return this;
         }
@@ -148,8 +138,7 @@ public class FileMetadata
          * @param md5Hash Firebase file md5 hash
          * @return this {@code Builder} instance
          */
-        public Builder setMd5Hash(String md5Hash)
-        {
+        public Builder setMd5Hash(String md5Hash) {
             inst.md5Hash = md5Hash;
             return this;
         }
@@ -160,8 +149,7 @@ public class FileMetadata
          * @param sizeBytes Firebase file size in bytes
          * @return this {@code Builder} instance
          */
-        public Builder setSizeBytes(long sizeBytes)
-        {
+        public Builder setSizeBytes(long sizeBytes) {
             inst.sizeBytes = sizeBytes;
             return this;
         }
@@ -172,8 +160,7 @@ public class FileMetadata
          * @param creationTimeMillis Creation time in unix timestamp milliseconds
          * @return this {@code Builder} instance
          */
-        public Builder setCreationTimeMillis(long creationTimeMillis)
-        {
+        public Builder setCreationTimeMillis(long creationTimeMillis) {
             inst.creationTimeMillis = creationTimeMillis;
             return this;
         }
@@ -184,8 +171,7 @@ public class FileMetadata
          * @param updatedTimeMillis Update time in unix timestamp milliseconds
          * @return this {@code Builder} instance
          */
-        public Builder setUpdatedTimeMillis(long updatedTimeMillis)
-        {
+        public Builder setUpdatedTimeMillis(long updatedTimeMillis) {
             inst.updatedTimeMillis = updatedTimeMillis;
             return this;
         }
@@ -195,8 +181,7 @@ public class FileMetadata
          *
          * @return {@code FileMetadata} instance created by given properties
          */
-        public FileMetadata build()
-        {
+        public FileMetadata build() {
             return inst;
         }
     }

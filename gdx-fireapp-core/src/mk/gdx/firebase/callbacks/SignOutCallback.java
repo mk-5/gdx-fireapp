@@ -19,8 +19,7 @@ package mk.gdx.firebase.callbacks;
 /**
  * Handles response from authorization actions.
  */
-public interface SignOutCallback
-{
+public interface SignOutCallback {
     /**
      * Calls when everything was done without issues.
      */

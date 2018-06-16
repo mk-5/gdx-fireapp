@@ -26,12 +26,10 @@ import mk.gdx.firebase.ios.database.resolvers.FIRQueryOrderByResolver;
 /**
  * Provides decision between call {@code FIRDatabaseReference} or {@code FIRDatabaseQuery} based at current query context.
  */
-public class FIRDatabaseQueryFilteringProvider extends FilteringProvider<FIRDatabaseQuery, FIRQueryFilterResolver, FIRQueryOrderByResolver>
-{
+public class FIRDatabaseQueryFilteringProvider extends FilteringProvider<FIRDatabaseQuery, FIRQueryFilterResolver, FIRQueryOrderByResolver> {
 
     @Override
-    public FIRDatabaseQuery applyFiltering()
-    {
+    public FIRDatabaseQuery applyFiltering() {
         if (orderByClause != null) {
             query = orderByResolver.resolve(orderByClause, query);
         }
@@ -44,14 +42,12 @@ public class FIRDatabaseQueryFilteringProvider extends FilteringProvider<FIRData
     }
 
     @Override
-    public FIRQueryFilterResolver createFilterResolver()
-    {
+    public FIRQueryFilterResolver createFilterResolver() {
         return new FIRQueryFilterResolver();
     }
 
     @Override
-    public FIRQueryOrderByResolver createOrderByResolver()
-    {
+    public FIRQueryOrderByResolver createOrderByResolver() {
         return new FIRQueryOrderByResolver();
     }
 }

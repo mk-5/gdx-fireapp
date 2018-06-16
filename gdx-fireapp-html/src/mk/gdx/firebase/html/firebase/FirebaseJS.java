@@ -21,8 +21,7 @@ import com.badlogic.gdx.Gdx;
 /**
  * Provides javascript calls for firebase.js loading.
  */
-public class FirebaseJS
-{
+public class FirebaseJS {
     public static native void initializeFirebase(String initializationScript) /*-{
         console.log("GdxFireapp: eval initialization script...");
         eval(initializationScript);
@@ -33,8 +32,7 @@ public class FirebaseJS
         return (typeof $wnd.firebase != 'undefined');
     }-*/;
 
-    public static void setFirebaseScriptIsLoaded()
-    {
+    public static void setFirebaseScriptIsLoaded() {
         Gdx.app.log("GdxFireapp", "firebase.js just loaded.");
         FirebaseScriptInformant.setIsLoaded(true);
     }

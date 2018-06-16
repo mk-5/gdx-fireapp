@@ -23,8 +23,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 /**
  * Transforms data to string.
  */
-public class StringGenerator
-{
+public class StringGenerator {
     /**
      * Returns JSON string representation of object.
      * <p>
@@ -33,8 +32,7 @@ public class StringGenerator
      * @param object Any object
      * @return JSON string representation of {@code object}
      */
-    public static String dataToString(Object object)
-    {
+    public static String dataToString(Object object) {
         if (isPrimitiveType(object))
             return object.toString();
         Json json = new Json();
@@ -45,8 +43,7 @@ public class StringGenerator
         return json.toJson(object);
     }
 
-    private static boolean isPrimitiveType(Object object)
-    {
+    private static boolean isPrimitiveType(Object object) {
 //        return PRIMITIVES.contains(object.getClass(), true);
         return object.getClass() == String.class || ClassReflection.isPrimitive(object.getClass());
     }

@@ -25,8 +25,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
  * @param <T> The type of object to which order-by is applied
  * @param <R> The return type after order-by
  */
-public interface OrderByResolver<T, R>
-{
+public interface OrderByResolver<T, R> {
 
     /**
      * Resolves given OrderByClause.

@@ -46,8 +46,7 @@ import mk.gdx.firebase.deserialization.FirebaseMapConverter;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface MapConversion
-{
+public @interface MapConversion {
     /**
      * @return The type to which Map are converted.
      */

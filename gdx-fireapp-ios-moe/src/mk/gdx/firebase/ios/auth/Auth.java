@@ -17,6 +17,7 @@
 package mk.gdx.firebase.ios.auth;
 
 import com.google.firebaseauth.FIRAuth;
+import com.google.firebaseauth.FIRAuthDataResult;
 import com.google.firebaseauth.FIRUser;
 
 import org.moe.natj.general.ptr.Ptr;
@@ -35,15 +36,13 @@ import mk.gdx.firebase.distributions.AuthDistribution;
  *
  * @see AuthDistribution
  */
-public class Auth implements AuthDistribution
-{
+public class Auth implements AuthDistribution {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GdxFirebaseUser getCurrentUser()
-    {
+    public GdxFirebaseUser getCurrentUser() {
         FIRUser firUser = FIRAuth.auth().currentUser();
         if (firUser == null) return null;
         UserInfo.Builder builder = new UserInfo.Builder();
@@ -61,16 +60,21 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback)
-    {
-        FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion()
-        {
+    public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
+        FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion() {
             @Override
-            public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
-            {
+            public void call_createUserWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1) {
                 if (handleError(arg1, callback)) return;
+                // TODO - arg0 was chacnged from FIRUser to FIRAuthDataResult - need to adopt it
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -78,16 +82,21 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback)
-    {
-        FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion()
-        {
+    public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
+        FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion() {
             @Override
-            public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
-            {
+            public void call_signInWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1) {
                 if (handleError(arg1, callback)) return;
+                // TODO
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -95,16 +104,21 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(String token, final AuthCallback callback)
-    {
-        FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion()
-        {
+    public void signInWithToken(String token, final AuthCallback callback) {
+        FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion() {
             @Override
-            public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
-            {
+            public void call_signInWithCustomTokenCompletion(FIRAuthDataResult arg0, NSError arg1) {
                 if (handleError(arg1, callback)) return;
+                // TODO
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -112,16 +126,20 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(final AuthCallback callback)
-    {
-        FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion()
-        {
+    public void signInAnonymously(final AuthCallback callback) {
+        FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion() {
             @Override
-            public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
-            {
+            public void call_signInAnonymouslyWithCompletion(FIRAuthDataResult arg0, NSError arg1) {
                 if (handleError(arg1, callback)) return;
                 callback.onSuccess(getCurrentUser());
             }
+
+//            @Override
+//            public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
+//            {
+//                if (handleError(arg1, callback)) return;
+//                callback.onSuccess(getCurrentUser());
+//            }
         });
     }
 
@@ -129,8 +147,7 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signOut(SignOutCallback callback)
-    {
+    public void signOut(SignOutCallback callback) {
         try {
             Ptr<NSError> ptr = PtrFactory.newObjectReference(NSError.class);
             FIRAuth.auth().signOut(ptr);
@@ -146,8 +163,7 @@ public class Auth implements AuthDistribution
      * @param callback {@link AuthCallback#onFail(Exception)} will be use here if error exsits.
      * @return True if any error occurred or false if don't
      */
-    private boolean handleError(NSError error, AuthCallback callback)
-    {
+    private boolean handleError(NSError error, AuthCallback callback) {
         if (error != null) {
             callback.onFail(new Exception(error.localizedDescription()));
             return true;

@@ -24,11 +24,9 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Applies OrderByClause to the Query instance.
  */
-public class QueryOrderByResolver implements OrderByResolver<Query, Query>
-{
+public class QueryOrderByResolver implements OrderByResolver<Query, Query> {
     @Override
-    public Query resolve(OrderByClause orderByClause, Query target)
-    {
+    public Query resolve(OrderByClause orderByClause, Query target) {
         switch (orderByClause.getOrderByMode()) {
             case ORDER_BY_CHILD:
                 return target.orderByChild(orderByClause.getArgument());

@@ -27,8 +27,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Ensures that filters will be applied in right context.
  */
-public class FilteringStateEnsurer
-{
+public class FilteringStateEnsurer {
     private static final String FILTER_SHOULD_BE_APPLIED_FOR_LIST = "Filter should be applied only for the List type";
 
 
@@ -37,8 +36,7 @@ public class FilteringStateEnsurer
      *
      * @param wantedType The type of requested data
      */
-    public static void checkFilteringState(Array<Filter> filters, OrderByClause orderByClause, Class<?> wantedType)
-    {
+    public static void checkFilteringState(Array<Filter> filters, OrderByClause orderByClause, Class<?> wantedType) {
         if ((filters.size > 0 || orderByClause != null) && !ClassReflection.isAssignableFrom(List.class, wantedType))
             throw new IllegalStateException(FILTER_SHOULD_BE_APPLIED_FOR_LIST);
     }

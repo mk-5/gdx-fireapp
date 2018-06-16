@@ -27,8 +27,7 @@ import java.util.Map;
 /**
  * Process json string to generic type.
  */
-public class JsonProcessor
-{
+public class JsonProcessor {
 
     /**
      * Converts json string into java object.
@@ -41,8 +40,7 @@ public class JsonProcessor
      * @param <R>        Return type
      * @return Instance of wanted type parsed from given json string, not null
      */
-    public static <R> R process(Class<?> wantedType, String jsonString)
-    {
+    public static <R> R process(Class<?> wantedType, String jsonString) {
         Json json = new Json();
         json.setIgnoreUnknownFields(true);
         json.setTypeName(null);

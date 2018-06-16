@@ -26,16 +26,13 @@ import mk.gdx.firebase.html.database.StringGenerator;
 /**
  * Provides setValue execution.
  */
-public class SetValueQuery extends GwtDatabaseQuery
-{
-    public SetValueQuery(Database databaseDistribution)
-    {
+public class SetValueQuery extends GwtDatabaseQuery {
+    public SetValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void runJS()
-    {
+    protected void runJS() {
         if (arguments.size == 1) {
             set(databaseReference, StringGenerator.dataToString(arguments.get(0)));
         } else if (arguments.size == 2) {
@@ -46,8 +43,7 @@ public class SetValueQuery extends GwtDatabaseQuery
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new SetValueValidator();
     }
 

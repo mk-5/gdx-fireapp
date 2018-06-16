@@ -16,13 +16,14 @@
 
 package mk.gdx.firebase.html.storage;
 
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.storage.FileMetadata;
+import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * Resolves transformation from UploadTaskSnapshot to FileMetadata
  */
-public class SnapshotFileMetaDataResolver
-{
+public class SnapshotFileMetaDataResolver {
 
     /**
      * Resolves conversion from UploadTaskSnapshot to FileMetadata resolve.
@@ -30,10 +31,8 @@ public class SnapshotFileMetaDataResolver
      * @param snapshot UploadTaskSnapshot from javascript, not null
      * @return FileMetadata object filled with data
      */
-    public static FileMetadata resolve(UploadTaskSnapshot snapshot)
-    {
-        FileMetadata.Builder builder = new FileMetadata.Builder()
-                .setDownloadUrl(snapshot.getDownloadURL());
+    public static FileMetadata resolve(final UploadTaskSnapshot snapshot) {
+        FileMetadata.Builder builder = new FileMetadata.Builder();
         FullMetaData metaData = snapshot.getMetaData();
         if (metaData != null) {
             builder.setMd5Hash(metaData.getMD5Hash())
@@ -42,6 +41,12 @@ public class SnapshotFileMetaDataResolver
                     .setSizeBytes((long) metaData.getSizeBytes());
             builder.setUpdatedTimeMillis((long) metaData.getTimeUpdatedMillis());
             builder.setCreationTimeMillis((long) metaData.getTimeCreatedMillis());
+            builder.setDownloadUrl(new DownloadUrl(new Consumer<Consumer<String>>() {
+                @Override
+                public void accept(Consumer<String> urlConsumer) {
+                    snapshot.downloadUrl(urlConsumer);
+                }
+            }));
         }
         return builder.build();
     }

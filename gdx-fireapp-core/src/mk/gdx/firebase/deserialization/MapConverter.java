@@ -26,8 +26,7 @@ import mk.gdx.firebase.GdxFIRLogger;
 /**
  * Converts {@code Map<String, Object>} to POJO.
  */
-public class MapConverter implements FirebaseMapConverter
-{
+public class MapConverter implements FirebaseMapConverter {
 
     /**
      * Transforms {@code Map<String,Object>} to {@code T object}.
@@ -43,8 +42,7 @@ public class MapConverter implements FirebaseMapConverter
      * @param <T>        Generic type of class we want to get. Needed if type we want have nested generic type.
      * @return Deserialized object, may be null
      */
-    public <T> T convert(Map<String, Object> map, Class<T> wantedType)
-    {
+    public <T> T convert(Map<String, Object> map, Class<T> wantedType) {
         try {
             String jsonString = new Json().toJson(map);
             Json json = new Json();
@@ -68,8 +66,7 @@ public class MapConverter implements FirebaseMapConverter
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Map<String, Object> unConvert(Object object)
-    {
+    public Map<String, Object> unConvert(Object object) {
         try {
             String jsonString = new Json().toJson(object);
             Json json = new Json();

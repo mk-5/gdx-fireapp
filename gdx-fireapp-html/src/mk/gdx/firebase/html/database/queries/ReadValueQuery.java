@@ -26,25 +26,21 @@ import mk.gdx.firebase.html.database.json.JsonDataCallback;
 /**
  * Provides setValue execution.
  */
-public class ReadValueQuery extends GwtDatabaseQuery
-{
+public class ReadValueQuery extends GwtDatabaseQuery {
     private JsonDataCallback jsDataCallback;
 
-    public ReadValueQuery(Database databaseDistribution)
-    {
+    public ReadValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void runJS()
-    {
+    protected void runJS() {
         jsDataCallback = new JsonDataCallback((Class) arguments.get(0), (DataCallback) arguments.get(1));
         once(databaseReference, jsDataCallback);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new ReadValueValidator();
     }
 

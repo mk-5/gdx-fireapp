@@ -23,7 +23,6 @@ package mk.gdx.firebase.database;
  * @param <T> The type of target object
  * @param <R> The type of return object
  */
-public interface FilterResolver<T, R>
-{
+public interface FilterResolver<T, R> {
     <V> R resolve(FilterType filterType, T target, V[] filterArguments);
 }

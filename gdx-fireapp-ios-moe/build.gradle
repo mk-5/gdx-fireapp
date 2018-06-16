@@ -38,7 +38,7 @@ tasks.withType(Test) {
     include "**/*Test.class" // whatever Ant pattern matches your test class files
 }
 
-ext{
+ext {
     appModuleName = 'GDX Fireapp iOS-moe'
 }
 
@@ -56,7 +56,7 @@ publishing {
         maven(MavenPublication) {
             groupId rootProject.group
             version = rootProject.version
-            artifactId ='gdx-fireapp-ios-moe'
+            artifactId = 'gdx-fireapp-ios-moe'
             artifact jar
             artifact sourceJar
             artifact javadocJar

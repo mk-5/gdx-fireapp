@@ -34,8 +34,7 @@ import mk.gdx.firebase.html.firebase.ScriptRunner;
  *
  * @see StorageDistribution
  */
-public class Storage implements StorageDistribution
-{
+public class Storage implements StorageDistribution {
 
     private String bucketUrl = "";
 
@@ -47,8 +46,7 @@ public class Storage implements StorageDistribution
      * @param callback Callback
      */
     @Override
-    public void upload(FileHandle file, String path, UploadCallback callback)
-    {
+    public void upload(FileHandle file, String path, UploadCallback callback) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
         // TODO - uploading internal files?
     }
@@ -57,13 +55,10 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void upload(final byte[] data, final String path, final UploadCallback callback)
-    {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl())
-        {
+    public void upload(final byte[] data, final String path, final UploadCallback callback) {
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
             @Override
-            public void run()
-            {
+            public void run() {
                 StorageJS.upload(scriptBucketUrl, path, new String(Base64Coder.encode(data)), callback);
             }
         });
@@ -73,13 +68,10 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void download(final String path, long bytesLimit, final DownloadCallback<byte[]> callback)
-    {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl())
-        {
+    public void download(final String path, long bytesLimit, final DownloadCallback<byte[]> callback) {
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
             @Override
-            public void run()
-            {
+            public void run() {
                 StorageJS.download(scriptBucketUrl, path, new UrlDownloadCallback(callback));
             }
         });
@@ -93,8 +85,7 @@ public class Storage implements StorageDistribution
      * @param callback   Callback
      */
     @Override
-    public void download(String path, File targetFile, DownloadCallback<File> callback)
-    {
+    public void download(String path, File targetFile, DownloadCallback<File> callback) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
     }
 
@@ -102,13 +93,10 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public void delete(final String path, final DeleteCallback callback)
-    {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl())
-        {
+    public void delete(final String path, final DeleteCallback callback) {
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
             @Override
-            public void run()
-            {
+            public void run() {
                 StorageJS.remove(scriptBucketUrl, path, callback);
             }
         });
@@ -118,14 +106,12 @@ public class Storage implements StorageDistribution
      * {@inheritDoc}
      */
     @Override
-    public StorageDistribution inBucket(String url)
-    {
+    public StorageDistribution inBucket(String url) {
         bucketUrl = url;
         return this;
     }
 
-    private String bucketUrl()
-    {
+    private String bucketUrl() {
         return bucketUrl != null ? bucketUrl : "";
     }
 }

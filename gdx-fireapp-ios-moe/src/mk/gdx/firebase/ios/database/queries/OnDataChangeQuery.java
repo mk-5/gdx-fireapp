@@ -21,8 +21,6 @@ import com.google.firebasedatabase.FIRDataSnapshot;
 import com.google.firebasedatabase.FIRDatabaseQuery;
 import com.google.firebasedatabase.enums.FIRDataEventType;
 
-import java.io.FileNotFoundException;
-
 import apple.foundation.NSError;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
@@ -37,25 +35,21 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Provides call to {@link FIRDatabaseQuery#observeEventTypeWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2)}.
  */
-public class OnDataChangeQuery extends IosDatabaseQuery<Void>
-{
+public class OnDataChangeQuery extends IosDatabaseQuery<Void> {
     private static final DataObserversManager observersManager = new DataObserversManager();
 
-    public OnDataChangeQuery(Database databaseDistribution)
-    {
+    public OnDataChangeQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new OnDataValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.get(1) != null) {
             long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
                     new DataChangeBlock((Class) arguments.get(0), orderByClause, (DataChangeListener) arguments.get(1)),
@@ -75,15 +69,13 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
     /**
      * Observer for data change. Wraps {@code DataChangeListener}
      */
-    private class DataChangeBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1
-    {
+    private class DataChangeBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1 {
 
         private Class type;
         private DataChangeListener dataChangeListener;
         private OrderByClause orderByClause;
 
-        private DataChangeBlock(Class type, OrderByClause orderByClause, DataChangeListener dataChangeListener)
-        {
+        private DataChangeBlock(Class type, OrderByClause orderByClause, DataChangeListener dataChangeListener) {
             this.type = type;
             this.orderByClause = orderByClause;
             this.dataChangeListener = dataChangeListener;
@@ -91,8 +83,7 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
 
 
         @Override
-        public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0)
-        {
+        public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0) {
             if (arg0.value() == null) {
                 dataChangeListener.onCanceled(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
@@ -115,19 +106,16 @@ public class OnDataChangeQuery extends IosDatabaseQuery<Void>
     /**
      * Observer for data change cancel. Wraps {@code DataChangeListener}
      */
-    private class DataChangeCancelBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2
-    {
+    private class DataChangeCancelBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2 {
 
         private DataChangeListener dataChangeListener;
 
-        private DataChangeCancelBlock(DataChangeListener dataChangeListener)
-        {
+        private DataChangeCancelBlock(DataChangeListener dataChangeListener) {
             this.dataChangeListener = dataChangeListener;
         }
 
         @Override
-        public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0)
-        {
+        public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0) {
             dataChangeListener.onCanceled(new Exception(arg0.localizedDescription()));
         }
     }

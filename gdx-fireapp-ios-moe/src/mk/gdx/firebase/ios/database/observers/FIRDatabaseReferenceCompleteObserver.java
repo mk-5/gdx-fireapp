@@ -25,18 +25,15 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
  * Wraps {@link mk.gdx.firebase.callbacks.CompleteCallback} with ios completion observer.
  */
 public class FIRDatabaseReferenceCompleteObserver implements FIRDatabaseReference.Block_setValueWithCompletionBlock,
-        FIRDatabaseReference.Block_removeValueWithCompletionBlock, FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock
-{
+        FIRDatabaseReference.Block_removeValueWithCompletionBlock, FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock {
 
     private CompleteCallback completeCallback;
 
-    public FIRDatabaseReferenceCompleteObserver(CompleteCallback completeCallback)
-    {
+    public FIRDatabaseReferenceCompleteObserver(CompleteCallback completeCallback) {
         this.completeCallback = completeCallback;
     }
 
-    protected void process(NSError arg0, FIRDatabaseReference arg1)
-    {
+    protected void process(NSError arg0, FIRDatabaseReference arg1) {
         if (arg0 != null) {
             completeCallback.onError(new Exception(arg0.localizedDescription()));
         } else {
@@ -45,20 +42,17 @@ public class FIRDatabaseReferenceCompleteObserver implements FIRDatabaseReferenc
     }
 
     @Override
-    public void call_setValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
-    {
+    public void call_setValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1) {
         process(arg0, arg1);
     }
 
     @Override
-    public void call_removeValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
-    {
+    public void call_removeValueWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1) {
         process(arg0, arg1);
     }
 
     @Override
-    public void call_updateChildValuesWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1)
-    {
+    public void call_updateChildValuesWithCompletionBlock(NSError arg0, FIRDatabaseReference arg1) {
         process(arg0, arg1);
     }
 }

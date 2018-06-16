@@ -26,15 +26,13 @@ import mk.gdx.firebase.distributions.CrashDistribution;
  *
  * @see CrashDistribution
  */
-public class Crash implements CrashDistribution
-{
+public class Crash implements CrashDistribution {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void log(String message)
-    {
+    public void log(String message) {
         FirebaseCrash.log(message);
     }
 }

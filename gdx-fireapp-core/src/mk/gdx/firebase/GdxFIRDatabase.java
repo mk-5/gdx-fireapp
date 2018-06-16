@@ -39,8 +39,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  * @see DatabaseDistribution
  * @see PlatformDistributor
  */
-public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> implements DatabaseDistribution
-{
+public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> implements DatabaseDistribution {
 
     private static volatile GdxFIRDatabase instance;
     private FirebaseMapConverter mapConverter;
@@ -52,16 +51,14 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRDatabase() throws PlatformDistributorException
-    {
+    private GdxFIRDatabase() throws PlatformDistributorException {
         mapConverter = new MapConverter();
     }
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
-    public static GdxFIRDatabase instance()
-    {
+    public static GdxFIRDatabase instance() {
         GdxFIRDatabase result = instance;
         if (result == null) {
             synchronized (GdxFIRDatabase.class) {
@@ -82,8 +79,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void onConnect(ConnectedListener connectedListener)
-    {
+    public void onConnect(ConnectedListener connectedListener) {
         platformObject.onConnect(connectedListener);
     }
 
@@ -91,8 +87,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution inReference(String databasePath)
-    {
+    public DatabaseDistribution inReference(String databasePath) {
         platformObject.inReference(databasePath);
         return this;
     }
@@ -101,8 +96,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         platformObject.setValue(value);
     }
 
@@ -110,8 +104,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value, CompleteCallback completeCallback)
-    {
+    public void setValue(Object value, CompleteCallback completeCallback) {
         platformObject.setValue(value, completeCallback);
     }
 
@@ -119,8 +112,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <T, E extends T> void readValue(Class<T> dataType, DataCallback<E> callback)
-    {
+    public <T, E extends T> void readValue(Class<T> dataType, DataCallback<E> callback) {
         DataCallbackMitmConverter<T, E> mitmConverter = new DataCallbackMitmConverter<T, E>(dataType, callback, mapConverter);
         if (mitmConverter.isPojo(dataType)) {
             platformObject.readValue(Map.class, mitmConverter.getPojoDataCallback());
@@ -133,8 +125,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <T, E extends T> void onDataChange(Class<T> dataType, DataChangeListener<E> listener)
-    {
+    public <T, E extends T> void onDataChange(Class<T> dataType, DataChangeListener<E> listener) {
         DataChangeListenerMitmConverter<T, E> mitmConverter = new DataChangeListenerMitmConverter<T, E>(dataType, listener, mapConverter);
         if (mitmConverter.isPojo(dataType)) {
             platformObject.onDataChange(Map.class, mitmConverter.getPojoListener());
@@ -147,15 +138,13 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <V> DatabaseDistribution filter(FilterType filterType, V[] filterArguments)
-    {
+    public <V> DatabaseDistribution filter(FilterType filterType, V[] filterArguments) {
         platformObject.filter(filterType, filterArguments);
         return this;
     }
 
     @Override
-    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
-    {
+    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument) {
         platformObject.orderBy(orderByMode, argument);
         return this;
     }
@@ -164,8 +153,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution push()
-    {
+    public DatabaseDistribution push() {
         return platformObject.push();
     }
 
@@ -173,8 +161,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void removeValue()
-    {
+    public void removeValue() {
         platformObject.removeValue();
     }
 
@@ -182,8 +169,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void removeValue(CompleteCallback completeCallback)
-    {
+    public void removeValue(CompleteCallback completeCallback) {
         platformObject.removeValue(completeCallback);
     }
 
@@ -191,8 +177,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(Map<String, Object> data)
-    {
+    public void updateChildren(Map<String, Object> data) {
         platformObject.updateChildren(data);
     }
 
@@ -200,8 +185,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(Map<String, Object> data, CompleteCallback completeCallback)
-    {
+    public void updateChildren(Map<String, Object> data, CompleteCallback completeCallback) {
         platformObject.updateChildren(data, completeCallback);
     }
 
@@ -209,8 +193,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback)
-    {
+    public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
         TransactionMitmConverter<T, R> mitmConverter = new TransactionMitmConverter<T, R>(dataType, transactionCallback, mapConverter);
         if (mitmConverter.isPojo(dataType)) {
             platformObject.transaction(Map.class, mitmConverter.getPojoCallback(), completeCallback);
@@ -223,8 +206,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void setPersistenceEnabled(boolean enabled)
-    {
+    public void setPersistenceEnabled(boolean enabled) {
         platformObject.setPersistenceEnabled(enabled);
     }
 
@@ -232,8 +214,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void keepSynced(boolean synced)
-    {
+    public void keepSynced(boolean synced) {
         platformObject.keepSynced(synced);
     }
 
@@ -242,8 +223,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      *
      * @param mapConverter Map convert instance, not null
      */
-    public void setMapConverter(FirebaseMapConverter mapConverter)
-    {
+    public void setMapConverter(FirebaseMapConverter mapConverter) {
         this.mapConverter = mapConverter;
     }
 
@@ -251,8 +231,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    protected String getIOSClassName()
-    {
+    protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.database.Database";
     }
 
@@ -260,8 +239,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    protected String getAndroidClassName()
-    {
+    protected String getAndroidClassName() {
         return "mk.gdx.firebase.android.database.Database";
     }
 
@@ -269,8 +247,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    protected String getWebGLClassName()
-    {
+    protected String getWebGLClassName() {
         return "mk.gdx.firebase.html.database.Database";
     }
 }

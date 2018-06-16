@@ -36,9 +36,10 @@ import apple.foundation.c.Foundation;
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
 import mk.gdx.firebase.distributions.StorageDistribution;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.storage.FileMetadata;
+import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * iOS Firebase storage API implementation.
@@ -54,13 +55,11 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void upload(FileHandle file, String path, final UploadCallback callback)
-    {
+    public void upload(FileHandle file, String path, final UploadCallback callback) {
         NSData nsData = NSData.dataWithContentsOfFile(file.file().getAbsolutePath());
         FIRStorageUploadTask uploadTask = firStorage().child(path).putDataMetadataCompletion(nsData, null, new FIRStorageReference.Block_putDataMetadataCompletion() {
             @Override
-            public void call_putDataMetadataCompletion(FIRStorageMetadata arg0, NSError arg1)
-            {
+            public void call_putDataMetadataCompletion(FIRStorageMetadata arg0, NSError arg1) {
                 if (ErrorHandler.handleUploadError(arg1, callback)) return;
                 FileMetadata fileMetadata = buildMetaData(arg0);
                 callback.onSuccess(fileMetadata);
@@ -72,15 +71,13 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void upload(byte[] data, String path, final UploadCallback callback)
-    {
+    public void upload(byte[] data, String path, final UploadCallback callback) {
         final BytePtr bytePtr = PtrFactory.newByteArray(data);
 //        NSData nsData = NSData.dataWithBytesLength(bytePtr, data.length);
         NSData nsData = NSData.dataWithBytesNoCopyLength(bytePtr, data.length);
         FIRStorageUploadTask uploadTask = firStorage().child(path).putDataMetadataCompletion(nsData, null, new FIRStorageReference.Block_putDataMetadataCompletion() {
             @Override
-            public void call_putDataMetadataCompletion(FIRStorageMetadata arg0, NSError arg1)
-            {
+            public void call_putDataMetadataCompletion(FIRStorageMetadata arg0, NSError arg1) {
                 if (ErrorHandler.handleUploadError(arg1, callback)) return;
                 FileMetadata fileMetadata = buildMetaData(arg0);
                 callback.onSuccess(fileMetadata);
@@ -94,17 +91,14 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, final long bytesLimit, DownloadCallback<byte[]> callback)
-    {
+    public void download(String path, final long bytesLimit, final DownloadCallback<byte[]> callback) {
         firStorage().child(path).dataWithMaxSizeCompletion(bytesLimit, new FIRStorageReference.Block_dataWithMaxSizeCompletion() {
             @Override
-            public void call_dataWithMaxSizeCompletion(NSData arg0, NSError arg1)
-            {
+            public void call_dataWithMaxSizeCompletion(final NSData arg0, NSError arg1) {
                 if (ErrorHandler.handleDownloadError(arg1, callback)) return;
                 ObjCRuntime.autoreleasepool(new Runnable() { // TODO - check this autorelease pool
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         int length = (int) arg0.length();
                         byte[] data = new byte[length];
                         arg0.bytes().getBytePtr().copyTo(data);
@@ -119,8 +113,7 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, DownloadCallback<File> callback)
-    {
+    public void download(String path, File targetFile, final DownloadCallback<File> callback) {
         NSURL targetFileUrl;
         if (targetFile == null) {
             // Create temporary file
@@ -130,8 +123,7 @@ public class Storage implements StorageDistribution {
         }
         FIRStorageDownloadTask downloadTask = firStorage().child(path).writeToFileCompletion(targetFileUrl, new FIRStorageReference.Block_writeToFileCompletion() {
             @Override
-            public void call_writeToFileCompletion(NSURL arg0, NSError arg1)
-            {
+            public void call_writeToFileCompletion(NSURL arg0, NSError arg1) {
                 if (ErrorHandler.handleDownloadError(arg1, callback)) return;
                 File file = new File(arg0.path());
                 callback.onSuccess(file);
@@ -143,12 +135,10 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, final DeleteCallback callback)
-    {
+    public void delete(String path, final DeleteCallback callback) {
         firStorage().child(path).deleteWithCompletion(new FIRStorageReference.Block_deleteWithCompletion() {
             @Override
-            public void call_deleteWithCompletion(NSError arg0)
-            {
+            public void call_deleteWithCompletion(NSError arg0) {
                 if (ErrorHandler.handleDeleteError(arg0, callback)) return;
                 callback.onSuccess();
             }
@@ -159,8 +149,7 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public StorageDistribution inBucket(String url)
-    {
+    public StorageDistribution inBucket(String url) {
         firStorage = FIRStorage.storage().referenceForURL(url);
         return this;
     }
@@ -168,8 +157,7 @@ public class Storage implements StorageDistribution {
     /**
      * @return Lazy loaded instance of {@link FIRStorageReference}. It should be only one instance for this object, not null.
      */
-    private FIRStorageReference firStorage()
-    {
+    private FIRStorageReference firStorage() {
         if (firStorage == null)
             firStorage = FIRStorage.storage().reference();
         return firStorage;
@@ -183,8 +171,7 @@ public class Storage implements StorageDistribution {
      * @param firMetadata FIRStorageMetadata that you want to wrap by {@link FileMetadata}
      * @return FileMetadata created of base of given {@code firMetadata}, not null.
      */
-    private FileMetadata buildMetaData(FIRStorageMetadata firMetadata)
-    {
+    private FileMetadata buildMetaData(final FIRStorageMetadata firMetadata) {
         // UpdateTimeMillis is specified in seconds so have to multiply it by 1000.
         /** https://developer.apple.com/documentation/foundation/timeinterval */
         FIRStorageMetadata m = FIRStorageMetadata.alloc().init();
@@ -195,7 +182,19 @@ public class Storage implements StorageDistribution {
                 .setSizeBytes(firMetadata.size())
                 .setPath(firMetadata.path())
                 .setCreationTimeMillis((long) (firMetadata.timeCreated().timeIntervalSince1970() * 1000L))
-                .setDownloadUrl(firMetadata.downloadURL().absoluteString())
+                .setDownloadUrl(new DownloadUrl(new Consumer<Consumer<String>>() {
+                    @Override
+                    public void accept(final Consumer<String> urlConsumer) {
+                        firStorage().child(firMetadata.path()).downloadURLWithCompletion(new FIRStorageReference.Block_downloadURLWithCompletion() {
+                            @Override
+                            public void call_downloadURLWithCompletion(NSURL arg0, NSError arg1) {
+                                if (arg1 != null)
+                                    throw new RuntimeException(arg1.localizedDescription());
+                                urlConsumer.accept(arg0.absoluteURL().absoluteString());
+                            }
+                        });
+                    }
+                }))
                 .setMd5Hash("")
                 .build();
     }
@@ -210,28 +209,25 @@ public class Storage implements StorageDistribution {
      * <li>{@link DownloadCallback}
      */
     private static class ErrorHandler {
-        private static boolean handleDeleteError(NSError error, DeleteCallback callback)
-        {
+        private static boolean handleDeleteError(NSError error, DeleteCallback callback) {
             if (error != null) {
-                callback.onFail(new Exception(error.localizedDescription()));
+                callback.onFail(new RuntimeException(error.localizedDescription()));
                 return true;
             }
             return false;
         }
 
-        private static boolean handleUploadError(NSError error, UploadCallback callback)
-        {
+        private static boolean handleUploadError(NSError error, UploadCallback callback) {
             if (error != null) {
-                callback.onFail(new Exception(error.localizedDescription()));
+                callback.onFail(new RuntimeException(error.localizedDescription()));
                 return true;
             }
             return false;
         }
 
-        private static boolean handleDownloadError(NSError error, DownloadCallback callback)
-        {
+        private static boolean handleDownloadError(NSError error, DownloadCallback callback) {
             if (error != null) {
-                callback.onFail(new Exception(error.localizedDescription()));
+                callback.onFail(new RuntimeException(error.localizedDescription()));
                 return true;
             }
             return false;

@@ -19,8 +19,7 @@ package mk.gdx.firebase.listeners;
 /**
  * Listens for firebase database connection status changing.
  */
-public interface ConnectedListener
-{
+public interface ConnectedListener {
     /**
      * Calls when application has been connected to the database.
      */

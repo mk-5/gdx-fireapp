@@ -21,8 +21,7 @@ import mk.gdx.firebase.storage.FileMetadata;
 /**
  * Handles response after uploading data to Firebase storage.
  */
-public interface UploadCallback
-{
+public interface UploadCallback {
     /**
      * Calls when everything was done without issues.
      *

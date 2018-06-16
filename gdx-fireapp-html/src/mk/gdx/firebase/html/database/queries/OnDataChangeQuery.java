@@ -26,16 +26,13 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Provides setValue execution.
  */
-public class OnDataChangeQuery extends GwtDatabaseQuery
-{
-    public OnDataChangeQuery(Database databaseDistribution)
-    {
+public class OnDataChangeQuery extends GwtDatabaseQuery {
+    public OnDataChangeQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void runJS()
-    {
+    protected void runJS() {
         // TODO DataChangeListener::onCancelled
         if (arguments.get(1) != null && !GwtDataListenersManager.hasListener(databaseReference)) {
             GwtDataListenersManager.addDataListener(databaseReference, new JsonDataListener((Class) arguments.get(0), (DataChangeListener) arguments.get(1)));
@@ -46,8 +43,7 @@ public class OnDataChangeQuery extends GwtDatabaseQuery
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new OnDataValidator();
     }
 

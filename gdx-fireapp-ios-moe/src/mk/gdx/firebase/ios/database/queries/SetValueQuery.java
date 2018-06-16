@@ -18,7 +18,6 @@ package mk.gdx.firebase.ios.database.queries;
 
 import com.google.firebasedatabase.FIRDatabaseReference;
 
-import apple.foundation.NSError;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
@@ -30,31 +29,26 @@ import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserv
 /**
  * Provides call to {@link FIRDatabaseReference#setValue(Object)} ()}.
  */
-public class SetValueQuery extends IosDatabaseQuery<Void>
-{
-    public SetValueQuery(Database databaseDistribution)
-    {
+public class SetValueQuery extends IosDatabaseQuery<Void> {
+    public SetValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof FIRDatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new SetValueValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.size == 1) {
             ((FIRDatabaseReference) query).setValue(DataProcessor.javaDataToIos(arguments.get(0)));
         } else if (arguments.size == 2) {

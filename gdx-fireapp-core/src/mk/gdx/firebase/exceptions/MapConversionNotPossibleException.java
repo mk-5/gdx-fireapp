@@ -19,10 +19,8 @@ package mk.gdx.firebase.exceptions;
 /**
  * Throws when conversions indicated by {@link mk.gdx.firebase.annotations.MapConversion} is not possible.
  */
-public class MapConversionNotPossibleException extends RuntimeException
-{
-    public MapConversionNotPossibleException(String msg)
-    {
+public class MapConversionNotPossibleException extends RuntimeException {
+    public MapConversionNotPossibleException(String msg) {
         super(msg);
     }
 }

@@ -48,8 +48,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution
-{
+public class Database implements DatabaseDistribution {
 
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
@@ -62,8 +61,7 @@ public class Database implements DatabaseDistribution
     /**
      * Constructor of android database distribution
      */
-    public Database()
-    {
+    public Database() {
         filters = new Array<>();
     }
 
@@ -71,8 +69,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void onConnect(final ConnectedListener listener)
-    {
+    public void onConnect(final ConnectedListener listener) {
         new ConnectionStatusQuery(this).withArgs(listener).execute();
     }
 
@@ -80,8 +77,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution inReference(String databasePath)
-    {
+    public DatabaseDistribution inReference(String databasePath) {
         databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
         this.databasePath = databasePath;
         return this;
@@ -91,8 +87,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         new SetValueQuery(this).withArgs(value).execute();
     }
 
@@ -100,8 +95,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value, final CompleteCallback completeCallback)
-    {
+    public void setValue(Object value, final CompleteCallback completeCallback) {
         new SetValueQuery(this).withArgs(value, completeCallback).execute();
     }
 
@@ -110,8 +104,7 @@ public class Database implements DatabaseDistribution
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback)
-    {
+    public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
@@ -120,8 +113,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener)
-    {
+    public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
     }
@@ -131,8 +123,7 @@ public class Database implements DatabaseDistribution
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments)
-    {
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments) {
         filters.add(new Filter(filterType, filterArguments));
         return this;
     }
@@ -141,8 +132,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument)
-    {
+    public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument) {
         orderByClause = new OrderByClause(orderByMode, argument);
         return this;
     }
@@ -151,8 +141,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public DatabaseDistribution push()
-    {
+    public DatabaseDistribution push() {
         databaseReference = databaseReference().push();
         databasePath = databasePath + "/" + databaseReference.getKey();
         return this;
@@ -162,8 +151,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void removeValue()
-    {
+    public void removeValue() {
         new RemoveValueQuery(this).execute();
     }
 
@@ -171,8 +159,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void removeValue(final CompleteCallback completeCallback)
-    {
+    public void removeValue(final CompleteCallback completeCallback) {
         new RemoveValueQuery(this).withArgs(completeCallback).execute();
     }
 
@@ -180,8 +167,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(Map<String, Object> data)
-    {
+    public void updateChildren(Map<String, Object> data) {
         new UpdateChildrenQuery(this).withArgs(data).execute();
     }
 
@@ -189,8 +175,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void updateChildren(Map<String, Object> data, final CompleteCallback completeCallback)
-    {
+    public void updateChildren(Map<String, Object> data, final CompleteCallback completeCallback) {
         new UpdateChildrenQuery(this).withArgs(data, completeCallback).execute();
     }
 
@@ -199,8 +184,7 @@ public class Database implements DatabaseDistribution
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback)
-    {
+    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback) {
         new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
@@ -208,8 +192,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void setPersistenceEnabled(boolean enabled)
-    {
+    public void setPersistenceEnabled(boolean enabled) {
         FirebaseDatabase.getInstance().setPersistenceEnabled(enabled);
     }
 
@@ -217,8 +200,7 @@ public class Database implements DatabaseDistribution
      * {@inheritDoc}
      */
     @Override
-    public void keepSynced(boolean synced)
-    {
+    public void keepSynced(boolean synced) {
         databaseReference().keepSynced(synced);
     }
 
@@ -228,8 +210,7 @@ public class Database implements DatabaseDistribution
      * @return FirebaseSDK Database reference. Every action will be deal with it.
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
-    DatabaseReference databaseReference()
-    {
+    DatabaseReference databaseReference() {
         if (databaseReference == null)
             throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
 
@@ -251,8 +232,7 @@ public class Database implements DatabaseDistribution
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */
-    void terminateOperation()
-    {
+    void terminateOperation() {
         databaseReference = null;
         databasePath = null;
         orderByClause = null;
@@ -264,8 +244,7 @@ public class Database implements DatabaseDistribution
      *
      * @return Database path, may be null
      */
-    String getDatabasePath()
-    {
+    String getDatabasePath() {
         return databasePath;
     }
 }

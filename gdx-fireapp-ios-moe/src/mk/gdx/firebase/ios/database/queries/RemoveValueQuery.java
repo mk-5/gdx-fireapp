@@ -18,7 +18,6 @@ package mk.gdx.firebase.ios.database.queries;
 
 import com.google.firebasedatabase.FIRDatabaseReference;
 
-import apple.foundation.NSError;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RemoveValueValidator;
@@ -29,31 +28,26 @@ import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserv
 /**
  * Provides call to {@link FIRDatabaseReference#removeValue()}.
  */
-public class RemoveValueQuery extends IosDatabaseQuery<Void>
-{
-    public RemoveValueQuery(Database databaseDistribution)
-    {
+public class RemoveValueQuery extends IosDatabaseQuery<Void> {
+    public RemoveValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof FIRDatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new RemoveValueValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.size == 0) {
             ((FIRDatabaseReference) query).removeValue();
         } else if (arguments.size == 1) {

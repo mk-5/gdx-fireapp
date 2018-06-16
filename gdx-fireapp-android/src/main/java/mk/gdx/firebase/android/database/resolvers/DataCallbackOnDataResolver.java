@@ -24,13 +24,11 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Resolves data callback with ordering preserved.
  */
-public class DataCallbackOnDataResolver
-{
+public class DataCallbackOnDataResolver {
 
     // TODO - docs
     @SuppressWarnings("unchecked")
-    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataCallback<E> dataCallback)
-    {
+    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataCallback<E> dataCallback) {
         if (DataSnapshotOrderByResolver.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot)) {
             dataCallback.onData((E) DataSnapshotOrderByResolver.resolve(dataSnapshot));
         } else {

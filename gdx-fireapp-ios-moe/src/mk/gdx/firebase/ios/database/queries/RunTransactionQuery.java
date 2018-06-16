@@ -35,56 +35,48 @@ import mk.gdx.firebase.ios.database.IosDatabaseQuery;
 /**
  * Provides call to {@link FIRDatabaseReference#runTransactionBlockAndCompletionBlock(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0, FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1)}.
  */
-public class RunTransactionQuery extends IosDatabaseQuery<Void>
-{
+public class RunTransactionQuery extends IosDatabaseQuery<Void> {
     private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
     private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
 
-    public RunTransactionQuery(Database databaseDistribution)
-    {
+    public RunTransactionQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof FIRDatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new RunTransactionValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         ((FIRDatabaseReference) query).runTransactionBlockAndCompletionBlock(
                 new RunTransactionBlock((Class) arguments.get(0), (TransactionCallback) arguments.get(1)),
                 new TransactionCompleteBlock(arguments.size == 3 ? (CompleteCallback) arguments.get(2) : null));
         return null;
     }
 
-    private class RunTransactionBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0
-    {
+    private class RunTransactionBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0 {
 
         private Class type;
         private TransactionCallback transactionCallback;
 
-        private RunTransactionBlock(Class type, TransactionCallback transactionCallback)
-        {
+        private RunTransactionBlock(Class type, TransactionCallback transactionCallback) {
             this.type = type;
             this.transactionCallback = transactionCallback;
         }
 
         @Override
-        public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0)
-        {
+        public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0) {
             if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
                 GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
                 return FIRTransactionResult.abort();
@@ -95,19 +87,16 @@ public class RunTransactionQuery extends IosDatabaseQuery<Void>
         }
     }
 
-    private class TransactionCompleteBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1
-    {
+    private class TransactionCompleteBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1 {
 
         private CompleteCallback completeCallback;
 
-        private TransactionCompleteBlock(CompleteCallback completeCallback)
-        {
+        private TransactionCompleteBlock(CompleteCallback completeCallback) {
             this.completeCallback = completeCallback;
         }
 
         @Override
-        public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2)
-        {
+        public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2) {
             if (arg0 != null) {
                 if (completeCallback != null) {
                     completeCallback.onError(new Exception(arg0.localizedDescription()));

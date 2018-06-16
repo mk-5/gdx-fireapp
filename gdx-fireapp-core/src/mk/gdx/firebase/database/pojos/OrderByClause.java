@@ -21,39 +21,32 @@ import mk.gdx.firebase.database.OrderByMode;
 /**
  * Keeps information about order-by clause.
  */
-public class OrderByClause
-{
+public class OrderByClause {
     private OrderByMode orderByMode;
     private String argument;
 
-    public OrderByClause()
-    {
+    public OrderByClause() {
 
     }
 
-    public OrderByClause(OrderByMode orderByMode, String argument)
-    {
+    public OrderByClause(OrderByMode orderByMode, String argument) {
         this.orderByMode = orderByMode;
         this.argument = argument;
     }
 
-    public OrderByMode getOrderByMode()
-    {
+    public OrderByMode getOrderByMode() {
         return orderByMode;
     }
 
-    public void setOrderByMode(OrderByMode orderByMode)
-    {
+    public void setOrderByMode(OrderByMode orderByMode) {
         this.orderByMode = orderByMode;
     }
 
-    public String getArgument()
-    {
+    public String getArgument() {
         return argument;
     }
 
-    public void setArgument(String argument)
-    {
+    public void setArgument(String argument) {
         this.argument = argument;
     }
 }

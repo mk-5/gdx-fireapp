@@ -13,161 +13,134 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Clipboard;
 
 
-public class TestApp implements Application
-{
+public class TestApp implements Application {
     @Override
-    public ApplicationListener getApplicationListener()
-    {
+    public ApplicationListener getApplicationListener() {
         return null;
     }
 
     @Override
-    public Graphics getGraphics()
-    {
+    public Graphics getGraphics() {
         return null;
     }
 
     @Override
-    public Audio getAudio()
-    {
+    public Audio getAudio() {
         return null;
     }
 
     @Override
-    public Input getInput()
-    {
+    public Input getInput() {
         return null;
     }
 
     @Override
-    public Files getFiles()
-    {
+    public Files getFiles() {
         return null;
     }
 
     @Override
-    public Net getNet()
-    {
+    public Net getNet() {
         return null;
     }
 
     @Override
-    public void log(String tag, String message)
-    {
+    public void log(String tag, String message) {
 
     }
 
     @Override
-    public void log(String tag, String message, Throwable exception)
-    {
+    public void log(String tag, String message, Throwable exception) {
 
     }
 
     @Override
-    public void error(String tag, String message)
-    {
+    public void error(String tag, String message) {
 
     }
 
     @Override
-    public void error(String tag, String message, Throwable exception)
-    {
+    public void error(String tag, String message, Throwable exception) {
 
     }
 
     @Override
-    public void debug(String tag, String message)
-    {
+    public void debug(String tag, String message) {
 
     }
 
     @Override
-    public void debug(String tag, String message, Throwable exception)
-    {
+    public void debug(String tag, String message, Throwable exception) {
 
     }
 
     @Override
-    public void setLogLevel(int logLevel)
-    {
+    public void setLogLevel(int logLevel) {
 
     }
 
     @Override
-    public int getLogLevel()
-    {
+    public int getLogLevel() {
         return 0;
     }
 
     @Override
-    public void setApplicationLogger(ApplicationLogger applicationLogger)
-    {
+    public void setApplicationLogger(ApplicationLogger applicationLogger) {
 
     }
 
     @Override
-    public ApplicationLogger getApplicationLogger()
-    {
+    public ApplicationLogger getApplicationLogger() {
         return null;
     }
 
     @Override
-    public ApplicationType getType()
-    {
+    public ApplicationType getType() {
         return ApplicationType.Desktop;
     }
 
     @Override
-    public int getVersion()
-    {
+    public int getVersion() {
         return 0;
     }
 
     @Override
-    public long getJavaHeap()
-    {
+    public long getJavaHeap() {
         return 0;
     }
 
     @Override
-    public long getNativeHeap()
-    {
+    public long getNativeHeap() {
         return 0;
     }
 
     @Override
-    public Preferences getPreferences(String name)
-    {
+    public Preferences getPreferences(String name) {
         return null;
     }
 
     @Override
-    public Clipboard getClipboard()
-    {
+    public Clipboard getClipboard() {
         return null;
     }
 
     @Override
-    public void postRunnable(Runnable runnable)
-    {
+    public void postRunnable(Runnable runnable) {
 
     }
 
     @Override
-    public void exit()
-    {
+    public void exit() {
         System.exit(0);
     }
 
     @Override
-    public void addLifecycleListener(LifecycleListener listener)
-    {
+    public void addLifecycleListener(LifecycleListener listener) {
 
     }
 
     @Override
-    public void removeLifecycleListener(LifecycleListener listener)
-    {
+    public void removeLifecycleListener(LifecycleListener listener) {
 
     }
 }

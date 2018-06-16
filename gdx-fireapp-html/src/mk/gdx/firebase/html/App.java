@@ -24,8 +24,7 @@ import mk.gdx.firebase.html.firebase.FirebaseConfiguration;
  *
  * @see AppDistribution
  */
-public class App implements AppDistribution
-{
+public class App implements AppDistribution {
 
     /**
      * Loads configuration from {@code Gdx.files.internal("firebase-config.html")} file.
@@ -35,8 +34,7 @@ public class App implements AppDistribution
      * {@inheritDoc}
      */
     @Override
-    public void configure()
-    {
+    public void configure() {
         FirebaseConfiguration configuration = new FirebaseConfiguration();
         configuration.load().init();
     }

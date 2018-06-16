@@ -19,7 +19,6 @@ package mk.gdx.firebase.html.database.resolvers;
 /**
  * Provides order-by for javascript firebase db.
  */
-public class GwtQueryOrderByResolver
-{
+public class GwtQueryOrderByResolver {
 
 }

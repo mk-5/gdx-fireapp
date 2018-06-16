@@ -37,8 +37,7 @@ import mk.gdx.firebase.helpers.ImageHelper;
  * @see StorageDistribution
  * @see PlatformDistributor
  */
-public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> implements StorageDistribution
-{
+public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> implements StorageDistribution {
 
     private static volatile GdxFIRStorage instance;
 
@@ -49,15 +48,13 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRStorage() throws PlatformDistributorException
-    {
+    private GdxFIRStorage() throws PlatformDistributorException {
     }
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
-    public static GdxFIRStorage instance()
-    {
+    public static GdxFIRStorage instance() {
         GdxFIRStorage result = instance;
         if (result == null) {
             synchronized (GdxFIRStorage.class) {
@@ -78,8 +75,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void upload(FileHandle file, String path, UploadCallback callback)
-    {
+    public void upload(FileHandle file, String path, UploadCallback callback) {
         platformObject.upload(file, path, callback);
     }
 
@@ -87,8 +83,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void upload(byte[] data, String path, UploadCallback callback)
-    {
+    public void upload(byte[] data, String path, UploadCallback callback) {
         platformObject.upload(data, path, callback);
     }
 
@@ -96,8 +91,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, long bytesLimit, DownloadCallback<byte[]> callback)
-    {
+    public void download(String path, long bytesLimit, DownloadCallback<byte[]> callback) {
         platformObject.download(path, bytesLimit, callback);
     }
 
@@ -105,8 +99,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, DownloadCallback<File> callback)
-    {
+    public void download(String path, File targetFile, DownloadCallback<File> callback) {
         platformObject.download(path, targetFile, callback);
     }
 
@@ -114,8 +107,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, DeleteCallback callback)
-    {
+    public void delete(String path, DeleteCallback callback) {
         platformObject.delete(path, callback);
     }
 
@@ -123,8 +115,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public StorageDistribution inBucket(String url)
-    {
+    public StorageDistribution inBucket(String url) {
         return platformObject.inBucket(url);
     }
 
@@ -143,27 +134,20 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * @param path     Path in FirebaseStorage bucket.
      * @param callback This callback will be call after image is downloaded.
      */
-    public void downloadImage(String path, final DownloadCallback<TextureRegion> callback)
-    {
-        download(path, Long.MAX_VALUE, new DownloadCallback<byte[]>()
-        {
+    public void downloadImage(String path, final DownloadCallback<TextureRegion> callback) {
+        download(path, Long.MAX_VALUE, new DownloadCallback<byte[]>() {
             @Override
-            public void onSuccess(final byte[] result)
-            {
-                Gdx.app.postRunnable(new Runnable()
-                {
+            public void onSuccess(final byte[] result) {
+                Gdx.app.postRunnable(new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         if (Gdx.app.getType() != Application.ApplicationType.WebGL) {
                             TextureRegion region = ImageHelper.createTextureFromBytes(result);
                             callback.onSuccess(region);
                         } else {
-                            ImageHelper.createTextureFromBytes(result, new Consumer<TextureRegion>()
-                            {
+                            ImageHelper.createTextureFromBytes(result, new Consumer<TextureRegion>() {
                                 @Override
-                                public void accept(TextureRegion textureRegion)
-                                {
+                                public void accept(TextureRegion textureRegion) {
                                     callback.onSuccess(textureRegion);
                                 }
                             });
@@ -173,8 +157,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
             }
 
             @Override
-            public void onFail(Exception e)
-            {
+            public void onFail(Exception e) {
                 callback.onFail(e);
             }
         });
@@ -185,8 +168,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    protected String getIOSClassName()
-    {
+    protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.storage.Storage";
     }
 
@@ -194,8 +176,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    protected String getAndroidClassName()
-    {
+    protected String getAndroidClassName() {
         return "mk.gdx.firebase.android.storage.Storage";
     }
 
@@ -203,8 +184,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    protected String getWebGLClassName()
-    {
+    protected String getWebGLClassName() {
         return "mk.gdx.firebase.html.storage.Storage";
     }
 }

@@ -21,9 +21,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
 import mk.gdx.firebase.exceptions.PlatformDistributorException;
 
 /**
@@ -49,8 +46,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  * Last step is telling {@code PlatformDistributor} which classes it should use on each platform,<p>
  * you can do this by implementing {@link #getAndroidClassName()} and {@link #getIOSClassName()} methods.
  */
-public abstract class PlatformDistributor<T>
-{
+public abstract class PlatformDistributor<T> {
 
     protected T platformObject;
 
@@ -64,8 +60,7 @@ public abstract class PlatformDistributor<T>
      * @throws PlatformDistributorException Throws when something is wrong with environment
      */
     @SuppressWarnings("unchecked")
-    protected PlatformDistributor() throws PlatformDistributorException
-    {
+    protected PlatformDistributor() throws PlatformDistributorException {
         String className = null;
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             className = getAndroidClassName();
@@ -91,8 +86,7 @@ public abstract class PlatformDistributor<T>
      *
      * @param mockObject Mock representation of platform distribution object - {@code T}
      */
-    public void setMockObject(T mockObject)
-    {
+    public void setMockObject(T mockObject) {
         platformObject = mockObject;
     }
 

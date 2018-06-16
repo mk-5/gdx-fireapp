@@ -25,8 +25,7 @@ import java.util.Map;
  * @see <a href="https://firebase.google.com/docs/analytics/android/start">android firebase docs</a>
  * @see <a href="https://firebase.google.com/docs/analytics/ios/start">ios firebase docs</a>
  */
-public interface AnalyticsDistribution
-{
+public interface AnalyticsDistribution {
 
     /**
      * Sends analytics event.

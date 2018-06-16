@@ -19,10 +19,8 @@ package mk.gdx.firebase.html.exceptions;
 /**
  * It is thrown when method that is not supported at GWT platform was calling.
  */
-public class UnsupportedOperationException extends IllegalStateException
-{
-    public UnsupportedOperationException()
-    {
+public class UnsupportedOperationException extends IllegalStateException {
+    public UnsupportedOperationException() {
         super("This method is not supported in Firebase Web API");
     }
 

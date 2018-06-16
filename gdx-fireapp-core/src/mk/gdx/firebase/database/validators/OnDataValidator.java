@@ -21,11 +21,9 @@ import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.listeners.DataChangeListener;
 
-public class OnDataValidator implements ArgumentsValidator
-{
+public class OnDataValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
+    public void validate(Array<Object> arguments) {
         if (arguments.size != 2)
             throw new IllegalStateException();
         if (!(arguments.get(0) instanceof Class))

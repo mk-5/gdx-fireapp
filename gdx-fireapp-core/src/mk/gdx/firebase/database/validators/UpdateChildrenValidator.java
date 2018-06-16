@@ -23,11 +23,9 @@ import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 
-public class UpdateChildrenValidator implements ArgumentsValidator
-{
+public class UpdateChildrenValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
+    public void validate(Array<Object> arguments) {
         if (arguments.size < 1)
             throw new IllegalStateException();
         if (arguments.get(0) != null && !(arguments.get(0) instanceof Map))

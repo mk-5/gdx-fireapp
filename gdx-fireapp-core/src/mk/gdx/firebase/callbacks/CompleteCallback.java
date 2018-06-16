@@ -19,8 +19,7 @@ package mk.gdx.firebase.callbacks;
 /**
  * Handles response when something has been done.
  */
-public interface CompleteCallback
-{
+public interface CompleteCallback {
     /**
      * Calls when everything was done without issues.
      */

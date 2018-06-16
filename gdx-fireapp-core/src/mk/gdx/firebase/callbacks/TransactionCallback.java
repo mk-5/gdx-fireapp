@@ -21,8 +21,7 @@ package mk.gdx.firebase.callbacks;
  *
  * @param <T> Type of data you want to deal with.
  */
-public interface TransactionCallback<T>
-{
+public interface TransactionCallback<T> {
     /**
      * Deals with firebase database value when you need to get care about concurrent modification of same data.
      *

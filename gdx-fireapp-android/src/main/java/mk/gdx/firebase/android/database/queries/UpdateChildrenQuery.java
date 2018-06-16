@@ -30,31 +30,26 @@ import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 /**
  * Provides {@link DatabaseReference#updateChildren(Map)} execution with firebase database reference.
  */
-public class UpdateChildrenQuery extends AndroidDatabaseQuery<Void>
-{
-    public UpdateChildrenQuery(Database databaseDistribution)
-    {
+public class UpdateChildrenQuery extends AndroidDatabaseQuery<Void> {
+    public UpdateChildrenQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof DatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new UpdateChildrenValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.size == 1) {
             ((DatabaseReference) query).updateChildren((Map<String, Object>) arguments.get(0));
         } else if (arguments.size == 2) {

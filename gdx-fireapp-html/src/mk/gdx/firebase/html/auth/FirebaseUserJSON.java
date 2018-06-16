@@ -21,11 +21,10 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * JSON representation of Firebase user.
  */
-class FirebaseUserJSON extends JavaScriptObject
-{
+class FirebaseUserJSON extends JavaScriptObject {
 
-    protected FirebaseUserJSON()
-    {}
+    protected FirebaseUserJSON() {
+    }
 
     public final native String getDisplayName() /*-{ return this.displayName; }-*/;
 

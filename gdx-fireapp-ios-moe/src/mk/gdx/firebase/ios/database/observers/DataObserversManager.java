@@ -21,6 +21,5 @@ import mk.gdx.firebase.database.DataListenersManager;
 /**
  * Keeps references to observers handles.
  */
-public class DataObserversManager extends DataListenersManager<Long>
-{
+public class DataObserversManager extends DataListenersManager<Long> {
 }

@@ -3,7 +3,7 @@ apply plugin: "gwt"
 apply plugin: "war"
 apply plugin: "maven-publish"
 
-dependencies{
+dependencies {
     compile project(":gdx-fireapp-core")
     compile libs.libgdx.html
 }
@@ -14,22 +14,22 @@ task sourceJar(type: Jar) {
 }
 
 gwt {
-    gwtVersion='2.8.0' // Should match the gwt version used for building the gwt backend
-    maxHeapSize="2G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
-    minHeapSize="2G"
+    gwtVersion = '2.8.0' // Should match the gwt version used for building the gwt backend
+    maxHeapSize = "2G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
+    minHeapSize = "2G"
     src = files(file("src/")) // Needs to be in front of "modules" below.
 }
 
 task addSource << {
-	sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
 }
 
-ext{
+ext {
     appModuleName = 'GDX Fireapp GWT'
 }
 
 sourceCompatibility = 1.7
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 eclipse.project {
     name = appName + "-html"

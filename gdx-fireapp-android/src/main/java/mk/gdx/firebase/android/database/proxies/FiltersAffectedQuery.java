@@ -21,8 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * Methods from {@code Query} that are filters affected.
  */
-public interface FiltersAffectedQuery
-{
+public interface FiltersAffectedQuery {
 
     /**
      * @see com.google.firebase.database.DatabaseReference#addListenerForSingleValueEvent(ValueEventListener)

@@ -24,8 +24,7 @@ package mk.gdx.firebase.database;
  * - {@link FilterType#END_AT}
  * - {@link FilterType#EQUAL_TO}
  */
-public enum OrderByMode
-{
+public enum OrderByMode {
     ORDER_BY_CHILD,
     ORDER_BY_KEY,
     ORDER_BY_VALUE;

@@ -25,27 +25,22 @@ import mk.gdx.firebase.listeners.ConnectedListener;
 /**
  * Provides connection-status ask javascript execution.
  */
-public class ConnectionStatusQuery extends GwtDatabaseQuery
-{
-    public ConnectionStatusQuery(Database databaseDistribution)
-    {
+public class ConnectionStatusQuery extends GwtDatabaseQuery {
+    public ConnectionStatusQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void runJS()
-    {
+    protected void runJS() {
         onConnect((ConnectedListener) arguments.get(0));
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new OnConnectionValidator();
     }
 

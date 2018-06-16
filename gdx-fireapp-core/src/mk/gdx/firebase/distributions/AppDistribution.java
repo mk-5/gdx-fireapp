@@ -19,8 +19,7 @@ package mk.gdx.firebase.distributions;
 /**
  * Starting point of work with firebase sdk.
  */
-public interface AppDistribution
-{
+public interface AppDistribution {
 
     /**
      * Method needed only for ios initialization.

@@ -3,7 +3,8 @@ ext {
     gdxVersion = '1.9.8'
     jUnitVersion = "4.12"
     mockitoVersion = '2.8.47'
-    firebaseVersion = '11.0.2'
+    firebaseCoreVersion = '16.0.0'
+    firebaseLibsVersion = '16.0.1'
     powerMockVersion = '1.7.0'
 }
 
@@ -25,9 +26,9 @@ libs.libgdx = [
 
 /* Firebase */
 libs.firebase = [
-    core : "com.google.firebase:firebase-core:$firebaseVersion",
-    storage: "com.google.firebase:firebase-storage:$firebaseVersion",
-    auth : "com.google.firebase:firebase-auth:$firebaseVersion",
-    crash : "com.google.firebase:firebase-crash:$firebaseVersion",
-    database : "com.google.firebase:firebase-database:$firebaseVersion"
+    core : "com.google.firebase:firebase-core:$firebaseCoreVersion",
+    storage: "com.google.firebase:firebase-storage:$firebaseLibsVersion",
+    auth : "com.google.firebase:firebase-auth:$firebaseLibsVersion",
+    crash : "com.google.firebase:firebase-crash:$firebaseLibsVersion",
+    database : "com.google.firebase:firebase-database:$firebaseLibsVersion"
 ]

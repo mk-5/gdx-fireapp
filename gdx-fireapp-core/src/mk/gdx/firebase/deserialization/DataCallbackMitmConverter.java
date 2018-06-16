@@ -36,14 +36,12 @@ import mk.gdx.firebase.reflection.AnnotationFinder;
  *
  * @param <T> Result type of callback
  */
-public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
-{
+public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter {
 
     private DataCallback<E> coveredCallback;
     private Class<T> dataType;
 
-    public DataCallbackMitmConverter(Class<T> dataType, DataCallback<E> coveredCallback, FirebaseMapConverter mapConverter)
-    {
+    public DataCallbackMitmConverter(Class<T> dataType, DataCallback<E> coveredCallback, FirebaseMapConverter mapConverter) {
         super(mapConverter);
         this.coveredCallback = coveredCallback;
         this.dataType = dataType;
@@ -57,8 +55,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
      *
      * @return DataCallback which retrieves data from database, not null.
      */
-    public DataCallback<?> get()
-    {
+    public DataCallback<?> get() {
         return isPojo(dataType) ? getPojoDataCallback() : getGenericDataCallback();
     }
 
@@ -67,8 +64,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
      *
      * @return New Pojo data callback instance, not null.
      */
-    public DataCallback<Map> getPojoDataCallback()
-    {
+    public DataCallback<Map> getPojoDataCallback() {
         return new PojoDataCallback();
     }
 
@@ -77,8 +73,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
      *
      * @return New Pojo data callback instance, not null.
      */
-    public DataCallback<T> getGenericDataCallback()
-    {
+    public DataCallback<T> getGenericDataCallback() {
         return new GenericDataCallback();
     }
 
@@ -89,8 +84,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
      * @see #doMitmConversion(Class, Object)
      */
     @SuppressWarnings("unchecked")
-    public void onData(Object data)
-    {
+    public void onData(Object data) {
 
         MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, coveredCallback);
         // If MapConversions was not indicated - do nothing.
@@ -108,26 +102,22 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
      *
      * @param e Exception with description what was wrong.
      */
-    public void onError(Exception e)
-    {
+    public void onError(Exception e) {
         coveredCallback.onError(e);
     }
 
     /**
      * Retrieve map from database and pass to {@link #onData(Object)}
      */
-    private class PojoDataCallback implements DataCallback<Map>
-    {
+    private class PojoDataCallback implements DataCallback<Map> {
 
         @Override
-        public void onData(Map data)
-        {
+        public void onData(Map data) {
             DataCallbackMitmConverter.this.onData(data);
         }
 
         @Override
-        public void onError(Exception e)
-        {
+        public void onError(Exception e) {
             DataCallbackMitmConverter.this.onError(e);
         }
     }
@@ -135,18 +125,15 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter
     /**
      * Retrieve {@code T} object from database and pass to {@link #onData(Object)}
      */
-    private class GenericDataCallback implements DataCallback<T>
-    {
+    private class GenericDataCallback implements DataCallback<T> {
 
         @Override
-        public void onData(T data)
-        {
+        public void onData(T data) {
             DataCallbackMitmConverter.this.onData(data);
         }
 
         @Override
-        public void onError(Exception e)
-        {
+        public void onError(Exception e) {
             DataCallbackMitmConverter.this.onError(e);
         }
     }

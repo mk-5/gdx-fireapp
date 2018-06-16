@@ -25,8 +25,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
  * @see AppDistribution
  * @see PlatformDistributor
  */
-public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution
-{
+public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution {
 
     private volatile static GdxFIRApp instance;
     private static boolean ignoreExceptions;
@@ -38,16 +37,14 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRApp() throws PlatformDistributorException
-    {
+    private GdxFIRApp() throws PlatformDistributorException {
     }
 
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
-    public static GdxFIRApp instance()
-    {
+    public static GdxFIRApp instance() {
         GdxFIRApp result = instance;
         if (result == null) {
             synchronized (GdxFIRApp.class) {
@@ -68,8 +65,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * {@inheritDoc}
      */
     @Override
-    public void configure()
-    {
+    public void configure() {
         platformObject.configure();
     }
 
@@ -77,8 +73,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * {@inheritDoc}
      */
     @Override
-    protected String getIOSClassName()
-    {
+    protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.App";
     }
 
@@ -86,8 +81,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * {@inheritDoc}
      */
     @Override
-    protected String getAndroidClassName()
-    {
+    protected String getAndroidClassName() {
         return "mk.gdx.firebase.android.App";
     }
 
@@ -95,8 +89,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * {@inheritDoc}
      */
     @Override
-    protected String getWebGLClassName()
-    {
+    protected String getWebGLClassName() {
         return "mk.gdx.firebase.html.App";
     }
 }

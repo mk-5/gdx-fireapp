@@ -21,11 +21,9 @@ import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.listeners.ConnectedListener;
 
-public class OnConnectionValidator implements ArgumentsValidator
-{
+public class OnConnectionValidator implements ArgumentsValidator {
     @Override
-    public void validate(Array<Object> arguments)
-    {
+    public void validate(Array<Object> arguments) {
         if (arguments.get(0) != null && !(arguments.get(0) instanceof ConnectedListener))
             throw new IllegalArgumentException();
     }

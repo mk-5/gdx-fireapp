@@ -21,11 +21,9 @@ import com.google.gwt.core.client.JavaScriptObject;
 /**
  * GWT implementation of <a href="https://firebase.google.com/docs/reference/js/firebase.storage.FullMetadata">FulMetaData</a>
  */
-class FullMetaData extends JavaScriptObject
-{
+class FullMetaData extends JavaScriptObject {
 
-    protected FullMetaData()
-    {
+    protected FullMetaData() {
     }
 
     /**

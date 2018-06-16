@@ -25,16 +25,13 @@ import mk.gdx.firebase.html.database.GwtDatabaseQuery;
 /**
  * Provides removeValue javascript execution.
  */
-public class RemoveValueQuery extends GwtDatabaseQuery
-{
-    public RemoveValueQuery(Database databaseDistribution)
-    {
+public class RemoveValueQuery extends GwtDatabaseQuery {
+    public RemoveValueQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void runJS()
-    {
+    protected void runJS() {
         if (arguments.size == 0) {
             remove(databaseReference);
         } else if (arguments.size == 1) {
@@ -45,8 +42,7 @@ public class RemoveValueQuery extends GwtDatabaseQuery
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new RemoveValueValidator();
     }
 

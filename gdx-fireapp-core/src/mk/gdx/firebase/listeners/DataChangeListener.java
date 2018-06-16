@@ -24,8 +24,7 @@ package mk.gdx.firebase.listeners;
  *
  * @param <T> Type of data you expecting to get
  */
-public interface DataChangeListener<T>
-{
+public interface DataChangeListener<T> {
     /**
      * Calls when everything was done without issues.
      *

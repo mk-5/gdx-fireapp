@@ -26,8 +26,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  *
  * @param <R> Result type after json string converting process
  */
-public class JsonDataListener<R> implements DataChangeListener<String>
-{
+public class JsonDataListener<R> implements DataChangeListener<String> {
 
     private Class<R> wantedType;
     private DataChangeListener dataListener;
@@ -35,23 +34,20 @@ public class JsonDataListener<R> implements DataChangeListener<String>
     /**
      * @param dataListener Listener, not null
      */
-    public JsonDataListener(Class<R> wantedType, DataChangeListener dataListener)
-    {
+    public JsonDataListener(Class<R> wantedType, DataChangeListener dataListener) {
         this.wantedType = wantedType;
         this.dataListener = dataListener;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onChange(String data)
-    {
+    public void onChange(String data) {
         R result = JsonProcessor.process(wantedType, data);
         dataListener.onChange(result);
     }
 
     @Override
-    public void onCanceled(Exception e)
-    {
+    public void onCanceled(Exception e) {
         dataListener.onCanceled(e);
     }
 }

@@ -19,8 +19,7 @@ package mk.gdx.firebase.helpers;
 /**
  * Gives information about type origin.
  */
-public class JavaCoreClassDetector
-{
+public class JavaCoreClassDetector {
 
     /**
      * Check if given type package name starts with 'java'.
@@ -28,8 +27,7 @@ public class JavaCoreClassDetector
      * @param type Type to examination, not null
      * @return True if type is core java class.
      */
-    public static boolean isJavaCoreClass(Class<?> type)
-    {
+    public static boolean isJavaCoreClass(Class<?> type) {
         return type.getName().startsWith("java");
     }
 }

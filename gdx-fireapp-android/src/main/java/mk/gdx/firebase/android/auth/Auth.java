@@ -36,15 +36,13 @@ import mk.gdx.firebase.distributions.AuthDistribution;
  *
  * @see AuthDistribution
  */
-public class Auth implements AuthDistribution
-{
+public class Auth implements AuthDistribution {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GdxFirebaseUser getCurrentUser()
-    {
+    public GdxFirebaseUser getCurrentUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return null;
         UserInfo.Builder builder = new UserInfo.Builder();
@@ -62,8 +60,7 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback)
-    {
+    public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, new String(password))
                 .addOnCompleteListener(new AuthListener(callback));
     }
@@ -72,8 +69,7 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback)
-    {
+    public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, new String(password))
                 .addOnCompleteListener(new AuthListener(callback));
     }
@@ -82,8 +78,7 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(String token, AuthCallback callback)
-    {
+    public void signInWithToken(String token, AuthCallback callback) {
         FirebaseAuth.getInstance().signInWithCustomToken(token)
                 .addOnCompleteListener(new AuthListener(callback));
     }
@@ -92,14 +87,12 @@ public class Auth implements AuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(AuthCallback callback)
-    {
+    public void signInAnonymously(AuthCallback callback) {
         FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener(new AuthListener(callback));
     }
 
     @Override
-    public void signOut(SignOutCallback callback)
-    {
+    public void signOut(SignOutCallback callback) {
         try {
             FirebaseAuth.getInstance().signOut();
             callback.onSuccess();
@@ -113,16 +106,14 @@ public class Auth implements AuthDistribution
      * This class is a wrap for using of {@link AuthCallback}.
      * Result from android sdk authentication methods is wrapped by {@link Task<AuthResult>} so we need to deal with it.
      */
-    private class AuthListener implements OnCompleteListener<AuthResult>
-    {
+    private class AuthListener implements OnCompleteListener<AuthResult> {
 
         private AuthCallback callback;
 
         /**
          * @param callback AuthCallback which need to be call on authentication result.
          */
-        public AuthListener(AuthCallback callback)
-        {
+        public AuthListener(AuthCallback callback) {
             this.callback = callback;
         }
 
@@ -130,8 +121,7 @@ public class Auth implements AuthDistribution
          * {@inheritDoc}
          */
         @Override
-        public void onComplete(@NonNull Task<AuthResult> task)
-        {
+        public void onComplete(@NonNull Task<AuthResult> task) {
             if (task.isSuccessful()) {
                 callback.onSuccess(getCurrentUser());
             } else {

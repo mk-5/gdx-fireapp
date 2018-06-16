@@ -33,8 +33,7 @@ import mk.gdx.firebase.functional.Consumer;
 /**
  * Fake class implementation. For GWT only.
  */
-public class ImageHelper
-{
+public class ImageHelper {
 
     /**
      * Covers implementation of {@code createTextureFromBytes} on GWT platform.
@@ -42,8 +41,7 @@ public class ImageHelper
      * LibGDX GWT backend do not support {@link Pixmap (byte[] encodedData, int offset, int len) }
      * FIXME
      */
-    public static TextureRegion createTextureFromBytes(byte[] bytes)
-    {
+    public static TextureRegion createTextureFromBytes(byte[] bytes) {
         throw new IllegalStateException("No such feature at GWT please use ImageHelper#createTextureFromBytes(byte[] bytes, Consumer<TextureRegion> consumer) instead");
     }
 
@@ -56,16 +54,13 @@ public class ImageHelper
      * @param bytes    Image byte[] representation, not null
      * @param consumer Consumer where you should deal with region, not null
      */
-    public static void createTextureFromBytes(byte[] bytes, final Consumer<TextureRegion> consumer)
-    {
+    public static void createTextureFromBytes(byte[] bytes, final Consumer<TextureRegion> consumer) {
         String base64 = "data:image/png;base64," + new String(Base64Coder.encode(bytes));
         final Image image = new Image();
         image.setVisible(false);
-        image.addLoadHandler(new LoadHandler()
-        {
+        image.addLoadHandler(new LoadHandler() {
             @Override
-            public void onLoad(LoadEvent event)
-            {
+            public void onLoad(LoadEvent event) {
                 ImageElement imageElement = image.getElement().cast();
                 Pixmap pixmap = new Pixmap(imageElement);
                 Gdx.app.log("ImageHelper", "pixmap: " + pixmap.getWidth() + "/" + pixmap.getHeight());

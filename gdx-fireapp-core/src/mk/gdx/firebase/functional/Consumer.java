@@ -19,8 +19,7 @@ package mk.gdx.firebase.functional;
 /**
  * Consumer functional interface for java < 8.
  */
-public interface Consumer<T>
-{
+public interface Consumer<T> {
 
     /**
      * Performs this operation on the given argument.

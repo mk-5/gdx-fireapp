@@ -30,31 +30,26 @@ import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 /**
  * Provides call to {@link FIRDatabaseReference#updateChildValues(NSDictionary)} ()}.
  */
-public class UpdateChildrenQuery extends IosDatabaseQuery<Void>
-{
-    public UpdateChildrenQuery(Database databaseDistribution)
-    {
+public class UpdateChildrenQuery extends IosDatabaseQuery<Void> {
+    public UpdateChildrenQuery(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
     @Override
-    protected void prepare()
-    {
+    protected void prepare() {
         super.prepare();
         if (!(query instanceof FIRDatabaseReference))
             throw new IllegalStateException(SHOULD_BE_RUN_WITH_DATABASE_REFERENCE);
     }
 
     @Override
-    protected ArgumentsValidator createArgumentsValidator()
-    {
+    protected ArgumentsValidator createArgumentsValidator() {
         return new UpdateChildrenValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run()
-    {
+    protected Void run() {
         if (arguments.size == 1) {
             ((FIRDatabaseReference) query).updateChildValues(NSDictionaryHelper.toNSDictionary(arguments.get(0)));
         } else if (arguments.size == 2) {

@@ -29,8 +29,7 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
  * @see <a href="https://firebase.google.com/docs/auth/android/start">android firebase docs</a>
  * @see <a href="https://firebase.google.com/docs/auth/ios/start">ios firebase docs</a>
  */
-public interface AuthDistribution
-{
+public interface AuthDistribution {
 
     /**
      * Gets currently logged in user or null if logged in user does not exists.
