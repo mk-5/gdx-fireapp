@@ -26,5 +26,6 @@
 \- fix: TS in distributions singletons
 
 **[1.4.1]**
-\- FileMetaData - support for async downloadUrl get
+\- Storage upload snapshot - async downloadUrl get
 \- fix: #6 ios firebase sdk 5.x
+\- android firebase sdk 16.x
