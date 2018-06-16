@@ -18,6 +18,8 @@ package mk.gdx.firebase.html.storage;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+import mk.gdx.firebase.functional.Consumer;
+
 /**
  * GWT implementation of <a href="https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot">UploadTaskSnapshot</a>
  */
@@ -26,12 +28,19 @@ class UploadTaskSnapshot extends JavaScriptObject {
     }
 
     /**
-     * GWT doc: <a href="https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot#downloadURL">https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot#downloadURL</a>
-     */
-    public final native String getDownloadURL() /*-{  return this.downloadURL; }-*/;
-
-    /**
      * GWT doc: <a href="https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot#metadata">https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot#metadata</a>
      */
     public final native FullMetaData getMetaData() /*-{ return this.metadata; }-*/;
+
+    /**
+     * Gets download url in async way.
+     *
+     * @param urlConsumer The url consumer, not null
+     */
+    public final native void downloadUrl(Consumer<String> urlConsumer) /*-{
+        this.ref.getDownloadURL().then(function(downloadURL) {
+          urlConsumer.@mk.gdx.firebase.functional.Consumer::accept(Ljava/lang/Object;)(downloadURL);
+        });
+    }-*/;
+
 }

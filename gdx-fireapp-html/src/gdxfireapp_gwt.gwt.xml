@@ -22,4 +22,6 @@
                                    value="mk.gdx.firebase.annotations.NestedGenericType"/>
     <extend-configuration-property name="gdx.reflect.include"
                                    value="mk.gdx.firebase.annotations.MapConversion"/>
+    <extend-configuration-property name="gdx.reflect.include"
+                                   value="mk.gdx.firebase.functional.Consumer"/>
 </module>

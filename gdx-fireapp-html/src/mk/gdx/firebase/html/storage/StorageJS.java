@@ -18,6 +18,7 @@ package mk.gdx.firebase.html.storage;
 
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.storage.FileMetadata;
 
 /**
@@ -67,14 +68,12 @@ public class StorageJS {
      */
     public static native void upload(String bucketUrl, String refPath, String base64DataString, UploadCallback uploadCallback) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
-
         storage.ref(refPath).putString(base64DataString,'base64').then(function(snapshot){
             @mk.gdx.firebase.html.storage.StorageJS::callUploadCallback(Lmk/gdx/firebase/html/storage/UploadTaskSnapshot;Lmk/gdx/firebase/callbacks/UploadCallback;)(snapshot, uploadCallback);
         })['catch'](function(error){
             uploadCallback.@mk.gdx.firebase.callbacks.UploadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
         });
     }-*/;
-
 
     /**
      * Creates FileMetaData from {@code snapshot} and calls callback.
