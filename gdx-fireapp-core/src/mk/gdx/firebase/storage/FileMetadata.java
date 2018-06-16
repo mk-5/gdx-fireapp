@@ -16,12 +16,15 @@
 
 package mk.gdx.firebase.storage;
 
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.storage.functional.DownloadUrl;
+
 /**
- * POJO class that holds information about file from Firebase storage.
+ * POJO class that holds information about the file from Firebase storage.
  */
 public class FileMetadata
 {
-    private String downloadUrl;
+    private DownloadUrl downloadUrl;
     private String name;
     private String path;
     private String md5Hash;
@@ -34,7 +37,7 @@ public class FileMetadata
      *
      * @return Url with which you can download file
      */
-    public String getDownloadUrl()
+    public DownloadUrl getDownloadUrl()
     {
         return downloadUrl;
     }
@@ -112,7 +115,7 @@ public class FileMetadata
          * @param downloadUrl Firebase download url
          * @return this {@code Builder} instance
          */
-        public Builder setDownloadUrl(String downloadUrl)
+        public Builder setDownloadUrl(DownloadUrl downloadUrl)
         {
             inst.downloadUrl = downloadUrl;
             return this;

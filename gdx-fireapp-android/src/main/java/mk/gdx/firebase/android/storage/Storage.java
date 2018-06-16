@@ -36,6 +36,7 @@ import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.storage.FileMetadata;
+import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * Android Firebase storage API implementation.
@@ -210,7 +211,7 @@ public class Storage implements StorageDistribution
     private FileMetadata buildMetadata(UploadTask.TaskSnapshot taskSnapshot)
     {
         FileMetadata.Builder builder = new FileMetadata.Builder()
-                .setDownloadUrl(taskSnapshot.getDownloadUrl() != null ? taskSnapshot.getDownloadUrl().getPath() : null);
+                .setDownloadUrl(new DownloadUrl(taskSnapshot.getDownloadUrl() != null ? taskSnapshot.getDownloadUrl().toString(): null));
         if (taskSnapshot.getMetadata() != null) {
             builder.setMd5Hash(taskSnapshot.getMetadata().getMd5Hash())
                     .setName(taskSnapshot.getMetadata().getName())

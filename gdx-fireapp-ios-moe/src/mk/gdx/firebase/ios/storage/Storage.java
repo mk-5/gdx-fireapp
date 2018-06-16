@@ -36,9 +36,10 @@ import apple.foundation.c.Foundation;
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
-import mk.gdx.firebase.distributions.AnalyticsDistribution;
 import mk.gdx.firebase.distributions.StorageDistribution;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.storage.FileMetadata;
+import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * iOS Firebase storage API implementation.
@@ -94,11 +95,11 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, final long bytesLimit, DownloadCallback<byte[]> callback)
+    public void download(String path, final long bytesLimit, final DownloadCallback<byte[]> callback)
     {
         firStorage().child(path).dataWithMaxSizeCompletion(bytesLimit, new FIRStorageReference.Block_dataWithMaxSizeCompletion() {
             @Override
-            public void call_dataWithMaxSizeCompletion(NSData arg0, NSError arg1)
+            public void call_dataWithMaxSizeCompletion(final NSData arg0, NSError arg1)
             {
                 if (ErrorHandler.handleDownloadError(arg1, callback)) return;
                 ObjCRuntime.autoreleasepool(new Runnable() { // TODO - check this autorelease pool
@@ -119,7 +120,7 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, DownloadCallback<File> callback)
+    public void download(String path, File targetFile, final DownloadCallback<File> callback)
     {
         NSURL targetFileUrl;
         if (targetFile == null) {
@@ -183,7 +184,7 @@ public class Storage implements StorageDistribution {
      * @param firMetadata FIRStorageMetadata that you want to wrap by {@link FileMetadata}
      * @return FileMetadata created of base of given {@code firMetadata}, not null.
      */
-    private FileMetadata buildMetaData(FIRStorageMetadata firMetadata)
+    private FileMetadata buildMetaData(final FIRStorageMetadata firMetadata)
     {
         // UpdateTimeMillis is specified in seconds so have to multiply it by 1000.
         /** https://developer.apple.com/documentation/foundation/timeinterval */
@@ -195,7 +196,20 @@ public class Storage implements StorageDistribution {
                 .setSizeBytes(firMetadata.size())
                 .setPath(firMetadata.path())
                 .setCreationTimeMillis((long) (firMetadata.timeCreated().timeIntervalSince1970() * 1000L))
-                .setDownloadUrl(firMetadata.downloadURL().absoluteString())
+                .setDownloadUrl(new DownloadUrl(new Consumer<Consumer<String>>() {
+                    @Override
+                    public void accept(final Consumer<String> urlConsumer)
+                    {
+                        firStorage().child(firMetadata.path()).downloadURLWithCompletion(new FIRStorageReference.Block_downloadURLWithCompletion() {
+                            @Override
+                            public void call_downloadURLWithCompletion(NSURL arg0, NSError arg1)
+                            {
+                                if( arg1 != null ) throw new RuntimeException(arg1.localizedDescription());
+                                urlConsumer.accept(arg0.absoluteURL().absoluteString());
+                            }
+                        });
+                    }
+                }))
                 .setMd5Hash("")
                 .build();
     }
@@ -213,7 +227,7 @@ public class Storage implements StorageDistribution {
         private static boolean handleDeleteError(NSError error, DeleteCallback callback)
         {
             if (error != null) {
-                callback.onFail(new Exception(error.localizedDescription()));
+                callback.onFail(new RuntimeException(error.localizedDescription()));
                 return true;
             }
             return false;
@@ -222,7 +236,7 @@ public class Storage implements StorageDistribution {
         private static boolean handleUploadError(NSError error, UploadCallback callback)
         {
             if (error != null) {
-                callback.onFail(new Exception(error.localizedDescription()));
+                callback.onFail(new RuntimeException(error.localizedDescription()));
                 return true;
             }
             return false;
@@ -231,7 +245,7 @@ public class Storage implements StorageDistribution {
         private static boolean handleDownloadError(NSError error, DownloadCallback callback)
         {
             if (error != null) {
-                callback.onFail(new Exception(error.localizedDescription()));
+                callback.onFail(new RuntimeException(error.localizedDescription()));
                 return true;
             }
             return false;
