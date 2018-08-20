@@ -68,13 +68,6 @@ public class Auth implements AuthDistribution {
                 // TODO - arg0 was chacnged from FIRUser to FIRAuthDataResult - need to adopt it
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -90,13 +83,6 @@ public class Auth implements AuthDistribution {
                 // TODO
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -112,13 +98,6 @@ public class Auth implements AuthDistribution {
                 // TODO
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -133,13 +112,6 @@ public class Auth implements AuthDistribution {
                 if (handleError(arg1, callback)) return;
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
