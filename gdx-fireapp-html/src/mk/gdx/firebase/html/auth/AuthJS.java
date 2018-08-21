@@ -98,11 +98,11 @@ class AuthJS {
     // TODO - check callbacks here
     public static native void signOut(final SignOutCallback callback) /*-{
         if( $wnd.firebase.auth().currentUser == null ){
-            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()();
             return;
         }
         $wnd.firebase.auth().signOut().then(function(){
-            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess();
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()();
         })['catch'](function(error) {
             callback.@mk.gdx.firebase.callbacks.SignOutCallback::onFail(Ljava/lang/Exception;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
@@ -113,7 +113,7 @@ class AuthJS {
     /**
      * @return Simplest way for javascript to get GdxFirebaseUser.
      */
-    public static GdxFirebaseUser getUserBridge() {
+    static GdxFirebaseUser getUserBridge() {
         return GdxFIRAuth.instance().getCurrentUser();
     }
 }
