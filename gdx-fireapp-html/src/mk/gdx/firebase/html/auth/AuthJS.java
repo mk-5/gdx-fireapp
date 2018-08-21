@@ -95,7 +95,6 @@ class AuthJS {
         });
     }-*/;
 
-    // TODO - check callbacks here
     public static native void signOut(final SignOutCallback callback) /*-{
         if( $wnd.firebase.auth().currentUser == null ){
             callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()();
