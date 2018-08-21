@@ -29,6 +29,7 @@ import mk.gdx.firebase.exceptions.PlatformDistributorException;
 public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements AuthDistribution {
 
     private static volatile GdxFIRAuth instance;
+    private GdxFIRGoogleAuth gdxFIRGoogleAuth;
 
     /**
      * GdxFIRAuth protected constructor.
@@ -38,6 +39,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@link PlatformDistributor#PlatformDistributor()}
      */
     private GdxFIRAuth() throws PlatformDistributorException {
+        gdxFIRGoogleAuth = new GdxFIRGoogleAuth();
     }
 
     /**
@@ -58,6 +60,13 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
             }
         }
         return result;
+    }
+
+    /**
+     * @return GoogleAuth platform distribution, not null
+     */
+    public GdxFIRGoogleAuth google() {
+        return gdxFIRGoogleAuth;
     }
 
     /**
