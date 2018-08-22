@@ -1,0 +1,1 @@
+{"output":"src","platform":"iOS","bindings":[{"type":"framework","name":"GoogleSignIn","objcClassGenerationMode":"Binding","frameworkPath":"xcode/Pods/GoogleSignIn/Frameworks/GoogleSignIn.framework","packageBase":"com.google","importCode":"#import <GoogleSignIn/GIDSignIn.h>\n#import <GoogleSignIn/GIDGoogleUser.h>\n#import <GoogleSignIn/GIDAuthentication.h>"}]}

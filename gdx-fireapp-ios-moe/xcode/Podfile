@@ -12,6 +12,7 @@ target 'ios-moe' do
   pod 'Firebase/Crash'
   pod 'Firebase/Auth'
   pod 'Firebase/Messaging'
+  pod 'GoogleSignIn'
 
 end
 
