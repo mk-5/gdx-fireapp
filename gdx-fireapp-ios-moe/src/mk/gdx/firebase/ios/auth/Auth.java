@@ -123,8 +123,11 @@ public class Auth implements AuthDistribution {
         try {
             Ptr<NSError> ptr = PtrFactory.newObjectReference(NSError.class);
             FIRAuth.auth().signOut(ptr);
-            if (ptr.get() != null)
-                throw new Exception(ptr.get().localizedDescription());
+            if (ptr.get() != null) {
+                callback.onFail(new Exception(ptr.get().localizedDescription()));
+            } else {
+                callback.onSuccess();
+            }
         } catch (Exception e) {
             callback.onFail(e);
         }
