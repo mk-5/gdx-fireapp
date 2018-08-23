@@ -22,9 +22,6 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
 
 /**
  * Provides authorization via Google.
- * <p>
- * You can read about possible Firebase authorization methods in Firebase docs:
- * <p>
  *
  * @see <a href="https://firebase.google.com/docs/auth/android/google-signin">android firebase docs</a>
  * @see <a href="https://firebase.google.com/docs/auth/ios/google-signin">ios firebase docs</a>
