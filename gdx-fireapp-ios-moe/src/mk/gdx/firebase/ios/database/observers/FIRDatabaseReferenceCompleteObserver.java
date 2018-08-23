@@ -16,9 +16,8 @@
 
 package mk.gdx.firebase.ios.database.observers;
 
-import com.google.firebasedatabase.FIRDatabaseReference;
-
 import apple.foundation.NSError;
+import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 
 /**

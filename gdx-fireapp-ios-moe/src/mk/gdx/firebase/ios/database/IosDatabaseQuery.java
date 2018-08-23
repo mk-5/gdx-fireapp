@@ -16,8 +16,7 @@
 
 package mk.gdx.firebase.ios.database;
 
-import com.google.firebasedatabase.FIRDatabaseQuery;
-
+import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFilteringProvider;
 

@@ -17,11 +17,11 @@
 package mk.gdx.firebase.ios.database;
 
 import com.badlogic.gdx.utils.Array;
-import com.google.firebasedatabase.FIRDatabase;
-import com.google.firebasedatabase.FIRDatabaseReference;
 
 import java.util.Map;
 
+import bindings.google.firebasedatabase.FIRDatabase;
+import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;

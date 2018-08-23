@@ -16,13 +16,12 @@
 
 package mk.gdx.firebase.ios.analytics;
 
-import com.google.firebaseanalytics.FIRAnalytics;
-
 import java.util.Map;
 
 import apple.foundation.NSDictionary;
 import apple.foundation.NSMutableDictionary;
 import apple.foundation.NSString;
+import bindings.google.firebaseanalytics.FIRAnalytics;
 import mk.gdx.firebase.distributions.AnalyticsDistribution;
 
 /**

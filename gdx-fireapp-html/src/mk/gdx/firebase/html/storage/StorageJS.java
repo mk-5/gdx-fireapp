@@ -24,7 +24,7 @@ import mk.gdx.firebase.storage.FileMetadata;
 /**
  * Javascript calls to firebase storage api.
  */
-public class StorageJS {
+class StorageJS {
 
     /**
      * Downloads file given at {@code refPath} and convert it to base64 string.
@@ -33,7 +33,7 @@ public class StorageJS {
      * @param refPath          Storage reference path, not null
      * @param downloadCallback Callback, not null
      */
-    public static native void download(String bucketUrl, String refPath, UrlDownloadCallback downloadCallback) /*-{
+    static native void download(String bucketUrl, String refPath, UrlDownloadCallback downloadCallback) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).getDownloadURL().then(function(url){
              downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onSuccess(Ljava/lang/String;)(url);
@@ -49,7 +49,7 @@ public class StorageJS {
      * @param refPath        Storage reference path, not null
      * @param deleteCallback Callback, not null
      */
-    public static native void remove(String bucketUrl, String refPath, DeleteCallback deleteCallback) /*-{
+    static native void remove(String bucketUrl, String refPath, DeleteCallback deleteCallback) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath)['delete']().then(function(){
              deleteCallback.@mk.gdx.firebase.callbacks.DeleteCallback::onSuccess()();
@@ -66,7 +66,7 @@ public class StorageJS {
      * @param base64DataString Base64 data representation, not null
      * @param uploadCallback   Callback, not null
      */
-    public static native void upload(String bucketUrl, String refPath, String base64DataString, UploadCallback uploadCallback) /*-{
+    static native void upload(String bucketUrl, String refPath, String base64DataString, UploadCallback uploadCallback) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).putString(base64DataString,'base64').then(function(snapshot){
             @mk.gdx.firebase.html.storage.StorageJS::callUploadCallback(Lmk/gdx/firebase/html/storage/UploadTaskSnapshot;Lmk/gdx/firebase/callbacks/UploadCallback;)(snapshot, uploadCallback);

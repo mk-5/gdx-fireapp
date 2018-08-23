@@ -16,14 +16,13 @@
 
 package mk.gdx.firebase.ios.auth;
 
-import com.google.firebaseauth.FIRAuth;
-import com.google.firebaseauth.FIRAuthDataResult;
-import com.google.firebaseauth.FIRUser;
-
 import org.moe.natj.general.ptr.Ptr;
 import org.moe.natj.general.ptr.impl.PtrFactory;
 
 import apple.foundation.NSError;
+import bindings.google.firebaseauth.FIRAuth;
+import bindings.google.firebaseauth.FIRAuthDataResult;
+import bindings.google.firebaseauth.FIRUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
@@ -68,13 +67,6 @@ public class Auth implements AuthDistribution {
                 // TODO - arg0 was chacnged from FIRUser to FIRAuthDataResult - need to adopt it
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_createUserWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -90,13 +82,6 @@ public class Auth implements AuthDistribution {
                 // TODO
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_signInWithEmailPasswordCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -112,13 +97,6 @@ public class Auth implements AuthDistribution {
                 // TODO
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_signInWithCustomTokenCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -133,13 +111,6 @@ public class Auth implements AuthDistribution {
                 if (handleError(arg1, callback)) return;
                 callback.onSuccess(getCurrentUser());
             }
-
-//            @Override
-//            public void call_signInAnonymouslyWithCompletion(FIRUser arg0, NSError arg1)
-//            {
-//                if (handleError(arg1, callback)) return;
-//                callback.onSuccess(getCurrentUser());
-//            }
         });
     }
 
@@ -151,8 +122,11 @@ public class Auth implements AuthDistribution {
         try {
             Ptr<NSError> ptr = PtrFactory.newObjectReference(NSError.class);
             FIRAuth.auth().signOut(ptr);
-            if (ptr.get() != null)
-                throw new Exception(ptr.get().localizedDescription());
+            if (ptr.get() != null) {
+                callback.onFail(new Exception(ptr.get().localizedDescription()));
+            } else {
+                callback.onSuccess();
+            }
         } catch (Exception e) {
             callback.onFail(e);
         }

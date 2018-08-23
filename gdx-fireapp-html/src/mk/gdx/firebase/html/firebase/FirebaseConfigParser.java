@@ -66,7 +66,7 @@ public class FirebaseConfigParser {
                 "}());";
     }
 
-
+    // TODO - allow to add more then one script (after sdk 5.0 should be one script per firebase package)
     private String parseFirebaseInitializationScript() {
         Pattern pattern = Pattern.compile("<script>((.|\\n|\\rn|\\r)*?)</script>");
         Matcher matcher = pattern.matcher(rawHtml);

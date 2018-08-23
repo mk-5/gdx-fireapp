@@ -25,13 +25,13 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
  * Provides calls to firebase javascript api.
  */
 class AuthJS {
-    public static native FirebaseUserJSON firebaseUser() /*-{
+    static native FirebaseUserJSON firebaseUser() /*-{
         if( typeof $wnd.firebase == 'undefined') return { isNULL : true };
         var user = $wnd.firebase.auth().currentUser;
         return (typeof user != 'undefined' && user != null) ? user : { isNULL : true };
     }-*/;
 
-    public static native void singInAnonymously(final AuthCallback callback) /*-{
+    static native void singInAnonymously(final AuthCallback callback) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
                 callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
@@ -47,7 +47,7 @@ class AuthJS {
         });
     }-*/;
 
-    public static native void signInWithEmailAndPassword(final String email, final String password, final AuthCallback callback) /*-{
+    static native void signInWithEmailAndPassword(final String email, final String password, final AuthCallback callback) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
                 callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
@@ -63,7 +63,7 @@ class AuthJS {
         });
     }-*/;
 
-    public static native void createUserWithEmailAndPassword(final String email, final String password, final AuthCallback callback) /*-{
+    static native void createUserWithEmailAndPassword(final String email, final String password, final AuthCallback callback) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
                 callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
@@ -79,7 +79,7 @@ class AuthJS {
         });
     }-*/;
 
-    public static native void signInWithToken(final String token, final AuthCallback callback) /*-{
+    static native void signInWithToken(final String token, final AuthCallback callback) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
                 callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
@@ -95,14 +95,13 @@ class AuthJS {
         });
     }-*/;
 
-    // TODO - check callbacks here
-    public static native void signOut(final SignOutCallback callback) /*-{
+    static native void signOut(final SignOutCallback callback) /*-{
         if( $wnd.firebase.auth().currentUser == null ){
-            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()();
             return;
         }
         $wnd.firebase.auth().signOut().then(function(){
-            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess();
+            callback.@mk.gdx.firebase.callbacks.SignOutCallback::onSuccess()();
         })['catch'](function(error) {
             callback.@mk.gdx.firebase.callbacks.SignOutCallback::onFail(Ljava/lang/Exception;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
@@ -113,7 +112,7 @@ class AuthJS {
     /**
      * @return Simplest way for javascript to get GdxFirebaseUser.
      */
-    public static GdxFirebaseUser getUserBridge() {
+    static GdxFirebaseUser getUserBridge() {
         return GdxFIRAuth.instance().getCurrentUser();
     }
 }

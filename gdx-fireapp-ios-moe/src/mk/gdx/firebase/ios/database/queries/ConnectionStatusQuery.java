@@ -17,13 +17,13 @@
 package mk.gdx.firebase.ios.database.queries;
 
 import com.badlogic.gdx.utils.LongArray;
-import com.google.firebasedatabase.FIRDataSnapshot;
-import com.google.firebasedatabase.FIRDatabase;
-import com.google.firebasedatabase.FIRDatabaseQuery;
-import com.google.firebasedatabase.FIRDatabaseReference;
-import com.google.firebasedatabase.enums.FIRDataEventType;
 
 import apple.foundation.NSNumber;
+import bindings.google.firebasedatabase.FIRDataSnapshot;
+import bindings.google.firebasedatabase.FIRDatabase;
+import bindings.google.firebasedatabase.FIRDatabaseQuery;
+import bindings.google.firebasedatabase.FIRDatabaseReference;
+import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
 import mk.gdx.firebase.ios.database.Database;

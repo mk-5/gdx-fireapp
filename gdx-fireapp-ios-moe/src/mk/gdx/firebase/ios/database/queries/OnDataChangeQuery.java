@@ -17,11 +17,11 @@
 package mk.gdx.firebase.ios.database.queries;
 
 import com.badlogic.gdx.utils.Array;
-import com.google.firebasedatabase.FIRDataSnapshot;
-import com.google.firebasedatabase.FIRDatabaseQuery;
-import com.google.firebasedatabase.enums.FIRDataEventType;
 
 import apple.foundation.NSError;
+import bindings.google.firebasedatabase.FIRDataSnapshot;
+import bindings.google.firebasedatabase.FIRDatabaseQuery;
+import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;

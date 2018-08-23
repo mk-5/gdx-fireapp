@@ -16,7 +16,7 @@
 
 package mk.gdx.firebase.ios.database.proxies;
 
-import com.google.firebasedatabase.FIRDatabaseQuery;
+import bindings.google.firebasedatabase.FIRDatabaseQuery;
 
 /**
  * Methods from {@code FIRDatabaseQuery} that are filters affected.

@@ -6,12 +6,13 @@ target 'ios-moe' do
   use_frameworks!
 
   # Pods for ios-moe
-  pod 'Firebase/Core'      # !! and here !!
-  pod 'Firebase/Storage'
-  pod 'Firebase/Database'
-  pod 'Firebase/Crash'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Messaging'
+  pod 'Firebase/Core', '5.2.0'      # !! and here !!
+  pod 'Firebase/Storage', '5.2.0'
+  pod 'Firebase/Database', '5.2.0'
+  pod 'Firebase/Crash', '5.2.0'
+  pod 'Firebase/Auth', '5.2.0'
+  pod 'Firebase/Messaging', '5.2.0'
+  pod 'GoogleSignIn', '4.1.2'
 
 end
 

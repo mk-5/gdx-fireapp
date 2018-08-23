@@ -17,12 +17,12 @@
 package mk.gdx.firebase.ios.database.resolvers;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.google.firebasedatabase.FIRDataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import apple.foundation.NSArray;
+import bindings.google.firebasedatabase.FIRDataSnapshot;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.ios.database.DataProcessor;
 

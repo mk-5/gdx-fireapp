@@ -16,8 +16,7 @@
 
 package mk.gdx.firebase.ios;
 
-import com.google.firebasecore.FIRApp;
-
+import bindings.google.firebasecore.FIRApp;
 import mk.gdx.firebase.distributions.AppDistribution;
 
 /**
