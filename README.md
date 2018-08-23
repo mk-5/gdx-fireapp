@@ -8,12 +8,12 @@ A libGDX cross-platform API for Firebase.
 
 ## Getting Started
 
-First thing is installing Firebase SDK. Here you can find some short tutorials describes installation inside LibGDX project:
+The first thing you should to do is installing Firebase SDK. Here you can find some short tutorials describes this installation inside LibGDX project:
 
 - [Android Firebase SDK installation guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-SDK-installation)
 - [iOS Firebase SDK installation guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Firebase-SDK-installation)
 
-Now you need to add GDX Fireapp gradle dependencies, as follow:
+Now you need to add gradle dependencies:
 
 **Core**
 
@@ -31,7 +31,7 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.5.1"
 compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.5.1"
 ```
 
-The last step is: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
+If you are done with that do the last step: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
 
 
