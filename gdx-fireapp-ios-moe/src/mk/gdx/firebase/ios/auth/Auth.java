@@ -16,14 +16,13 @@
 
 package mk.gdx.firebase.ios.auth;
 
-import com.google.firebaseauth.FIRAuth;
-import com.google.firebaseauth.FIRAuthDataResult;
-import com.google.firebaseauth.FIRUser;
-
 import org.moe.natj.general.ptr.Ptr;
 import org.moe.natj.general.ptr.impl.PtrFactory;
 
 import apple.foundation.NSError;
+import bindings.google.firebaseauth.FIRAuth;
+import bindings.google.firebaseauth.FIRAuthDataResult;
+import bindings.google.firebaseauth.FIRUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;

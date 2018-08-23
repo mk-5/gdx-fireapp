@@ -16,8 +16,7 @@
 
 package mk.gdx.firebase.ios.database.queries;
 
-import com.google.firebasedatabase.FIRDatabaseReference;
-
+import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;

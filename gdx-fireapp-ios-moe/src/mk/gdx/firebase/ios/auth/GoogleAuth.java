@@ -15,8 +15,7 @@
  */
 package mk.gdx.firebase.ios.auth;
 
-import com.google.googlesignin.GIDSignIn;
-
+import bindings.google.googlesignin.GIDSignIn;
 import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;

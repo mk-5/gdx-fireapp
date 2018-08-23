@@ -16,8 +16,7 @@
 
 package mk.gdx.firebase.ios.crash;
 
-import com.google.firebasecrash.c.FirebaseCrash;
-
+import bindings.google.firebasecrash.c.FirebaseCrash;
 import mk.gdx.firebase.distributions.CrashDistribution;
 
 /**

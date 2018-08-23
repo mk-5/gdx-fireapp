@@ -16,13 +16,12 @@
 
 package mk.gdx.firebase.ios.database.queries;
 
-import com.google.firebasedatabase.FIRDataSnapshot;
-import com.google.firebasedatabase.FIRDatabaseReference;
-import com.google.firebasedatabase.FIRMutableData;
-import com.google.firebasedatabase.FIRTransactionResult;
-
 import apple.foundation.NSError;
 import apple.foundation.NSNull;
+import bindings.google.firebasedatabase.FIRDataSnapshot;
+import bindings.google.firebasedatabase.FIRDatabaseReference;
+import bindings.google.firebasedatabase.FIRMutableData;
+import bindings.google.firebasedatabase.FIRTransactionResult;
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;

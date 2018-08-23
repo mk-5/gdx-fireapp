@@ -4,16 +4,13 @@ apply plugin: 'maven-publish'
 
 task sourceJar(type: Jar) {
     from sourceSets.main.allJava
-    exclude 'com/google/**'
     classifier "sources"
 }
 
 jar {
     from sourceSets.main.output
-    exclude 'com/google/**'
 
     from sourceSets.main.allJava
-    exclude 'com/google/**'
 }
 
 sourceCompatibility = 1.7

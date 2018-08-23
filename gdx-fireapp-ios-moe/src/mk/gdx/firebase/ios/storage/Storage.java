@@ -17,11 +17,6 @@
 package mk.gdx.firebase.ios.storage;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.google.firebasestorage.FIRStorage;
-import com.google.firebasestorage.FIRStorageDownloadTask;
-import com.google.firebasestorage.FIRStorageMetadata;
-import com.google.firebasestorage.FIRStorageReference;
-import com.google.firebasestorage.FIRStorageUploadTask;
 
 import org.moe.natj.general.ptr.BytePtr;
 import org.moe.natj.general.ptr.impl.PtrFactory;
@@ -33,6 +28,11 @@ import apple.foundation.NSData;
 import apple.foundation.NSError;
 import apple.foundation.NSURL;
 import apple.foundation.c.Foundation;
+import bindings.google.firebasestorage.FIRStorage;
+import bindings.google.firebasestorage.FIRStorageDownloadTask;
+import bindings.google.firebasestorage.FIRStorageMetadata;
+import bindings.google.firebasestorage.FIRStorageReference;
+import bindings.google.firebasestorage.FIRStorageUploadTask;
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
