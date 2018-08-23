@@ -28,3 +28,10 @@
 \- API Change: The downloadUrl field in FileMetadata is loaded in async way
 \- fix: #6 ios firebase sdk 5.x
 \- API Change: android firebase sdk 16.x
+
+**[1.5.1]**
+\- API Addition: Google authorization for android
+\- API Addition: Google authorization for ios
+\- API Addition: Google authorization for gwt
+\- API Fix: Fix sign-out callback for gwt
+\- API Change: The multi-os engine bindings are delivery with library so no longer needs to generate bindings yourself
