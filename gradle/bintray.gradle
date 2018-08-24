@@ -11,7 +11,6 @@ bintray {
     key = System.getenv('BINTRAY_API_KEY') != null ? System.getenv('BINTRAY_API_KEY') : properties.getProperty("bintray.apikey")
     publications = ['maven']
     override = true
-    dryRun = true
     pkg {
         repo = bintrayRepo
         name = bintrayName
