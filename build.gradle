@@ -51,7 +51,6 @@ allprojects {
     }
 
     apply from: "" + project.rootDir + "/gradle/dependencies.gradle"
-    apply from: "" + project.rootDir + "/gradle/bintray.gradle"
 
     repositories {
         mavenLocal()

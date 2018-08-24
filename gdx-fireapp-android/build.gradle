@@ -71,4 +71,6 @@ publishing {
     }
 }
 
+apply from: "" + project.rootDir + "/gradle/bintray.gradle"
+
 publishToMavenLocal.dependsOn.add("assembleRelease");
