@@ -25,6 +25,7 @@ jobs:
       script: ./gradlew gdx-fireapp-android:assembleRelease
     - script: ./gradlew gdx-fireapp-core:jar
     - script: ./gradlew gdx-fireapp-ios-moe:jar
+    - script: ./gradlew gdx-fireapp-html:jar
     - stage: test
       script: ./gradlew gdx-fireapp-core:test
     - stage: deploy
