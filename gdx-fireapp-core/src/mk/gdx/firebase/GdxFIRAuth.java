@@ -20,7 +20,6 @@ import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 
 /**
  * @see AuthDistribution
@@ -38,7 +37,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRAuth() throws PlatformDistributorException {
+    private GdxFIRAuth() {
         gdxFIRGoogleAuth = new GdxFIRGoogleAuth();
     }
 
@@ -51,11 +50,7 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
             synchronized (GdxFIRAuth.class) {
                 result = instance;
                 if (result == null) {
-                    try {
-                        instance = result = new GdxFIRAuth();
-                    } catch (PlatformDistributorException e) {
-                        e.printStackTrace();
-                    }
+                    instance = result = new GdxFIRAuth();
                 }
             }
         }

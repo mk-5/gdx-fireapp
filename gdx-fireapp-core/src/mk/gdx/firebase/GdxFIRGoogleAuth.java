@@ -20,7 +20,6 @@ import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 
 /**
  * @see GoogleAuthDistribution
@@ -33,7 +32,7 @@ public class GdxFIRGoogleAuth extends PlatformDistributor<GoogleAuthDistribution
     /**
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    GdxFIRGoogleAuth() throws PlatformDistributorException {
+    GdxFIRGoogleAuth() {
     }
 
     /**

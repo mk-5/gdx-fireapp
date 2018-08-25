@@ -17,7 +17,6 @@
 package mk.gdx.firebase;
 
 import mk.gdx.firebase.distributions.AppDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 
 /**
  * Gets access to Firebase App API in multi-modules.
@@ -37,7 +36,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRApp() throws PlatformDistributorException {
+    private GdxFIRApp() {
     }
 
 
@@ -50,11 +49,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
             synchronized (GdxFIRApp.class) {
                 result = instance;
                 if (result == null) {
-                    try {
-                        instance = result = new GdxFIRApp();
-                    } catch (PlatformDistributorException e) {
-                        e.printStackTrace();
-                    }
+                    instance = result = new GdxFIRApp();
                 }
             }
         }

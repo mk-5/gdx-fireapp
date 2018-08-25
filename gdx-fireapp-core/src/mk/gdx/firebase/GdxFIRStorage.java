@@ -27,7 +27,6 @@ import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.helpers.ImageHelper;
 
@@ -48,7 +47,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRStorage() throws PlatformDistributorException {
+    private GdxFIRStorage() {
     }
 
     /**
@@ -60,11 +59,7 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
             synchronized (GdxFIRStorage.class) {
                 result = instance;
                 if (result == null) {
-                    try {
-                        instance = result = new GdxFIRStorage();
-                    } catch (PlatformDistributorException e) {
-                        e.printStackTrace();
-                    }
+                    instance = result = new GdxFIRStorage();
                 }
             }
         }

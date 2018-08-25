@@ -51,7 +51,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRDatabase() throws PlatformDistributorException {
+    private GdxFIRDatabase() {
         mapConverter = new MapConverter();
     }
 
@@ -64,11 +64,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
             synchronized (GdxFIRDatabase.class) {
                 result = instance;
                 if (result == null) {
-                    try {
-                        instance = result = new GdxFIRDatabase();
-                    } catch (PlatformDistributorException e) {
-                        e.printStackTrace();
-                    }
+                    instance = result = new GdxFIRDatabase();
                 }
             }
         }

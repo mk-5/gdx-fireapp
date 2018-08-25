@@ -60,7 +60,7 @@ public abstract class PlatformDistributor<T> {
      * @throws PlatformDistributorException Throws when something is wrong with environment
      */
     @SuppressWarnings("unchecked")
-    protected PlatformDistributor() throws PlatformDistributorException {
+    protected PlatformDistributor() {
         String className = null;
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             className = getAndroidClassName();

@@ -37,7 +37,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRAnalytics() throws PlatformDistributorException {
+    private GdxFIRAnalytics(){
     }
 
 
@@ -50,11 +50,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
             synchronized (GdxFIRAnalytics.class) {
                 result = instance;
                 if (result == null) {
-                    try {
-                        instance = result = new GdxFIRAnalytics();
-                    } catch (PlatformDistributorException e) {
-                        e.printStackTrace();
-                    }
+                    instance = result = new GdxFIRAnalytics();
                 }
             }
         }

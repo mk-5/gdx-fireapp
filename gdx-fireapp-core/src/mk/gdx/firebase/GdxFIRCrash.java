@@ -36,7 +36,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRCrash() throws PlatformDistributorException {
+    private GdxFIRCrash() {
     }
 
     /**
@@ -48,11 +48,7 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
             synchronized (GdxFIRCrash.class) {
                 result = instance;
                 if (result == null) {
-                    try {
-                        instance = result = new GdxFIRCrash();
-                    } catch (PlatformDistributorException e) {
-                        e.printStackTrace();
-                    }
+                    instance = result = new GdxFIRCrash();
                 }
             }
         }
