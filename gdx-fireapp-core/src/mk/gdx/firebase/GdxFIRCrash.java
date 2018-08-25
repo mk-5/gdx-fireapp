@@ -17,7 +17,6 @@
 package mk.gdx.firebase;
 
 import mk.gdx.firebase.distributions.CrashDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 
 /**
  * Gets access to Firebase Crash API in multi-modules.

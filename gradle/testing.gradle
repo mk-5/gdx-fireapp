@@ -1,0 +1,34 @@
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "pl.mk5.gdx-fireapp:gdx-fireapp"
+        property "sonar.projectName", "gdx-fireapp"
+    }
+}
+
+configure(subprojects.findAll { it.name != 'gdx-fireapp-android' }) {
+    sonarqube {
+        properties {
+            property "sonar.jacoco.reportPaths", "$buildDir/jacoco/test.exec"
+        }
+    }
+}
+
+configure(subprojects.findAll { it.name.equals('gdx-fireapp-android') }) {
+    sonarqube {
+        properties {
+            property "sonar.jacoco.reportPaths", "$buildDir/jacoco/testDebugUnitTest.exec"
+            property "sonar.junit.reportsPath", "$buildDir/test-results/debug"
+            property "sonar.tests", "$projectDir/src/test/java"
+        }
+    }
+}
+
+allprojects {
+    apply plugin: "jacoco"
+
+    jacoco {
+        reportsDir = file("$buildDir/jacoco/test.exec")
+    }
+}

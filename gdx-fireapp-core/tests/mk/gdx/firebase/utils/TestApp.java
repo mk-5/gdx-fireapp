@@ -10,10 +10,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
 import com.badlogic.gdx.utils.Clipboard;
 
 
 public class TestApp implements Application {
+
+    private ApplicationLogger applicationLogger = new LwjglApplicationLogger();
+    private int logLevel = LOG_DEBUG;
+
     @Override
     public ApplicationListener getApplicationListener() {
         return null;
@@ -45,53 +50,53 @@ public class TestApp implements Application {
     }
 
     @Override
-    public void log(String tag, String message) {
-
-    }
-
-    @Override
-    public void log(String tag, String message, Throwable exception) {
-
-    }
-
-    @Override
-    public void error(String tag, String message) {
-
-    }
-
-    @Override
-    public void error(String tag, String message, Throwable exception) {
-
-    }
-
-    @Override
     public void debug(String tag, String message) {
-
+        if (logLevel >= LOG_DEBUG) getApplicationLogger().debug(tag, message);
     }
 
     @Override
     public void debug(String tag, String message, Throwable exception) {
+        if (logLevel >= LOG_DEBUG) getApplicationLogger().debug(tag, message, exception);
+    }
 
+    @Override
+    public void log(String tag, String message) {
+        if (logLevel >= LOG_INFO) getApplicationLogger().log(tag, message);
+    }
+
+    @Override
+    public void log(String tag, String message, Throwable exception) {
+        if (logLevel >= LOG_INFO) getApplicationLogger().log(tag, message, exception);
+    }
+
+    @Override
+    public void error(String tag, String message) {
+        if (logLevel >= LOG_ERROR) getApplicationLogger().error(tag, message);
+    }
+
+    @Override
+    public void error(String tag, String message, Throwable exception) {
+        if (logLevel >= LOG_ERROR) getApplicationLogger().error(tag, message, exception);
     }
 
     @Override
     public void setLogLevel(int logLevel) {
-
+        this.logLevel = logLevel;
     }
 
     @Override
     public int getLogLevel() {
-        return 0;
+        return logLevel;
     }
 
     @Override
     public void setApplicationLogger(ApplicationLogger applicationLogger) {
-
+        this.applicationLogger = applicationLogger;
     }
 
     @Override
     public ApplicationLogger getApplicationLogger() {
-        return null;
+        return applicationLogger;
     }
 
     @Override

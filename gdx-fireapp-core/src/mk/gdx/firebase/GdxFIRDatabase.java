@@ -29,7 +29,6 @@ import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.deserialization.TransactionMitmConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 

@@ -15,8 +15,6 @@ buildscript {
     }
 }
 
-apply plugin: "org.sonarqube"
-
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
@@ -63,6 +61,8 @@ allprojects {
         maven { url 'https://maven.google.com' }
     }
 }
+
+apply from: "" + project.rootDir + "/gradle/testing.gradle"
 
 tasks.eclipse.doLast {
     delete ".project"

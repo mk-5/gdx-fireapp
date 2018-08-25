@@ -21,6 +21,8 @@ dependencies {
     compile libs.libgdx.core
     testCompile libs.junit
     testCompile libs.mockito
+    testCompile libs.systemrules
+    testCompile libs.libgdx.desktop
 }
 
 eclipse.project {

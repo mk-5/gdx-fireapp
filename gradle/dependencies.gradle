@@ -7,12 +7,14 @@ ext {
     firebaseLibsVersion = '16.0.1'
     powerMockVersion = '1.7.0'
     robolectricVersion = '3.8'
+    systemRulesVersion = '1.18.0'
 }
 
 
 libs.junit = "junit:junit:$jUnitVersion"
 libs.mockito = "org.mockito:mockito-core:$mockitoVersion"
 libs.robolectric = "org.robolectric:robolectric:$robolectricVersion"
+libs.systemrules = "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 libs.powermock = [
         junit: "org.powermock:powermock-module-junit4:$powerMockVersion",
         api  : "org.powermock:powermock-api-mockito2:$powerMockVersion"
@@ -23,7 +25,8 @@ libs.libgdx = [
         core   : "com.badlogicgames.gdx:gdx:$gdxVersion",
         android: "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion",
         iosmoe : "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion",
-        html   : "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+        html   : "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion",
+        desktop: "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 ]
 
 /* Firebase */

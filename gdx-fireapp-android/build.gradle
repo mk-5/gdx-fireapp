@@ -28,8 +28,13 @@ android {
     }
 
     testOptions {
-        unitTests{
+        unitTests {
             returnDefaultValues = false
+        }
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
         }
     }
 

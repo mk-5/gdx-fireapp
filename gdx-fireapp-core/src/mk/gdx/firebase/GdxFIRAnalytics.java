@@ -19,7 +19,6 @@ package mk.gdx.firebase;
 import java.util.Map;
 
 import mk.gdx.firebase.distributions.AnalyticsDistribution;
-import mk.gdx.firebase.exceptions.PlatformDistributorException;
 
 /**
  * Gets access to Firebase Analytics API in multi-modules.
