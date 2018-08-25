@@ -53,7 +53,7 @@ public class Analytics implements AnalyticsDistribution {
             for (String key : params.keySet()) {
                 String value = params.get(key);
                 if (Character.isDigit(value.charAt(0))) {
-                    putNumberParam(bundle, key, value);
+                    BundleHelper.putNumberParam(bundle, key, value);
                 } else {
                     bundle.putString(key, value);
                 }
@@ -97,41 +97,4 @@ public class Analytics implements AnalyticsDistribution {
         return firebaseAnalytics;
     }
 
-    /**
-     * Put numeric value from string inside given bundle.
-     * If {@code number} do not contain numeric value - nothing will happen
-     *
-     * @param bundle Bundle in which you want to put String numeric value.
-     * @param key    Bundle key where you want to put the new value.
-     * @param number String which should contain numeric value.
-     */
-    private void putNumberParam(Bundle bundle, String key, String number) {
-        String[] types = {"int", "long", "float", "double"};
-        String type;
-        for (int i = 0; i < types.length; i++) {
-            try {
-                type = types[i];
-                switch (type) {
-                    case "int":
-                        int i1 = Integer.parseInt(number);
-                        bundle.putInt(key, i1);
-                        break;
-                    case "long":
-                        long i2 = Long.parseLong(number);
-                        bundle.putLong(key, i2);
-                        break;
-                    case "float":
-                        float i3 = Float.parseFloat(number);
-                        bundle.putFloat(key, i3);
-                        break;
-                    case "double":
-                        double i4 = Double.parseDouble(number);
-                        bundle.putDouble(key, i4);
-                        break;
-                }
-                break;
-            } catch (NumberFormatException e) {
-            }
-        }
-    }
 }

@@ -70,6 +70,15 @@ public class GdxFIRLogger {
         Gdx.app.error(LOG_TAG, msg, t);
     }
 
+    /**
+     * Gets the log tag.
+     *
+     * @return The log tag, not null
+     */
+    public static String getLogTag() {
+        return LOG_TAG;
+    }
+
     public static boolean isEnabled() {
         return enabled;
     }

@@ -5,9 +5,10 @@ dependencies {
     compile project(":gdx-fireapp-core")
     compile libs.firebase.core, libs.firebase.storage, libs.firebase.auth, libs.firebase.crash, libs.firebase.database
     compile libs.libgdx.android
-    compile 'com.google.android.gms:play-services-auth:16.0.0'
+    compile libs.playservices.auth
     testCompile libs.powermock.junit
     testCompile libs.powermock.api
+    testCompile libs.robolectric
 }
 
 task sourceJar(type: Jar) {
@@ -27,7 +28,9 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests{
+            returnDefaultValues = false
+        }
     }
 
     buildTypes {
