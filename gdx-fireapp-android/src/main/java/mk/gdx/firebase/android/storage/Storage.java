@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
@@ -97,7 +98,7 @@ public class Storage implements StorageDistribution {
             try {
                 targetFile = File.createTempFile(UUID.randomUUID().toString(), "");
             } catch (IOException e) {
-                e.printStackTrace();
+                GdxFIRLogger.error("Error while creating temporary file.", e);
             }
         }
         if (targetFile == null)
