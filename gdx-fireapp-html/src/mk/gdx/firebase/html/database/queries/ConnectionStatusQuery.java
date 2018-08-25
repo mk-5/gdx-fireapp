@@ -36,10 +36,6 @@ public class ConnectionStatusQuery extends GwtDatabaseQuery {
     }
 
     @Override
-    protected void prepare() {
-    }
-
-    @Override
     protected ArgumentsValidator createArgumentsValidator() {
         return new OnConnectionValidator();
     }

@@ -39,11 +39,6 @@ public class ReadValueQuery extends AndroidDatabaseQuery<Void> {
     }
 
     @Override
-    protected void prepare() {
-        super.prepare();
-    }
-
-    @Override
     protected ArgumentsValidator createArgumentsValidator() {
         return new ReadValueValidator();
     }

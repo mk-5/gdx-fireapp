@@ -21,6 +21,8 @@ package mk.gdx.firebase.html.firebase;
 import com.badlogic.gdx.Gdx;
 import com.google.gwt.core.client.ScriptInjector;
 
+import mk.gdx.firebase.GdxFIRLogger;
+
 /**
  * Loads firebase configuration from {@code android/assets/firebase-config.html}.
  */
@@ -40,9 +42,9 @@ public class FirebaseConfiguration {
      * @return self
      */
     public FirebaseConfiguration load() {
-        Gdx.app.log("GdxFireapp", "Loading firebase config...");
+        Gdx.app.log(GdxFIRLogger.getLogTag(), "Loading firebase config...");
         if (!Gdx.files.internal("firebase-config.html").exists()) {
-            Gdx.app.error("GdxFireapp", "Can't find firebase-config.html file.");
+            Gdx.app.error(GdxFIRLogger.getLogTag(), "Can't find firebase-config.html file.");
             return this;
         }
         rawHtml = Gdx.files.internal("firebase-config.html").readString();
@@ -55,7 +57,7 @@ public class FirebaseConfiguration {
      */
     public void init() {
         if (rawHtml == null) {
-            Gdx.app.error("GdxFireapp", "You forgot about calling FirebaseConfiguration#init() first.");
+            Gdx.app.error(GdxFIRLogger.getLogTag(), "You forgot about calling FirebaseConfiguration#init() first.");
             return;
         }
         ScriptInjector.fromUrl(configParser.getFirebaseScriptSrc())

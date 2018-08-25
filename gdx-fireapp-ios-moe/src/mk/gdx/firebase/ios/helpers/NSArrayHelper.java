@@ -58,7 +58,7 @@ public class NSArrayHelper {
      * @return {@code list} object transformed to {@code NSMutableArray} with NSObject instances inside, not null.
      */
     @SuppressWarnings("unchecked")
-    public static NSMutableArray<? extends NSObject> toArray(List list) {
+    public static NSMutableArray<NSObject> toArray(List list) {
         NSMutableArray<NSObject> nsMutableArray = (NSMutableArray<NSObject>) NSMutableArray.alloc().init();
         for (Object value : list) {
             nsMutableArray.add(DataProcessor.javaDataToIos(value));

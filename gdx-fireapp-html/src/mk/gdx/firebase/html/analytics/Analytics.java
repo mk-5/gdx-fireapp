@@ -33,6 +33,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void logEvent(String name, Map<String, String> params) {
+        // Do nothing
     }
 
     /**
@@ -43,7 +44,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setScreen(String name, Class<?> screenClass) {
-
+        // Do nothing
     }
 
     /**
@@ -54,7 +55,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setUserProperty(String name, String value) {
-
+        // Do nothing
     }
 
     /**
@@ -64,6 +65,6 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setUserId(String id) {
-
+        // Do nothing
     }
 }
