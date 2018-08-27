@@ -6,7 +6,7 @@ import mk.gdx.firebase.functional.Consumer;
  * Holds reference to the download url with support for async fetch.
  * <p>
  */
-public class DownloadUrl<T> {
+public class DownloadUrl {
 
     private Consumer<Consumer<String>> urlConsumer;
 
