@@ -59,7 +59,7 @@ public class Analytics implements AnalyticsDistribution {
                 }
             }
         }
-        getFirebaseAnalytics().logEvent(name, bundle);
+        FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app).logEvent(name, bundle);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setScreen(String name, Class<?> screenClass) {
-        getFirebaseAnalytics().setCurrentScreen((AndroidApplication) Gdx.app, name, screenClass.getSimpleName());
+        FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app).setCurrentScreen((AndroidApplication) Gdx.app, name, screenClass.getSimpleName());
     }
 
     /**
@@ -75,7 +75,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setUserProperty(String name, String value) {
-        getFirebaseAnalytics().setUserProperty(name, value);
+        FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app).setUserProperty(name, value);
     }
 
     /**
@@ -83,18 +83,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setUserId(String id) {
-        getFirebaseAnalytics().setUserId(id);
-    }
-
-    /**
-     * Get FirebaseAnalytics instance in lazy-loading way.
-     *
-     * @return Instance of FirebaseAnalytics class. This instance should be use later to do some analytics actions.
-     */
-    protected FirebaseAnalytics getFirebaseAnalytics() {
-        if (firebaseAnalytics == null)
-            firebaseAnalytics = FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app);
-        return firebaseAnalytics;
+        FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app).setUserId(id);
     }
 
 }
