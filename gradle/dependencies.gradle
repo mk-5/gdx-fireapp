@@ -2,22 +2,27 @@ ext {
     libs = [:]
     gdxVersion = '1.9.8'
     jUnitVersion = '4.12'
-    mockitoVersion = '2.8.47'
+    mockitoVersion = '2.21.0'
     firebaseCoreVersion = '16.0.0'
     firebaseLibsVersion = '16.0.1'
-    powerMockVersion = '1.7.0'
+    powerMockVersion = '1.7.4'
     robolectricVersion = '3.8'
     systemRulesVersion = '1.18.0'
 }
 
 
 libs.junit = "junit:junit:$jUnitVersion"
-libs.mockito = "org.mockito:mockito-core:$mockitoVersion"
+libs.mockito = [
+        core   : "org.mockito:mockito-core:$mockitoVersion",
+        android: "org.mockito:mockito-android:$mockitoVersion"
+]
 libs.robolectric = "org.robolectric:robolectric:$robolectricVersion"
 libs.systemrules = "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 libs.powermock = [
-        junit: "org.powermock:powermock-module-junit4:$powerMockVersion",
-        api  : "org.powermock:powermock-api-mockito2:$powerMockVersion"
+        junit    : "org.powermock:powermock-module-junit4:$powerMockVersion",
+        junitRule: "org.powermock:powermock-module-junit4-rule:$powerMockVersion",
+        api      : "org.powermock:powermock-api-mockito2:$powerMockVersion",
+        xstream  : "org.powermock:powermock-classloading-xstream:$powerMockVersion"
 ]
 
 /*LibGDX*/
