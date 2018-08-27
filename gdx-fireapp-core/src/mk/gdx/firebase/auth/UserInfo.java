@@ -185,6 +185,23 @@ public class UserInfo {
         }
 
         /**
+         * Sets all fields from the source {@code userInfo}.
+         *
+         * @param userInfo The source UserInfo, not null
+         * @return this {@code Builder} instance
+         */
+        public Builder setUserInfo(UserInfo userInfo) {
+            inst.displayName = userInfo.displayName;
+            inst.email = userInfo.email;
+            inst.isAnonymous = userInfo.isAnonymous;
+            inst.isEmailVerified = userInfo.isEmailVerified;
+            inst.photoUrl = userInfo.photoUrl;
+            inst.uid = userInfo.uid;
+            inst.providerId = userInfo.providerId;
+            return this;
+        }
+
+        /**
          * Gets {@code UserInfo} instance.
          *
          * @return {@code UserInfo} instance created by given properties

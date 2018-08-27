@@ -46,4 +46,30 @@ public class UserInfoTest {
         Assert.assertEquals(userInfo.getPhotoUrl(), "photo_url");
     }
 
+    @Test
+    public void test_builderCreatesUserInfoFromOtherUserInfoAndReturnsValidInstance() {
+        // Given
+        UserInfo.Builder builder = new UserInfo.Builder();
+
+        // When
+        builder.setDisplayName("display_name");
+        builder.setEmail("email");
+        builder.setIsAnonymous(true);
+        builder.setIsEmailVerified(true);
+        builder.setProviderId("provider_id");
+        builder.setUid("uid");
+        builder.setPhotoUrl("photo_url");
+        UserInfo sourceUserInfo = builder.build();
+        UserInfo userInfo = new UserInfo.Builder().setUserInfo(sourceUserInfo).build();
+
+        // Then
+        Assert.assertEquals(userInfo.getDisplayName(), "display_name");
+        Assert.assertEquals(userInfo.getEmail(), "email");
+        Assert.assertTrue(userInfo.isAnonymous());
+        Assert.assertTrue(userInfo.isEmailVerified());
+        Assert.assertEquals(userInfo.getProviderId(), "provider_id");
+        Assert.assertEquals(userInfo.getUid(), "uid");
+        Assert.assertEquals(userInfo.getPhotoUrl(), "photo_url");
+    }
+
 }

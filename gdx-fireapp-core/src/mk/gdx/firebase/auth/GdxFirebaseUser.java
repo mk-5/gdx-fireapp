@@ -26,7 +26,7 @@ public class GdxFirebaseUser {
      * @param userInfo User information wrapped by POJO object.
      */
     private GdxFirebaseUser(UserInfo userInfo) {
-        this.userInfo = userInfo;
+        this.userInfo = new UserInfo.Builder().setUserInfo(userInfo).build();
     }
 
     /**
