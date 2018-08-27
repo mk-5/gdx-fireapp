@@ -8,6 +8,7 @@ ext {
     powerMockVersion = '1.7.4'
     robolectricVersion = '3.8'
     systemRulesVersion = '1.18.0'
+    gwtMockitoVersion = '1.1.8'
 }
 
 
@@ -16,6 +17,7 @@ libs.mockito = [
         core   : "org.mockito:mockito-core:$mockitoVersion",
         android: "org.mockito:mockito-android:$mockitoVersion"
 ]
+libs.gwtmockito = "com.google.gwt.gwtmockito:gwtmockito:$gwtMockitoVersion"
 libs.robolectric = "org.robolectric:robolectric:$robolectricVersion"
 libs.systemrules = "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 libs.powermock = [

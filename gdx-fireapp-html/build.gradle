@@ -3,9 +3,17 @@ apply plugin: "gwt"
 apply plugin: "war"
 apply plugin: "maven-publish"
 
+sourceSets.test.java.srcDirs = ["tests/"]
+
 dependencies {
     compile project(":gdx-fireapp-core")
     compile libs.libgdx.html
+    testCompile libs.junit
+    testCompile libs.gwtmockito
+    testCompile libs.powermock.junit
+    testCompile libs.powermock.junitRule
+    testCompile libs.powermock.api
+    testCompile libs.powermock.xstream
 }
 
 task sourceJar(type: Jar) {
