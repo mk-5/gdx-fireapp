@@ -20,35 +20,10 @@ import com.badlogic.gdx.utils.reflect.Annotation;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
-import mk.gdx.firebase.annotations.NestedGenericType;
-
 /**
  * Gets information from annotations.
  */
 public class AnnotationFinder {
-
-    /**
-     * Gets {@code NestedGenericType} annotation from object.
-     * <p>
-     * Looks at all object methods and returns first encountered annotation.
-     *
-     * @param object Object to deal with, not null
-     * @return Annotation, may be null
-     */
-    public static NestedGenericType getNestedGenericTypeAnnotation(Object object) {
-        NestedGenericType result = null;
-        Method[] methods = ClassReflection.getMethods(object.getClass());
-        // TODO - use type annotation, not method?
-        for (Method m : methods) {
-            Annotation[] annotations = m.getDeclaredAnnotations();
-            Annotation a = m.getDeclaredAnnotation(NestedGenericType.class);
-            if (a != null) {
-                result = a.getAnnotation(NestedGenericType.class);
-                break;
-            }
-        }
-        return result;
-    }
 
     /**
      * Find object methods annotation.
