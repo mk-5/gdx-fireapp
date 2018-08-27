@@ -34,8 +34,6 @@ import mk.gdx.firebase.distributions.AnalyticsDistribution;
  */
 public class Analytics implements AnalyticsDistribution {
 
-    private static FirebaseAnalytics firebaseAnalytics;
-
     /**
      * Analytics class constructor.
      */
