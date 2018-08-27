@@ -46,7 +46,7 @@ public abstract class GdxHtmlAppTest {
     public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
-    public void setup() {
+    public void setup() throws Exception{
         Application application = Mockito.mock(Application.class);
         Mockito.when(application.getType()).thenReturn(Application.ApplicationType.WebGL);
         FileHandle configFile = Mockito.mock(FileHandle.class);
@@ -72,24 +72,20 @@ public abstract class GdxHtmlAppTest {
         Mockito.when(ScriptInjector.fromUrl(Mockito.anyString())).thenCallRealMethod();
 
         PowerMockito.mockStatic(ClassReflection.class);
-        try {
-            Mockito.when(ClassReflection.forName(Mockito.anyString())).thenAnswer(new Answer<Object>() {
-                @Override
-                public Object answer(InvocationOnMock invocation) throws Throwable {
-                    return Class.forName((String) invocation.getArgument(0));
-                }
-            });
-            Mockito.when(ClassReflection.getConstructor(Mockito.any(Class.class))).thenAnswer(new Answer<Object>() {
-                @Override
-                public Object answer(InvocationOnMock invocation) throws Throwable {
-                    Constructor constructor = PowerMockito.mock(Constructor.class);
-                    Mockito.when(constructor.newInstance()).thenReturn(((Class) invocation.getArgument(0)).getConstructors()[0].newInstance());
-                    return constructor;
-                }
-            });
-        } catch (ReflectionException e) {
-            e.printStackTrace();
-        }
+        Mockito.when(ClassReflection.forName(Mockito.anyString())).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return Class.forName((String) invocation.getArgument(0));
+            }
+        });
+        Mockito.when(ClassReflection.getConstructor(Mockito.any(Class.class))).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Constructor constructor = PowerMockito.mock(Constructor.class);
+                Mockito.when(constructor.newInstance()).thenReturn(((Class) invocation.getArgument(0)).getConstructors()[0].newInstance());
+                return constructor;
+            }
+        });
 
         Gdx.app = application;
         Gdx.files = files;
