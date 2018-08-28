@@ -16,8 +16,11 @@
 
 package mk.gdx.firebase.android.crash;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.crashlytics.android.Crashlytics;
 
+import io.fabric.sdk.android.Fabric;
 import mk.gdx.firebase.distributions.CrashDistribution;
 
 /**
@@ -28,11 +31,26 @@ import mk.gdx.firebase.distributions.CrashDistribution;
  */
 public class Crash implements CrashDistribution {
 
+    private boolean initialized;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void log(String message) {
+        initializeOnce();
         Crashlytics.log(message);
+    }
+
+    @Override
+    public void initialize() {
+        initializeOnce();
+    }
+
+    private synchronized void initializeOnce() {
+        if (!initialized) {
+            initialized = true;
+            Fabric.with((AndroidApplication) Gdx.app, new Crashlytics());
+        }
     }
 }

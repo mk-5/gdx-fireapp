@@ -40,6 +40,14 @@ public class Crash implements CrashDistribution {
         Crashlytics.CLSLogv(message, null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initialize() {
+        initializeOnce();
+    }
+
     private synchronized void initializeOnce() {
         if (!initialized) {
             initialized = true;

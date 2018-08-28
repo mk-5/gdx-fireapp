@@ -37,6 +37,16 @@ public class GdxFIRCrashTest extends GdxAppTest {
     }
 
     @Test
+    public void initialize() {
+// Given
+        // When
+        GdxFIRCrash.instance().log("abc");
+
+        // Then
+        Mockito.verify(crashDistribution, VerificationModeFactory.times(1)).initialize();
+    }
+
+    @Test
     public void getIOSClassName() {
         Assert.assertEquals(GdxFIRCrash.instance().getIOSClassName(), "mk.gdx.firebase.ios.crash.Crash");
     }

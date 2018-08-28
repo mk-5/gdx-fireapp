@@ -66,6 +66,14 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * {@inheritDoc}
      */
     @Override
+    public void initialize() {
+        platformObject.initialize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected String getIOSClassName() {
         return "mk.gdx.firebase.ios.crash.Crash";
     }

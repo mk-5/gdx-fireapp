@@ -33,4 +33,11 @@ public interface CrashDistribution {
      * @param message Custom message you want to log into firebase console.
      */
     void log(String message);
+
+    /**
+     * Initialize crash reporting.
+     * <p>
+     * Fabric.with will be call here so you don't need to add it manually to your AndroidLauncher/IOSMoeLauncher.
+     */
+    void initialize();
 }
