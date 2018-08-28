@@ -1,4 +1,4 @@
-package bindings.google.firebasecrash;
+package bindings.fabric.fabric;
 
 
 import apple.NSObject;
@@ -25,16 +25,16 @@ import org.moe.natj.objc.ann.Selector;
 import org.moe.natj.objc.map.ObjCObjectMapper;
 
 @Generated
-@Library("FirebaseCrash")
+@Library("Fabric")
 @Runtime(ObjCRuntime.class)
 @ObjCClassBinding
-public class FIRCrash extends NSObject {
+public class Fabric extends NSObject {
 	static {
 		NatJ.register();
 	}
 
 	@Generated
-	protected FIRCrash(Pointer peer) {
+	protected Fabric(Pointer peer) {
 		super(peer);
 	}
 
@@ -45,7 +45,7 @@ public class FIRCrash extends NSObject {
 	@Generated
 	@Owned
 	@Selector("alloc")
-	public static native FIRCrash alloc();
+	public static native Fabric alloc();
 
 	@Generated
 	@Selector("allocWithZone:")
@@ -76,6 +76,10 @@ public class FIRCrash extends NSObject {
 	public static native Class classForKeyedUnarchiver();
 
 	@Generated
+	@Selector("debug")
+	public native boolean debug();
+
+	@Generated
 	@Selector("debugDescription")
 	public static native String debugDescription_static();
 
@@ -90,7 +94,7 @@ public class FIRCrash extends NSObject {
 
 	@Generated
 	@Selector("init")
-	public native FIRCrash init();
+	public native Fabric init();
 
 	@Generated
 	@Selector("instanceMethodForSelector:")
@@ -106,11 +110,6 @@ public class FIRCrash extends NSObject {
 	@Generated
 	@Selector("instancesRespondToSelector:")
 	public static native boolean instancesRespondToSelector(SEL aSelector);
-
-	@Generated
-	@Deprecated
-	@Selector("isCrashCollectionEnabled")
-	public native boolean isCrashCollectionEnabled();
 
 	@Generated
 	@Selector("isSubclassOfClass:")
@@ -136,17 +135,17 @@ public class FIRCrash extends NSObject {
 	public static native boolean resolveInstanceMethod(SEL sel);
 
 	@Generated
-	@Deprecated
-	@Selector("setCrashCollectionEnabled:")
-	public native void setCrashCollectionEnabled(boolean value);
+	@Selector("setDebug:")
+	public native void setDebug(boolean value);
 
 	@Generated
 	@Selector("setVersion:")
 	public static native void setVersion(@NInt long aVersion);
 
 	@Generated
-	@Selector("sharedInstance")
-	public static native FIRCrash sharedInstance();
+	@Selector("sharedSDK")
+	@MappedReturn(ObjCObjectMapper.class)
+	public static native Object sharedSDK();
 
 	@Generated
 	@Selector("superclass")
@@ -156,4 +155,9 @@ public class FIRCrash extends NSObject {
 	@Selector("version")
 	@NInt
 	public static native long version_static();
+
+	@Generated
+	@Selector("with:")
+	@MappedReturn(ObjCObjectMapper.class)
+	public static native Object with(NSArray<?> kitClasses);
 }

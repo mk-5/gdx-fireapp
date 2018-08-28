@@ -32,7 +32,8 @@ public class App implements AppDistribution {
      */
     @Override
     public void configure() {
-        if (FIRApp.defaultApp() == null)
+        if (FIRApp.defaultApp() == null) {
             FIRApp.configure();
+        }
     }
 }

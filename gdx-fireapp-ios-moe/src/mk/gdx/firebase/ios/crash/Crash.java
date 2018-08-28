@@ -16,7 +16,9 @@
 
 package mk.gdx.firebase.ios.crash;
 
-import bindings.google.firebasecrash.c.FirebaseCrash;
+import apple.foundation.NSArray;
+import bindings.fabric.fabric.Fabric;
+import bindings.google.crashlytics.c.Crashlytics;
 import mk.gdx.firebase.distributions.CrashDistribution;
 
 /**
@@ -27,11 +29,21 @@ import mk.gdx.firebase.distributions.CrashDistribution;
  */
 public class Crash implements CrashDistribution {
 
+    private boolean initialized;
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void log(String message) {
-        FirebaseCrash.FIRCrashLogv("" + message, null);
+        initializeOnce();
+        Crashlytics.CLSLogv(message, null);
+    }
+
+    private synchronized void initializeOnce() {
+        if (!initialized) {
+            initialized = true;
+            Fabric.with(NSArray.arrayWithObject(bindings.google.crashlytics.Crashlytics.alloc().init()));
+        }
     }
 }
