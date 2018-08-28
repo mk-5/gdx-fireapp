@@ -27,7 +27,7 @@ jobs:
     - script: ./gradlew gdx-fireapp-ios-moe:jar
     - script: ./gradlew gdx-fireapp-html:jar
     - stage: test
-      script: ./gradlew gdx-fireapp-core:test
+      script: ./gradlew test
     - stage: deploy
       script: ./gradlew bintrayUpload -Pversion=$TRAVIS_BRANCH
       env:
