@@ -20,7 +20,10 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.crashlytics.android.Crashlytics;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -30,6 +33,7 @@ import mk.gdx.firebase.GdxFIRCrash;
 import mk.gdx.firebase.android.AndroidContextTest;
 
 @PrepareForTest({Crashlytics.class, Fabric.class, GdxNativesLoader.class})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CrashTest extends AndroidContextTest {
 
     @Test
@@ -44,7 +48,7 @@ public class CrashTest extends AndroidContextTest {
 
         // Then
         PowerMockito.verifyStatic(Fabric.class, VerificationModeFactory.times(1));
-        Fabric.with((AndroidApplication) Gdx.app, new Crashlytics());
+        Fabric.with(Mockito.any(AndroidApplication.class), Mockito.any(Crashlytics.class));
         PowerMockito.verifyNoMoreInteractions(Fabric.class);
     }
 
