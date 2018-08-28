@@ -33,5 +33,9 @@
 \- API Addition: Google authorization for android  
 \- API Addition: Google authorization for ios  
 \- API Addition: Google authorization for gwt  
-\- API Fix: Fix sign-out callback for gwt  
+\- API Fix: Fix the sign-out callback for gwt  
 \- API Change: The multi-os engine bindings are delivery with library so no longer needs to generate bindings yourself  
+
+**[1.6.1]**  
+\- API Change: GdxFIRCrash use Crashlytics now, if you have project with older version  - go to the wiki page and update your project  
+\- General: Minor bugs fix and improvements
