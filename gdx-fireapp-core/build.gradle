@@ -20,7 +20,8 @@ task sourceJar(type: Jar) {
 dependencies {
     compile libs.libgdx.core
     testCompile libs.junit
-    testCompile libs.mockito.core
+    testCompile libs.powermock.junit
+    testCompile libs.powermock.api
     testCompile libs.systemrules
 }
 

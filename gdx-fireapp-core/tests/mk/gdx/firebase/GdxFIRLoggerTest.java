@@ -16,6 +16,10 @@
 
 package mk.gdx.firebase;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationLogger;
+import com.badlogic.gdx.Gdx;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,7 +27,10 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GdxFIRLoggerTest extends GdxAppTest {
@@ -37,6 +44,67 @@ public class GdxFIRLoggerTest extends GdxAppTest {
     @Override
     public void setup() {
         super.setup();
+        // Mock application logger
+        ApplicationLogger applicationLogger = Mockito.mock(ApplicationLogger.class);
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                System.out.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
+                return null;
+            }
+        }).when(applicationLogger).log(Mockito.anyString(), Mockito.anyString());
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                System.out.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
+                ((Throwable) invocation.getArgument(2)).printStackTrace(System.out);
+                return null;
+            }
+        }).when(applicationLogger).log(Mockito.anyString(), Mockito.anyString(), Mockito.any(Throwable.class));
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                System.err.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
+                return null;
+            }
+        }).when(applicationLogger).error(Mockito.anyString(), Mockito.anyString());
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                System.err.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
+                ((Throwable) invocation.getArgument(2)).printStackTrace(System.err);
+                return null;
+            }
+        }).when(applicationLogger).error(Mockito.anyString(), Mockito.anyString(), Mockito.any(Throwable.class));
+        Mockito.when(Gdx.app.getApplicationLogger()).thenReturn(applicationLogger);
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Application) invocation.getMock()).getApplicationLogger().log((String) invocation.getArgument(0), (String) invocation.getArgument(1));
+                return null;
+            }
+        }).when(Gdx.app).log(Mockito.anyString(), Mockito.anyString());
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Application) invocation.getMock()).getApplicationLogger().log((String) invocation.getArgument(0), (String) invocation.getArgument(1), (Throwable) invocation.getArgument(2));
+                return null;
+            }
+        }).when(Gdx.app).log(Mockito.anyString(), Mockito.anyString(), Mockito.any(Throwable.class));
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Application) invocation.getMock()).getApplicationLogger().error((String) invocation.getArgument(0), (String) invocation.getArgument(1));
+                return null;
+            }
+        }).when(Gdx.app).error(Mockito.anyString(), Mockito.anyString());
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Application) invocation.getMock()).getApplicationLogger().error((String) invocation.getArgument(0), (String) invocation.getArgument(1), (Throwable) invocation.getArgument(2));
+                return null;
+            }
+        }).when(Gdx.app).error(Mockito.anyString(), Mockito.anyString(), Mockito.any(Throwable.class));
         GdxFIRLogger.setEnabled(true);
     }
 

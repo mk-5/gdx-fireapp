@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package mk.gdx.firebase.html.analytics;
 
-package mk.gdx.firebase;
-
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationLogger;
-import com.badlogic.gdx.Gdx;
-
-import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(MockitoJUnitRunner.class)
-public abstract class GdxAppTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Analytics.class)
+public class AnalyticsTest {
 
-    @Before
-    public void setup() {
-        Gdx.app = Mockito.mock(Application.class);
+    @Test
+    public void logEvent() {
+        Analytics analytics = PowerMockito.mock(Analytics.class);
+        analytics.logEvent("", null);
     }
 }
