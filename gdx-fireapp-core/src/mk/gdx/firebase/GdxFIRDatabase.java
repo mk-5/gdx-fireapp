@@ -133,7 +133,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <V> DatabaseDistribution filter(FilterType filterType, V[] filterArguments) {
+    public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments) {
         platformObject.filter(filterType, filterArguments);
         return this;
     }
