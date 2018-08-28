@@ -16,12 +16,18 @@
 
 package mk.gdx.firebase.html.crash;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.google.gwt.core.client.ScriptInjector;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.GdxFIRCrash;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
 
+@PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class, Crash.class})
 public class CrashTest extends GdxHtmlAppTest {
 
     @Test
