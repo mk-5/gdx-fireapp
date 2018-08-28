@@ -38,9 +38,9 @@ public class GdxFIRCrashTest extends GdxAppTest {
 
     @Test
     public void initialize() {
-// Given
+        // Given
         // When
-        GdxFIRCrash.instance().log("abc");
+        GdxFIRCrash.instance().initialize();
 
         // Then
         Mockito.verify(crashDistribution, VerificationModeFactory.times(1)).initialize();
