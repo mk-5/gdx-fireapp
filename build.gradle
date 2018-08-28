@@ -20,7 +20,7 @@ allprojects {
     apply plugin: "idea"
     apply plugin: "maven-publish"
     group 'pl.mk5.gdx-fireapp'
-    version = '1.6.1-SNAPSHOT'
+    version = project.hasProperty("version") ? project.getProperty("version") : '1.6.1-SNAPSHOT'
 
     ext {
         appName = 'GDX Fireapp'
