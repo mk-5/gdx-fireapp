@@ -18,24 +18,24 @@ Now you need to add gradle dependencies:
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.5.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.+"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.5.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.+"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.5.1"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.+"
 ```
 
 If you are done with that do the last step: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
 
 
-**Version 1.5.1** was built using LibGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
+**The latest version** was built using LibGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
 
