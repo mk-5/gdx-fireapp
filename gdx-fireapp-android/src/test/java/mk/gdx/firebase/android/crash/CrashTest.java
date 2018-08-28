@@ -16,7 +16,7 @@
 package mk.gdx.firebase.android.crash;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 
 import org.junit.Test;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -26,21 +26,21 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import mk.gdx.firebase.GdxFIRCrash;
 import mk.gdx.firebase.android.AndroidContextTest;
 
-@PrepareForTest({FirebaseCrash.class, GdxNativesLoader.class})
+@PrepareForTest({Crashlytics.class, GdxNativesLoader.class})
 public class CrashTest extends AndroidContextTest {
 
     @Test
     public void log() {
         // Given
-        PowerMockito.mockStatic(FirebaseCrash.class);
+        PowerMockito.mockStatic(Crashlytics.class);
         GdxFIRCrash gdxFIRCrash = GdxFIRCrash.instance();
 
         // When
         gdxFIRCrash.log("abc");
 
         // Then
-        PowerMockito.verifyStatic(FirebaseCrash.class, VerificationModeFactory.times(1));
-        FirebaseCrash.log("abc");
-        PowerMockito.verifyNoMoreInteractions(FirebaseCrash.class);
+        PowerMockito.verifyStatic(Crashlytics.class, VerificationModeFactory.times(1));
+        Crashlytics.log("abc");
+        PowerMockito.verifyNoMoreInteractions(Crashlytics.class);
     }
 }

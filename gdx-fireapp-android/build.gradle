@@ -3,7 +3,8 @@ apply plugin: "maven-publish"
 
 dependencies {
     compile project(":gdx-fireapp-core")
-    compile libs.firebase.core, libs.firebase.storage, libs.firebase.auth, libs.firebase.crash, libs.firebase.database
+    compile libs.firebase.core, libs.firebase.storage, libs.firebase.auth, libs.firebase.database
+    compile libs.crashlytics
     compile libs.libgdx.android
     compile libs.playservices.auth
     testCompile libs.powermock.junit

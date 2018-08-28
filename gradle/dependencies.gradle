@@ -9,6 +9,7 @@ ext {
     robolectricVersion = '3.8'
     systemRulesVersion = '1.18.0'
     gwtMockitoVersion = '1.1.8'
+    crashlyticsVersion = '2.9.5'
 }
 
 
@@ -42,8 +43,9 @@ libs.firebase = [
         storage : "com.google.firebase:firebase-storage:$firebaseLibsVersion",
         auth    : "com.google.firebase:firebase-auth:$firebaseLibsVersion",
         crash   : "com.google.firebase:firebase-crash:$firebaseLibsVersion",
-        database: "com.google.firebase:firebase-database:$firebaseLibsVersion"
+        database: "com.google.firebase:firebase-database:$firebaseLibsVersion",
 ]
+libs.crashlytics = "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
 
 /* Play services */
 libs.playservices = [

@@ -16,7 +16,7 @@
 
 package mk.gdx.firebase.android.crash;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 
 import mk.gdx.firebase.distributions.CrashDistribution;
 
@@ -33,6 +33,6 @@ public class Crash implements CrashDistribution {
      */
     @Override
     public void log(String message) {
-        FirebaseCrash.log(message);
+        Crashlytics.log(message);
     }
 }
