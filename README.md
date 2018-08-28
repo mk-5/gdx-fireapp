@@ -39,7 +39,7 @@ If you are done with that do the last step: [Update proguard files](https://gith
 
 Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
 
-If you want to use GWT platform read this wiki page first: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
+If you would like to use GWT platform you should read this wiki page first: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
 
 
 
@@ -49,13 +49,20 @@ API is something like bridge between libGDX app and firebase sdk. It's cover fir
 
 
 
-To initialize Firebase SDK  just put this line somewhere in your app initialization code:
+To initialize Firebase SDK just put this line somewhere in your app initialization code:
 
 ```java
 GdxFIRApp.instance().configure();
 ```
 
-**Firebase Analytics** and **Firebase Crash** are features which start working just after this step.
+**Firebase Analytics** should start working just after this step.  
+
+If you would add ***Fabric/Crashlytics*** to your project you should initialize it also:
+
+````
+GdxFIRCrash.instance().initialize();
+````
+
 
 
 
@@ -103,7 +110,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 - [x] Authentication
 - [x] Database
 - [x] Storage
-- [x] Crash raporting
+- [x] Crash raporting (Crashlytics)
 - [ ] Messaging
 
 
