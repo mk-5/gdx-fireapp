@@ -2,7 +2,7 @@
 
 A libGDX cross-platform API for Firebase.
 
-[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion) [![Javadocs](http://javadoc.io/badge/pl.mk5.gdx-fireapp/gdx-fireapp-core.svg)](http://javadoc.io/doc/pl.mk5.gdx-fireapp/gdx-fireapp-core)
+[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
 
 
 
