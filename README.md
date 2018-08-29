@@ -2,7 +2,8 @@
 
 A libGDX cross-platform API for Firebase.
 
-[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
+[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion) [![Javadocs](http://javadoc.io/badge/pl.mk5.gdx-fireapp/gdx-fireapp-core.svg)](http://javadoc.io/doc/pl.mk5.gdx-fireapp/gdx-fireapp-core)
+
 
 
 
@@ -37,8 +38,6 @@ If you are done with that do the last step: [Update proguard files](https://gith
 
 **The latest version** was built using LibGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
 
-Docs are here: [Javadoc](http://fireappdocs.mk5.pl/)
-
 If you would like to use GWT platform you should read this wiki page first: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
 
 
@@ -68,12 +67,12 @@ GdxFIRCrash.instance().initialize();
 
 Firebase SDK communication is done with following classes:
 
-- **[GdxFIRApp](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRApp.html)**
-- **[GdxFIRAnalytics](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRAnalytics.html)**
-- **[GdxFIRAuth](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRAuth.html)**
-- **[GdxFIRStorage](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRStorage.html)**
-- **[GdxFIRDatabase](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRDatabase.html)**
-- **[GdxFIRCrash](http://fireappdocs.mk5.pl/mk/gdx/firebase/GdxFIRCrash.html)**
+- **[GdxFIRApp](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRApp.html)**
+- **[GdxFIRAnalytics](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRAnalytics.html)**
+- **[GdxFIRAuth](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRAuth.html)**
+- **[GdxFIRStorage](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRStorage.html)**
+- **[GdxFIRDatabase](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRDatabase.html)**
+- **[GdxFIRCrash](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRCrash.html)**
 
 
 
@@ -86,7 +85,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 
 ## Useful links
 
-- [Javadoc](http://fireappdocs.mk5.pl)
+- [Javadoc](http://javadoc.io/doc/pl.mk5.gdx-fireapp/gdx-fireapp-core)
 - [Filtering API wiki](https://github.com/mk-5/gdx-fireapp/wiki/Filtering-API)
 
 
