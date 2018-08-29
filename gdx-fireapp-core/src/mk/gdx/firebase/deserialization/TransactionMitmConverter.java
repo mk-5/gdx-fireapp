@@ -40,6 +40,7 @@ public class TransactionMitmConverter<T, R extends T> extends MapMitmConverter i
 
     public TransactionMitmConverter(Class<T> dataType, TransactionCallback<R> coveredCallback, FirebaseMapConverter mapConverter) {
         super(mapConverter);
+        this.dataType = dataType;
         this.coveredCallback = coveredCallback;
     }
 

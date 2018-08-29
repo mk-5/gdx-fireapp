@@ -30,6 +30,9 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 public class FilteringStateEnsurer {
     private static final String FILTER_SHOULD_BE_APPLIED_FOR_LIST = "Filter should be applied only for the List type";
 
+    private FilteringStateEnsurer() {
+
+    }
 
     /**
      * Throws IllegalStateException when filter was applied but type of wanted data is not a list.

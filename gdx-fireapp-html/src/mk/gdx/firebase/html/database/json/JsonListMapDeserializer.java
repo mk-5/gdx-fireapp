@@ -55,7 +55,7 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer {
         if (jsonData.isObject()) {
             return processObject(json, jsonData);
         } else if (jsonData.isValue()) {
-            return processValue(json, jsonData);
+            return processValue(jsonData);
         } else {
             return null;
         }
@@ -65,7 +65,7 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer {
         return json.fromJson(this.objectType, jsonData.toJson(JsonWriter.OutputType.json));
     }
 
-    protected Object processValue(Json json, JsonValue jsonData) {
+    protected Object processValue(JsonValue jsonData) {
         if (jsonData.isBoolean())
             return jsonData.asBoolean();
         else if (jsonData.isDouble())

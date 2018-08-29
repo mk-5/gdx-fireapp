@@ -21,6 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import mk.gdx.firebase.android.utils.StringResource;
 
 class GoogleSignInOptionsFactory {
+
+    private GoogleSignInOptionsFactory() {
+        //
+    }
+
     static GoogleSignInOptions factory() {
         String webClientId = StringResource.getStringResourceByName("default_web_client_id");
         return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

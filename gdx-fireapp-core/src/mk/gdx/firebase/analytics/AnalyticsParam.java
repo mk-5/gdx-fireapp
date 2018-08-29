@@ -24,6 +24,11 @@ package mk.gdx.firebase.analytics;
  * @see <a href="https://firebase.google.com/docs/reference/ios/firebaseanalytics/api/reference/Constants">ios docs</a>
  */
 public class AnalyticsParam {
+
+    private AnalyticsParam() {
+        //
+    }
+
     /**
      * Firebase Analytics Params
      */

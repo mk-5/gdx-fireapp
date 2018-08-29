@@ -27,8 +27,6 @@ import mk.gdx.firebase.distributions.GoogleAuthDistribution;
  */
 public class GdxFIRGoogleAuth extends PlatformDistributor<GoogleAuthDistribution> implements GoogleAuthDistribution {
 
-    private static volatile GdxFIRGoogleAuth instance;
-
     /**
      * {@link PlatformDistributor#PlatformDistributor()}
      */

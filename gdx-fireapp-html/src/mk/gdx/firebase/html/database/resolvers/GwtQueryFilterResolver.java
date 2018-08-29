@@ -20,9 +20,6 @@ package mk.gdx.firebase.html.database.resolvers;
  * Provides filtering for javascript firebase db.
  */
 public class GwtQueryFilterResolver {
-    public void addFiltersToNextQuery() {
-
-    }
 
     public static native void applyFilter(String filterType, Object arg)  /*-{
         var filters = $wnd.fireappFilters || [];

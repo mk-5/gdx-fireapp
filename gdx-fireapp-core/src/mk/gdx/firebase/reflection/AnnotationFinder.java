@@ -25,6 +25,10 @@ import com.badlogic.gdx.utils.reflect.Method;
  */
 public class AnnotationFinder {
 
+    private AnnotationFinder() {
+        //
+    }
+
     /**
      * Find object methods annotation.
      * <p>

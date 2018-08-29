@@ -34,6 +34,10 @@ import mk.gdx.firebase.ios.database.DataProcessor;
  */
 public class NSDictionaryHelper {
 
+    private NSDictionaryHelper() {
+
+    }
+
     @SuppressWarnings("unchecked")
     public static Map<String, Object> toMap(NSDictionary<NSString, NSObject> nsDictionary) {
         Map<String, Object> map = new HashMap<String, Object>();

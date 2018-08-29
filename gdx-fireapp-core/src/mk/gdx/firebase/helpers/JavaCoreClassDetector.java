@@ -21,6 +21,10 @@ package mk.gdx.firebase.helpers;
  */
 public class JavaCoreClassDetector {
 
+    private JavaCoreClassDetector() {
+        //
+    }
+
     /**
      * Check if given type package name starts with 'java'.
      *

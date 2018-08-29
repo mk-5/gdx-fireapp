@@ -27,7 +27,6 @@ import mk.gdx.firebase.distributions.AppDistribution;
 public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution {
 
     private volatile static GdxFIRApp instance;
-    private static boolean ignoreExceptions;
 
     /**
      * GdxFIRApp protected constructor.

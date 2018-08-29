@@ -27,6 +27,11 @@ import mk.gdx.firebase.functional.Consumer;
  * Helper for dealing with transforming {@code byte[]} to {@code TextureRegion}.
  */
 public class ImageHelper {
+
+    private ImageHelper() {
+        //
+    }
+
     /**
      * Transforms byte[] to Texture Region.
      * <p>

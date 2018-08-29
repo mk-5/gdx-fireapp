@@ -22,6 +22,10 @@ import mk.gdx.firebase.callbacks.AuthCallback;
  */
 class GoogleAuthJS {
 
+    private GoogleAuthJS() {
+        //
+    }
+
     static native void signIn(final AuthCallback callback) /*-{
         if( $wnd.firebase.auth().currentUser != null ){
             callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(

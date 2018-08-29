@@ -99,16 +99,16 @@ public class GdxFIRAuthTest extends GdxAppTest {
 
     @Test
     public void getIOSClassName() {
-        Assert.assertEquals(GdxFIRAuth.instance().getIOSClassName(), "mk.gdx.firebase.ios.auth.Auth");
+        Assert.assertEquals("mk.gdx.firebase.ios.auth.Auth", GdxFIRAuth.instance().getIOSClassName());
     }
 
     @Test
     public void getAndroidClassName() {
-        Assert.assertEquals(GdxFIRAuth.instance().getAndroidClassName(), "mk.gdx.firebase.android.auth.Auth");
+        Assert.assertEquals("mk.gdx.firebase.android.auth.Auth", GdxFIRAuth.instance().getAndroidClassName());
     }
 
     @Test
     public void getWebGLClassName() {
-        Assert.assertEquals(GdxFIRAuth.instance().getWebGLClassName(), "mk.gdx.firebase.html.auth.Auth");
+        Assert.assertEquals("mk.gdx.firebase.html.auth.Auth", GdxFIRAuth.instance().getWebGLClassName());
     }
 }

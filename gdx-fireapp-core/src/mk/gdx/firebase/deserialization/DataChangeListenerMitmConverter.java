@@ -38,6 +38,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
 
     public DataChangeListenerMitmConverter(Class<T> dataType, DataChangeListener<E> coveredListener, FirebaseMapConverter mapConverter) {
         super(mapConverter);
+        this.dataType = dataType;
         this.coveredListener = coveredListener;
     }
 

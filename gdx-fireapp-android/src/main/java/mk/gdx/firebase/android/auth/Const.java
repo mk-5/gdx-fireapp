@@ -16,6 +16,11 @@
 
 package mk.gdx.firebase.android.auth;
 
-public class Const {
+class Const {
+
+    private Const() {
+        //
+    }
+
     static final Integer GOOGLE_SIGN_IN = 9001;
 }

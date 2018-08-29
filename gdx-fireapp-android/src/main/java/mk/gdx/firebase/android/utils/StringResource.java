@@ -24,6 +24,10 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
  */
 public class StringResource {
 
+    private StringResource() {
+
+    }
+
     /**
      * Gets value from R.string by name.
      *

@@ -20,6 +20,11 @@ package mk.gdx.firebase.html.firebase;
  * Provides javascript calls for firebase.js loading.
  */
 class FirebaseJS {
+
+    private FirebaseJS(){
+        //
+    }
+
     static native void initializeFirebase(String initializationScript) /*-{
         console.log("GdxFireapp: eval initialization script...");
         eval(initializationScript);

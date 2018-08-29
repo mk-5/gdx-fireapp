@@ -28,6 +28,10 @@ public class GdxFIRLogger {
 
     private static boolean enabled;
 
+    private GdxFIRLogger() {
+        //
+    }
+
     /**
      * Logs message to the console or logcat.
      *

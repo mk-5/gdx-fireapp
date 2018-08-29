@@ -26,6 +26,11 @@ import java.util.Map;
  * Transforms {@link java.util.Map} to JSON string.
  */
 public class MapTransformer {
+
+    private MapTransformer() {
+        //
+    }
+
     /**
      * @param map Map, not null
      * @return JSON representation of given map

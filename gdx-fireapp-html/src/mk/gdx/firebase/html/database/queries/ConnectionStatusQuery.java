@@ -31,6 +31,11 @@ public class ConnectionStatusQuery extends GwtDatabaseQuery {
     }
 
     @Override
+    protected void prepare() {
+        // Do nothing
+    }
+
+    @Override
     protected void runJS() {
         onConnect((ConnectedListener) arguments.get(0));
     }

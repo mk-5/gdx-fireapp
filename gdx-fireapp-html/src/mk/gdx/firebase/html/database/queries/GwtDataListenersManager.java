@@ -27,6 +27,10 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 public class GwtDataListenersManager {
     private static final DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<DataChangeListener>();
 
+    private GwtDataListenersManager() {
+        //
+    }
+
     /**
      * @param refPath  Reference path, not null
      * @param listener Listener, may be null
@@ -60,7 +64,6 @@ public class GwtDataListenersManager {
      */
     static void callListener(String refPath, String newValue) {
         if (!listenersManager.hasListeners(refPath))
-//            throw new IllegalStateException();
             return;
         Array<DataChangeListener> listeners = listenersManager.getListeners(refPath);
         for (DataChangeListener listener : listeners)

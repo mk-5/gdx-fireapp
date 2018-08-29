@@ -29,6 +29,10 @@ import java.util.Map;
  */
 public class JsonProcessor {
 
+    private JsonProcessor() {
+        //
+    }
+
     /**
      * Converts json string into java object.
      * <p>

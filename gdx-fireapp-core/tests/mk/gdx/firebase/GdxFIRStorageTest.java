@@ -108,16 +108,16 @@ public class GdxFIRStorageTest extends GdxAppTest {
 
     @Test
     public void getIOSClassName() {
-        Assert.assertEquals(GdxFIRStorage.instance().getIOSClassName(), "mk.gdx.firebase.ios.storage.Storage");
+        Assert.assertEquals("mk.gdx.firebase.ios.storage.Storage", GdxFIRStorage.instance().getIOSClassName());
     }
 
     @Test
     public void getAndroidClassName() {
-        Assert.assertEquals(GdxFIRStorage.instance().getAndroidClassName(), "mk.gdx.firebase.android.storage.Storage");
+        Assert.assertEquals("mk.gdx.firebase.android.storage.Storage", GdxFIRStorage.instance().getAndroidClassName());
     }
 
     @Test
     public void getWebGLClassName() {
-        Assert.assertEquals(GdxFIRStorage.instance().getWebGLClassName(), "mk.gdx.firebase.html.storage.Storage");
+        Assert.assertEquals("mk.gdx.firebase.html.storage.Storage", GdxFIRStorage.instance().getWebGLClassName());
     }
 }

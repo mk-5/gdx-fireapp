@@ -26,6 +26,10 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  */
 public class DataListenerOnDataChangeResolver {
 
+    private DataListenerOnDataChangeResolver() {
+        //
+    }
+
     // TODO - docs
     @SuppressWarnings("unchecked")
     public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataChangeListener<E> dataChangeListener) {

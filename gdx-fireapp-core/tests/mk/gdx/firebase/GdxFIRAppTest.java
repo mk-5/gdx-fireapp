@@ -39,16 +39,16 @@ public class GdxFIRAppTest extends GdxAppTest {
 
     @Test
     public void getIOSClassName() {
-        Assert.assertEquals(GdxFIRApp.instance().getIOSClassName(), "mk.gdx.firebase.ios.App");
+        Assert.assertEquals("mk.gdx.firebase.ios.App", GdxFIRApp.instance().getIOSClassName());
     }
 
     @Test
     public void getAndroidClassName() {
-        Assert.assertEquals(GdxFIRApp.instance().getAndroidClassName(), "mk.gdx.firebase.android.App");
+        Assert.assertEquals("mk.gdx.firebase.android.App", GdxFIRApp.instance().getAndroidClassName());
     }
 
     @Test
     public void getWebGLClassName() {
-        Assert.assertEquals(GdxFIRApp.instance().getWebGLClassName(), "mk.gdx.firebase.html.App");
+        Assert.assertEquals("mk.gdx.firebase.html.App", GdxFIRApp.instance().getWebGLClassName());
     }
 }

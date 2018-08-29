@@ -35,12 +35,6 @@ import mk.gdx.firebase.distributions.AnalyticsDistribution;
 public class Analytics implements AnalyticsDistribution {
 
     /**
-     * Analytics class constructor.
-     */
-    public Analytics() {
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

@@ -7,6 +7,10 @@ import apple.foundation.NSNumber;
  */
 public class NSNumberHelper {
 
+    private NSNumberHelper() {
+
+    }
+
     /**
      * Transforms {@code NSNumber} to java {@code Number} equivalent.
      * <p>

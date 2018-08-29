@@ -25,6 +25,10 @@ public class GdxFIRAuthHtml {
     private static boolean googleAuthViaRedirect;
     private static boolean googleAuthAlwaysPromptForAccount;
 
+    private GdxFIRAuthHtml() {
+        // 
+    }
+
     /**
      * @return If true, google sign-in will be do via redirection, this method is preferred on mobile devices.
      */

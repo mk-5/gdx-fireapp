@@ -29,6 +29,10 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
  */
 public class DataSnapshotOrderByResolver {
 
+    private DataSnapshotOrderByResolver() {
+        //
+    }
+
     /**
      * Gets children's from DataSnapshot and puts them into new ArrayList.
      *

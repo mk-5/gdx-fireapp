@@ -75,16 +75,16 @@ public class GdxFIRAnalyticsTest extends GdxAppTest {
 
     @Test
     public void getIOSClassName() {
-        Assert.assertEquals(GdxFIRAnalytics.instance().getIOSClassName(), "mk.gdx.firebase.ios.analytics.Analytics");
+        Assert.assertEquals("mk.gdx.firebase.ios.analytics.Analytics", GdxFIRAnalytics.instance().getIOSClassName());
     }
 
     @Test
     public void getAndroidClassName() {
-        Assert.assertEquals(GdxFIRAnalytics.instance().getAndroidClassName(), "mk.gdx.firebase.android.analytics.Analytics");
+        Assert.assertEquals("mk.gdx.firebase.android.analytics.Analytics", GdxFIRAnalytics.instance().getAndroidClassName());
     }
 
     @Test
     public void getWebGLClassName() {
-        Assert.assertEquals(GdxFIRAnalytics.instance().getWebGLClassName(), "mk.gdx.firebase.html.analytics.Analytics");
+        Assert.assertEquals("mk.gdx.firebase.html.analytics.Analytics", GdxFIRAnalytics.instance().getWebGLClassName());
     }
 }

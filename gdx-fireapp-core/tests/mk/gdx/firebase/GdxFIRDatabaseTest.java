@@ -216,16 +216,16 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
 
     @Test
     public void getIOSClassName() {
-        Assert.assertEquals(GdxFIRDatabase.instance().getIOSClassName(), "mk.gdx.firebase.ios.database.Database");
+        Assert.assertEquals("mk.gdx.firebase.ios.database.Database", GdxFIRDatabase.instance().getIOSClassName());
     }
 
     @Test
     public void getAndroidClassName() {
-        Assert.assertEquals(GdxFIRDatabase.instance().getAndroidClassName(), "mk.gdx.firebase.android.database.Database");
+        Assert.assertEquals("mk.gdx.firebase.android.database.Database", GdxFIRDatabase.instance().getAndroidClassName());
     }
 
     @Test
     public void getWebGLClassName() {
-        Assert.assertEquals(GdxFIRDatabase.instance().getWebGLClassName(), "mk.gdx.firebase.html.database.Database");
+        Assert.assertEquals("mk.gdx.firebase.html.database.Database", GdxFIRDatabase.instance().getWebGLClassName());
     }
 }

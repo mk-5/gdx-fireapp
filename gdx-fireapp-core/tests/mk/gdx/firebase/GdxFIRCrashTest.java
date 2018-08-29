@@ -48,16 +48,16 @@ public class GdxFIRCrashTest extends GdxAppTest {
 
     @Test
     public void getIOSClassName() {
-        Assert.assertEquals(GdxFIRCrash.instance().getIOSClassName(), "mk.gdx.firebase.ios.crash.Crash");
+        Assert.assertEquals("mk.gdx.firebase.ios.crash.Crash", GdxFIRCrash.instance().getIOSClassName());
     }
 
     @Test
     public void getAndroidClassName() {
-        Assert.assertEquals(GdxFIRCrash.instance().getAndroidClassName(), "mk.gdx.firebase.android.crash.Crash");
+        Assert.assertEquals("mk.gdx.firebase.android.crash.Crash", GdxFIRCrash.instance().getAndroidClassName());
     }
 
     @Test
     public void getWebGLClassName() {
-        Assert.assertEquals(GdxFIRCrash.instance().getWebGLClassName(), "mk.gdx.firebase.html.crash.Crash");
+        Assert.assertEquals("mk.gdx.firebase.html.crash.Crash", GdxFIRCrash.instance().getWebGLClassName());
     }
 }

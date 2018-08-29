@@ -25,6 +25,10 @@ package mk.gdx.firebase.analytics;
  */
 public class AnalyticsEvent {
 
+    private AnalyticsEvent() {
+        //
+    }
+
     /**
      * Firebase analytics event: {@value}
      * <p>

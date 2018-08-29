@@ -49,6 +49,10 @@ import mk.gdx.firebase.ios.helpers.NSNumberHelper;
  */
 public class DataProcessor {
 
+    private DataProcessor() {
+
+    }
+
     /**
      * Transforms ios object to java with preserved GenericType.
      *

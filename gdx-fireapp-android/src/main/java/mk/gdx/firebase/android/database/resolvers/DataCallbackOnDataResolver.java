@@ -26,6 +26,10 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
  */
 public class DataCallbackOnDataResolver {
 
+    private DataCallbackOnDataResolver() {
+        //
+    }
+
     // TODO - docs
     @SuppressWarnings("unchecked")
     public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataCallback<E> dataCallback) {

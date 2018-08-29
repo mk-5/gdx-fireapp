@@ -22,6 +22,10 @@ import android.os.Bundle;
  */
 class BundleHelper {
 
+    private BundleHelper() {
+        //
+    }
+
     /**
      * Put numeric value from string inside given bundle.
      * If {@code number} do not contain numeric value - nothing will happen
@@ -60,6 +64,7 @@ class BundleHelper {
                     break;
                 }
             } catch (NumberFormatException e) {
+                // Do nothing
             }
         }
         if (!found) {

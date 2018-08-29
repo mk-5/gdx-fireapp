@@ -25,6 +25,11 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
  * Provides calls to firebase javascript api.
  */
 class AuthJS {
+
+    private AuthJS() {
+        //
+    }
+
     static native FirebaseUserJSON firebaseUser() /*-{
         if( typeof $wnd.firebase == 'undefined') return { isNULL : true };
         var user = $wnd.firebase.auth().currentUser;

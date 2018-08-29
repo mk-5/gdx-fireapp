@@ -26,6 +26,10 @@ import mk.gdx.firebase.storage.FileMetadata;
  */
 class StorageJS {
 
+    private StorageJS() {
+        //
+    }
+
     /**
      * Downloads file given at {@code refPath} and convert it to base64 string.
      *
