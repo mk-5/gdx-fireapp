@@ -15,7 +15,6 @@
  */
 package mk.gdx.firebase.android.crash;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.crashlytics.android.Crashlytics;
@@ -41,10 +40,12 @@ public class CrashTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(Crashlytics.class);
         PowerMockito.mockStatic(Fabric.class);
-        GdxFIRCrash gdxFIRCrash = GdxFIRCrash.instance();
+        Crash crash = new Crash();
 
         // When
-        gdxFIRCrash.initialize();
+        crash.initialize();
+        crash.initialize();
+        crash.initialize();
 
         // Then
         PowerMockito.verifyStatic(Fabric.class, VerificationModeFactory.times(1));
@@ -57,10 +58,10 @@ public class CrashTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(Crashlytics.class);
         PowerMockito.mockStatic(Fabric.class);
-        GdxFIRCrash gdxFIRCrash = GdxFIRCrash.instance();
+        Crash crash = new Crash();
 
         // When
-        gdxFIRCrash.log("abc");
+        crash.log("abc");
 
         // Then
         PowerMockito.verifyStatic(Crashlytics.class, VerificationModeFactory.times(1));

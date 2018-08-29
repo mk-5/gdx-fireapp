@@ -2,43 +2,38 @@ apply plugin: "java"
 apply plugin: "moe"
 apply plugin: 'maven-publish'
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.test.java.srcDirs = ["tests/"]
+
+jar {
+    from sourceSets.main.output
+    from sourceSets.main.allJava
+}
+
 task sourceJar(type: Jar) {
     from sourceSets.main.allJava
     classifier "sources"
 }
 
-jar {
-    from sourceSets.main.output
-
-    from sourceSets.main.allJava
-}
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-sourceSets.main.java.srcDirs = ["src/"]
-sourceSets.test.java.srcDirs = ["tests/"]
-
 dependencies {
     compile project(":gdx-fireapp-core")
     compile libs.libgdx.iosmoe
     testCompile libs.junit
-    testCompile libs.mockito.core
+    testCompile libs.powermock.junit
+    testCompile libs.powermock.api
 }
 
 eclipse.project {
     name = "gdx-fireapp-io-smoe"
 }
 
-tasks.withType(Test) {
-    scanForTestClasses = false
-    include "**/*Test.class" // whatever Ant pattern matches your test class files
-}
-
 ext {
     appModuleName = 'GDX Fireapp iOS-moe'
 }
-
 
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"

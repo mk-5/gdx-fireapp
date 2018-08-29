@@ -33,7 +33,6 @@ ext {
     appModuleName = 'GDX Fireapp Core'
 }
 
-
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"
 
