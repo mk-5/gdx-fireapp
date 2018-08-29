@@ -57,7 +57,7 @@ GdxFIRApp.instance().configure();
 
 **Firebase Analytics** should start working just after this step.  
 
-If you would add ***Fabric/Crashlytics*** to your project you should initialize it also:
+If you added ***Fabric/Crashlytics*** to your project you should initialize it also:
 
 ````
 GdxFIRCrash.instance().initialize();
