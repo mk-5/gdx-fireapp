@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.annotations.MapConversion;
@@ -70,7 +71,7 @@ public class DataCallbackMitmConverterTest {
         DataCallbackMitmConverter dataCallbackMitmConverter = new DataCallbackMitmConverter(DataCallbackMitmConverterTest.class, dataCallback, firebaseMapConverter);
 
         // When
-        DataCallback resultCallback = dataCallbackMitmConverter.getPojoDataCallback();
+        DataCallback resultCallback = dataCallbackMitmConverter.getGenericDataCallback();
 
         // Then
         Assert.assertTrue(resultCallback.getClass().getSimpleName().equals("GenericDataCallback"));
@@ -92,6 +93,24 @@ public class DataCallbackMitmConverterTest {
         Mockito.verify(dataCallback).onData(Mockito.any(MyClass.class));
     }
 
+    @Test
+    public void onData_singleValueList() {
+        // Given
+        DataCallback dataCallback = Mockito.mock(TestCallbackWithMapConversionAndList.class);
+        FirebaseMapConverter firebaseMapConverter = Mockito.mock(FirebaseMapConverter.class);
+        MyClass myClass = new MyClass();
+        Mockito.when(firebaseMapConverter.convert(Mockito.any(Map.class), Mockito.eq(MyClass.class))).thenReturn(myClass);
+        DataCallbackMitmConverter dataCallbackMitmConverter = new DataCallbackMitmConverter(List.class, dataCallback, firebaseMapConverter);
+        Map rawData = Collections.singletonMap("field", "test");
+        List<MyClass> expectedList = Collections.singletonList(myClass);
+
+        // When
+        dataCallbackMitmConverter.onData(rawData);
+
+        // Then
+        Mockito.verify(dataCallback).onData(Mockito.eq(expectedList));
+    }
+
     @Test(expected = ClassCastException.class)
     public void onData_withoutMapConversion() {
         // Given
@@ -109,6 +128,20 @@ public class DataCallbackMitmConverterTest {
 
     @Test
     public void onError() {
+    }
+
+    public class TestCallbackWithMapConversionAndList implements DataCallback<List<MyClass>> {
+
+        @Override
+        @MapConversion(MyClass.class)
+        public void onData(List data) {
+
+        }
+
+        @Override
+        public void onError(Exception e) {
+
+        }
     }
 
     public class TestCallbackWithMapConversion implements DataCallback<MyClass> {
