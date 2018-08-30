@@ -16,10 +16,13 @@
 
 package mk.gdx.firebase.deserialization;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.annotations.MapConversion;
-import mk.gdx.firebase.annotations.NestedGenericType;
 import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.reflection.AnnotationFinder;
 
@@ -81,14 +84,10 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
     @SuppressWarnings("unchecked")
     public void onChange(Object data) {
         MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, coveredListener);
-        // If MapConversions was not indicated - do nothing.
         if (mapConversionAnnotation != null) {
             data = (E) doMitmConversion(mapConversionAnnotation.value(), data);
-        } else {
-            // Depracated - will be remove in next releases.
-            NestedGenericType nestedGenericTypeAnnotation = AnnotationFinder.getMethodAnnotation(NestedGenericType.class, coveredListener);
-            if (nestedGenericTypeAnnotation != null) {
-                data = (E) doMitmConversion(nestedGenericTypeAnnotation.value(), data);
+            if (ClassReflection.isAssignableFrom(List.class, dataType) && data.getClass() == mapConversionAnnotation.value()) {
+                data = Collections.singletonList(data);
             }
         }
         coveredListener.onChange((E) data);
