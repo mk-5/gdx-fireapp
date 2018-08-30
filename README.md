@@ -2,19 +2,18 @@
 
 A libGDX cross-platform API for Firebase.
 
-[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
+[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) ![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=pl.mk5.gdx-fireapp%3Agdx-fireapp&metric=alert_status) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion)
 
 
 
 
 ## Getting Started
 
-The first thing you should to do is installing Firebase SDK. Here you can find some short tutorials describes this installation inside LibGDX project:
+The first thing you should do is installing Firebase SDK and add gradle dependencies.   
 
-- [Android Firebase SDK installation guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-SDK-installation)
-- [iOS Firebase SDK installation guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Firebase-SDK-installation)
-
-Now you need to add gradle dependencies:
+- [Android  guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-guide)
+- [iOS guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Guide)
+- [GWT guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide)
 
 **Core**
 
@@ -32,13 +31,17 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.+"
 compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.+"
 ```
 
+**GWT**
+
+```
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:1.+"
+```
+
 If you are done with that do the last step: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
 
 
-**The latest version** was built using LibGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
-
-If you would like to use GWT platform you should read this wiki page first: [GWT support](https://github.com/mk-5/gdx-fireapp/wiki/GDX-Fireapp-GWT)
+**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
 
 
 
