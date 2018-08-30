@@ -37,9 +37,9 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.+"
 compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:1.+"
 ```
 
-If you are done with that do the last step: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
+If you are done with that do the last step: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)  
 
-
+  
 
 **The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
 
