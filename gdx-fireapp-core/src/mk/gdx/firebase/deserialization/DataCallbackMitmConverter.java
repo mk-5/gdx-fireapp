@@ -85,9 +85,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter 
      */
     @SuppressWarnings("unchecked")
     public void onData(Object data) {
-
         MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, coveredCallback);
-        // If MapConversions was not indicated - do nothing.
         if (mapConversionAnnotation != null) {
             data = doMitmConversion(mapConversionAnnotation.value(), data);
             if (ClassReflection.isAssignableFrom(List.class, dataType) && data.getClass() == mapConversionAnnotation.value()) {
