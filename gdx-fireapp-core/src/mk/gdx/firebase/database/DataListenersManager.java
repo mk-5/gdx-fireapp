@@ -43,7 +43,8 @@ public class DataListenersManager<T> {
 
     public void removeListenersForPath(String databasePath) {
         synchronized (listeners) {
-            listeners.get(databasePath).clear();
+            if (listeners.containsKey(databasePath))
+                listeners.get(databasePath).clear();
         }
     }
 
@@ -52,6 +53,7 @@ public class DataListenersManager<T> {
     }
 
     public Array<T> getListeners(String databasePath) {
+        if (!listeners.containsKey(databasePath)) return new Array<>();
         return new Array<>(listeners.get(databasePath));
     }
 }
