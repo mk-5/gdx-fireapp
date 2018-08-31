@@ -38,4 +38,7 @@
 
 **[1.6.1]**  
 \- API Change: GdxFIRCrash use Crashlytics now, if you have project with older version  - go to the wiki page and update your project  
-\- General: Minor bugs fix and improvements
+\- General: Minor bugs fix and improvements  
+
+**[1.6.2]**  
+\- fix: Fix for detaching of listeners when call ***GdxFIRDatabase#onDataChange(class, null)***    
