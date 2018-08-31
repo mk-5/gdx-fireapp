@@ -41,7 +41,7 @@ public abstract class AndroidContextTest {
     public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         PowerMockito.mockStatic(GdxNativesLoader.class);
         AndroidApplication application = PowerMockito.mock(AndroidApplication.class);
         Mockito.when(application.getType()).thenReturn(Application.ApplicationType.Android);

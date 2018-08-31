@@ -102,6 +102,16 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     }
 
     @Test
+    public void onDataChange_withNull() {
+        // Given
+        // When
+        GdxFIRDatabase.instance().onDataChange(Map.class, null);
+
+        // Then
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(Map.class), (DataChangeListener<Map>) Mockito.isNull());
+    }
+
+    @Test
     public void filter() {
         // Given
         // When

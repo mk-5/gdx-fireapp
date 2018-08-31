@@ -43,7 +43,7 @@ public class AnalyticsTest extends AndroidContextTest {
 
     @Before
     @Override
-    public void setup() {
+    public void setup() throws Exception {
         super.setup();
         PowerMockito.mockStatic(FirebaseAnalytics.class);
         firebaseAnalytics = PowerMockito.mock(FirebaseAnalytics.class);

@@ -43,7 +43,7 @@ public class AuthTest extends AndroidContextTest {
     private Task task;
 
     @Override
-    public void setup() {
+    public void setup() throws Exception {
         super.setup();
         PowerMockito.mockStatic(FirebaseAuth.class);
         firebaseAuth = PowerMockito.mock(FirebaseAuth.class);
