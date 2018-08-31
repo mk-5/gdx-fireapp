@@ -63,7 +63,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      * @return New Pojo data callback instance, not null.
      */
     public DataChangeListener<Map> getPojoListener() {
-        return new PojoDataChangeListener();
+        return coveredListener == null ? null : new PojoDataChangeListener();
     }
 
     /**
@@ -72,7 +72,7 @@ public class DataChangeListenerMitmConverter<T, E extends T> extends MapMitmConv
      * @return New Pojo data callback instance, not null.
      */
     public DataChangeListener<T> getGenericListener() {
-        return new GenericDataChangeListener();
+        return coveredListener == null ? null : new GenericDataChangeListener();
     }
 
     /**

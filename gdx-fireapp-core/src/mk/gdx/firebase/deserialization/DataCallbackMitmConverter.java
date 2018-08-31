@@ -65,7 +65,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter 
      * @return New Pojo data callback instance, not null.
      */
     public DataCallback<Map> getPojoDataCallback() {
-        return new PojoDataCallback();
+        return coveredCallback == null ? null : new PojoDataCallback();
     }
 
     /**
@@ -74,7 +74,7 @@ public class DataCallbackMitmConverter<T, E extends T> extends MapMitmConverter 
      * @return New Pojo data callback instance, not null.
      */
     public DataCallback<T> getGenericDataCallback() {
-        return new GenericDataCallback();
+        return coveredCallback == null ? null : new GenericDataCallback();
     }
 
     /**
