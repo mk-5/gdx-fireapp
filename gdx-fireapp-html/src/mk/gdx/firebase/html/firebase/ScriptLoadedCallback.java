@@ -19,13 +19,10 @@ package mk.gdx.firebase.html.firebase;
 import com.badlogic.gdx.Gdx;
 import com.google.gwt.core.client.Callback;
 
-/**
- *
- */
-public class ScriptLoadedCallback implements Callback<Void, Exception> {
+class ScriptLoadedCallback implements Callback<Void, Exception> {
     private FirebaseConfigParser configParser;
 
-    public ScriptLoadedCallback(FirebaseConfigParser configParser) {
+    ScriptLoadedCallback(FirebaseConfigParser configParser) {
         this.configParser = configParser;
     }
 
