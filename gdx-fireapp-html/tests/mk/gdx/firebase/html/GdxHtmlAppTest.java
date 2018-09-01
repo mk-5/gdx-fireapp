@@ -17,12 +17,12 @@ package mk.gdx.firebase.html;
 
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 
@@ -42,16 +42,18 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 @SuppressStaticInitializationFor({"com.google.gwt.core.client.ScriptInjector"})
 public abstract class GdxHtmlAppTest {
 
+    protected FileHandle configFileMock;
+
     @Rule
     public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
-    public void setup() throws Exception{
+    public void setup() throws Exception {
         Application application = Mockito.mock(Application.class);
         Mockito.when(application.getType()).thenReturn(Application.ApplicationType.WebGL);
-        FileHandle configFile = Mockito.mock(FileHandle.class);
-        Mockito.when(configFile.exists()).thenReturn(true);
-        Mockito.when(configFile.readString()).thenReturn("<script src=\"https://www.gstatic.com/firebasejs/123/firebase.js\"></script>\n" +
+        configFileMock = Mockito.mock(FileHandle.class);
+        Mockito.when(configFileMock.exists()).thenReturn(true);
+        Mockito.when(configFileMock.readString()).thenReturn("<script src=\"https://www.gstatic.com/firebasejs/123/firebase.js\"></script>\n" +
                 "<script>\n" +
                 "  // Initialize Firebase\n" +
                 "  var config = {\n" +
@@ -66,7 +68,7 @@ public abstract class GdxHtmlAppTest {
                 "</script>");
 
         Files files = Mockito.mock(Files.class);
-        Mockito.when(files.internal(Mockito.eq("firebase-config.html"))).thenReturn(configFile);
+        Mockito.when(files.internal(Mockito.eq("firebase-config.html"))).thenReturn(configFileMock);
 
         PowerMockito.mockStatic(ScriptInjector.class);
         Mockito.when(ScriptInjector.fromUrl(Mockito.anyString())).thenCallRealMethod();
