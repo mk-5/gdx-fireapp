@@ -16,11 +16,6 @@ dependencies {
     testCompile libs.powermock.xstream
 }
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier "sources"
-}
-
 gwt {
     gwtVersion = '2.8.0' // Should match the gwt version used for building the gwt backend
     maxHeapSize = "2G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
@@ -46,14 +41,23 @@ eclipse.project {
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    exclude "**/com/badlogic/**"
+    classifier "sources"
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier 'javadoc'
     from javadoc.destinationDir
+    exclude "**/com/badlogic/**"
 }
 
 jar {
     from project.sourceSets.main.allSource
+    exclude "**/com/badlogic/**"
     from project.sourceSets.main.output
+    exclude "**/com/badlogic/**"
 }
 
 publishing {

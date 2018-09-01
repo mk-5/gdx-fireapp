@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.helpers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,6 +27,7 @@ import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.functional.Consumer;
 
 /**
@@ -63,7 +63,7 @@ public class ImageHelper {
             public void onLoad(LoadEvent event) {
                 ImageElement imageElement = image.getElement().cast();
                 Pixmap pixmap = new Pixmap(imageElement);
-                Gdx.app.log("ImageHelper", "pixmap: " + pixmap.getWidth() + "/" + pixmap.getHeight());
+                GdxFIRLogger.log("Image loaded");
                 final int orgWidth = pixmap.getWidth();
                 final int orgHeight = pixmap.getHeight();
                 int width = MathUtils.nextPowerOfTwo(orgWidth);
