@@ -124,6 +124,7 @@ public class DataCallbackMitmConverterTest {
         dataCallbackMitmConverter.onData(rawData);
 
         // Then exception
+        Assert.fail();
     }
 
     @Test

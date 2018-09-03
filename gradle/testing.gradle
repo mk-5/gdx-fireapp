@@ -37,7 +37,8 @@ configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
                 fileTree(dir: it, exclude: [
                         '**/bindings/**', '**/fakes/**', '**/com/badlogic/**',
                         // GWT Crash&Analytics does nothing
-                        'mk/gdx/firebase/html/crash/**', 'mk/gdx/firebase/html/analytics/**'
+                        'mk/gdx/firebase/html/crash/**', 'mk/gdx/firebase/html/analytics/**',
+                        'mk/gdx/firebase/analytics/**', 'mk/gdx/firebase/exceptions'
                 ])
             })
         }

@@ -119,6 +119,7 @@ public class DataChangeListenerMitmConverterTest {
         mitmConverter.onChange(rawData);
 
         // Then exception
+        Assert.fail();
     }
 
     @Test

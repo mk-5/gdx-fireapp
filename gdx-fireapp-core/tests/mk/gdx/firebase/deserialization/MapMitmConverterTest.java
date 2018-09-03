@@ -95,6 +95,7 @@ public class MapMitmConverterTest {
         Object object1 = mapMitmConverter.doMitmConversion(MyClass.class, "abc");
 
         // Then exception
+        Assert.fail();
     }
 
     @Test
