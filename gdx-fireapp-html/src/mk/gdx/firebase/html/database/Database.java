@@ -34,6 +34,7 @@ import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.html.database.queries.ConnectionStatusQuery;
 import mk.gdx.firebase.html.database.queries.OnDataChangeQuery;
 import mk.gdx.firebase.html.database.queries.PushQuery;
+import mk.gdx.firebase.html.database.queries.ReadValueQuery;
 import mk.gdx.firebase.html.database.queries.RemoveValueQuery;
 import mk.gdx.firebase.html.database.queries.RunTransactionQuery;
 import mk.gdx.firebase.html.database.queries.SetValueQuery;
@@ -94,7 +95,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback) {
-        new RemoveValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
+        new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
