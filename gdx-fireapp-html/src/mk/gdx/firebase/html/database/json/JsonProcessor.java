@@ -56,7 +56,7 @@ public class JsonProcessor {
             } else if (wantedType == Map.class) {
                 wantedType = HashMap.class;
             }
-            json.setDefaultSerializer(new JsonListMapDeserializer(wantedType, HashMap.class));
+            json.setDefaultSerializer(new JsonListMapDeserializer(HashMap.class));
             result = (R) json.fromJson(wantedType, jsonString);
         } else {
             result = (R) json.fromJson(wantedType, jsonString);

@@ -19,27 +19,18 @@ package mk.gdx.firebase.html.database.json;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-
-import java.util.List;
-import java.util.Map;
-
-import mk.gdx.firebase.html.exceptions.WrongTypeForDeserializerException;
 
 /**
- * Abstraction for deserializers of json string without class type inside each doc.
+ * Provides deserialization of json without the class descriptor field inside the document.
  */
 class JsonListMapDeserializer extends Json.ReadOnlySerializer {
-    protected Class<?> type;
-    protected Class<?> objectType;
+
+    private Class<?> objectType;
 
     /**
-     * @param type List or map value type, not null
+     * @param objectType The type of 'Object' inside json string.
      */
-    public JsonListMapDeserializer(Class<?> type, Class<?> objectType) {
-        if (!(ClassReflection.isAssignableFrom(List.class, type) || ClassReflection.isAssignableFrom(Map.class, type)))
-            throw new WrongTypeForDeserializerException();
-        this.type = type;
+    JsonListMapDeserializer(Class<?> objectType) {
         this.objectType = objectType;
     }
 
@@ -51,7 +42,7 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer {
         return processJsonValue(json, jsonData);
     }
 
-    protected Object processJsonValue(Json json, JsonValue jsonData) {
+    private Object processJsonValue(Json json, JsonValue jsonData) {
         if (jsonData.isObject()) {
             return processObject(json, jsonData);
         } else if (jsonData.isValue()) {
@@ -65,7 +56,7 @@ class JsonListMapDeserializer extends Json.ReadOnlySerializer {
         return json.fromJson(this.objectType, jsonData.toJson(JsonWriter.OutputType.json));
     }
 
-    protected Object processValue(JsonValue jsonData) {
+    private Object processValue(JsonValue jsonData) {
         if (jsonData.isBoolean())
             return jsonData.asBoolean();
         else if (jsonData.isDouble())
