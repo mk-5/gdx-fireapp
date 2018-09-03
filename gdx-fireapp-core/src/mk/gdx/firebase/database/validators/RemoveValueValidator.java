@@ -20,11 +20,19 @@ package mk.gdx.firebase.database.validators;
 import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.callbacks.DataCallback;
+import mk.gdx.firebase.distributions.DatabaseDistribution;
 
+/**
+ * Validates arguments for {@link DatabaseDistribution#removeValue()} nad {@link DatabaseDistribution#removeValue(CompleteCallback)}
+ */
 public class RemoveValueValidator implements ArgumentsValidator {
+
+    private static final String MESSAGE = "The first argument should be CompleteCallback";
+
     @Override
     public void validate(Array<Object> arguments) {
-        if (arguments.size > 0 && arguments.get(0) != null && !(arguments.get(0) instanceof CompleteCallback))
-            throw new IllegalArgumentException();
+        if (arguments.size > 0 && !(arguments.get(0) instanceof CompleteCallback))
+            throw new IllegalArgumentException(MESSAGE);
     }
 }

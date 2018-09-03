@@ -22,15 +22,24 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.distributions.DatabaseDistribution;
 
+/**
+ * Validates arguments for {@link DatabaseDistribution#updateChildren(Map)} and {@link DatabaseDistribution#updateChildren(Map, CompleteCallback)}
+ */
 public class UpdateChildrenValidator implements ArgumentsValidator {
+
+    private static final String MESSAGE1 = "Database#updateChildren needs at least 1 argument";
+    private static final String MESSAGE2 = "The first argument should be null or Map";
+    private static final String MESSAGE3 = "The second argument should be null or CompleteCallback";
+
     @Override
     public void validate(Array<Object> arguments) {
-        if (arguments.size < 1)
-            throw new IllegalStateException();
+        if (arguments.size == 0)
+            throw new IllegalArgumentException(MESSAGE1);
         if (arguments.get(0) != null && !(arguments.get(0) instanceof Map))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(MESSAGE2);
         if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof CompleteCallback))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(MESSAGE3);
     }
 }

@@ -19,12 +19,19 @@ package mk.gdx.firebase.database.validators;
 
 import com.badlogic.gdx.utils.Array;
 
+import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.listeners.ConnectedListener;
 
+/**
+ * Validates arguments for {@link DatabaseDistribution#onConnect(ConnectedListener)}
+ */
 public class OnConnectionValidator implements ArgumentsValidator {
+
+    private static final String MESSAGE = "The first argument should be null or ConnectedListener";
+
     @Override
     public void validate(Array<Object> arguments) {
-        if (arguments.get(0) != null && !(arguments.get(0) instanceof ConnectedListener))
-            throw new IllegalArgumentException();
+        if (arguments.size == 0 || (arguments.get(0) != null && !(arguments.get(0) instanceof ConnectedListener)))
+            throw new IllegalArgumentException(MESSAGE);
     }
 }

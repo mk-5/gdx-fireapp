@@ -21,17 +21,27 @@ import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.distributions.DatabaseDistribution;
 
+/**
+ * Validates arguments for {@link DatabaseDistribution#transaction(Class, TransactionCallback, CompleteCallback)} }
+ */
 public class RunTransactionValidator implements ArgumentsValidator {
+
+    private static final String MESSAGE1 = "Database#transaction needs at least 2 arguments";
+    private static final String MESSAGE2 = "The first argument should be class type";
+    private static final String MESSAGE3 = "The second argument should be TransactionCallback";
+    private static final String MESSAGE4 = "The third argument should be null or CompleteCallback";
+
     @Override
     public void validate(Array<Object> arguments) {
         if (arguments.size < 2)
-            throw new IllegalStateException();
+            throw new IllegalArgumentException(MESSAGE1);
         if (!(arguments.get(0) instanceof Class))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(MESSAGE2);
         if (!(arguments.get(1) instanceof TransactionCallback))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(MESSAGE3);
         if (arguments.size > 2 && arguments.get(2) != null && !(arguments.get(2) instanceof CompleteCallback))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(MESSAGE4);
     }
 }
