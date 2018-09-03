@@ -42,3 +42,7 @@
 
 **[1.6.2]**  
 \- fix: Fix for detaching of listeners when call ***GdxFIRDatabase#onDataChange(class, null)***    
+
+**[1.6.3]**  
+\- fix: Fix of wrong query execution for ***GdxFIRDatabase#readValue*** at GWT API   
+\- fix: Fix of getting the wrong argument in query for ***GdxFIRDatabase#removeValue(callback)*** at GWT API   
