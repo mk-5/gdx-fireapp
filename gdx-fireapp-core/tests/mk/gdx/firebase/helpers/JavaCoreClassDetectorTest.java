@@ -24,12 +24,24 @@ import com.badlogic.gdx.utils.Array;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 
 public class JavaCoreClassDetectorTest {
+
+    @Test
+    public void constructor() throws NoSuchMethodException {
+        // Given
+        // When
+        Constructor<JavaCoreClassDetector> constructor = JavaCoreClassDetector.class.getDeclaredConstructor();
+
+        // Then
+        Assert.assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+    }
 
     @Test
     public void isJavaCoreClass() {

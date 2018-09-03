@@ -21,7 +21,9 @@ dependencies {
     compile libs.libgdx.core
     testCompile libs.junit
     testCompile libs.powermock.junit
+    testCompile libs.powermock.junitRule
     testCompile libs.powermock.api
+    testCompile libs.powermock.xstream
     testCompile libs.systemrules
 }
 

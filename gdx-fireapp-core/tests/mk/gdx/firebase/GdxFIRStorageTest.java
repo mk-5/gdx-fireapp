@@ -1,12 +1,20 @@
 package mk.gdx.firebase;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.io.File;
 
@@ -14,17 +22,23 @@ import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.helpers.ImageHelper;
 
 import static org.junit.Assert.assertNotNull;
 
+@PrepareForTest({ImageHelper.class})
 public class GdxFIRStorageTest extends GdxAppTest {
 
-    @Mock
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
+
     private StorageDistribution storageDistribution;
 
     @Override
     public void setup() {
         super.setup();
+        storageDistribution = Mockito.mock(StorageDistribution.class);
         GdxFIRStorage.instance().platformObject = storageDistribution;
     }
 
@@ -107,6 +121,74 @@ public class GdxFIRStorageTest extends GdxAppTest {
     }
 
     @Test
+    public void downloadImage() throws Exception {
+        // Given
+        PowerMockito.mockStatic(ImageHelper.class);
+        PowerMockito.when(ImageHelper.class, "createTextureFromBytes", Mockito.any()).thenReturn(Mockito.mock(TextureRegion.class));
+        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        final byte[] byteData = {0, 0, 0, 0};
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((DownloadCallback) invocation.getArgument(2)).onSuccess(byteData);
+                return null;
+            }
+        }).when(storageDistribution).download(Mockito.anyString(), Mockito.anyLong(), Mockito.any(DownloadCallback.class));
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Runnable) invocation.getArgument(0)).run();
+                return null;
+            }
+        }).when(Gdx.app).postRunnable(Mockito.any(Runnable.class));
+        String testPath = "/test";
+
+        // When
+        GdxFIRStorage.instance().downloadImage(testPath, callback);
+
+        // Then
+        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(TextureRegion.class));
+    }
+
+    @Test
+    public void downloadImage_webGl() throws Exception {
+        // Given
+        PowerMockito.mockStatic(ImageHelper.class);
+        PowerMockito.when(ImageHelper.class, "createTextureFromBytes", Mockito.any()).thenReturn(Mockito.mock(TextureRegion.class));
+        PowerMockito.when(ImageHelper.class, "createTextureFromBytes", Mockito.any(), Mockito.any(Consumer.class)).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Consumer) invocation.getArgument(1)).accept(Mockito.mock(TextureRegion.class));
+                return null;
+            }
+        });
+        Mockito.when(Gdx.app.getType()).thenReturn(Application.ApplicationType.WebGL);
+        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        final byte[] byteData = {0, 0, 0, 0};
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((DownloadCallback) invocation.getArgument(2)).onSuccess(byteData);
+                return null;
+            }
+        }).when(storageDistribution).download(Mockito.anyString(), Mockito.anyLong(), Mockito.any(DownloadCallback.class));
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Runnable) invocation.getArgument(0)).run();
+                return null;
+            }
+        }).when(Gdx.app).postRunnable(Mockito.any(Runnable.class));
+        String testPath = "/test";
+
+        // When
+        GdxFIRStorage.instance().downloadImage(testPath, callback);
+
+        // Then
+        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(TextureRegion.class));
+    }
+
+    @Test
     public void getIOSClassName() {
         Assert.assertEquals("mk.gdx.firebase.ios.storage.Storage", GdxFIRStorage.instance().getIOSClassName());
     }
@@ -120,4 +202,5 @@ public class GdxFIRStorageTest extends GdxAppTest {
     public void getWebGLClassName() {
         Assert.assertEquals("mk.gdx.firebase.html.storage.Storage", GdxFIRStorage.instance().getWebGLClassName());
     }
+
 }
