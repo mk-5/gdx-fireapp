@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.html.firebase;
+package mk.gdx.firebase.analytics;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
 
-@RunWith(BlockJUnit4ClassRunner.class)
-public class FirebaseJSTest {
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+
+public class AnalyticsEventTest {
 
     @Test
-    public void setFirebaseScriptIsLoaded() {
+    public void constructor() throws NoSuchMethodException {
         // Given
         // When
-        FirebaseJS.setFirebaseScriptIsLoaded();
+        Constructor<AnalyticsEvent> constructor = AnalyticsEvent.class.getDeclaredConstructor();
 
         // Then
-        Assert.assertTrue(FirebaseScriptInformant.isFirebaseScriptLoaded());
+        Assert.assertTrue(Modifier.isPrivate(constructor.getModifiers()));
     }
+
 }

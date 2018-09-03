@@ -38,6 +38,12 @@ ext {
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"
 
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Test.class"
+    exclude "**/GdxIOSAppTest.class"
+}
+
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier 'javadoc'
     from javadoc.destinationDir

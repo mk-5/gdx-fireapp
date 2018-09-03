@@ -34,11 +34,6 @@ android {
         unitTests {
             returnDefaultValues = false
         }
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
     }
 
     buildTypes {

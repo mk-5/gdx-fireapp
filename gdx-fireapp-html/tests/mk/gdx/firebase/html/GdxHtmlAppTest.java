@@ -17,17 +17,14 @@ package mk.gdx.firebase.html;
 
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
 import com.google.gwt.core.client.ScriptInjector;
-import com.google.gwtmockito.GwtMockitoTestRunner;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -35,17 +32,14 @@ import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
-import org.powermock.modules.junit4.rule.PowerMockRule;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(GwtMockitoTestRunner.class)
+@RunWith(PowerMockRunner.class)
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class})
 @SuppressStaticInitializationFor({"com.google.gwt.core.client.ScriptInjector"})
 public abstract class GdxHtmlAppTest {
 
     protected FileHandle configFileMock;
-
-    @Rule
-    public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
     public void setup() throws Exception {

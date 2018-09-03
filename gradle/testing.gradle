@@ -7,28 +7,97 @@ sonarqube {
     }
 }
 
-configure(subprojects.findAll { it.name != 'gdx-fireapp-android' }) {
+configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
+    apply plugin: "java"
+    apply plugin: "jacoco"
+
     sonarqube {
         properties {
-            property "sonar.jacoco.reportPaths", "$buildDir/jacoco/test.exec"
+            property "sonar.sources", "$projectDir/src"
+            property "sonar.binaries", "$projectDir/build/classes/main"
+            property "sonar.java.binaries", "$projectDir/build/classes/main"
+            property "sonar.tests", "$projectDir/tests"
+            property "sonar.java.test.binaries", "$projectDir/build/classes/test"
+
+            property "sonar.jacoco.reportPaths", "$buildDir/jacoco/*.exec"
         }
     }
+
+    jacocoTestReport {
+        group "reporting"
+        reports {
+            csv.enabled false
+            html.enabled true
+            xml.enabled true
+            html.destination "${buildDir}/jacoco-html"
+        }
+
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        '**/bindings/**', '**/fakes/**', '**/com/badlogic/**',
+                        // GWT Crash&Analytics does nothing
+                        'mk/gdx/firebase/html/crash/**', 'mk/gdx/firebase/html/analytics/**'
+                ])
+            })
+        }
+    }
+
+    jacocoTestReport.dependsOn.add("test")
 }
 
 configure(subprojects.findAll { it.name.equals('gdx-fireapp-android') }) {
+    apply plugin: "android-library"
+    apply plugin: "jacoco-android"
+
     sonarqube {
         properties {
-            property "sonar.jacoco.reportPaths", "$buildDir/jacoco/testDebugUnitTest.exec"
-            property "sonar.junit.reportsPath", "$buildDir/test-results/debug"
+            property "sonar.sources", "$projectDir/src/main/java"
+            property "sonar.binaries", "$projectDir/build/intermediates/classes/debug"
+            property "sonar.java.binaries", "$projectDir/build/intermediates/classes/debug"
             property "sonar.tests", "$projectDir/src/test/java"
+            property "sonar.java.test.binaries", "$projectDir/build/intermediates/classes/test/debug"
+
+            def unit = fileTree(dir: project.projectDir, includes: ['**/*.exec']).files;
+            def ui = fileTree(dir: project.projectDir, includes: ['**/*.ec']).files;
+            unit.addAll(ui);
+            def files = unit.join(", ");
+
+            property "sonar.jacoco.reportPaths", files
+            property "sonar.java.coveragePlugin", "jacoco"
+            property "sonar.junit.reportsPath", "$projectDir/build/test-results/debug"
+            property "sonar.android.lint.report", "$projectDir/build/reports/lint-results.xml"
         }
     }
+
+    jacocoAndroidUnitTestReport {
+        csv.enabled false
+        html.enabled true
+        xml.enabled true
+    }
+
+    android {
+        buildTypes {
+            debug {
+                testCoverageEnabled = true
+            }
+        }
+        testOptions {
+            unitTests.all {
+                jacoco {
+                    includeNoLocationClasses = true
+                }
+            }
+        }
+    }
+
+    jacocoTestReport.dependsOn.add("test")
 }
 
 allprojects {
     apply plugin: "jacoco"
 
     jacoco {
-        reportsDir = file("$buildDir/jacoco/test.exec")
+        reportsDir = file("$buildDir/jacoco")
     }
 }

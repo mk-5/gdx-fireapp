@@ -20,8 +20,11 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.mockito.Mockito;
 
+@RunWith(BlockJUnit4ClassRunner.class)
 public class FirebaseScriptInformantTest {
 
     @AfterClass
