@@ -26,7 +26,6 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import mk.gdx.firebase.GdxFIRApp;
 import mk.gdx.firebase.html.firebase.FirebaseConfiguration;
 
 @PrepareForTest({FirebaseConfiguration.class, ClassReflection.class, Constructor.class, ScriptInjector.class, App.class})
@@ -35,11 +34,12 @@ public class AppTest extends GdxHtmlAppTest {
     @Test
     public void configure() throws Exception {
         // Given
+        App app = new App();
         FirebaseConfiguration firebaseConfiguration = PowerMockito.spy(new FirebaseConfiguration());
         PowerMockito.whenNew(FirebaseConfiguration.class).withNoArguments().thenReturn(firebaseConfiguration);
 
         // When
-        GdxFIRApp.instance().configure();
+        app.configure();
 
         // Then
         PowerMockito.verifyNew(FirebaseConfiguration.class, VerificationModeFactory.times(1)).withNoArguments();

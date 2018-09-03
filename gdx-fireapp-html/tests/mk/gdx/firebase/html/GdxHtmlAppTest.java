@@ -25,19 +25,21 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.google.gwt.core.client.ScriptInjector;
 
 import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
-@RunWith(PowerMockRunner.class)
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class})
 @SuppressStaticInitializationFor({"com.google.gwt.core.client.ScriptInjector"})
 public abstract class GdxHtmlAppTest {
+
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
 
     protected FileHandle configFileMock;
 
