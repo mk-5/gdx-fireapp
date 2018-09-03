@@ -77,7 +77,7 @@ class GoogleAuthProvider {
     @Runtime(ObjCRuntime.class)
     @ObjCClassName("GIDSignDelegate")
     @RegisterOnStartup
-    private class GIDSignDelegate implements GIDSignInDelegate {
+    class GIDSignDelegate implements GIDSignInDelegate {
 
         @Override
         public void signInDidSignInForUserWithError(GIDSignIn signIn, GIDGoogleUser user, NSError error) {
@@ -119,7 +119,7 @@ class GoogleAuthProvider {
     @Runtime(ObjCRuntime.class)
     @ObjCClassName("GIDViewController")
     @RegisterOnStartup
-    private static class GIDViewController extends UITableViewController implements GIDSignInUIDelegate {
+    static class GIDViewController extends UITableViewController implements GIDSignInUIDelegate {
         protected GIDViewController(Pointer peer) {
             super(peer);
         }
