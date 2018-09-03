@@ -17,23 +17,31 @@ package mk.gdx.firebase.ios;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.iosmoe.IOSApplication;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.moe.natj.general.NatJ;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({NatJ.class})
 public abstract class GdxIOSAppTest {
 
+//    @Rule
+//    public PowerMockRule powerMockRule = new PowerMockRule();
+
     @Before
     public void setup() {
         PowerMockito.mockStatic(NatJ.class);
-        Application application = Mockito.mock(Application.class);
+        IOSApplication application = Mockito.mock(IOSApplication.class);
         Mockito.when(application.getType()).thenReturn(Application.ApplicationType.iOS);
         Gdx.app = application;
     }
