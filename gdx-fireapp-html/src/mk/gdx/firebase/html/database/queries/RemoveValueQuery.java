@@ -35,7 +35,7 @@ public class RemoveValueQuery extends GwtDatabaseQuery {
         if (arguments.size == 0) {
             remove(databaseReference);
         } else if (arguments.size == 1) {
-            removeWithCallback(databaseReference, (CompleteCallback) arguments.get(1));
+            removeWithCallback(databaseReference, (CompleteCallback) arguments.get(0));
         } else {
             throw new IllegalStateException();
         }
