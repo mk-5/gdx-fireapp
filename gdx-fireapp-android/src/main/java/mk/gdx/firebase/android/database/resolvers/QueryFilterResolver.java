@@ -40,7 +40,7 @@ public class QueryFilterResolver implements FilterResolver<Query, Query> {
      * @return Query with filtering applied
      */
     @Override
-    public <V> Query resolve(FilterType filterType, Query target, V[] filterArguments) {
+    public <V> Query resolve(FilterType filterType, Query target, V... filterArguments) {
         if (filterArguments.length == 0)
             throw new IllegalArgumentException(MISSING_FILTER_ARGUMENTS);
         switch (filterType) {
