@@ -68,9 +68,9 @@ public class DataProcessor {
         try {
             if (NSNull.class.isAssignableFrom(iosObject.getClass())) {
                 return null;
-            } else if (resultType == NSString.class && wantedType == String.class) {
+            } else if (NSString.class.isAssignableFrom(resultType) && wantedType == String.class) {
                 result = processPrimitiveData(iosObject, wantedType);
-            } else if (resultType == NSNumber.class && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) {
+            } else if (NSNumber.class.isAssignableFrom(resultType) && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) {
                 result = processPrimitiveData(iosObject, wantedType);
             } else if (NSArray.class.isAssignableFrom(resultType) && List.class.isAssignableFrom(wantedType)) {
                 // T is assignable from list. Result is ArrayList now.
