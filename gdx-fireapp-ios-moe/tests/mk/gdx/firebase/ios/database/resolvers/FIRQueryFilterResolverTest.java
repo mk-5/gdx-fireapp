@@ -58,7 +58,7 @@ public class FIRQueryFilterResolverTest extends GdxIOSAppTest {
         FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
 
         // When
-        firQueryFilterResolver.resolve(FilterType.LIMIT_FIRST, firDatabaseQuery);
+        firQueryFilterResolver.resolve(FilterType.LIMIT_FIRST, firDatabaseQuery, "test");
 
         // Then
         Assert.fail();
@@ -73,7 +73,31 @@ public class FIRQueryFilterResolverTest extends GdxIOSAppTest {
         firQueryFilterResolver.resolve(FilterType.END_AT, firDatabaseQuery, "test");
 
         // Then
-        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEndingAtValue(Mockito.eq("test")); // NSString?
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEndingAtValue(Mockito.eq("test"));
+    }
+
+    @Test
+    public void resolve_endAt2() {
+        // Given
+        FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
+
+        // When
+        firQueryFilterResolver.resolve(FilterType.END_AT, firDatabaseQuery, 2.0);
+
+        // Then
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEndingAtValue(Mockito.any());
+    }
+
+    @Test
+    public void resolve_endAt3() {
+        // Given
+        FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
+
+        // When
+        firQueryFilterResolver.resolve(FilterType.END_AT, firDatabaseQuery, true);
+
+        // Then
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEndingAtValue(Mockito.any());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -100,13 +124,37 @@ public class FIRQueryFilterResolverTest extends GdxIOSAppTest {
         Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEqualToValue(Mockito.eq("test"));
     }
 
+    @Test
+    public void resolve_equalTo2() {
+        // Given
+        FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
+
+        // When
+        firQueryFilterResolver.resolve(FilterType.EQUAL_TO, firDatabaseQuery, 10.0);
+
+        // Then
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEqualToValue(Mockito.any());
+    }
+
+    @Test
+    public void resolve_equalTo3() {
+        // Given
+        FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
+
+        // When
+        firQueryFilterResolver.resolve(FilterType.EQUAL_TO, firDatabaseQuery, true);
+
+        // Then
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryEqualToValue(Mockito.any());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void resolve_equalToWrongArgument() {
         // Given
         FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
 
         // When
-        firQueryFilterResolver.resolve(FilterType.EQUAL_TO, firDatabaseQuery);
+        firQueryFilterResolver.resolve(FilterType.EQUAL_TO, firDatabaseQuery, 10f);
 
         // Then
         Assert.fail();
@@ -130,7 +178,7 @@ public class FIRQueryFilterResolverTest extends GdxIOSAppTest {
         FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
 
         // When
-        firQueryFilterResolver.resolve(FilterType.LIMIT_LAST, firDatabaseQuery);
+        firQueryFilterResolver.resolve(FilterType.LIMIT_LAST, firDatabaseQuery, "test");
 
         // Then
         Assert.fail();
@@ -148,15 +196,40 @@ public class FIRQueryFilterResolverTest extends GdxIOSAppTest {
         Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryStartingAtValue(Mockito.eq("test"));
     }
 
+    @Test
+    public void resolve_startAt2() {
+        // Given
+        FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
+
+        // When
+        firQueryFilterResolver.resolve(FilterType.START_AT, firDatabaseQuery, 10.0);
+
+        // Then
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryStartingAtValue(Mockito.any());
+    }
+
+    @Test
+    public void resolve_startAt3() {
+        // Given
+        FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
+
+        // When
+        firQueryFilterResolver.resolve(FilterType.START_AT, firDatabaseQuery, true);
+
+        // Then
+        Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).queryStartingAtValue(Mockito.any());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void resolve_startAtWrongArgument() {
         // Given
         FIRQueryFilterResolver firQueryFilterResolver = new FIRQueryFilterResolver();
 
         // When
-        firQueryFilterResolver.resolve(FilterType.START_AT, firDatabaseQuery);
+        firQueryFilterResolver.resolve(FilterType.START_AT, firDatabaseQuery, 10f);
 
         // Then
         Assert.fail();
     }
+
 }

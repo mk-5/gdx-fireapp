@@ -90,6 +90,23 @@ public class UpdateChildrenQueryTest extends GdxIOSAppTest {
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValues(Mockito.any());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void run_wrongArguments() throws Exception {
+        // Given
+        PowerMockito.mockStatic(Database.class);
+        Database database = PowerMockito.mock(Database.class);
+        PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
+        Whitebox.setInternalState(database, "databasePath", "/test");
+        UpdateChildrenQuery query = new UpdateChildrenQuery(database);
+        Map data = Mockito.mock(Map.class);
+
+        // When
+        query.withArgs(data, data, data).execute();
+
+        // Then
+        Assert.fail();
+    }
+
     @Test
     public void run_withCallback() throws Exception {
         // Given
