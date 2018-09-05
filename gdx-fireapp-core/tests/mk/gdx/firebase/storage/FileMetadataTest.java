@@ -48,10 +48,10 @@ public class FileMetadataTest {
                 Assert.assertEquals(s, "url");
             }
         });
-        Assert.assertEquals(fileMetadata.getMd5Hash(), "md5");
-        Assert.assertEquals(fileMetadata.getName(), "name");
-        Assert.assertEquals(fileMetadata.getPath(), "path");
-        Assert.assertEquals(fileMetadata.getSizeBytes(), 2);
-        Assert.assertEquals(fileMetadata.getUpdatedTimeMillis(), 3);
+        Assert.assertEquals("md5", fileMetadata.getMd5Hash());
+        Assert.assertEquals("name", fileMetadata.getName());
+        Assert.assertEquals("path", fileMetadata.getPath());
+        Assert.assertEquals(2, fileMetadata.getSizeBytes());
+        Assert.assertEquals(3, fileMetadata.getUpdatedTimeMillis());
     }
 }

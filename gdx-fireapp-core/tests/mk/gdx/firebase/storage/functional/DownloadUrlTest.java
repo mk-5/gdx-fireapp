@@ -38,6 +38,6 @@ public class DownloadUrlTest {
         });
 
         // Then
-        Assert.assertEquals(string[0], "abc");
+        Assert.assertEquals("abc", string[0]);
     }
 }

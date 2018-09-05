@@ -37,13 +37,13 @@ public class UserInfoTest {
         UserInfo userInfo = builder.build();
 
         // Then
-        Assert.assertEquals(userInfo.getDisplayName(), "display_name");
-        Assert.assertEquals(userInfo.getEmail(), "email");
+        Assert.assertEquals("display_name", userInfo.getDisplayName());
+        Assert.assertEquals("email", userInfo.getEmail());
         Assert.assertTrue(userInfo.isAnonymous());
         Assert.assertTrue(userInfo.isEmailVerified());
-        Assert.assertEquals(userInfo.getProviderId(), "provider_id");
-        Assert.assertEquals(userInfo.getUid(), "uid");
-        Assert.assertEquals(userInfo.getPhotoUrl(), "photo_url");
+        Assert.assertEquals("provider_id", userInfo.getProviderId());
+        Assert.assertEquals("uid", userInfo.getUid());
+        Assert.assertEquals("photo_url", userInfo.getPhotoUrl());
     }
 
     @Test
@@ -63,13 +63,13 @@ public class UserInfoTest {
         UserInfo userInfo = new UserInfo.Builder().setUserInfo(sourceUserInfo).build();
 
         // Then
-        Assert.assertEquals(userInfo.getDisplayName(), "display_name");
-        Assert.assertEquals(userInfo.getEmail(), "email");
+        Assert.assertEquals("display_name", userInfo.getDisplayName());
+        Assert.assertEquals("email", userInfo.getEmail());
         Assert.assertTrue(userInfo.isAnonymous());
         Assert.assertTrue(userInfo.isEmailVerified());
-        Assert.assertEquals(userInfo.getProviderId(), "provider_id");
-        Assert.assertEquals(userInfo.getUid(), "uid");
-        Assert.assertEquals(userInfo.getPhotoUrl(), "photo_url");
+        Assert.assertEquals("provider_id", userInfo.getProviderId());
+        Assert.assertEquals("uid", userInfo.getUid());
+        Assert.assertEquals("photo_url", userInfo.getPhotoUrl());
     }
 
 }

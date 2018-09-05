@@ -136,13 +136,13 @@ public class GdxFIRLoggerTest extends GdxAppTest {
 
     @Test
     public void getLogTag() {
-        Assert.assertEquals(GdxFIRLogger.getLogTag(), "GdxFireapp Api");
+        Assert.assertEquals("GdxFireapp Api", GdxFIRLogger.getLogTag());
     }
 
     @Test
     public void isEnabled() {
         GdxFIRLogger.setEnabled(false);
-        Assert.assertEquals(GdxFIRLogger.isEnabled(), false);
+        Assert.assertEquals(false, GdxFIRLogger.isEnabled());
     }
 
     @Test
@@ -150,7 +150,7 @@ public class GdxFIRLoggerTest extends GdxAppTest {
         GdxFIRLogger.setEnabled(false);
         GdxFIRLogger.log("test");
 
-        Assert.assertEquals(GdxFIRLogger.isEnabled(), false);
+        Assert.assertEquals(false, GdxFIRLogger.isEnabled());
         Assert.assertTrue(systemOutRule.getLog().isEmpty());
 
         GdxFIRLogger.setEnabled(true);
