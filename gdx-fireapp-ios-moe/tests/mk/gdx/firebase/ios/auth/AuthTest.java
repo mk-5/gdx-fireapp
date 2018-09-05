@@ -18,7 +18,6 @@ package mk.gdx.firebase.ios.auth;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.InvocationOnMock;
@@ -28,7 +27,6 @@ import org.moe.natj.general.ptr.Ptr;
 import org.moe.natj.general.ptr.impl.PtrFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import apple.foundation.NSError;
 import apple.foundation.NSURL;
@@ -78,12 +76,12 @@ public class AuthTest extends GdxIOSAppTest {
         // Then
         Assert.assertNotNull(gdxFirebaseUser);
         Assert.assertNotNull(gdxFirebaseUser.getUserInfo());
-        Assert.assertEquals(gdxFirebaseUser.getUserInfo().getDisplayName(), "display_name");
-        Assert.assertEquals(gdxFirebaseUser.getUserInfo().getEmail(), "email");
-        Assert.assertEquals(gdxFirebaseUser.getUserInfo().getPhotoUrl(), "test");
-        Assert.assertEquals(gdxFirebaseUser.getUserInfo().getUid(), "uid");
-        Assert.assertEquals(gdxFirebaseUser.getUserInfo().isAnonymous(), true);
-        Assert.assertEquals(gdxFirebaseUser.getUserInfo().isEmailVerified(), false);
+        Assert.assertEquals("display_name", gdxFirebaseUser.getUserInfo().getDisplayName());
+        Assert.assertEquals("email", gdxFirebaseUser.getUserInfo().getEmail());
+        Assert.assertEquals("test", gdxFirebaseUser.getUserInfo().getPhotoUrl());
+        Assert.assertEquals("uid", gdxFirebaseUser.getUserInfo().getUid());
+        Assert.assertEquals(true, gdxFirebaseUser.getUserInfo().isAnonymous());
+        Assert.assertEquals(false, gdxFirebaseUser.getUserInfo().isEmailVerified());
     }
 
     @Test
