@@ -43,9 +43,10 @@ public class NSArrayHelper {
     @SuppressWarnings("unchecked")
     public static List toList(NSArray<NSObject> nsArray) {
         List list = new ArrayList();
-        for (Object value : nsArray) {
-            list.add(DataProcessor.iosDataToJava(value));
-        }
+        if (nsArray.size() > 0)
+            for (Object value : nsArray) {
+                list.add(DataProcessor.iosDataToJava(value));
+            }
         return list;
     }
 
