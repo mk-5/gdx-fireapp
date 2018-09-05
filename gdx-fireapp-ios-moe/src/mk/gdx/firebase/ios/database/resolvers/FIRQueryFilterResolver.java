@@ -31,7 +31,7 @@ public class FIRQueryFilterResolver implements FilterResolver<FIRDatabaseQuery, 
 
 
     @Override
-    public <V> FIRDatabaseQuery resolve(FilterType filterType, FIRDatabaseQuery target, V[] filterArguments) {
+    public <V> FIRDatabaseQuery resolve(FilterType filterType, FIRDatabaseQuery target, V... filterArguments) {
         switch (filterType) {
             case LIMIT_FIRST:
                 if (!(filterArguments[0] instanceof Integer))
