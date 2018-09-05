@@ -38,8 +38,12 @@ configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
                         '**/bindings/**', '**/fakes/**', '**/com/badlogic/**',
                         // GWT Crash&Analytics does nothing
                         'mk/gdx/firebase/html/crash/**', 'mk/gdx/firebase/html/analytics/**',
-                        'mk/gdx/firebase/analytics/**', 'mk/gdx/firebase/exceptions',
-                        'mk/gdx/firebase/ios/exceptions', 'mk/gdx/firebase/ios/database/observers/DataObserversManager*'
+                        'mk/gdx/firebase/analytics/**', 'mk/gdx/firebase/exceptions/**', 'mk/gdx/firebase/html/exceptions/**',
+                        'mk/gdx/firebase/ios/exceptions', 'mk/gdx/firebase/ios/database/observers/DataObserversManager*',
+                        // Only native gwt methods
+                        'mk/gdx/firebase/html/auth/FirebaseUserJSON*',
+                        'mk/gdx/firebase/html/storage/FullMetaData*',
+                        'mk/gdx/firebase/html/storage/UploadTaskSnapshot*',
                 ])
             })
         }
