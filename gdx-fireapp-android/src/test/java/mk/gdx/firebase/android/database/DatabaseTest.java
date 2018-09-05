@@ -50,8 +50,7 @@ import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
-//@PrepareForTest({GdxNativesLoader.class, FirebaseDatabase.class, OnDataChangeQuery.class, Database.class})
-@PrepareForTest({GdxNativesLoader.class, FirebaseDatabase.class, OnDataChangeQuery.class})
+@PrepareForTest({GdxNativesLoader.class, FirebaseDatabase.class, OnDataChangeQuery.class, Database.class})
 public class DatabaseTest extends AndroidContextTest {
 
     private FirebaseDatabase firebaseDatabase;
@@ -232,7 +231,7 @@ public class DatabaseTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(RemoveValueQuery.class);
         Database database = new Database();
-        RemoveValueQuery query = PowerMockito.spy(new RemoveValueQuery(database));
+        RemoveValueQuery query = PowerMockito.mock(RemoveValueQuery.class);
         PowerMockito.whenNew(RemoveValueQuery.class).withAnyArguments().thenReturn(query);
         Mockito.when(query.withArgs(Mockito.any())).thenReturn(query);
 
@@ -249,7 +248,7 @@ public class DatabaseTest extends AndroidContextTest {
         PowerMockito.mockStatic(SetValueQuery.class);
         Database database = new Database();
         CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        RemoveValueQuery query = PowerMockito.spy(new RemoveValueQuery(database));
+        RemoveValueQuery query = PowerMockito.mock(RemoveValueQuery.class);
         PowerMockito.whenNew(RemoveValueQuery.class).withAnyArguments().thenReturn(query);
         Mockito.when(query.withArgs(Mockito.any())).thenReturn(query);
 
@@ -300,7 +299,7 @@ public class DatabaseTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(RunTransactionQuery.class);
         Database database = new Database();
-        RunTransactionQuery query = PowerMockito.spy(new RunTransactionQuery(database));
+        RunTransactionQuery query = PowerMockito.mock(RunTransactionQuery.class);
         PowerMockito.whenNew(RunTransactionQuery.class).withAnyArguments().thenReturn(query);
         Mockito.when(query.withArgs(Mockito.any())).thenReturn(query);
         CompleteCallback callback = Mockito.mock(CompleteCallback.class);
