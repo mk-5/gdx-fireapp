@@ -14,6 +14,7 @@ The first thing you should do is installing Firebase SDK and add gradle dependen
 - [Android  guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-guide)
 - [iOS guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Guide)
 - [GWT guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide)
+- [ProGuard rules](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)  
 
 **Core**
 
@@ -36,8 +37,6 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.+"
 ```
 compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:1.+"
 ```
-
-If you are done with that do the last step: [Update proguard files](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)  
 
   
 
