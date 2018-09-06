@@ -37,18 +37,18 @@ configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
                 def excludes = [
                         '**/bindings/**', '**/fakes/**', '**/com/badlogic/**',
                         // Exclude because - do nothing special
-                        'mk/gdx/firebase/html/crash/**', 'mk/gdx/firebase/html/analytics/**',
-                        'mk/gdx/firebase/analytics/**', 'mk/gdx/firebase/exceptions/**', 'mk/gdx/firebase/html/exceptions/**',
-                        'mk/gdx/firebase/ios/exceptions', 'mk/gdx/firebase/ios/database/observers/DataObserversManager*',
+                        '**/mk/gdx/firebase/html/crash/**', '**/mk/gdx/firebase/html/analytics/**',
+                        '**/mk/gdx/firebase/analytics/**', '**/mk/gdx/firebase/exceptions/**', 'mk/gdx/firebase/html/exceptions/**',
+                        '**/mk/gdx/firebase/ios/exceptions', '**/mk/gdx/firebase/ios/database/observers/DataObserversManager*',
                         // Exclude for some time because - JaCoCo can't get it coverage (PowerMock issue)
 
                         // Exclude because - only native gwt methods
-                        'mk/gdx/firebase/html/auth/FirebaseUserJSON*',
-                        'mk/gdx/firebase/html/auth/GoogleAuthJS*',
-                        'mk/gdx/firebase/html/storage/FullMetaData*',
-                        'mk/gdx/firebase/html/storage/UploadTaskSnapshot*',
-                        'mk/gdx/firebase/html/database/resolvers/GwtQueryFilterResolver*',
-                        'mk/gdx/firebase/html/database/resolvers/GwtQueryOrderByResolver*',
+                        '**/mk/gdx/firebase/html/auth/FirebaseUserJSON*',
+                        '**/mk/gdx/firebase/html/auth/GoogleAuthJS*',
+                        '**/mk/gdx/firebase/html/storage/FullMetaData*',
+                        '**/mk/gdx/firebase/html/storage/UploadTaskSnapshot*',
+                        '**/mk/gdx/firebase/html/database/resolvers/GwtQueryFilterResolver*',
+                        '**/mk/gdx/firebase/html/database/resolvers/GwtQueryOrderByResolver*',
                 ];
                 if( project.name.equals('gdx-fireapp-html') ) {
                     excludes.push('mk/gdx/firebase/helpers/ImageHelper*')
