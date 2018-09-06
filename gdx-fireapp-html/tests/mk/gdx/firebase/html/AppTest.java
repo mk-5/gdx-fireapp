@@ -18,6 +18,8 @@ package mk.gdx.firebase.html;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Constructor;
+import com.google.gwt.core.client.Callback;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.ScriptInjector;
 
 import org.junit.Test;
@@ -26,24 +28,29 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
+import mk.gdx.firebase.html.firebase.FirebaseConfigParser;
 import mk.gdx.firebase.html.firebase.FirebaseConfiguration;
 
-@PrepareForTest({FirebaseConfiguration.class, ClassReflection.class, Constructor.class, ScriptInjector.class, App.class})
+@PrepareForTest({FirebaseConfiguration.class, FirebaseConfigParser.class, ClassReflection.class, Constructor.class, ScriptInjector.class})
 public class AppTest extends GdxHtmlAppTest {
 
     @Test
     public void configure() throws Exception {
         // Given
         App app = new App();
-        FirebaseConfiguration firebaseConfiguration = PowerMockito.spy(new FirebaseConfiguration());
-        PowerMockito.whenNew(FirebaseConfiguration.class).withNoArguments().thenReturn(firebaseConfiguration);
+        FirebaseConfigParser configParser = PowerMockito.mock(FirebaseConfigParser.class);
+        PowerMockito.whenNew(FirebaseConfigParser.class).withAnyArguments().thenReturn(configParser);
+        ScriptInjector.FromUrl fromUrl = PowerMockito.mock(ScriptInjector.FromUrl.class);
+        Mockito.when(ScriptInjector.fromUrl(Mockito.nullable(String.class))).thenReturn(fromUrl);
+        Mockito.when(fromUrl.setCallback(Mockito.nullable(Callback.class))).thenReturn(fromUrl);
+        Mockito.when(fromUrl.setRemoveTag(Mockito.anyBoolean())).thenReturn(fromUrl);
+        Mockito.when(fromUrl.setWindow(Mockito.nullable(JavaScriptObject.class))).thenReturn(fromUrl);
 
         // When
         app.configure();
 
         // Then
-        PowerMockito.verifyNew(FirebaseConfiguration.class, VerificationModeFactory.times(1)).withNoArguments();
-        Mockito.verify(firebaseConfiguration, VerificationModeFactory.times(1)).load();
-        Mockito.verify(firebaseConfiguration, VerificationModeFactory.times(1)).init();
+        PowerMockito.verifyNew(FirebaseConfigParser.class, VerificationModeFactory.times(1)).withArguments(Mockito.anyString());
+        Mockito.verify(configParser, VerificationModeFactory.times(1)).getFirebaseScriptSrc();
     }
 }
