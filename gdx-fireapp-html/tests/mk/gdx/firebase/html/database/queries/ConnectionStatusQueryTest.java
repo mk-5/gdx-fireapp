@@ -25,15 +25,23 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
 import mk.gdx.firebase.html.database.Database;
+import mk.gdx.firebase.listeners.ConnectedListener;
 
 public class ConnectionStatusQueryTest {
 
     @Rule
     public PowerMockRule powerMockRule = new PowerMockRule();
 
-    @Test
+    @Test(expected = UnsatisfiedLinkError.class)
     public void runJS() {
-        // If use @PrepareForTest(query...), JaCoCo can't get coverage
+        // Given
+        ConnectionStatusQuery query = new ConnectionStatusQuery(Mockito.mock(Database.class));
+
+        // When
+        ((ConnectionStatusQuery) query.withArgs(Mockito.mock(ConnectedListener.class))).runJS();
+
+        // Then
+        Assert.fail("Native method should be run");
     }
 
     @Test

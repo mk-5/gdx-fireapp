@@ -21,12 +21,21 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.html.database.Database;
 
-import static org.junit.Assert.*;
-
 public class PushQueryTest {
+
+    @Test(expected = UnsatisfiedLinkError.class)
+    public void runJS() {
+        // Given
+        PushQuery query = new PushQuery(Mockito.mock(Database.class));
+
+        // When
+        query.runJS();
+
+        // Then
+        Assert.fail("Native method should be run");
+    }
 
     @Test
     public void createArgumentsValidator() {
