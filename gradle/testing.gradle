@@ -34,17 +34,26 @@ configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
 
         afterEvaluate {
             classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: [
+                def excludes = [
                         '**/bindings/**', '**/fakes/**', '**/com/badlogic/**',
-                        // GWT Crash&Analytics does nothing
+                        // Exclude because - do nothing special
                         'mk/gdx/firebase/html/crash/**', 'mk/gdx/firebase/html/analytics/**',
                         'mk/gdx/firebase/analytics/**', 'mk/gdx/firebase/exceptions/**', 'mk/gdx/firebase/html/exceptions/**',
                         'mk/gdx/firebase/ios/exceptions', 'mk/gdx/firebase/ios/database/observers/DataObserversManager*',
-                        // Only native gwt methods
+                        // Exclude for some time because - JaCoCo can't get it coverage (PowerMock issue)
+
+                        // Exclude because - only native gwt methods
                         'mk/gdx/firebase/html/auth/FirebaseUserJSON*',
+                        'mk/gdx/firebase/html/auth/GoogleAuthJS*',
                         'mk/gdx/firebase/html/storage/FullMetaData*',
                         'mk/gdx/firebase/html/storage/UploadTaskSnapshot*',
-                ])
+                        'mk/gdx/firebase/html/database/resolvers/GwtQueryFilterResolver*',
+                        'mk/gdx/firebase/html/database/resolvers/GwtQueryOrderByResolver*',
+                ];
+                if( project.name.equals('gdx-fireapp-html') ) {
+                    excludes.push('mk/gdx/firebase/helpers/ImageHelper*')
+                }
+                fileTree(dir: it, exclude: excludes)
             })
         }
     }
@@ -104,6 +113,7 @@ allprojects {
     apply plugin: "jacoco"
 
     jacoco {
+        toolVersion = '0.8.2'
         reportsDir = file("$buildDir/jacoco")
     }
 }
