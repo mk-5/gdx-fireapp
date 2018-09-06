@@ -24,19 +24,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@PrepareForTest({Json.class, JsonListMapDeserializer.class, ClassReflection.class, JsonProcessor.class})
+@PrepareForTest({JsonListMapDeserializer.class, ClassReflection.class})
 public class JsonProcessorTest {
 
     @Rule
@@ -46,10 +43,7 @@ public class JsonProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        PowerMockito.mockStatic(Json.class);
         PowerMockito.mockStatic(JsonListMapDeserializer.class);
-        json = PowerMockito.mock(Json.class);
-        PowerMockito.whenNew(Json.class).withAnyArguments().thenReturn(json);
         PowerMockito.whenNew(JsonListMapDeserializer.class).withAnyArguments().thenReturn(PowerMockito.mock(JsonListMapDeserializer.class));
         PowerMockito.mockStatic(ClassReflection.class);
         Mockito.when(ClassReflection.isAssignableFrom(Mockito.any(Class.class), Mockito.any(Class.class))).thenAnswer(new Answer<Object>() {
@@ -58,37 +52,40 @@ public class JsonProcessorTest {
                 return ((Class) invocation.getArgument(0)).isAssignableFrom((Class) invocation.getArgument(1));
             }
         });
+        Mockito.when(ClassReflection.newInstance(Mockito.any(Class.class))).then(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                return ((Class) invocation.getArgument(0)).newInstance();
+            }
+        });
     }
 
     @Test
     public void process_withList() throws Exception {
         // Given
         Class wantedType = List.class;
-        String jsonString = "test";
-        Mockito.when(json.fromJson(Mockito.any(Class.class), Mockito.anyString())).thenReturn("test_result");
+        String jsonString = "[]";
 
         // When
         Object result = JsonProcessor.process(wantedType, jsonString);
 
         // Then
-        Assert.assertEquals("test_result", result);
-        PowerMockito.verifyNew(JsonListMapDeserializer.class).withArguments(Mockito.any());
-        Mockito.verify(json).fromJson(Mockito.eq(ArrayList.class), Mockito.eq(jsonString));
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof List);
     }
 
     @Test
     public void process_withMap() throws Exception {
         // Given
         Class wantedType = Map.class;
-        String jsonString = "test";
-        Mockito.when(json.fromJson(Mockito.any(Class.class), Mockito.anyString())).thenReturn("test_result");
+        String jsonString = "{ }";
 
         // When
         Object result = JsonProcessor.process(wantedType, jsonString);
 
         // Then
-        PowerMockito.verifyNew(JsonListMapDeserializer.class).withArguments(Mockito.any());
-        Mockito.verify(json).fromJson(Mockito.eq(HashMap.class), Mockito.eq(jsonString));
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Map);
     }
 
     @Test
@@ -96,13 +93,24 @@ public class JsonProcessorTest {
         // Given
         Class wantedType = String.class;
         String jsonString = "test";
-        Mockito.when(json.fromJson(Mockito.any(Class.class), Mockito.anyString())).thenReturn("test_result");
 
         // When
         Object result = JsonProcessor.process(wantedType, jsonString);
 
         // Then
-        PowerMockito.verifyNew(JsonListMapDeserializer.class, VerificationModeFactory.times(0)).withArguments(Mockito.any());
-        Mockito.verify(json).fromJson(Mockito.eq(String.class), Mockito.eq(jsonString));
+        Assert.assertEquals("test", result);
+    }
+
+    @Test
+    public void process_withAnyValue2() throws Exception {
+        // Given
+        Class wantedType = Double.class;
+        String jsonString = "2.0";
+
+        // When
+        Object result = JsonProcessor.process(wantedType, jsonString);
+
+        // Then
+        Assert.assertEquals(2.0, result);
     }
 }
