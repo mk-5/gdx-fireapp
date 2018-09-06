@@ -28,7 +28,7 @@ public class Filter {
     public Filter() {
     }
 
-    public Filter(FilterType filterType, Object[] filterArguments) {
+    public Filter(FilterType filterType, Object... filterArguments) {
         this.filterType = filterType;
         this.filterArguments = filterArguments;
     }
