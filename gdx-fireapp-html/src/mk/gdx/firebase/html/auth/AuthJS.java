@@ -36,7 +36,7 @@ class AuthJS {
         return (typeof user != 'undefined' && user != null) ? user : { isNULL : true };
     }-*/;
 
-    static native void singInAnonymously(final AuthCallback callback) /*-{
+    static native void signInAnonymously(final AuthCallback callback) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
                 callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(

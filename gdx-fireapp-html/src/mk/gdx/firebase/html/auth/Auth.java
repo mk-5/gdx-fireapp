@@ -93,7 +93,7 @@ public class Auth implements AuthDistribution {
         ScriptRunner.firebaseScript(new Runnable() {
             @Override
             public void run() {
-                AuthJS.singInAnonymously(callback);
+                AuthJS.signInAnonymously(callback);
             }
         });
     }
