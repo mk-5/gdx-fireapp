@@ -25,12 +25,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
@@ -68,9 +71,18 @@ public class StorageTest extends AndroidContextTest {
         File file = Mockito.mock(File.class);
         Mockito.when(fileHandle.file()).thenReturn(file);
         UploadCallback callback = Mockito.mock(UploadCallback.class);
-        UploadTask uploadTask = Mockito.mock(UploadTask.class);
+        final UploadTask uploadTask = Mockito.mock(UploadTask.class);
+        final UploadTask.TaskSnapshot taskSnapshot = Mockito.mock(UploadTask.TaskSnapshot.class);
+        Mockito.when(taskSnapshot.getMetadata()).thenReturn(Mockito.mock(StorageMetadata.class));
         Mockito.when(storageReference.putFile(Mockito.any(Uri.class))).thenReturn(uploadTask);
         Mockito.when(uploadTask.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(uploadTask);
+        Mockito.when(uploadTask.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((OnSuccessListener) invocation.getArgument(0)).onSuccess(taskSnapshot);
+                return uploadTask;
+            }
+        });
 
         // When
         storage.upload(fileHandle, "test", callback);
