@@ -16,13 +16,37 @@
 
 package mk.gdx.firebase.deserialization;
 
-import org.junit.Assert;
-import org.junit.Test;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.rule.PowerMockRule;
+
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRLogger;
+
+@PrepareForTest({GdxFIRLogger.class, Json.class, StringWriter.class})
 public class MapConverterTest {
+
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
+
+    @Before
+    public void setUp() throws Exception {
+        PowerMockito.mockStatic(GdxFIRLogger.class);
+    }
 
     @Test
     public void convert() {
@@ -40,6 +64,24 @@ public class MapConverterTest {
     }
 
     @Test
+    public void convert_exception() throws Exception {
+        // Given
+        PowerMockito.mockStatic(StringWriter.class);
+        PowerMockito.whenNew(StringWriter.class).withAnyArguments().thenReturn(Mockito.mock(StringWriter.class));
+        MapConverter mapConverter = new MapConverter();
+        Map map = new HashMap();
+        map.put("name", "bob");
+
+        // When
+        Object result = mapConverter.convert(map, TestClass.class);
+
+        // Then
+        PowerMockito.verifyNew(StringWriter.class).withNoArguments();
+        PowerMockito.verifyStatic(GdxFIRLogger.class, VerificationModeFactory.times(1));
+        GdxFIRLogger.error(Mockito.anyString(), Mockito.any(Exception.class));
+    }
+
+    @Test
     public void unConvert() {
         // Given
         MapConverter mapConverter = new MapConverter();
@@ -53,6 +95,20 @@ public class MapConverterTest {
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof Map);
         Assert.assertEquals("fred", ((Map) result).get("name"));
+    }
+
+    @Test
+    public void unConvert_exception() {
+        // Given
+        MapConverter mapConverter = new MapConverter();
+        String testString = "";
+
+        // When
+        Object result = mapConverter.unConvert(testString);
+
+        // Then
+        PowerMockito.verifyStatic(GdxFIRLogger.class, VerificationModeFactory.times(1));
+        GdxFIRLogger.error(Mockito.anyString(), Mockito.any(Exception.class));
     }
 
     public static class TestClass {

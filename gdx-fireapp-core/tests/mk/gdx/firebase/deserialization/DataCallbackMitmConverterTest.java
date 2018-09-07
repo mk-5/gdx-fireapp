@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
@@ -58,6 +59,8 @@ public class DataCallbackMitmConverterTest {
 
         // When
         DataCallback resultCallback = dataCallbackMitmConverter.getPojoDataCallback();
+        resultCallback.onData(Mockito.mock(Map.class));
+        resultCallback.onError(Mockito.mock(Exception.class));
 
         // Then
         Assert.assertTrue(resultCallback.getClass().getSimpleName().equals("PojoDataCallback"));
@@ -72,6 +75,8 @@ public class DataCallbackMitmConverterTest {
 
         // When
         DataCallback resultCallback = dataCallbackMitmConverter.getGenericDataCallback();
+        resultCallback.onData(Mockito.mock(Map.class));
+        resultCallback.onError(Mockito.mock(Exception.class));
 
         // Then
         Assert.assertTrue(resultCallback.getClass().getSimpleName().equals("GenericDataCallback"));
@@ -129,6 +134,18 @@ public class DataCallbackMitmConverterTest {
 
     @Test
     public void onError() {
+        // Given
+        DataCallback dataCallback = Mockito.mock(TestCallbackWithoutMapConversion.class);
+        FirebaseMapConverter firebaseMapConverter = Mockito.mock(FirebaseMapConverter.class);
+        Mockito.when(firebaseMapConverter.convert(Mockito.any(Map.class), Mockito.eq(MyClass.class))).thenReturn(new MyClass());
+        DataCallbackMitmConverter dataCallbackMitmConverter = new DataCallbackMitmConverter(MyClass.class, dataCallback, firebaseMapConverter);
+        Exception exception = Mockito.mock(Exception.class);
+
+        // When
+        dataCallbackMitmConverter.onError(exception);
+
+        // Then
+        Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onError(Mockito.refEq(exception));
     }
 
     public class TestCallbackWithMapConversionAndList implements DataCallback<List<MyClass>> {

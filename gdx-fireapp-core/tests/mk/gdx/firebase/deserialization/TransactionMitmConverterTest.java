@@ -27,9 +27,12 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import mk.gdx.firebase.annotations.MapConversion;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.exceptions.MapConversionNotPossibleException;
 import mk.gdx.firebase.reflection.AnnotationFinder;
 
 @PrepareForTest({AnnotationFinder.class})
@@ -64,6 +67,7 @@ public class TransactionMitmConverterTest {
 
         // When
         TransactionCallback resultCallback = mitmConverter.getPojoCallback();
+        resultCallback.run(Mockito.mock(Map.class));
 
         // Then
         Assert.assertTrue(resultCallback.getClass().getSimpleName().equals("PojoTransactionCallback"));
@@ -78,6 +82,7 @@ public class TransactionMitmConverterTest {
 
         // When
         TransactionCallback resultCallback = mitmConverter.getGenericCallback();
+        resultCallback.run(Mockito.mock(Map.class));
 
         // Then
         Assert.assertTrue(resultCallback.getClass().getSimpleName().equals("GenericTransactionCallback"));
@@ -143,5 +148,25 @@ public class TransactionMitmConverterTest {
         // Then
         Assert.assertNotNull(result);
         Mockito.verify(mapConverter, VerificationModeFactory.times(1)).unConvert(Mockito.eq("test_callback_value"));
+    }
+
+    @Test(expected = MapConversionNotPossibleException.class)
+    public void run_withException() throws Exception {
+        // Given
+        TransactionCallback callback = Mockito.mock(TransactionCallback.class);
+        FirebaseMapConverter firebaseMapConverter = Mockito.mock(FirebaseMapConverter.class);
+        TransactionMitmConverter mitmConverter = new TransactionMitmConverter(TransactionMitmConverterTest.class, callback, firebaseMapConverter);
+        String transactionData = "test";
+        Mockito.when(callback.run(Mockito.any())).thenReturn("test");
+        PowerMockito.mockStatic(AnnotationFinder.class);
+        MapConversion annotation = Mockito.mock(MapConversion.class);
+        Mockito.doReturn(String.class).when(annotation).value();
+        PowerMockito.when(AnnotationFinder.class, "getMethodAnnotation", Mockito.any(), Mockito.any()).thenReturn(annotation);
+
+        // When
+        Object result = mitmConverter.run(transactionData);
+
+        // Then
+        Assert.fail();
     }
 }

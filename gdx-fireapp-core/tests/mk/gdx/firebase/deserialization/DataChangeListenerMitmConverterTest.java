@@ -54,6 +54,8 @@ public class DataChangeListenerMitmConverterTest {
         DataChangeListenerMitmConverter mitmConverter = new DataChangeListenerMitmConverter(DataChangeListenerMitmConverterTest.class, listener, firebaseMapConverter);
         // When
         DataChangeListener result = mitmConverter.getPojoListener();
+        result.onChange(Mockito.mock(Map.class));
+        result.onCanceled(Mockito.mock(Exception.class));
 
         // Then
         Assert.assertTrue(result.getClass().getSimpleName().equals("PojoDataChangeListener"));
@@ -67,6 +69,8 @@ public class DataChangeListenerMitmConverterTest {
         DataChangeListenerMitmConverter mitmConverter = new DataChangeListenerMitmConverter(DataChangeListenerMitmConverterTest.class, listener, firebaseMapConverter);
         // When
         DataChangeListener result = mitmConverter.getGenericListener();
+        result.onChange(Mockito.mock(Map.class));
+        result.onCanceled(Mockito.mock(Exception.class));
 
         // Then
         Assert.assertTrue(result.getClass().getSimpleName().equals("GenericDataChangeListener"));
@@ -124,6 +128,19 @@ public class DataChangeListenerMitmConverterTest {
 
     @Test
     public void onCanceled() {
+        // Given
+        DataChangeListener listener = Mockito.mock(TestListenerWithMapConversionAndList.class);
+        FirebaseMapConverter firebaseMapConverter = Mockito.mock(FirebaseMapConverter.class);
+        MyClass myClass = new MyClass();
+        Mockito.when(firebaseMapConverter.convert(Mockito.any(Map.class), Mockito.eq(MyClass.class))).thenReturn(myClass);
+        DataChangeListenerMitmConverter mitmConverter = new DataChangeListenerMitmConverter(List.class, listener, firebaseMapConverter);
+        Exception exception = Mockito.mock(Exception.class);
+
+        // When
+        mitmConverter.onCanceled(exception);
+
+        // Then
+        Mockito.verify(listener).onCanceled(Mockito.refEq(exception));
     }
 
     public class TestListenerWithMapConversionAndList implements DataChangeListener<List<MyClass>> {
