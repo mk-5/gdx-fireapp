@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.powermock.reflect.Whitebox;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
+import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
@@ -92,6 +94,16 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     }
 
     @Test
+    public void readValue2() {
+        // Given
+        // When
+        GdxFIRDatabase.instance().readValue(GdxFIRDatabaseTest.class, Mockito.mock(DataCallback.class));
+
+        // Then
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).readValue(Mockito.eq(Map.class), Mockito.any(DataCallback.class));
+    }
+
+    @Test
     public void onDataChange() {
         // Given
         // When
@@ -99,6 +111,16 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
 
         // Then
         Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(String.class), Mockito.any(DataChangeListener.class));
+    }
+
+    @Test
+    public void onDataChange2() {
+        // Given
+        // When
+        GdxFIRDatabase.instance().onDataChange(GdxFIRDatabaseTest.class, Mockito.mock(DataChangeListener.class));
+
+        // Then
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(Map.class), Mockito.any(DataChangeListener.class));
     }
 
     @Test
@@ -205,6 +227,18 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     }
 
     @Test
+    public void transaction2() {
+        // Given
+        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
+
+        // When (simulate POJO)
+        GdxFIRDatabase.instance().transaction(GdxFIRDatabaseTest.class, Mockito.mock(TransactionCallback.class), completeCallback);
+
+        // Then
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(Map.class), Mockito.any(TransactionCallback.class), Mockito.refEq(completeCallback));
+    }
+
+    @Test
     public void setPersistenceEnabled() {
         // Given
         // When
@@ -222,6 +256,18 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
 
         // Then
         Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).keepSynced(Mockito.eq(true));
+    }
+
+    @Test
+    public void setMapConverter() {
+        // Given
+        FirebaseMapConverter mapConverter = Mockito.mock(FirebaseMapConverter.class);
+
+        // When
+        GdxFIRDatabase.instance().setMapConverter(mapConverter);
+
+        // Then
+        Assert.assertTrue(Whitebox.getInternalState(GdxFIRDatabase.instance(), "mapConverter") == mapConverter);
     }
 
     @Test
