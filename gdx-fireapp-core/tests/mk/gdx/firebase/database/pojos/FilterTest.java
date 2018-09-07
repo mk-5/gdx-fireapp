@@ -83,4 +83,15 @@ public class FilterTest {
         // Then
         Assert.assertNull(res);
     }
+
+    @Test
+    public void constructor() {
+        // Given
+        // When
+        Filter filter = new Filter(FilterType.LIMIT_FIRST, 2);
+
+        // Then
+        Assert.assertEquals(FilterType.LIMIT_FIRST, filter.getFilterType());
+        Assert.assertEquals(2, filter.getFilterArguments()[0]);
+    }
 }

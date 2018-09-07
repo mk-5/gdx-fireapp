@@ -70,4 +70,15 @@ public class OrderByClauseTest {
         // Then
         Assert.assertEquals("test2", orderByClause.getArgument());
     }
+
+    @Test
+    public void constructor() {
+        // Given
+        // When
+        OrderByClause orderByClause = new OrderByClause(OrderByMode.ORDER_BY_KEY, "test");
+
+        // Then
+        Assert.assertEquals(OrderByMode.ORDER_BY_KEY, orderByClause.getOrderByMode());
+        Assert.assertEquals("test", orderByClause.getArgument());
+    }
 }
