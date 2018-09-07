@@ -40,7 +40,7 @@ class GoogleSignInListener implements AndroidEventListener {
 
     private AuthCallback authCallback;
 
-    public GoogleSignInListener(AuthCallback authCallback) {
+    GoogleSignInListener(AuthCallback authCallback) {
         this.authCallback = authCallback;
     }
 
