@@ -40,7 +40,8 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:1.+"
 
 &nbsp;  
 
-**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
+**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x,   
+android firebase sdk 16.x
 
 &nbsp;  
 
