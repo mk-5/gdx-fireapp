@@ -67,7 +67,6 @@ GdxFIRCrash.instance().initialize();
 
 &nbsp;  
 
-
 Firebase SDK communication is done with following classes:
 
 - **[GdxFIRApp](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRApp.html)**
@@ -94,8 +93,6 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 &nbsp;  
 
 ## What's next?
-
-&nbsp;  
 
 - GWT database filtering api
 - Better wiki/documentation
