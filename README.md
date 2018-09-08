@@ -38,17 +38,17 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.+"
 compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:1.+"
 ```
 
-  
+&nbsp;  
 
 **The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x, android firebase sdk 16.x
 
-
+&nbsp;  
 
 ## Basics
 
-API is something like bridge between libGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this API should be intuitive for you.
+API is something like bridge between libGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this API should be intuitive for you.  
 
-
+&nbsp;  
 
 To initialize Firebase SDK just put this line somewhere in your app initialization code:
 
@@ -64,7 +64,7 @@ If you added ***Fabric/Crashlytics*** to your project you should initialize it a
 GdxFIRCrash.instance().initialize();
 ````
 
-
+&nbsp;  
 
 
 Firebase SDK communication is done with following classes:
@@ -76,26 +76,25 @@ Firebase SDK communication is done with following classes:
 - **[GdxFIRDatabase](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRDatabase.html)**
 - **[GdxFIRCrash](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRCrash.html)**
 
-
+&nbsp;  
 
 
 ## Examples
 
 For some examples please look at [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
 
-
+&nbsp;  
 
 ## Useful links
 
 - [Javadoc](http://javadoc.io/doc/pl.mk5.gdx-fireapp/gdx-fireapp-core)
 - [Filtering API wiki](https://github.com/mk-5/gdx-fireapp/wiki/Filtering-API)
 
-
-
+&nbsp;  
 
 ## What's next?
 
-
+&nbsp;  
 
 - GWT database filtering api
 - Better wiki/documentation
@@ -103,8 +102,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 - Messaging
 - Upload task monitoring
 
-
-
+&nbsp;  
 
 ## Features
 
@@ -115,8 +113,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 - [x] Crash raporting (Crashlytics)
 - [ ] Messaging
 
-
-
+&nbsp;  
 
 ## Platforms
 
@@ -124,9 +121,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 - [x] iOS (Multi-os Engine)
 - [x] GWT
 
-
-
-
+&nbsp;  
 
 ## License
 
