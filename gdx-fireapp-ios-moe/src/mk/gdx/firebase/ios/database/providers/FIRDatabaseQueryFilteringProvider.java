@@ -17,7 +17,7 @@
 package mk.gdx.firebase.ios.database.providers;
 
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
-import mk.gdx.firebase.database.FilteringProvider;
+import mk.gdx.firebase.database.SortingFilteringProvider;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.ios.database.resolvers.FIRQueryFilterResolver;
 import mk.gdx.firebase.ios.database.resolvers.FIRQueryOrderByResolver;
@@ -25,7 +25,7 @@ import mk.gdx.firebase.ios.database.resolvers.FIRQueryOrderByResolver;
 /**
  * Provides decision between call {@code FIRDatabaseReference} or {@code FIRDatabaseQuery} based at current query context.
  */
-public class FIRDatabaseQueryFilteringProvider extends FilteringProvider<FIRDatabaseQuery, FIRQueryFilterResolver, FIRQueryOrderByResolver> {
+public class FIRDatabaseQueryFilteringProvider extends SortingFilteringProvider<FIRDatabaseQuery, FIRQueryFilterResolver, FIRQueryOrderByResolver> {
 
     @Override
     public FIRDatabaseQuery applyFiltering() {

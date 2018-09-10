@@ -29,12 +29,12 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FilteringProviderTest {
+public class SortingFilteringProviderTest {
 
     @Test
     public void setQuery() {
         // Given
-        FilteringProvider filteringProvider = new FilteringProvider() {
+        SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
             @Override
             public Object applyFiltering() {
                 return null;
@@ -53,16 +53,16 @@ public class FilteringProviderTest {
         GdxFireappQuery query = Mockito.mock(GdxFireappQuery.class);
 
         // When
-        filteringProvider.setQuery(query);
+        sortingFilteringProvider.setQuery(query);
 
         // Then
-        Assert.assertNotNull(Whitebox.getInternalState(filteringProvider, "query"));
+        Assert.assertNotNull(Whitebox.getInternalState(sortingFilteringProvider, "query"));
     }
 
     @Test
     public void setFilters() {
         // Given
-        FilteringProvider filteringProvider = new FilteringProvider() {
+        SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
             @Override
             public Object applyFiltering() {
                 return null;
@@ -81,10 +81,10 @@ public class FilteringProviderTest {
         Array array = new Array();
         Array array2 = new Array();
         array2.add("test");
-        Whitebox.setInternalState(filteringProvider, "filters", array);
+        Whitebox.setInternalState(sortingFilteringProvider, "filters", array);
 
         // When
-        filteringProvider.setFilters(array2);
+        sortingFilteringProvider.setFilters(array2);
 
         // Then
         Assert.assertTrue(array.contains("test", false));
@@ -93,7 +93,7 @@ public class FilteringProviderTest {
     @Test
     public void setOrderByClause() {
         // Given
-        FilteringProvider filteringProvider = new FilteringProvider() {
+        SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
             @Override
             public Object applyFiltering() {
                 return null;
@@ -112,16 +112,16 @@ public class FilteringProviderTest {
         OrderByClause orderByClause = Mockito.mock(OrderByClause.class);
 
         // When
-        filteringProvider.setOrderByClause(orderByClause);
+        sortingFilteringProvider.setOrderByClause(orderByClause);
 
         // Then
-        Assert.assertNotNull(Whitebox.getInternalState(filteringProvider, "orderByClause"));
+        Assert.assertNotNull(Whitebox.getInternalState(sortingFilteringProvider, "orderByClause"));
     }
 
     @Test
     public void clear() {
         // Given
-        FilteringProvider filteringProvider = new FilteringProvider() {
+        SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
             @Override
             public Object applyFiltering() {
                 return null;
@@ -139,16 +139,16 @@ public class FilteringProviderTest {
         };
         Array array = new Array();
         array.add("test");
-        filteringProvider.setOrderByClause(Mockito.mock(OrderByClause.class));
-        filteringProvider.setFilters(array);
-        filteringProvider.setQuery(Mockito.mock(GdxFireappQuery.class));
+        sortingFilteringProvider.setOrderByClause(Mockito.mock(OrderByClause.class));
+        sortingFilteringProvider.setFilters(array);
+        sortingFilteringProvider.setQuery(Mockito.mock(GdxFireappQuery.class));
 
         // When
-        filteringProvider.clear();
+        sortingFilteringProvider.clear();
 
         // Then
-        Assert.assertNull(Whitebox.getInternalState(filteringProvider, "query"));
-        Assert.assertNull(Whitebox.getInternalState(filteringProvider, "orderByClause"));
-        Assert.assertTrue(((Array) Whitebox.getInternalState(filteringProvider, "filters")).size == 0);
+        Assert.assertNull(Whitebox.getInternalState(sortingFilteringProvider, "query"));
+        Assert.assertNull(Whitebox.getInternalState(sortingFilteringProvider, "orderByClause"));
+        Assert.assertTrue(((Array) Whitebox.getInternalState(sortingFilteringProvider, "filters")).size == 0);
     }
 }

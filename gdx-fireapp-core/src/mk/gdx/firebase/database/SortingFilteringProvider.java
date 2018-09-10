@@ -25,9 +25,10 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
  * Provides filtering flow.
  *
  * @param <T> Firebase database Query type
- * @param <E> Filter resolver instance
+ * @param <E> Filter resolver type
+ * @param <K> Order-by resolver type
  */
-public abstract class FilteringProvider<T, E extends FilterResolver, K extends OrderByResolver> {
+public abstract class SortingFilteringProvider<T, E extends FilterResolver, K extends OrderByResolver> {
 
     protected E filterResolver;
     protected K orderByResolver;
@@ -35,7 +36,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
     protected final Array<Filter> filters;
     protected OrderByClause orderByClause;
 
-    public FilteringProvider() {
+    public SortingFilteringProvider() {
         filters = new Array<>();
         filterResolver = createFilterResolver();
         orderByResolver = createOrderByResolver();
@@ -47,7 +48,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
 
     public abstract K createOrderByResolver();
 
-    public FilteringProvider setQuery(T query) {
+    public SortingFilteringProvider setQuery(T query) {
         this.query = query;
         return this;
     }
@@ -58,7 +59,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
      * @param filters Filters array, not null
      * @return this
      */
-    public FilteringProvider setFilters(Array<Filter> filters) {
+    public SortingFilteringProvider setFilters(Array<Filter> filters) {
         if (filters == null) return this;
         this.filters.clear();
         this.filters.addAll(filters);
@@ -67,7 +68,7 @@ public abstract class FilteringProvider<T, E extends FilterResolver, K extends O
         return this;
     }
 
-    public FilteringProvider setOrderByClause(OrderByClause orderByClause) {
+    public SortingFilteringProvider setOrderByClause(OrderByClause orderByClause) {
         this.orderByClause = orderByClause;
         return this;
     }

@@ -20,13 +20,13 @@ import com.google.firebase.database.Query;
 
 import mk.gdx.firebase.android.database.resolvers.QueryFilterResolver;
 import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
-import mk.gdx.firebase.database.FilteringProvider;
+import mk.gdx.firebase.database.SortingFilteringProvider;
 import mk.gdx.firebase.database.pojos.Filter;
 
 /**
  * Provides filter and order-by application into given {@code Query} instance.
  */
-public class QueryFilteringProvider extends FilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> {
+public class QueryFilteringProvider extends SortingFilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> {
 
     @Override
     public Query applyFiltering() {
