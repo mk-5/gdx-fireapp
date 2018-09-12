@@ -25,10 +25,16 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
  * Applies OrderByClause to the Query instance.
  */
 public class QueryOrderByResolver implements OrderByResolver<Query, Query> {
+
+    private final static String MISSING_ARGUMENT = "Order by argument is missing";
+
     @Override
     public Query resolve(OrderByClause orderByClause, Query target) {
         switch (orderByClause.getOrderByMode()) {
             case ORDER_BY_CHILD:
+                if (orderByClause.getArgument() == null) {
+                    throw new IllegalArgumentException(MISSING_ARGUMENT);
+                }
                 return target.orderByChild(orderByClause.getArgument());
             case ORDER_BY_KEY:
                 return target.orderByKey();

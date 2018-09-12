@@ -48,6 +48,21 @@ public class QueryOrderByResolverTest extends AndroidContextTest {
         Mockito.verify(query, VerificationModeFactory.times(1)).orderByChild(Mockito.eq("test_argument"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void resolve_orderByChild_withoutArgument() {
+        // Given
+        OrderByClause orderByClause = new OrderByClause();
+        orderByClause.setOrderByMode(OrderByMode.ORDER_BY_CHILD);
+        Query query = PowerMockito.mock(Query.class);
+        QueryOrderByResolver resolver = new QueryOrderByResolver();
+
+        // When
+        resolver.resolve(orderByClause, query);
+
+        // Then
+        Mockito.verify(query, VerificationModeFactory.times(1)).orderByChild(Mockito.eq("test_argument"));
+    }
+
     @Test
     public void resolve_orderByKey() {
         // Given
