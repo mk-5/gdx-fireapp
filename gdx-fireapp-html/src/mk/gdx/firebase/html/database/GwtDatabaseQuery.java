@@ -17,6 +17,7 @@
 package mk.gdx.firebase.html.database;
 
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
+import mk.gdx.firebase.html.database.providers.JsFilteringProvider;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 /**
@@ -24,20 +25,22 @@ import mk.gdx.firebase.html.firebase.ScriptRunner;
  */
 public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
 
-    protected String databaseReference;
+    protected String databaseReferencePath;
+    protected JsFilteringProvider jsFilteringProvider;
 
     public GwtDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
+        jsFilteringProvider = new JsFilteringProvider();
     }
 
     @Override
     protected void prepare() {
-        databaseReference = databaseDistribution.databaseReference();
+        databaseReferencePath = databaseDistribution.databaseReference();
     }
 
     @Override
     protected Void run() {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReference) {
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReferencePath) {
             @Override
             public void run() {
                 runJS();
@@ -54,7 +57,7 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
     @Override
     protected void terminate() {
         databaseDistribution.terminateOperation();
-        databaseReference = null;
+        databaseReferencePath = null;
     }
 
     /**

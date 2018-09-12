@@ -34,11 +34,11 @@ public class OnDataChangeQuery extends GwtDatabaseQuery {
     @Override
     protected void runJS() {
         // TODO DataChangeListener::onCancelled
-        if (arguments.get(1) != null && !GwtDataListenersManager.hasListener(databaseReference)) {
-            GwtDataListenersManager.addDataListener(databaseReference, new JsonDataListener((Class) arguments.get(0), (DataChangeListener) arguments.get(1)));
-            onValue(databaseReference);
+        if (arguments.get(1) != null && !GwtDataListenersManager.hasListener(databaseReferencePath)) {
+            GwtDataListenersManager.addDataListener(databaseReferencePath, new JsonDataListener((Class) arguments.get(0), (DataChangeListener) arguments.get(1)));
+            onValue(databaseReferencePath);
         } else if (arguments.get(1) == null) {
-            offValue(databaseReference);
+            offValue(databaseReferencePath);
         }
     }
 

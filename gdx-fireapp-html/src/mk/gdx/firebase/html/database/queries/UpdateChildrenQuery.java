@@ -37,9 +37,9 @@ public class UpdateChildrenQuery extends GwtDatabaseQuery {
     @SuppressWarnings("unchecked")
     protected void runJS() {
         if (arguments.size == 1) {
-            update(databaseReference, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)));
+            update(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)));
         } else if (arguments.size == 2) {
-            updateWithCallback(databaseReference, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)), (CompleteCallback) arguments.get(1));
+            updateWithCallback(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)), (CompleteCallback) arguments.get(1));
         } else {
             throw new IllegalStateException();
         }

@@ -34,9 +34,9 @@ public class SetValueQuery extends GwtDatabaseQuery {
     @Override
     protected void runJS() {
         if (arguments.size == 1) {
-            set(databaseReference, StringGenerator.dataToString(arguments.get(0)));
+            set(databaseReferencePath, StringGenerator.dataToString(arguments.get(0)));
         } else if (arguments.size == 2) {
-            setWithCallback(databaseReference, StringGenerator.dataToString(arguments.get(0)), (CompleteCallback) arguments.get(1));
+            setWithCallback(databaseReferencePath, StringGenerator.dataToString(arguments.get(0)), (CompleteCallback) arguments.get(1));
         } else {
             throw new IllegalStateException();
         }

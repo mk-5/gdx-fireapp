@@ -16,6 +16,8 @@
 
 package mk.gdx.firebase.html.database.queries;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
@@ -36,7 +38,7 @@ public class ReadValueQuery extends GwtDatabaseQuery {
     @Override
     protected void runJS() {
         jsDataCallback = new JsonDataCallback((Class) arguments.get(0), (DataCallback) arguments.get(1));
-        once(databaseReference, jsDataCallback);
+        once(databaseReferencePath, jsDataCallback);
     }
 
     @Override
@@ -56,6 +58,4 @@ public class ReadValueQuery extends GwtDatabaseQuery {
             jsDataCallback.@mk.gdx.firebase.html.database.json.JsonDataCallback::onData(Ljava/lang/String;)(val);
         });
     }-*/;
-
-
 }

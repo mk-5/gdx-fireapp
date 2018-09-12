@@ -35,7 +35,7 @@ public class RunTransactionQuery extends GwtDatabaseQuery {
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        transaction(databaseReference, new JsonDataModifier((Class) arguments.get(0), (TransactionCallback) arguments.get(1)), (CompleteCallback) arguments.get(2));
+        transaction(databaseReferencePath, new JsonDataModifier((Class) arguments.get(0), (TransactionCallback) arguments.get(1)), (CompleteCallback) arguments.get(2));
     }
 
     @Override

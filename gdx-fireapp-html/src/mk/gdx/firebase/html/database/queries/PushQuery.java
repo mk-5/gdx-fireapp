@@ -30,8 +30,8 @@ public class PushQuery extends GwtDatabaseQuery {
 
     @Override
     protected void runJS() {
-        // TODO - update db distribution databaseReference
-        push(databaseReference);
+        // TODO - update db distribution databaseReferencePath
+        push(databaseReferencePath);
     }
 
     @Override
