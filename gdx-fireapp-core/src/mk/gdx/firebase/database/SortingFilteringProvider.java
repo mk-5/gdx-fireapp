@@ -42,7 +42,21 @@ public abstract class SortingFilteringProvider<T, E extends FilterResolver, K ex
         orderByResolver = createOrderByResolver();
     }
 
-    public abstract T applyFiltering();
+    /**
+     * @return The query with filtering and soring applied - if any
+     */
+    @SuppressWarnings("unchecked")
+    public T applyFiltering() {
+        Filter filter;
+        if (orderByClause != null) {
+            query = (T) orderByResolver.resolve(orderByClause, query);
+        }
+        while (filters.size > 0) {
+            filter = filters.pop();
+            query = (T) filterResolver.resolve(filter.getFilterType(), query, filter.getFilterArguments());
+        }
+        return query;
+    }
 
     public abstract E createFilterResolver();
 

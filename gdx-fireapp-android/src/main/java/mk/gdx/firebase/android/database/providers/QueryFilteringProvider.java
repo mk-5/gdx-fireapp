@@ -21,24 +21,11 @@ import com.google.firebase.database.Query;
 import mk.gdx.firebase.android.database.resolvers.QueryFilterResolver;
 import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
 import mk.gdx.firebase.database.SortingFilteringProvider;
-import mk.gdx.firebase.database.pojos.Filter;
 
 /**
  * Provides filter and order-by application into given {@code Query} instance.
  */
 public class QueryFilteringProvider extends SortingFilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> {
-
-    @Override
-    public Query applyFiltering() {
-        Filter filter = null;
-        if (orderByClause != null)
-            query = orderByResolver.resolve(orderByClause, query);
-        while (filters.size > 0) {
-            filter = filters.pop();
-            query = filterResolver.resolve(filter.getFilterType(), query, filter.getFilterArguments());
-        }
-        return query;
-    }
 
     @Override
     public QueryFilterResolver createFilterResolver() {

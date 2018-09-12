@@ -22,9 +22,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
+import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
@@ -35,11 +37,6 @@ public class SortingFilteringProviderTest {
     public void setQuery() {
         // Given
         SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
-            @Override
-            public Object applyFiltering() {
-                return null;
-            }
-
             @Override
             public FilterResolver createFilterResolver() {
                 return null;
@@ -63,11 +60,6 @@ public class SortingFilteringProviderTest {
     public void setFilters() {
         // Given
         SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
-            @Override
-            public Object applyFiltering() {
-                return null;
-            }
-
             @Override
             public FilterResolver createFilterResolver() {
                 return null;
@@ -95,11 +87,6 @@ public class SortingFilteringProviderTest {
         // Given
         SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
             @Override
-            public Object applyFiltering() {
-                return null;
-            }
-
-            @Override
             public FilterResolver createFilterResolver() {
                 return null;
             }
@@ -123,11 +110,6 @@ public class SortingFilteringProviderTest {
         // Given
         SortingFilteringProvider sortingFilteringProvider = new SortingFilteringProvider() {
             @Override
-            public Object applyFiltering() {
-                return null;
-            }
-
-            @Override
             public FilterResolver createFilterResolver() {
                 return null;
             }
@@ -150,5 +132,34 @@ public class SortingFilteringProviderTest {
         Assert.assertNull(Whitebox.getInternalState(sortingFilteringProvider, "query"));
         Assert.assertNull(Whitebox.getInternalState(sortingFilteringProvider, "orderByClause"));
         Assert.assertTrue(((Array) Whitebox.getInternalState(sortingFilteringProvider, "filters")).size == 0);
+    }
+
+    @Test
+    public void applyFiltering() {
+        // Given
+        SortingFilteringProvider provider = new SortingFilteringProvider() {
+
+            @Override
+            public FilterResolver createFilterResolver() {
+                return Mockito.mock(FilterResolver.class);
+            }
+
+            @Override
+            public OrderByResolver createOrderByResolver() {
+                return Mockito.mock(OrderByResolver.class);
+            }
+        };
+        Array array = new Array();
+        array.add(new Filter());
+        provider.setOrderByClause(Mockito.mock(OrderByClause.class));
+        provider.setFilters(array);
+        provider.setQuery(Mockito.mock(GdxFireappQuery.class));
+
+        // When
+        provider.applyFiltering();
+
+        // Then
+        Mockito.verify(provider.filterResolver, VerificationModeFactory.times(1)).resolve(Mockito.nullable(FilterType.class), Mockito.nullable(Object.class), Mockito.nullable(Object[].class));
+        Mockito.verify(provider.orderByResolver, VerificationModeFactory.times(1)).resolve(Mockito.nullable(OrderByClause.class), Mockito.any());
     }
 }
