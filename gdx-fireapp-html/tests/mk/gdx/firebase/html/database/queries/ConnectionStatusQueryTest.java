@@ -17,20 +17,30 @@
 package mk.gdx.firebase.html.database.queries;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
 import mk.gdx.firebase.html.database.Database;
+import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.listeners.ConnectedListener;
 
+@PrepareForTest({DatabaseReference.class})
 public class ConnectionStatusQueryTest {
 
     @Rule
     public PowerMockRule powerMockRule = new PowerMockRule();
+
+    @Before
+    public void setUp() throws Exception {
+        PowerMockito.mockStatic(DatabaseReference.class);
+    }
 
     @Test(expected = UnsatisfiedLinkError.class)
     public void runJS() {

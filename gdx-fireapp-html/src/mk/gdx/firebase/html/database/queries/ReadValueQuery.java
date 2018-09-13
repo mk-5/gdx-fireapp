@@ -16,12 +16,11 @@
 
 package mk.gdx.firebase.html.database.queries;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.html.database.Database;
+import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.html.database.GwtDatabaseQuery;
 import mk.gdx.firebase.html.database.json.JsonDataCallback;
 
@@ -38,7 +37,7 @@ public class ReadValueQuery extends GwtDatabaseQuery {
     @Override
     protected void runJS() {
         jsDataCallback = new JsonDataCallback((Class) arguments.get(0), (DataCallback) arguments.get(1));
-        once(databaseReferencePath, jsDataCallback);
+        once(databaseReference, jsDataCallback);
     }
 
     @Override
@@ -50,11 +49,21 @@ public class ReadValueQuery extends GwtDatabaseQuery {
      * Gets some data from firebase and returns value parsed by JSON.stringify
      * <p>
      *
-     * @param reference Reference path, not null
+     * @param databaseReference DatabaseReference path, not null
      */
-    public static native void once(String reference, DataCallback jsDataCallback) /*-{
-        $wnd.firebase.database().ref(reference).once("value").then(function(snapshot){
-            var val = JSON.stringify(snapshot.val());
+    public static native void once(DatabaseReference databaseReference, DataCallback jsDataCallback) /*-{
+        var orderByCalled = databaseReference.orderByCalled_;
+        databaseReference.once("value").then(function(snapshot){
+            var val;
+            if( !orderByCalled ){
+                val = JSON.stringify(snapshot.val());
+            }else{
+                var tmp = [];
+                snapshot.forEach(function(child){
+                    tmp.push(child.val());
+                });
+                val = JSON.stringify(tmp);
+            }
             jsDataCallback.@mk.gdx.firebase.html.database.json.JsonDataCallback::onData(Ljava/lang/String;)(val);
         });
     }-*/;

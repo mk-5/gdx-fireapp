@@ -26,7 +26,6 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class DatabaseReference extends JavaScriptObject {
 
     protected DatabaseReference() {
-        // Overlay types always have protected, zero-arg constructor
     }
 
     public final native DatabaseReference child(String key) /*-{
@@ -53,7 +52,7 @@ public class DatabaseReference extends JavaScriptObject {
         return this.endAt(key);
     }-*/;
 
-    public final native DatabaseReference endAt(Number key) /*-{
+    public final native DatabaseReference endAt(double key) /*-{
         return this.endAt(key);
     }-*/;
 
@@ -65,7 +64,7 @@ public class DatabaseReference extends JavaScriptObject {
         return this.startAt(key);
     }-*/;
 
-    public final native DatabaseReference startAt(Number key) /*-{
+    public final native DatabaseReference startAt(double key) /*-{
         return this.startAt(key);
     }-*/;
 
@@ -77,16 +76,20 @@ public class DatabaseReference extends JavaScriptObject {
         return this.equalTo(key);
     }-*/;
 
-    public final native DatabaseReference equalTo(Number key) /*-{
+    public final native DatabaseReference equalTo(double key) /*-{
         return this.equalTo(key);
     }-*/;
 
-    public final native DatabaseReference limitToFirst(Number number) /*-{
+    public final native DatabaseReference limitToFirst(double number) /*-{
         return this.limitToFirst(number);
     }-*/;
 
-    public final native DatabaseReference limitToLast(Number number) /*-{
+    public final native DatabaseReference limitToLast(double number) /*-{
         return this.limitToLast(number);
+    }-*/;
+
+    public final native Boolean orderByCalled_() /*-{
+        return this.orderByCalled_;
     }-*/;
 
     static native DatabaseReference of(String path) /*-{

@@ -16,6 +16,11 @@
 
 package mk.gdx.firebase.html.database;
 
+import com.badlogic.gdx.utils.Array;
+
+import mk.gdx.firebase.GdxFIRLogger;
+import mk.gdx.firebase.database.pojos.Filter;
+import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 import mk.gdx.firebase.html.database.providers.JsFilteringProvider;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
@@ -28,6 +33,10 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
     protected String databaseReferencePath;
     protected JsFilteringProvider jsFilteringProvider;
 
+    protected DatabaseReference databaseReference;
+    private Array<Filter> filtersToApply;
+    private OrderByClause orderByToApply;
+
     public GwtDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
         jsFilteringProvider = new JsFilteringProvider();
@@ -39,25 +48,48 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected Void run() {
         ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReferencePath) {
             @Override
             public void run() {
+                databaseReference = DatabaseReference.of(databaseReferencePath);
+                if (filtersToApply != null || orderByToApply != null) {
+                    GdxFIRLogger.log("Applies filters and sorting to database reference...");
+                    jsFilteringProvider
+                            .setFilters(filtersToApply)
+                            .setOrderByClause(orderByToApply)
+                            .setQuery(databaseReference);
+                    databaseReference = jsFilteringProvider.applyFiltering();
+                    filtersToApply = null;
+                    orderByToApply = null;
+                }
                 runJS();
             }
         });
         return null;
     }
 
+    /**
+     * Filters and order by will be clear in the GdxFireappQuery flow,
+     * so we save it here for a moment. All database flow need to be run
+     * in {@link #runJS()}.
+     */
     @Override
     protected void applyFilters() {
-
+        if (filters.size > 0) {
+            filtersToApply = new Array<>(filters);
+        }
+        if (orderByClause != null) {
+            orderByToApply = orderByClause;
+        }
     }
 
     @Override
     protected void terminate() {
         databaseDistribution.terminateOperation();
         databaseReferencePath = null;
+        databaseReference = null;
     }
 
     /**

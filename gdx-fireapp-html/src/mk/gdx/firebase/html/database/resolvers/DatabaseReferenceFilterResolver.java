@@ -39,16 +39,16 @@ public class DatabaseReferenceFilterResolver implements FilterResolver<DatabaseR
             case LIMIT_FIRST:
                 if (!(filterArguments[0] instanceof Number))
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
-                target = target.limitToFirst((Number) filterArguments[0]);
+                target = target.limitToFirst(((Number) filterArguments[0]).doubleValue());
                 break;
             case LIMIT_LAST:
                 if (!(filterArguments[0] instanceof Number))
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE);
-                target = target.limitToLast((Number) filterArguments[0]);
+                target = target.limitToLast(((Number) filterArguments[0]).doubleValue());
                 break;
             case START_AT:
                 if (filterArguments[0] instanceof Number) {
-                    target = target.startAt((Number) filterArguments[0]);
+                    target = target.startAt(((Number) filterArguments[0]).doubleValue());
                 } else if (filterArguments[0] instanceof String) {
                     target = target.startAt((String) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
@@ -59,7 +59,7 @@ public class DatabaseReferenceFilterResolver implements FilterResolver<DatabaseR
                 break;
             case END_AT:
                 if (filterArguments[0] instanceof Number) {
-                    target = target.endAt((Number) filterArguments[0]);
+                    target = target.endAt(((Number) filterArguments[0]).doubleValue());
                 } else if (filterArguments[0] instanceof String) {
                     target = target.endAt((String) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {
@@ -67,9 +67,10 @@ public class DatabaseReferenceFilterResolver implements FilterResolver<DatabaseR
                 } else {
                     throw new IllegalArgumentException(WRONG_ARGUMENT_TYPE2);
                 }
+                break;
             case EQUAL_TO:
                 if (filterArguments[0] instanceof Number) {
-                    target = target.equalTo((Number) filterArguments[0]);
+                    target = target.equalTo(((Number) filterArguments[0]).doubleValue());
                 } else if (filterArguments[0] instanceof String) {
                     target = target.equalTo((String) filterArguments[0]);
                 } else if (filterArguments[0] instanceof Boolean) {

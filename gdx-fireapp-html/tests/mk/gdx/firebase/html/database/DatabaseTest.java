@@ -53,7 +53,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 
 @PrepareForTest({ScriptRunner.class, ConnectionStatusQuery.class,
         SetValueQuery.class, ReadValueQuery.class, OnDataChangeQuery.class, PushQuery.class,
-        RemoveValueQuery.class, UpdateChildrenQuery.class, RunTransactionQuery.class
+        RemoveValueQuery.class, UpdateChildrenQuery.class, RunTransactionQuery.class, DatabaseReference.class
 //        , Database.class
 })
 public class DatabaseTest {
@@ -61,8 +61,11 @@ public class DatabaseTest {
     @Rule
     public PowerMockRule powerMockRule = new PowerMockRule();
 
+    private DatabaseReference databaseReference;
+
     @Before
     public void setUp() throws Exception {
+        PowerMockito.mockStatic(DatabaseReference.class);
         PowerMockito.mockStatic(ScriptRunner.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override
@@ -71,6 +74,8 @@ public class DatabaseTest {
                 return null;
             }
         });
+        databaseReference = PowerMockito.mock(DatabaseReference.class);
+        PowerMockito.when(DatabaseReference.of(Mockito.anyString())).thenReturn(databaseReference);
     }
 
     @Test
@@ -160,7 +165,7 @@ public class DatabaseTest {
         // Then
 //        PowerMockito.verifyNew(ReadValueQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(ReadValueQuery.class);
-        ReadValueQuery.once(Mockito.eq(testReference), Mockito.any(JsonDataCallback.class));
+        ReadValueQuery.once(Mockito.any(DatabaseReference.class), Mockito.any(JsonDataCallback.class));
     }
 
     @Test
@@ -180,7 +185,7 @@ public class DatabaseTest {
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery.onValue(Mockito.eq(testReference));
+        OnDataChangeQuery.onValue(Mockito.eq(testReference), Mockito.any(DatabaseReference.class));
     }
 
     @Test

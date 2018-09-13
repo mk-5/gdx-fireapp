@@ -113,7 +113,6 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments) {
         filters.add(new Filter(filterType, filterArguments));
-        GdxFIRLogger.log("GWT does not support filtering yet.");
         return this;
     }
 
@@ -123,7 +122,6 @@ public class Database implements DatabaseDistribution {
     @Override
     public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument) {
         orderByClause = new OrderByClause(orderByMode, argument);
-        GdxFIRLogger.log("GWT does not support order-by yet.");
         return this;
     }
 

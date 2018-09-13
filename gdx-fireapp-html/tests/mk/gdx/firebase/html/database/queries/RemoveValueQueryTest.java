@@ -31,9 +31,10 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RemoveValueValidator;
 import mk.gdx.firebase.html.database.Database;
+import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
-@PrepareForTest({ScriptRunner.class})
+@PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class RemoveValueQueryTest {
 
     @Rule
@@ -41,6 +42,7 @@ public class RemoveValueQueryTest {
 
     @Before
     public void setUp() throws Exception {
+        PowerMockito.mockStatic(DatabaseReference.class);
         PowerMockito.mockStatic(ScriptRunner.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override

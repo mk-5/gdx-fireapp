@@ -19,6 +19,7 @@ package mk.gdx.firebase.html.database.queries;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.html.database.Database;
+import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.html.database.GwtDatabaseQuery;
 import mk.gdx.firebase.html.database.json.JsonDataListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
@@ -36,7 +37,7 @@ public class OnDataChangeQuery extends GwtDatabaseQuery {
         // TODO DataChangeListener::onCancelled
         if (arguments.get(1) != null && !GwtDataListenersManager.hasListener(databaseReferencePath)) {
             GwtDataListenersManager.addDataListener(databaseReferencePath, new JsonDataListener((Class) arguments.get(0), (DataChangeListener) arguments.get(1)));
-            onValue(databaseReferencePath);
+            onValue(databaseReferencePath, databaseReference);
         } else if (arguments.get(1) == null) {
             offValue(databaseReferencePath);
         }
@@ -52,11 +53,23 @@ public class OnDataChangeQuery extends GwtDatabaseQuery {
      *
      * @param reference Reference path, not null
      */
-    public static native void onValue(String reference) /*-{
+    public static native void onValue(String reference, DatabaseReference databaseReference) /*-{
            var ref = reference;
+           var orderByCalled = databaseReference.orderByCalled_;
+           $wnd.valueListenersOrderByCalled = $wnd.valueListenersOrderByCalled || {};
+           $wnd.valueListenersOrderByCalled[reference] = orderByCalled;
            $wnd.valueListeners = $wnd.valueListeners || {};
-           $wnd.valueListeners[reference] = $wnd.firebase.database().ref(ref).on("value", function(snap){
-            var val = JSON.stringify(snap.val());
+           $wnd.valueListeners[reference] = databaseReference.on("value", function(snap){
+             var val;
+             if( !$wnd.valueListenersOrderByCalled[reference] ){
+               val = JSON.stringify(snap.val());
+             }else{
+               var tmp = [];
+               snap.forEach(function(child){
+                 tmp.push(child.val());
+               });
+               val = JSON.stringify(tmp);
+            }
             @mk.gdx.firebase.html.database.queries.GwtDataListenersManager::callListener(Ljava/lang/String;Ljava/lang/String;)(ref,val);
           });
     }-*/;
@@ -70,6 +83,8 @@ public class OnDataChangeQuery extends GwtDatabaseQuery {
      */
     public static native void offValue(String reference) /*-{
         $wnd.valueListeners = $wnd.valueListeners || {};
+        $wnd.valueListenersOrderByCalled = $wnd.valueListenersOrderByCalled || {};
+        $wnd.valueListenersOrderByCalled[reference] = false;
         var listener = $wnd.valueListeners[reference] || null;
         $wnd.firebase.database().ref(reference).off('value', listener);
         @mk.gdx.firebase.html.database.queries.GwtDataListenersManager::removeDataListener(Ljava/lang/String;)(reference);

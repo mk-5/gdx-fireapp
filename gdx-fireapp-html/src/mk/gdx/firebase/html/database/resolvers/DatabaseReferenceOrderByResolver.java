@@ -43,6 +43,6 @@ public class DatabaseReferenceOrderByResolver implements OrderByResolver<Databas
                 target = target.orderByValue();
                 break;
         }
-        return null;
+        return target;
     }
 }
