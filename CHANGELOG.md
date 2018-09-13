@@ -46,3 +46,6 @@
 **[1.6.3]**  
 \- fix: Fix of wrong query execution for ***GdxFIRDatabase#readValue*** at GWT API   
 \- fix: Fix of getting the wrong argument in query for ***GdxFIRDatabase#removeValue(callback)*** at GWT API   
+
+**[1.7.1]**  
+\- API Addition: Database Filtering&Sorting support for GWT platform  
