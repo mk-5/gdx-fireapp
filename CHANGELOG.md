@@ -49,3 +49,4 @@
 
 **[1.7.1]**  
 \- API Addition: Database Filtering&Sorting support for GWT platform  
+\- General: Minor bugs fix and improvements for GWT platform  
