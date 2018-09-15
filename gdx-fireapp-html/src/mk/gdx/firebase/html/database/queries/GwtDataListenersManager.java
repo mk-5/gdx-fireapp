@@ -24,7 +24,7 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Keeps reference do DataListenersManager and provides static methods for javascript calls.
  */
-public class GwtDataListenersManager {
+class GwtDataListenersManager {
     private static final DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<DataChangeListener>();
 
     private GwtDataListenersManager() {
@@ -39,7 +39,6 @@ public class GwtDataListenersManager {
         if (listenersManager.hasListeners(refPath)) {
             if (listener == null) {
                 listenersManager.removeListenersForPath(refPath);
-                // TODO - remove from firebase.js?
             }
         } else if (listener != null) {
             listenersManager.addNewListener(refPath, listener);
