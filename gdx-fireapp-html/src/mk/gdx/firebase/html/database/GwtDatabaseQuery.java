@@ -78,7 +78,8 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
     @Override
     protected void applyFilters() {
         if (filters.size > 0) {
-            filtersToApply = new Array<>(filters);
+            filtersToApply = new Array<>();
+            filtersToApply.addAll(filters);
         }
         if (orderByClause != null) {
             orderByToApply = orderByClause;
@@ -90,6 +91,8 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
         databaseDistribution.terminateOperation();
         databaseReferencePath = null;
         databaseReference = null;
+        filtersToApply = null;
+        orderByToApply = null;
     }
 
     /**
