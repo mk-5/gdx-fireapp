@@ -65,6 +65,8 @@ public class ReadValueQuery extends GwtDatabaseQuery {
                 val = JSON.stringify(tmp);
             }
             jsDataCallback.@mk.gdx.firebase.html.database.json.JsonDataCallback::onData(Ljava/lang/String;)(val);
+        })['catch'](function(error){
+            jsDataCallback.@mk.gdx.firebase.callbacks.DataCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }
