@@ -27,7 +27,7 @@ import mk.gdx.firebase.GdxFIRLogger;
  * Loads firebase configuration from {@code android/assets/firebase-config.html}.
  */
 public class FirebaseConfiguration {
-    
+
     private String rawHtml;
     private FirebaseConfigParser configParser;
 

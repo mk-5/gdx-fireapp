@@ -21,7 +21,7 @@ package mk.gdx.firebase.html.firebase;
  */
 class FirebaseJS {
 
-    private FirebaseJS(){
+    private FirebaseJS() {
         //
     }
 

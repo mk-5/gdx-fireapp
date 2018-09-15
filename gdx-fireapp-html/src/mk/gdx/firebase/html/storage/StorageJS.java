@@ -18,7 +18,6 @@ package mk.gdx.firebase.html.storage;
 
 import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
-import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.storage.FileMetadata;
 
 /**

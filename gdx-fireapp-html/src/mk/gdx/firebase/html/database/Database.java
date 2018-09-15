@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
-import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
