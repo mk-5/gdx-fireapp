@@ -94,7 +94,6 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 
 ## What's next?
 
-- GWT database filtering api
 - Better wiki/documentation
 - Facebook, github authorization
 - Messaging
