@@ -49,6 +49,7 @@ configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
                         '**/mk/gdx/firebase/html/storage/UploadTaskSnapshot*',
                         '**/mk/gdx/firebase/html/database/resolvers/GwtQueryFilterResolver*',
                         '**/mk/gdx/firebase/html/database/resolvers/GwtQueryOrderByResolver*',
+                        '**/mk/gdx/firebase/html/database/DatabaseReference*',
                 ];
                 if( project.name.equals('gdx-fireapp-html') ) {
                     excludes.push('mk/gdx/firebase/helpers/ImageHelper*')
