@@ -16,6 +16,8 @@
 
 package mk.gdx.firebase.html.auth;
 
+import com.badlogic.gdx.utils.Timer;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,17 +27,20 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.html.GdxHtmlAppTest;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 @PrepareForTest({
-        ScriptRunner.class, AuthJS.class, FirebaseUserJS.class
+        ScriptRunner.class, AuthJS.class, FirebaseUserJS.class, Timer.class
 })
-public class AuthTest {
+@SuppressStaticInitializationFor("com.badlogic.gdx.utils.Timer")
+public class AuthTest extends GdxHtmlAppTest {
 
     @Rule
     public PowerMockRule powerMockRule = new PowerMockRule();
@@ -99,13 +104,21 @@ public class AuthTest {
         String email = "email@com.pl";
         char[] password = {'s', 'e', 'c', 'r', 'e', 't'};
         AuthCallback callback = Mockito.mock(AuthCallback.class);
+        PowerMockito.mockStatic(Timer.class);
+        Mockito.when(Timer.schedule(Mockito.any(Timer.Task.class), Mockito.anyFloat())).then(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((Timer.Task) invocation.getArgument(0)).run();
+                return null;
+            }
+        });
 
         // When
         auth.createUserWithEmailAndPassword(email, password, callback);
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.createUserWithEmailAndPassword(Mockito.eq(email), Mockito.eq(new String(password)), Mockito.refEq(callback));
+        AuthJS.createUserWithEmailAndPassword(Mockito.eq(email), Mockito.eq(new String(password)), Mockito.any(AuthCallback.class));
     }
 
     @Test
