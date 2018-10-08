@@ -26,6 +26,7 @@ import bindings.google.firebaseauth.FIRUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
@@ -130,6 +131,23 @@ public class Auth implements AuthDistribution {
         } catch (Exception e) {
             callback.onFail(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPasswordResetEmail(String email, CompleteCallback callback) {
+        FIRAuth.auth().sendPasswordResetWithEmailCompletion(email, new FIRAuth.Block_sendPasswordResetWithEmailCompletion() {
+            @Override
+            public void call_sendPasswordResetWithEmailCompletion(NSError arg0) {
+                if (arg0 != null) {
+                    callback.onError(new Exception(arg0.localizedDescription()));
+                } else {
+                    callback.onSuccess();
+                }
+            }
+        });
     }
 
     /**

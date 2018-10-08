@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
@@ -99,6 +100,26 @@ public class Auth implements AuthDistribution {
         } catch (Exception e) {
             callback.onFail(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPasswordResetEmail(String email, final CompleteCallback callback) {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (callback != null) {
+                            if (task.isSuccessful()) {
+                                callback.onSuccess();
+                            } else {
+                                callback.onError(task.getException());
+                            }
+                        }
+                    }
+                });
     }
 
     /**

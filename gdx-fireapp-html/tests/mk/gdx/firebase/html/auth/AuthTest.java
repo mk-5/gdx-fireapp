@@ -32,6 +32,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
@@ -178,5 +179,20 @@ public class AuthTest extends GdxHtmlAppTest {
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
         AuthJS.signOut(Mockito.refEq(callback));
+    }
+
+    @Test
+    public void sendPasswordResetEmail() {
+        // Given
+        Auth auth = new Auth();
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        String arg1 = "email";
+
+        // When
+        auth.sendPasswordResetEmail(arg1, callback);
+
+        // Then
+        PowerMockito.verifyStatic(AuthJS.class);
+        AuthJS.sendPasswordResetEmail(Mockito.eq(arg1), Mockito.refEq(callback));
     }
 }

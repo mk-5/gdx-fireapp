@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
@@ -83,6 +84,19 @@ public class GdxFIRAuthTest extends GdxAppTest {
 
         // Then
         Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInAnonymously(Mockito.refEq(callback));
+    }
+
+    @Test
+    public void sendPasswordResetEmail() {
+        // Given
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        String arg1 = "email";
+
+        // When
+        GdxFIRAuth.instance().sendPasswordResetEmail(arg1, callback);
+
+        // Then
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1), Mockito.refEq(callback));
     }
 
     @Test

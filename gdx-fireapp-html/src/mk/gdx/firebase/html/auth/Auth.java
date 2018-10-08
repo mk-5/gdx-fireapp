@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Timer;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
@@ -124,6 +125,19 @@ public class Auth implements AuthDistribution {
             @Override
             public void run() {
                 AuthJS.signOut(callback);
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPasswordResetEmail(final String email, final CompleteCallback callback) {
+        ScriptRunner.firebaseScript(new Runnable() {
+            @Override
+            public void run() {
+                AuthJS.sendPasswordResetEmail(email, callback);
             }
         });
     }

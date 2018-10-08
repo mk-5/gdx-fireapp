@@ -18,6 +18,7 @@ package mk.gdx.firebase;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
@@ -104,9 +105,20 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
         platformObject.signInAnonymously(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void signOut(SignOutCallback callback) {
         platformObject.signOut(callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPasswordResetEmail(String email, CompleteCallback callback) {
+        platformObject.sendPasswordResetEmail(email, callback);
     }
 
     /**

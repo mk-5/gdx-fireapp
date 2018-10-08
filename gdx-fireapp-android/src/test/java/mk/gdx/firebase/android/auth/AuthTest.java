@@ -34,6 +34,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 
 @PrepareForTest({FirebaseAuth.class, GdxNativesLoader.class})
@@ -281,6 +282,47 @@ public class AuthTest extends AndroidContextTest {
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signOut();
         Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(RuntimeException.class));
+        Mockito.verifyNoMoreInteractions(firebaseAuth);
+    }
+
+    @Test
+    public void sendPasswordResetEmail() {
+        // Given
+        Auth auth = new Auth();
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Mockito.when(task.isSuccessful()).thenReturn(true);
+        Mockito.doReturn(task).when(firebaseAuth).sendPasswordResetEmail(Mockito.anyString());
+        String arg1 = "email";
+
+        // When
+        auth.sendPasswordResetEmail(arg1, callback);
+
+        // Then
+        PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
+        FirebaseAuth.getInstance();
+        Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1));
+        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verifyNoMoreInteractions(firebaseAuth);
+    }
+
+    @Test
+    public void sendPasswordResetEmail_fail() {
+        // Given
+        Auth auth = new Auth();
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Mockito.when(task.isSuccessful()).thenReturn(false);
+        Mockito.when(task.getException()).thenReturn(new Exception());
+        Mockito.doReturn(task).when(firebaseAuth).sendPasswordResetEmail(Mockito.anyString());
+        String arg1 = "email";
+
+        // When
+        auth.sendPasswordResetEmail(arg1, callback);
+
+        // Then
+        PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
+        FirebaseAuth.getInstance();
+        Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1));
+        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.any(Exception.class));
         Mockito.verifyNoMoreInteractions(firebaseAuth);
     }
 }

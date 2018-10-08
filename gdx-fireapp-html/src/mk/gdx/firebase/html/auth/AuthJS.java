@@ -19,6 +19,7 @@ package mk.gdx.firebase.html.auth;
 import mk.gdx.firebase.GdxFIRAuth;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 
 /**
@@ -107,6 +108,14 @@ class AuthJS {
             callback.@mk.gdx.firebase.callbacks.SignOutCallback::onFail(Ljava/lang/Exception;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
+        });
+    }-*/;
+
+    static native void sendPasswordResetEmail(String email, final CompleteCallback callback) /*-{
+        $wnd.firebase.auth().sendPasswordResetEmail(email).then(function(){
+            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+        })["catch"](function(error){
+            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 

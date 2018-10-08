@@ -18,6 +18,7 @@ package mk.gdx.firebase.distributions;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 
 /**
@@ -89,4 +90,12 @@ public interface AuthDistribution {
      * @param callback Sign-out callback, not null
      */
     void signOut(SignOutCallback callback);
+
+    /**
+     * Sends password reset email message to given email.
+     *
+     * @param email    The new email, not null
+     * @param callback Callback, may ne null
+     */
+    void sendPasswordResetEmail(String email, CompleteCallback callback);
 }

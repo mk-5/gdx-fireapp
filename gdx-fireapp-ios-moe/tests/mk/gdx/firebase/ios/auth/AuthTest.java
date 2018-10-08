@@ -34,6 +34,7 @@ import bindings.google.firebaseauth.FIRAuth;
 import bindings.google.firebaseauth.FIRUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
@@ -289,4 +290,52 @@ public class AuthTest extends GdxIOSAppTest {
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signOut(Mockito.any());
         Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
     }
+
+    @Test
+    public void sendPasswordResetEmail() {
+        // Given
+        PowerMockito.mockStatic(PtrFactory.class);
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((FIRAuth.Block_sendPasswordResetWithEmailCompletion) invocation.getArgument(1))
+                        .call_sendPasswordResetWithEmailCompletion(null);
+                return null;
+            }
+        }).when(firAuth).sendPasswordResetWithEmailCompletion(Mockito.anyString(), Mockito.any());
+        Auth auth = new Auth();
+        String arg1 = "email";
+
+        // When
+        auth.sendPasswordResetEmail(arg1, callback);
+
+        // Then
+        Mockito.verify(firAuth, VerificationModeFactory.times(1)).sendPasswordResetWithEmailCompletion(Mockito.eq(arg1), Mockito.any());
+        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+    }
+
+    @Test
+    public void sendPasswordResetEmail_fail() {
+        // Given
+        PowerMockito.mockStatic(PtrFactory.class);
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((FIRAuth.Block_sendPasswordResetWithEmailCompletion) invocation.getArgument(1)).call_sendPasswordResetWithEmailCompletion(Mockito.mock(NSError.class));
+                return null;
+            }
+        }).when(firAuth).sendPasswordResetWithEmailCompletion(Mockito.anyString(), Mockito.any());
+        Auth auth = new Auth();
+        String arg1 = "email";
+
+        // When
+        auth.sendPasswordResetEmail(arg1, callback);
+
+        // Then
+        Mockito.verify(firAuth, VerificationModeFactory.times(1)).sendPasswordResetWithEmailCompletion(Mockito.eq(arg1), Mockito.any());
+        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.any(Exception.class));
+    }
+
 }
