@@ -50,3 +50,7 @@
 **[1.7.1]**  
 \- API Addition: Database Filtering&Sorting support for GWT platform  
 \- General: Minor bugs fix and improvements for GWT platform  
+
+**[1.8.1]**  
+\- API Addition: User-manage methods (update email, update password, send verification email, delete account) for **GdxFirebaseUser**  
+\- GWT API: Fix of broken signing-in after user creation  
