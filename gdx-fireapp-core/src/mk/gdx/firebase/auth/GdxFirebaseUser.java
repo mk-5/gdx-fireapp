@@ -16,17 +16,22 @@
 
 package mk.gdx.firebase.auth;
 
+import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.distributions.AuthUserDistribution;
+
 /**
  * Multi-module Firebase user representation.
  */
-public class GdxFirebaseUser {
+public class GdxFirebaseUser implements AuthUserDistribution {
     private UserInfo userInfo;
+    private GdxFIRUser userDistribution;
 
     /**
      * @param userInfo User information wrapped by POJO object.
      */
     private GdxFirebaseUser(UserInfo userInfo) {
         this.userInfo = new UserInfo.Builder().setUserInfo(userInfo).build();
+        this.userDistribution = new GdxFIRUser();
     }
 
     /**
@@ -38,9 +43,43 @@ public class GdxFirebaseUser {
     }
 
     /**
-     * @return Information about Firebase user wrapped by POJO class.
+     * Gets user information.
+     *
+     * @return Information about Firebase user
      */
     public UserInfo getUserInfo() {
         return userInfo;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateEmail(String newEmail, CompleteCallback callback) {
+        userDistribution.updateEmail(newEmail, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendEmailVerification(CompleteCallback callback) {
+        userDistribution.sendEmailVerification(callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updatePassword(char[] newPassword, CompleteCallback callback) {
+        userDistribution.updatePassword(newPassword, callback);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete(CompleteCallback callback) {
+        userDistribution.delete(callback);
     }
 }

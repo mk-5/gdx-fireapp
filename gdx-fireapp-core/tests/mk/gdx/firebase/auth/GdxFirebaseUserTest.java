@@ -17,9 +17,21 @@
 package mk.gdx.firebase.auth;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.rule.PowerMockRule;
+import org.powermock.reflect.Whitebox;
 
-public class GdxFirebaseUserTest {
+import mk.gdx.firebase.GdxAppTest;
+import mk.gdx.firebase.callbacks.CompleteCallback;
+
+public class GdxFirebaseUserTest extends GdxAppTest {
+
+    @Rule
+    public final PowerMockRule powerMockRule = new PowerMockRule();
 
     @Test
     public void create() {
@@ -31,17 +43,19 @@ public class GdxFirebaseUserTest {
 
         // Then
         Assert.assertNotNull(user);
+        Assert.assertNotNull(user.getUserInfo());
     }
 
     @Test
     public void getUserInfo() {
         // Given
-        UserInfo userInfo = new UserInfo.Builder().build();
+        UserInfo userInfo = new UserInfo.Builder().setEmail("email").build();
 
         // When
         GdxFirebaseUser user = GdxFirebaseUser.create(userInfo);
 
         // Then
+        Assert.assertNotNull(user.getUserInfo());
         Assert.assertNotEquals(user.getUserInfo(), userInfo);
         Assert.assertEquals(user.getUserInfo().getPhotoUrl(), userInfo.getPhotoUrl());
         Assert.assertEquals(user.getUserInfo().getUid(), userInfo.getUid());
@@ -50,5 +64,67 @@ public class GdxFirebaseUserTest {
         Assert.assertEquals(user.getUserInfo().getDisplayName(), userInfo.getDisplayName());
         Assert.assertEquals(user.getUserInfo().isEmailVerified(), userInfo.isAnonymous());
         Assert.assertEquals(user.getUserInfo().isAnonymous(), userInfo.isAnonymous());
+    }
+
+    @Test
+    public void updateEmail() {
+        // Given
+        GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
+        String email = "email";
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
+        Whitebox.setInternalState(user, "userDistribution", userDistribution);
+
+        // When
+        user.updateEmail(email, callback);
+
+        // Then
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).updateEmail(Mockito.eq(email), Mockito.refEq(callback));
+    }
+
+    @Test
+    public void sendEmailVerification() {
+        // Given
+        GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
+        Whitebox.setInternalState(user, "userDistribution", userDistribution);
+
+        // When
+        user.sendEmailVerification(callback);
+
+        // Then
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).sendEmailVerification(Mockito.refEq(callback));
+    }
+
+    @Test
+    public void updatePassword() {
+        // Given
+        GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        char[] password = {'a', 'b', 'c'};
+        GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
+        Whitebox.setInternalState(user, "userDistribution", userDistribution);
+
+        // When
+        user.updatePassword(password, callback);
+
+        // Then
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).updatePassword(Mockito.refEq(password), Mockito.refEq(callback));
+    }
+
+    @Test
+    public void delete() {
+        // Given
+        GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
+        Whitebox.setInternalState(user, "userDistribution", userDistribution);
+
+        // When
+        user.delete(callback);
+
+        // Then
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).delete(Mockito.refEq(callback));
     }
 }
