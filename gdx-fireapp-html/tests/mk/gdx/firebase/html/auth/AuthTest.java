@@ -33,7 +33,7 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 @PrepareForTest({
-        ScriptRunner.class, AuthJS.class, FirebaseUserJSON.class
+        ScriptRunner.class, AuthJS.class, FirebaseUserJS.class
 })
 public class AuthTest {
 
@@ -56,9 +56,9 @@ public class AuthTest {
     @Test
     public void getCurrentUser_null() {
         // Given
-        FirebaseUserJSON firebaseUserJSON = PowerMockito.mock(FirebaseUserJSON.class);
-        Mockito.when(firebaseUserJSON.isNULL()).thenReturn(true);
-        Mockito.when(AuthJS.firebaseUser()).thenReturn(firebaseUserJSON);
+        FirebaseUserJS firebaseUserJS = PowerMockito.mock(FirebaseUserJS.class);
+        Mockito.when(firebaseUserJS.isNULL()).thenReturn(true);
+        Mockito.when(AuthJS.firebaseUser()).thenReturn(firebaseUserJS);
         Auth auth = new Auth();
 
         // When
@@ -71,13 +71,13 @@ public class AuthTest {
     @Test
     public void getCurrentUser() {
         // Given
-        FirebaseUserJSON firebaseUserJSON = PowerMockito.mock(FirebaseUserJSON.class);
-        Mockito.when(firebaseUserJSON.getDisplayName()).thenReturn("display_name");
-        Mockito.when(firebaseUserJSON.getEmail()).thenReturn("email");
-        Mockito.when(firebaseUserJSON.getPhotoURL()).thenReturn("photo_url");
-        Mockito.when(firebaseUserJSON.getProviderId()).thenReturn("provider_id");
-        Mockito.when(firebaseUserJSON.getUID()).thenReturn("uid");
-        Mockito.when(AuthJS.firebaseUser()).thenReturn(firebaseUserJSON);
+        FirebaseUserJS firebaseUserJS = PowerMockito.mock(FirebaseUserJS.class);
+        Mockito.when(firebaseUserJS.getDisplayName()).thenReturn("display_name");
+        Mockito.when(firebaseUserJS.getEmail()).thenReturn("email");
+        Mockito.when(firebaseUserJS.getPhotoURL()).thenReturn("photo_url");
+        Mockito.when(firebaseUserJS.getProviderId()).thenReturn("provider_id");
+        Mockito.when(firebaseUserJS.getUID()).thenReturn("uid");
+        Mockito.when(AuthJS.firebaseUser()).thenReturn(firebaseUserJS);
         Auth auth = new Auth();
 
         // When

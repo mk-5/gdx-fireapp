@@ -34,7 +34,7 @@ import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 @PrepareForTest({
-        ScriptRunner.class, GoogleAuthJS.class, FirebaseUserJSON.class, GdxFIRAuth.class
+        ScriptRunner.class, GoogleAuthJS.class, FirebaseUserJS.class, GdxFIRAuth.class
 })
 public class GoogleAuthTest {
 

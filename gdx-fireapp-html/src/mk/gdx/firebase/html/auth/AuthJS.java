@@ -30,7 +30,7 @@ class AuthJS {
         //
     }
 
-    static native FirebaseUserJSON firebaseUser() /*-{
+    static native FirebaseUserJS firebaseUser() /*-{
         if( typeof $wnd.firebase == 'undefined') return { isNULL : true };
         var user = $wnd.firebase.auth().currentUser;
         return (typeof user != 'undefined' && user != null) ? user : { isNULL : true };
@@ -69,15 +69,11 @@ class AuthJS {
     }-*/;
 
     static native void createUserWithEmailAndPassword(final String email, final String password, final AuthCallback callback) /*-{
-        var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
-            if( user ){
-                callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
-                    @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
-                );
-            }
-            removeAuthListener();
-        });
-        $wnd.firebase.auth().createUserWithEmailAndPassword(email, password)['catch'](function(error) {
+        $wnd.firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
+            callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
+            );
+        })['catch'](function(error) {
             callback.@mk.gdx.firebase.callbacks.AuthCallback::onFail(Ljava/lang/Exception;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
