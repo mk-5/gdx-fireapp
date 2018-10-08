@@ -52,5 +52,6 @@
 \- General: Minor bugs fix and improvements for GWT platform  
 
 **[1.8.1]**  
-\- API Addition: User-manage methods (update email, update password, send verification email, delete account) for **GdxFirebaseUser**  
+\- API Addition: User-manage methods (update email, update password, send verification email, delete account)   
+\- API Addition: **GdxFIRAuth#sendPasswordResetEmail**   
 \- GWT API: Fix of broken signing-in after user creation  
