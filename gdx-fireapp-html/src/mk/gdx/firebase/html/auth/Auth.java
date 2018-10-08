@@ -16,6 +16,8 @@
 
 package mk.gdx.firebase.html.auth;
 
+import com.badlogic.gdx.utils.Timer;
+
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
 import mk.gdx.firebase.callbacks.AuthCallback;
@@ -33,7 +35,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public GdxFirebaseUser getCurrentUser() {
-        FirebaseUserJSON userFromApi = AuthJS.firebaseUser();
+        FirebaseUserJS userFromApi = AuthJS.firebaseUser();
         if (userFromApi.isNULL()) return null;
         UserInfo.Builder builder = new UserInfo.Builder();
         builder.setDisplayName(userFromApi.getDisplayName())
@@ -54,7 +56,22 @@ public class Auth implements AuthDistribution {
         ScriptRunner.firebaseScript(new Runnable() {
             @Override
             public void run() {
-                AuthJS.createUserWithEmailAndPassword(email, new String(password), callback);
+                AuthJS.createUserWithEmailAndPassword(email, new String(password), new AuthCallback() {
+                    @Override
+                    public void onSuccess(GdxFirebaseUser user) {
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                signInWithEmailAndPassword(email, password, callback);
+                            }
+                        }, 0.5f);
+                    }
+
+                    @Override
+                    public void onFail(Exception e) {
+                        callback.onFail(e);
+                    }
+                });
             }
         });
     }
