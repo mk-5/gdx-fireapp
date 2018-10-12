@@ -95,6 +95,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 ## What's next?
 
 - Better wiki/documentation
+- Promises instead callbacks
 - Facebook, github authorization
 - Messaging
 - Upload task monitoring
