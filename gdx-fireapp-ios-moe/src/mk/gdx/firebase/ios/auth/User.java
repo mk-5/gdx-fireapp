@@ -92,4 +92,21 @@ public class User implements AuthUserDistribution {
         });
     }
 
+    @Override
+    public void reload(CompleteCallback callback) {
+        if (FIRAuth.auth().currentUser() == null) {
+            throw new IllegalStateException();
+        }
+        FIRAuth.auth().currentUser().reloadWithCompletion(new FIRUser.Block_reloadWithCompletion() {
+            @Override
+            public void call_reloadWithCompletion(NSError arg0) {
+                if (arg0 == null) {
+                    callback.onSuccess();
+                } else {
+                    callback.onError(new Exception(arg0.localizedDescription()));
+                }
+            }
+        });
+    }
+
 }

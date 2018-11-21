@@ -82,4 +82,9 @@ public class GdxFirebaseUser implements AuthUserDistribution {
     public void delete(CompleteCallback callback) {
         userDistribution.delete(callback);
     }
+
+    @Override
+    public void reload(CompleteCallback callback) {
+        userDistribution.reload(callback);
+    }
 }

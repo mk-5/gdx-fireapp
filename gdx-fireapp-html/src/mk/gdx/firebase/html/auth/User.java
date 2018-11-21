@@ -23,6 +23,7 @@ import mk.gdx.firebase.distributions.AuthUserDistribution;
  * @see AuthUserDistribution
  */
 public class User implements AuthUserDistribution {
+
     @Override
     public void updateEmail(String newEmail, CompleteCallback callback) {
         if (AuthJS.firebaseUser().isNULL()) {
@@ -53,5 +54,13 @@ public class User implements AuthUserDistribution {
             throw new IllegalStateException();
         }
         AuthJS.firebaseUser().delete(callback);
+    }
+
+    @Override
+    public void reload(CompleteCallback callback) {
+        if (AuthJS.firebaseUser().isNULL()) {
+            throw new IllegalStateException();
+        }
+        AuthJS.firebaseUser().reload(callback);
     }
 }

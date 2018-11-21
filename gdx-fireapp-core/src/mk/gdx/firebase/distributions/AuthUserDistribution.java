@@ -63,4 +63,12 @@ public interface AuthUserDistribution {
      * @throws IllegalStateException When current user is not present
      */
     void delete(CompleteCallback callback);
+
+    /**
+     * Reload current user and calls {@code callback} when complete.
+     *
+     * @param callback Callback, may be null
+     * @throws IllegalStateException When current user is not present
+     */
+    void reload(CompleteCallback callback);
 }

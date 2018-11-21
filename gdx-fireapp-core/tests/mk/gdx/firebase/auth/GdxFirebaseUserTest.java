@@ -127,4 +127,19 @@ public class GdxFirebaseUserTest extends GdxAppTest {
         // Then
         Mockito.verify(userDistribution, VerificationModeFactory.times(1)).delete(Mockito.refEq(callback));
     }
+
+    @Test
+    public void reload() {
+        // Given
+        GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
+        Whitebox.setInternalState(user, "userDistribution", userDistribution);
+
+        // When
+        user.reload(callback);
+
+        // Then
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).reload(Mockito.refEq(callback));
+    }
 }
