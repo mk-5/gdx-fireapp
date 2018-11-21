@@ -55,3 +55,6 @@
 \- API Addition: User-manage methods (update email, update password, send verification email)   
 \- API Addition: **GdxFIRAuth#sendPasswordResetEmail**   
 \- GWT API: Fix of broken signing-in after user creation  
+
+**[1.9.1]**  
+\- API Addition: #reload() method in User API
