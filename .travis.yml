@@ -33,4 +33,4 @@ jobs:
       env:
         - BINTRAY_USER=mk-5
         - secure: "FV7WxKvLlG3cKKLmGaypquqXkH0qErYQDkvN6pgP1kI8rKPWCdG4NPmFhGxzJ0PoV3n1/hWWuyvcVCm9tC1dOOzEex+qWYE/GnyRhNaQ+2+Z64/R2i8xprJG1RPDL+Cv6JTftNK3UQpzaCxx2mSwSyWTpmSfYnlaCYRhOH5RLCC+pxzkcHq8ixV4GWIm+Ntm6YxSpvbvr+7CYHx0tx/4zEEFdNtIOvz1icWrt3MYs+pYQQDHv7RwVocgps9AZuhHK6gdFAx7YEsG14a4KP8cRyN/QJyR2QyrrXWFBa+yCFFVCDc1Z0gw8/0LZq/Y0O+DjBlDe+Lkjd4X5EKnw53tAB935hHNCi4E9Ui+8tPfWSfegkUzogfxsJtS0leoTwUhN2ITvuf4bMAH2lrROr6c9gk+HZLeOuBTOicCh9R4wOsF4W0ZOQS1rs0OtfGiCAwBksAMA+i2IVPU24lks9wB61TtBHL65DOZyhyn2PYKBfUznMHjjFC03S0/f2CihBzLyzK/cS+6PpyRd3OIMYvQ8liAH6jgAWhwk5fJf3jcZPhXQzjUUxe75eUebCtGGRZO2NV3nm6VKOaQOXr4t1TAMSRkCOHoVpsdOLNQq7lfvejATzZUvzLBMrYDweik/sfIYMwrZHjzXPxtOLs33vxf57Y9UvH6Wh2LudPfSSJQ5W8="
-      if: branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
+      if: branch =~ /^\d+\.\d+(\.\d+)?$/
