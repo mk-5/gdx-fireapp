@@ -21,6 +21,8 @@ import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
+import mk.gdx.firebase.functional.BiConsumer;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 /**
@@ -46,7 +48,17 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public void signOut(final SignOutCallback callback) {
-        GdxFIRAuth.instance().signOut(callback);
+        GdxFIRAuth.instance().signOut().then(new Consumer<Void>() {
+            @Override
+            public void accept(Void aVoid) {
+                callback.onSuccess();
+            }
+        }).fail(new BiConsumer<String, Throwable>() {
+            @Override
+            public void accept(String s, Throwable throwable) {
+                callback.onFail((Exception) throwable);
+            }
+        });
     }
 
     /**

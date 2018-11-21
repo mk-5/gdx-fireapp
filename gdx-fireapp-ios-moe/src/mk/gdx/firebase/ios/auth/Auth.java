@@ -25,10 +25,10 @@ import bindings.google.firebaseauth.FIRAuthDataResult;
 import bindings.google.firebaseauth.FIRUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * iOS Firebase authorization API implementation.
@@ -60,13 +60,18 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
-        FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion() {
+    public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(String email, char[] password) {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void call_createUserWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1) {
-                if (handleError(arg1, callback)) return;
-                // TODO - arg0 was chacnged from FIRUser to FIRAuthDataResult - need to adopt it
-                callback.onSuccess(getCurrentUser());
+            public void accept(FuturePromise<GdxFirebaseUser> promise) {
+                FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion() {
+                    @Override
+                    public void call_createUserWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1) {
+                        if (handleError(arg1, promise)) return;
+                        // TODO - arg0 was changed from FIRUser to FIRAuthDataResult - need to adopt it
+                        promise.doComplete(getCurrentUser());
+                    }
+                });
             }
         });
     }
@@ -75,13 +80,17 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
-        FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion() {
+    public Promise<GdxFirebaseUser> signInWithEmailAndPassword(String email, char[] password) {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void call_signInWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1) {
-                if (handleError(arg1, callback)) return;
-                // TODO
-                callback.onSuccess(getCurrentUser());
+            public void accept(FuturePromise<GdxFirebaseUser> promise) {
+                FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion() {
+                    @Override
+                    public void call_signInWithEmailPasswordCompletion(FIRAuthDataResult arg0, NSError arg1) {
+                        if (handleError(arg1, promise)) return;
+                        promise.doComplete(getCurrentUser());
+                    }
+                });
             }
         });
     }
@@ -90,13 +99,17 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(String token, final AuthCallback callback) {
-        FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion() {
+    public Promise<GdxFirebaseUser> signInWithToken(String token) {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void call_signInWithCustomTokenCompletion(FIRAuthDataResult arg0, NSError arg1) {
-                if (handleError(arg1, callback)) return;
-                // TODO
-                callback.onSuccess(getCurrentUser());
+            public void accept(FuturePromise<GdxFirebaseUser> promise) {
+                FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion() {
+                    @Override
+                    public void call_signInWithCustomTokenCompletion(FIRAuthDataResult arg0, NSError arg1) {
+                        if (handleError(arg1, promise)) return;
+                        promise.doComplete(getCurrentUser());
+                    }
+                });
             }
         });
     }
@@ -105,12 +118,17 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(final AuthCallback callback) {
-        FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion() {
+    public Promise<GdxFirebaseUser> signInAnonymously() {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void call_signInAnonymouslyWithCompletion(FIRAuthDataResult arg0, NSError arg1) {
-                if (handleError(arg1, callback)) return;
-                callback.onSuccess(getCurrentUser());
+            public void accept(FuturePromise<GdxFirebaseUser> promise) {
+                FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion() {
+                    @Override
+                    public void call_signInAnonymouslyWithCompletion(FIRAuthDataResult arg0, NSError arg1) {
+                        if (handleError(arg1, promise)) return;
+                        promise.doComplete(getCurrentUser());
+                    }
+                });
             }
         });
     }
@@ -119,45 +137,50 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signOut(SignOutCallback callback) {
-        try {
-            Ptr<NSError> ptr = PtrFactory.newObjectReference(NSError.class);
-            FIRAuth.auth().signOut(ptr);
-            if (ptr.get() != null) {
-                callback.onFail(new Exception(ptr.get().localizedDescription()));
-            } else {
-                callback.onSuccess();
-            }
-        } catch (Exception e) {
-            callback.onFail(e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void sendPasswordResetEmail(String email, CompleteCallback callback) {
-        FIRAuth.auth().sendPasswordResetWithEmailCompletion(email, new FIRAuth.Block_sendPasswordResetWithEmailCompletion() {
+    public Promise<Void> signOut() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void call_sendPasswordResetWithEmailCompletion(NSError arg0) {
-                if (arg0 != null) {
-                    callback.onError(new Exception(arg0.localizedDescription()));
-                } else {
-                    callback.onSuccess();
+            public void accept(FuturePromise<Void> promise) {
+                try {
+                    Ptr<NSError> ptr = PtrFactory.newObjectReference(NSError.class);
+                    FIRAuth.auth().signOut(ptr);
+                    if (ptr.get() != null) {
+                        promise.doFail(new Exception(ptr.get().localizedDescription()));
+                    } else {
+                        promise.doComplete(null);
+                    }
+                } catch (Exception e) {
+                    promise.doFail(e);
                 }
             }
         });
     }
 
     /**
-     * @param error    NSError occurred during the authorization process - can be null.
-     * @param callback {@link AuthCallback#onFail(Exception)} will be use here if error exsits.
-     * @return True if any error occurred or false if don't
+     * {@inheritDoc}
      */
-    private boolean handleError(NSError error, AuthCallback callback) {
+    @Override
+    public FuturePromise<Void> sendPasswordResetEmail(String email) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> promise) {
+                FIRAuth.auth().sendPasswordResetWithEmailCompletion(email, new FIRAuth.Block_sendPasswordResetWithEmailCompletion() {
+                    @Override
+                    public void call_sendPasswordResetWithEmailCompletion(NSError arg0) {
+                        if (arg0 != null) {
+                            promise.doFail(new Exception(arg0.localizedDescription()));
+                        } else {
+                            promise.doComplete(null);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private boolean handleError(NSError error, FuturePromise promise) {
         if (error != null) {
-            callback.onFail(new Exception(error.localizedDescription()));
+            promise.doFail(error.localizedDescription(), new Exception(error.localizedDescription()));
             return true;
         }
         return false;

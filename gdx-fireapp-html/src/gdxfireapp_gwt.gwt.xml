@@ -10,6 +10,8 @@
     <extend-configuration-property name="gdx.reflect.exclude" value="mk.gdx.firebase.html.database.DatabaseReference"/>
 
     <extend-configuration-property name="gdx.reflect.include"
+                                   value="mk.gdx.firebase.promises.FuturePromise"/>
+    <extend-configuration-property name="gdx.reflect.include"
                                    value="mk.gdx.firebase.callbacks.AuthCallback"/>
     <extend-configuration-property name="gdx.reflect.include"
                                    value="mk.gdx.firebase.callbacks.DataCallback"/>

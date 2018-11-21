@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -32,10 +33,10 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({
         ScriptRunner.class, AuthJS.class, FirebaseUserJS.class, Timer.class
@@ -99,12 +100,12 @@ public class AuthTest extends GdxHtmlAppTest {
     }
 
     @Test
-    public void createUserWithEmailAndPassword() {
+    public void createUserWithEmailAndPassword() throws Exception {
         // Given
         Auth auth = new Auth();
         String email = "email@com.pl";
         char[] password = {'s', 'e', 'c', 'r', 'e', 't'};
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         PowerMockito.mockStatic(Timer.class);
         Mockito.when(Timer.schedule(Mockito.any(Timer.Task.class), Mockito.anyFloat())).then(new Answer<Object>() {
             @Override
@@ -113,13 +114,28 @@ public class AuthTest extends GdxHtmlAppTest {
                 return null;
             }
         });
+        PowerMockito.doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((FuturePromise) invocation.getArgument(2)).doComplete(Mockito.mock(GdxFirebaseUser.class));
+                return null;
+            }
+        }).when(AuthJS.class, "createUserWithEmailAndPassword", Mockito.anyString(), Mockito.anyString(), Mockito.any(FuturePromise.class));
+        PowerMockito.doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((FuturePromise) invocation.getArgument(2)).doComplete(Mockito.mock(GdxFirebaseUser.class));
+                return null;
+            }
+        }).when(AuthJS.class, "signInWithEmailAndPassword", Mockito.anyString(), Mockito.anyString(), Mockito.any(FuturePromise.class));
 
         // When
-        auth.createUserWithEmailAndPassword(email, password, callback);
+        auth.createUserWithEmailAndPassword(email, password).then(consumer);
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.createUserWithEmailAndPassword(Mockito.eq(email), Mockito.eq(new String(password)), Mockito.any(AuthCallback.class));
+        AuthJS.createUserWithEmailAndPassword(Mockito.eq(email), Mockito.eq(new String(password)), Mockito.any(FuturePromise.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
@@ -128,14 +144,13 @@ public class AuthTest extends GdxHtmlAppTest {
         Auth auth = new Auth();
         String email = "email@com.pl";
         char[] password = {'s', 'e', 'c', 'r', 'e', 't'};
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        auth.signInWithEmailAndPassword(email, password, callback);
+        FuturePromise promise = (FuturePromise) auth.signInWithEmailAndPassword(email, password);
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.signInWithEmailAndPassword(Mockito.eq(email), Mockito.eq(new String(password)), Mockito.refEq(callback));
+        AuthJS.signInWithEmailAndPassword(Mockito.eq(email), Mockito.eq(new String(password)), Mockito.refEq(promise));
     }
 
     @Test
@@ -146,53 +161,50 @@ public class AuthTest extends GdxHtmlAppTest {
         AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        auth.signInWithToken(token, callback);
+        FuturePromise promise = (FuturePromise) auth.signInWithToken(token);
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.signInWithToken(Mockito.eq(token), Mockito.refEq(callback));
+        AuthJS.signInWithToken(Mockito.eq(token), Mockito.refEq(promise));
     }
 
     @Test
     public void signInAnonymously() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        auth.signInAnonymously(callback);
+        FuturePromise promise = (FuturePromise) auth.signInAnonymously();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.signInAnonymously(Mockito.refEq(callback));
+        AuthJS.signInAnonymously(Mockito.refEq(promise));
     }
 
     @Test
     public void signOut() {
         // Given
         Auth auth = new Auth();
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
 
         // When
-        auth.signOut(callback);
+        FuturePromise promise = (FuturePromise) auth.signOut();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.signOut(Mockito.refEq(callback));
+        AuthJS.signOut(Mockito.refEq(promise));
     }
 
     @Test
     public void sendPasswordResetEmail() {
         // Given
         Auth auth = new Auth();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1, callback);
+        FuturePromise promise = (FuturePromise) auth.sendPasswordResetEmail(arg1);
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
-        AuthJS.sendPasswordResetEmail(Mockito.eq(arg1), Mockito.refEq(callback));
+        AuthJS.sendPasswordResetEmail(Mockito.eq(arg1), Mockito.refEq(promise));
     }
 }

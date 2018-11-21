@@ -17,10 +17,8 @@
 package mk.gdx.firebase;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * @see AuthDistribution
@@ -77,48 +75,48 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, AuthCallback callback) {
-        platformObject.createUserWithEmailAndPassword(email, password, callback);
+    public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(String email, char[] password) {
+        return platformObject.createUserWithEmailAndPassword(email, password);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, AuthCallback callback) {
-        platformObject.signInWithEmailAndPassword(email, password, callback);
+    public Promise<GdxFirebaseUser> signInWithEmailAndPassword(String email, char[] password) {
+        return platformObject.signInWithEmailAndPassword(email, password);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(String token, AuthCallback callback) {
-        platformObject.signInWithToken(token, callback);
+    public Promise<GdxFirebaseUser> signInWithToken(String token) {
+        return platformObject.signInWithToken(token);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(AuthCallback callback) {
-        platformObject.signInAnonymously(callback);
+    public Promise<GdxFirebaseUser> signInAnonymously() {
+        return platformObject.signInAnonymously();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signOut(SignOutCallback callback) {
-        platformObject.signOut(callback);
+    public Promise<Void> signOut() {
+        return platformObject.signOut();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void sendPasswordResetEmail(String email, CompleteCallback callback) {
-        platformObject.sendPasswordResetEmail(email, callback);
+    public Promise<Void> sendPasswordResetEmail(String email) {
+        return platformObject.sendPasswordResetEmail(email);
     }
 
     /**

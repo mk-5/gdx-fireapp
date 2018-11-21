@@ -44,10 +44,10 @@ public class GdxFIRAuthTest extends GdxAppTest {
         AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        GdxFIRAuth.instance().createUserWithEmailAndPassword("user", "password".toCharArray(), callback);
+        GdxFIRAuth.instance().createUserWithEmailAndPassword("user", "password".toCharArray());
 
         // Then
-        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).createUserWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password".toCharArray()), Mockito.refEq(callback));
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).createUserWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password".toCharArray()));
     }
 
     @Test
@@ -56,10 +56,10 @@ public class GdxFIRAuthTest extends GdxAppTest {
         AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        GdxFIRAuth.instance().signInWithEmailAndPassword("user", "password".toCharArray(), callback);
+        GdxFIRAuth.instance().signInWithEmailAndPassword("user", "password".toCharArray());
 
         // Then
-        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password".toCharArray()), Mockito.refEq(callback));
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password".toCharArray()));
     }
 
     @Test
@@ -68,10 +68,10 @@ public class GdxFIRAuthTest extends GdxAppTest {
         AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        GdxFIRAuth.instance().signInWithToken("token", callback);
+        GdxFIRAuth.instance().signInWithToken("token");
 
         // Then
-        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInWithToken(Mockito.eq("token"), Mockito.refEq(callback));
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInWithToken(Mockito.eq("token"));
     }
 
     @Test
@@ -80,10 +80,10 @@ public class GdxFIRAuthTest extends GdxAppTest {
         AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        GdxFIRAuth.instance().signInAnonymously(callback);
+        GdxFIRAuth.instance().signInAnonymously();
 
         // Then
-        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInAnonymously(Mockito.refEq(callback));
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signInAnonymously();
     }
 
     @Test
@@ -93,10 +93,10 @@ public class GdxFIRAuthTest extends GdxAppTest {
         String arg1 = "email";
 
         // When
-        GdxFIRAuth.instance().sendPasswordResetEmail(arg1, callback);
+        GdxFIRAuth.instance().sendPasswordResetEmail(arg1);
 
         // Then
-        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1), Mockito.refEq(callback));
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1));
     }
 
     @Test
@@ -105,10 +105,10 @@ public class GdxFIRAuthTest extends GdxAppTest {
         SignOutCallback callback = Mockito.mock(SignOutCallback.class);
 
         // When
-        GdxFIRAuth.instance().signOut(callback);
+        GdxFIRAuth.instance().signOut();
 
         // Then
-        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signOut(Mockito.refEq(callback));
+        Mockito.verify(authDistribution, VerificationModeFactory.times(1)).signOut();
     }
 
     @Test

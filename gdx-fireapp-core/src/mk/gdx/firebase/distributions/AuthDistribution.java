@@ -18,8 +18,8 @@ package mk.gdx.firebase.distributions;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Provides access to Firebase authorization methods.
@@ -40,62 +40,52 @@ public interface AuthDistribution {
     GdxFirebaseUser getCurrentUser();
 
     /**
-     * Registers new user and gives response by {@code AuthCallback}.
+     * Registers new user and gives response by {@code Promise}.
      *
      * @param email    New email address
      * @param password New password
-     * @param callback Authorization callback, not null
-     * @see AuthCallback
      */
-    void createUserWithEmailAndPassword(String email, char[] password, AuthCallback callback);
+    Promise<GdxFirebaseUser> createUserWithEmailAndPassword(String email, char[] password);
 
     /**
-     * Signs in into application and gives response by {@code AuthCallback}
+     * Signs in into application and gives response by {@code Promise}
      * <p>
      * If something is wrong {@link AuthCallback#onFail(Exception)} will be call.
      *
      * @param email    Firebase user email
      * @param password Firebase user password
-     * @param callback Authorization callback, not null
-     * @see AuthCallback
      */
-    void signInWithEmailAndPassword(String email, char[] password, AuthCallback callback);
+    Promise<GdxFirebaseUser> signInWithEmailAndPassword(String email, char[] password);
 
     /**
-     * Signs in into application by token and gives response by {@code AuthCallback}.
+     * Signs in into application by token and gives response by {@code Promise}.
      * <p>
      * More info you about custom tokens you can find <a href="https://firebase.google.com/docs/auth/admin/create-custom-tokens">here</a>.
      *
      * @param token    Custom token from your firebase console.
-     * @param callback Authorization callback, cant be null.
-     * @see AuthCallback
      */
-    void signInWithToken(String token, AuthCallback callback);
+    Promise<GdxFirebaseUser> signInWithToken(String token);
 
     /**
-     * Signs in into application anonymously and gives response by {@code AuthCallback}.
+     * Signs in into application anonymously and gives response by {@code Promise}.
      * <p>
      * It may be very useful when you do not provide user authentication in your application and<p>
      * working with {@link mk.gdx.firebase.GdxFIRDatabase} or with {@link mk.gdx.firebase.GdxFIRStorage}<p>
      * because default Firebase requires authorization for database and storage actions.
      *
-     * @param callback Authorization callback, not null
      */
-    void signInAnonymously(AuthCallback callback);
+    Promise<GdxFirebaseUser> signInAnonymously();
 
     /**
      * Sign-out current user and gives response by {@code SignOutCallback}.
      * <p>
-     *
-     * @param callback Sign-out callback, not null
      */
-    void signOut(SignOutCallback callback);
+    Promise<Void> signOut();
 
     /**
      * Sends password reset email message to given email.
      *
      * @param email    The new email, not null
-     * @param callback Callback, may ne null
      */
-    void sendPasswordResetEmail(String email, CompleteCallback callback);
+    Promise<Void> sendPasswordResetEmail(String email);
 }

@@ -20,16 +20,15 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Android Firebase authorization API implementation.
@@ -61,93 +60,72 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, new String(password))
-                .addOnCompleteListener(new AuthListener(callback));
+    public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(String email, char[] password) {
+        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, new String(password))));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(String email, char[] password, final AuthCallback callback) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, new String(password))
-                .addOnCompleteListener(new AuthListener(callback));
+    public Promise<GdxFirebaseUser> signInWithEmailAndPassword(String email, char[] password) {
+        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInWithEmailAndPassword(email, new String(password))));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(String token, AuthCallback callback) {
-        FirebaseAuth.getInstance().signInWithCustomToken(token)
-                .addOnCompleteListener(new AuthListener(callback));
+    public Promise<GdxFirebaseUser> signInWithToken(String token) {
+        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInWithCustomToken(token)));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(AuthCallback callback) {
-        FirebaseAuth.getInstance().signInAnonymously().addOnCompleteListener(new AuthListener(callback));
-    }
-
-    @Override
-    public void signOut(SignOutCallback callback) {
-        try {
-            FirebaseAuth.getInstance().signOut();
-            callback.onSuccess();
-        } catch (Exception e) {
-            callback.onFail(e);
-        }
+    public Promise<GdxFirebaseUser> signInAnonymously() {
+        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInAnonymously()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void sendPasswordResetEmail(String email, final CompleteCallback callback) {
-        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (callback != null) {
-                            if (task.isSuccessful()) {
-                                callback.onSuccess();
-                            } else {
-                                callback.onError(task.getException());
-                            }
-                        }
-                    }
-                });
-    }
-
-    /**
-     * Listener for AuthenticationResult.
-     * This class is a wrap for using of {@link AuthCallback}.
-     * Result from android sdk authentication methods is wrapped by {@link Task<AuthResult>} so we need to deal with it.
-     */
-    private class AuthListener implements OnCompleteListener<AuthResult> {
-
-        private AuthCallback callback;
-
-        /**
-         * @param callback AuthCallback which need to be call on authentication result.
-         */
-        public AuthListener(AuthCallback callback) {
-            this.callback = callback;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if (task.isSuccessful()) {
-                callback.onSuccess(getCurrentUser());
-            } else {
-                callback.onFail(task.getException());
+    public Promise<Void> signOut() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> promise) {
+                try {
+                    FirebaseAuth.getInstance().signOut();
+                    promise.doComplete(null);
+                } catch (Exception e) {
+                    promise.doFail(e);
+                }
             }
-        }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Promise<Void> sendPasswordResetEmail(final String email) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(final FuturePromise<Void> promise) {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    promise.doComplete(null);
+                                } else {
+                                    promise.doFail(task.getException());
+                                }
+                            }
+                        });
+            }
+        });
     }
 }

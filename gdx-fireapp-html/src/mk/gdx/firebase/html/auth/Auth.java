@@ -20,11 +20,12 @@ import com.badlogic.gdx.utils.Timer;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.auth.UserInfo;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
+import mk.gdx.firebase.functional.BiConsumer;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * @see AuthDistribution
@@ -53,24 +54,41 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void createUserWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(final String email, final char[] password) {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void run() {
-                AuthJS.createUserWithEmailAndPassword(email, new String(password), new AuthCallback() {
+            public void accept(final FuturePromise<GdxFirebaseUser> promise) {
+                final FuturePromise<GdxFirebaseUser> creationPromise = new FuturePromise<>();
+                creationPromise.then(new Consumer<GdxFirebaseUser>() {
                     @Override
-                    public void onSuccess(GdxFirebaseUser user) {
+                    public void accept(GdxFirebaseUser gdxFirebaseUser) {
                         Timer.schedule(new Timer.Task() {
                             @Override
                             public void run() {
-                                signInWithEmailAndPassword(email, password, callback);
+                                signInWithEmailAndPassword(email, password).then(new Consumer<GdxFirebaseUser>() {
+                                    @Override
+                                    public void accept(GdxFirebaseUser gdxFirebaseUser) {
+                                        promise.doComplete(gdxFirebaseUser);
+                                    }
+                                }).fail(new BiConsumer<String, Throwable>() {
+                                    @Override
+                                    public void accept(String s, Throwable throwable) {
+                                        promise.doFail(s, throwable);
+                                    }
+                                });
                             }
                         }, 0.5f);
                     }
-
+                }).fail(new BiConsumer<String, Throwable>() {
                     @Override
-                    public void onFail(Exception e) {
-                        callback.onFail(e);
+                    public void accept(String s, Throwable throwable) {
+                        promise.doFail(s, throwable);
+                    }
+                });
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        AuthJS.createUserWithEmailAndPassword(email, new String(password), creationPromise);
                     }
                 });
             }
@@ -81,11 +99,16 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signInWithEmailAndPassword(final String email, final char[] password, final AuthCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<GdxFirebaseUser> signInWithEmailAndPassword(final String email, final char[] password) {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void run() {
-                AuthJS.signInWithEmailAndPassword(email, new String(password), callback);
+            public void accept(final FuturePromise<GdxFirebaseUser> promise) {
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        AuthJS.signInWithEmailAndPassword(email, new String(password), promise);
+                    }
+                });
             }
         });
     }
@@ -94,11 +117,16 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signInWithToken(final String token, final AuthCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<GdxFirebaseUser> signInWithToken(final String token) {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void run() {
-                AuthJS.signInWithToken(token, callback);
+            public void accept(final FuturePromise<GdxFirebaseUser> promise) {
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        AuthJS.signInWithToken(token, promise);
+                    }
+                });
             }
         });
     }
@@ -107,11 +135,16 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signInAnonymously(final AuthCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<GdxFirebaseUser> signInAnonymously() {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void run() {
-                AuthJS.signInAnonymously(callback);
+            public void accept(final FuturePromise<GdxFirebaseUser> promise) {
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        AuthJS.signInAnonymously(promise);
+                    }
+                });
             }
         });
     }
@@ -120,11 +153,16 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signOut(final SignOutCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<Void> signOut() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void run() {
-                AuthJS.signOut(callback);
+            public void accept(final FuturePromise<Void> promise) {
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        AuthJS.signOut(promise);
+                    }
+                });
             }
         });
     }
@@ -133,11 +171,16 @@ public class Auth implements AuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void sendPasswordResetEmail(final String email, final CompleteCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<Void> sendPasswordResetEmail(final String email) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void run() {
-                AuthJS.sendPasswordResetEmail(email, callback);
+            public void accept(final FuturePromise<Void> promise) {
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        AuthJS.sendPasswordResetEmail(email, promise);
+                    }
+                });
             }
         });
     }

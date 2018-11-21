@@ -32,6 +32,8 @@ import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 @PrepareForTest({
         ScriptRunner.class, GoogleAuthJS.class, FirebaseUserJS.class, GdxFIRAuth.class
@@ -78,12 +80,13 @@ public class GoogleAuthTest {
         Auth auth = Mockito.mock(Auth.class);
         GdxFIRAuth gdxFIRAuth = Mockito.mock(GdxFIRAuth.class);
         Mockito.when(GdxFIRAuth.instance()).thenReturn(gdxFIRAuth);
+        Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy(new FuturePromise<Void>()));
 
         // When
         googleAuth.signOut(callback);
 
         // Then
-        Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut(Mockito.refEq(callback));
+        Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut();
     }
 
     @Test
@@ -94,11 +97,12 @@ public class GoogleAuthTest {
         Auth auth = Mockito.mock(Auth.class);
         GdxFIRAuth gdxFIRAuth = Mockito.mock(GdxFIRAuth.class);
         Mockito.when(GdxFIRAuth.instance()).thenReturn(gdxFIRAuth);
+        Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy(new FuturePromise<Void>()));
 
         // When
         googleAuth.revokeAccess(callback);
 
         // Then
-        Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut(Mockito.any(SignOutCallback.class));
+        Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut();
     }
 }

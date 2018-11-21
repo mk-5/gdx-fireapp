@@ -33,9 +33,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.functional.BiConsumer;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.Promise;
 
 @PrepareForTest({FirebaseAuth.class, GdxNativesLoader.class})
 public class AuthTest extends AndroidContextTest {
@@ -86,54 +86,52 @@ public class AuthTest extends AndroidContextTest {
     public void createUserWithEmailAndPassword() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.doReturn(task).when(firebaseAuth).createUserWithEmailAndPassword(Mockito.anyString(), Mockito.anyString());
 
         // When
-        auth.createUserWithEmailAndPassword("user", "password".toCharArray(), callback);
+        Promise promise = auth.createUserWithEmailAndPassword("user", "password".toCharArray())
+                .then(consumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(2));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).createUserWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password"));
-        Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).getCurrentUser();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(GdxFirebaseUser.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any(GdxFirebaseUser.class));
     }
 
     @Test
     public void createUserWithEmailAndPassword_fail() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        BiConsumer biConsumer = Mockito.mock(BiConsumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(task.getException()).thenReturn(new Exception());
         Mockito.doReturn(task).when(firebaseAuth).createUserWithEmailAndPassword(Mockito.anyString(), Mockito.anyString());
 
         // When
-        auth.createUserWithEmailAndPassword("user", "password".toCharArray(), callback);
+        auth.createUserWithEmailAndPassword("user", "password".toCharArray())
+                .fail(biConsumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).createUserWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password"));
-        Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void signInWithEmailAndPassword() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.doReturn(task).when(firebaseAuth).signInWithEmailAndPassword(Mockito.anyString(), Mockito.anyString());
 
         // When
-        auth.signInWithEmailAndPassword("user", "password".toCharArray(), callback);
+        auth.signInWithEmailAndPassword("user", "password".toCharArray())
+                .then(consumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(2));
@@ -141,41 +139,41 @@ public class AuthTest extends AndroidContextTest {
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signInWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password"));
         Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).getCurrentUser();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(GdxFirebaseUser.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any(GdxFirebaseUser.class));
     }
 
     @Test
     public void signInWithEmailAndPassword_fail() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        BiConsumer biConsumer = Mockito.mock(BiConsumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(task.getException()).thenReturn(new Exception());
         Mockito.doReturn(task).when(firebaseAuth).signInWithEmailAndPassword(Mockito.anyString(), Mockito.anyString());
 
         // When
-        auth.signInWithEmailAndPassword("user", "password".toCharArray(), callback);
+        auth.signInWithEmailAndPassword("user", "password".toCharArray())
+                .fail(biConsumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signInWithEmailAndPassword(Mockito.eq("user"), Mockito.eq("password"));
         Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void signInWithToken() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.doReturn(task).when(firebaseAuth).signInWithCustomToken(Mockito.anyString());
 
         // When
-        auth.signInWithToken("token", callback);
+        auth.signInWithToken("token")
+                .then(consumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(2));
@@ -183,146 +181,141 @@ public class AuthTest extends AndroidContextTest {
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signInWithCustomToken(Mockito.eq("token"));
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).getCurrentUser();
         Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(GdxFirebaseUser.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any(GdxFirebaseUser.class));
     }
 
     @Test
     public void signInWithToken_fail() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        BiConsumer biConsumer = Mockito.mock(BiConsumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(task.getException()).thenReturn(new Exception());
         Mockito.doReturn(task).when(firebaseAuth).signInWithCustomToken(Mockito.anyString());
 
         // When
-        auth.signInWithToken("token", callback);
+        auth.signInWithToken("token")
+                .fail(biConsumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signInWithCustomToken(Mockito.eq("token"));
         Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void signInAnonymously() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.doReturn(task).when(firebaseAuth).signInAnonymously();
 
         // When
-        auth.signInAnonymously(callback);
+        auth.signInAnonymously()
+                .then(consumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(2));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signInAnonymously();
         Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(GdxFirebaseUser.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any(GdxFirebaseUser.class));
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).getCurrentUser();
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
     }
 
     @Test
     public void signInAnonymously_fail() {
         // Given
         Auth auth = new Auth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        BiConsumer biConsumer = Mockito.mock(BiConsumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(task.getException()).thenReturn(new Exception());
         Mockito.doReturn(task).when(firebaseAuth).signInAnonymously();
 
         // When
-        auth.signInAnonymously(callback);
+        auth.signInAnonymously()
+                .fail(biConsumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signInAnonymously();
         Mockito.verify(task, VerificationModeFactory.times(1)).addOnCompleteListener(Mockito.any(OnCompleteListener.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void signOut() {
         // Given
         Auth auth = new Auth();
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
 
         // When
-        auth.signOut(callback);
+        auth.signOut().then(consumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signOut();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
     public void signOut_fail() {
         // Given
         Auth auth = new Auth();
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
+        BiConsumer biConsumer = Mockito.mock(BiConsumer.class);
         Mockito.doThrow(new RuntimeException()).when(firebaseAuth).signOut();
 
         // When
-        auth.signOut(callback);
+        auth.signOut().fail(biConsumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).signOut();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(RuntimeException.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void sendPasswordResetEmail() {
         // Given
         Auth auth = new Auth();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.doReturn(task).when(firebaseAuth).sendPasswordResetEmail(Mockito.anyString());
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1, callback);
+        auth.sendPasswordResetEmail(arg1).then(consumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
     public void sendPasswordResetEmail_fail() {
         // Given
         Auth auth = new Auth();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        BiConsumer biConsumer = Mockito.mock(BiConsumer.class);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(task.getException()).thenReturn(new Exception());
         Mockito.doReturn(task).when(firebaseAuth).sendPasswordResetEmail(Mockito.anyString());
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1, callback);
+        auth.sendPasswordResetEmail(arg1).fail(biConsumer);
 
         // Then
         PowerMockito.verifyStatic(FirebaseAuth.class, VerificationModeFactory.times(1));
         FirebaseAuth.getInstance();
         Mockito.verify(firebaseAuth, VerificationModeFactory.times(1)).sendPasswordResetEmail(Mockito.eq(arg1));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.any(Exception.class));
-        Mockito.verifyNoMoreInteractions(firebaseAuth);
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 }

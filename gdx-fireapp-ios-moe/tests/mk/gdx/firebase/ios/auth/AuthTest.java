@@ -33,15 +33,16 @@ import apple.foundation.NSURL;
 import bindings.google.firebaseauth.FIRAuth;
 import bindings.google.firebaseauth.FIRUser;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.functional.BiConsumer;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
 @PrepareForTest({NatJ.class, FIRAuth.class, FIRUser.class, NSURL.class, NSError.class, PtrFactory.class, Ptr.class})
 public class AuthTest extends GdxIOSAppTest {
 
     private FIRAuth firAuth;
+    private Consumer consumer;
+    private BiConsumer biConsumer;
 
     @Override
     public void setup() {
@@ -54,6 +55,8 @@ public class AuthTest extends GdxIOSAppTest {
         PowerMockito.mockStatic(NSURL.class);
         firAuth = PowerMockito.mock(FIRAuth.class);
         Mockito.when(FIRAuth.auth()).thenReturn(firAuth);
+        consumer = Mockito.mock(Consumer.class);
+        biConsumer = Mockito.mock(BiConsumer.class);
     }
 
     @Test
@@ -88,7 +91,6 @@ public class AuthTest extends GdxIOSAppTest {
     @Test
     public void createUserWithEmailAndPassword() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -99,17 +101,17 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.createUserWithEmailAndPassword("email", "password".toCharArray(), callback);
+        auth.createUserWithEmailAndPassword("email", "password".toCharArray())
+                .then(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).createUserWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
     public void createUserWithEmailAndPassword_fail() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -120,18 +122,16 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.createUserWithEmailAndPassword("email", "password".toCharArray(), callback);
+        auth.createUserWithEmailAndPassword("email", "password".toCharArray()).fail(biConsumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).createUserWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(0)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.nullable(Exception.class));
     }
 
     @Test
     public void signInWithEmailAndPassword() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -142,17 +142,16 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithEmailAndPassword("email", "password".toCharArray(), callback);
+        auth.signInWithEmailAndPassword("email", "password".toCharArray()).then(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
     public void signInWithEmailAndPassword_fail() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -163,18 +162,16 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithEmailAndPassword("email", "password".toCharArray(), callback);
+        auth.signInWithEmailAndPassword("email", "password".toCharArray()).fail(biConsumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(0)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void signInWithToken() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -185,17 +182,16 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithToken("token", callback);
+        auth.signInWithToken("token").then(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithCustomTokenCompletion(Mockito.eq("token"), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
     public void signInWithToken_fail() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -206,18 +202,16 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithToken("token", callback);
+        auth.signInWithToken("token").fail(biConsumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithCustomTokenCompletion(Mockito.eq("token"), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(0)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void signInAnonymously() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -228,17 +222,16 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInAnonymously(callback);
+        auth.signInAnonymously().then(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInAnonymouslyWithCompletion(Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
     public void signInAnonymously_fail() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -249,12 +242,11 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInAnonymously(callback);
+        auth.signInAnonymously().fail(biConsumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInAnonymouslyWithCompletion(Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(0)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
@@ -262,15 +254,14 @@ public class AuthTest extends GdxIOSAppTest {
         // Given
         PowerMockito.mockStatic(PtrFactory.class);
         Mockito.when(PtrFactory.newObjectReference(NSError.class)).thenReturn(Mockito.mock(Ptr.class));
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
         Auth auth = new Auth();
 
         // When
-        auth.signOut(callback);
+        auth.signOut().then(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signOut(Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
@@ -280,22 +271,20 @@ public class AuthTest extends GdxIOSAppTest {
         NSError nsError = Mockito.mock(NSError.class);
         Mockito.when(PtrFactory.newObjectReference(NSError.class)).thenReturn(ptrError);
         Mockito.when(ptrError.get()).thenReturn(nsError);
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
         Auth auth = new Auth();
 
         // When
-        auth.signOut(callback);
+        auth.signOut().fail(biConsumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signOut(Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
     @Test
     public void sendPasswordResetEmail() {
         // Given
         PowerMockito.mockStatic(PtrFactory.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -308,18 +297,17 @@ public class AuthTest extends GdxIOSAppTest {
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1, callback);
+        auth.sendPasswordResetEmail(arg1).then(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).sendPasswordResetWithEmailCompletion(Mockito.eq(arg1), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
     public void sendPasswordResetEmail_fail() {
         // Given
         PowerMockito.mockStatic(PtrFactory.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         Mockito.doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -331,11 +319,11 @@ public class AuthTest extends GdxIOSAppTest {
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1, callback);
+        auth.sendPasswordResetEmail(arg1).fail(biConsumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).sendPasswordResetWithEmailCompletion(Mockito.eq(arg1), Mockito.any());
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.any(Exception.class));
+        Mockito.verify(biConsumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
 }
