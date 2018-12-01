@@ -19,94 +19,94 @@ package mk.gdx.firebase.ios.auth;
 import apple.foundation.NSError;
 import bindings.google.firebaseauth.FIRAuth;
 import bindings.google.firebaseauth.FIRUser;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.distributions.AuthUserDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 public class User implements AuthUserDistribution {
 
     @Override
-    public void updateEmail(String newEmail, CompleteCallback callback) {
+    public Promise<Void> updateEmail(String newEmail) {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        FIRAuth.auth().currentUser().updateEmailCompletion(newEmail, new FIRUser.Block_updateEmailCompletion() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void call_updateEmailCompletion(NSError arg0) {
-                if (arg0 == null) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(new Exception(arg0.localizedDescription()));
-                }
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                FIRAuth.auth().currentUser().updateEmailCompletion(newEmail, new FIRUser.Block_updateEmailCompletion() {
+                    @Override
+                    public void call_updateEmailCompletion(NSError arg0) {
+                        if (handleError(arg0, voidFuturePromise)) return;
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
             }
         });
     }
 
     @Override
-    public void sendEmailVerification(CompleteCallback callback) {
+    public Promise<Void> sendEmailVerification() {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        FIRAuth.auth().currentUser().sendEmailVerificationWithCompletion(new FIRUser.Block_sendEmailVerificationWithCompletion() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void call_sendEmailVerificationWithCompletion(NSError arg0) {
-                if (arg0 == null) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(new Exception(arg0.localizedDescription()));
-                }
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                FIRAuth.auth().currentUser().sendEmailVerificationWithCompletion(new FIRUser.Block_sendEmailVerificationWithCompletion() {
+                    @Override
+                    public void call_sendEmailVerificationWithCompletion(NSError arg0) {
+                        if (handleError(arg0, voidFuturePromise)) return;
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
             }
         });
     }
 
     @Override
-    public void updatePassword(char[] newPassword, CompleteCallback callback) {
+    public Promise<Void> updatePassword(char[] newPassword) {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        FIRAuth.auth().currentUser().updatePasswordCompletion(new String(newPassword), new FIRUser.Block_updatePasswordCompletion() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void call_updatePasswordCompletion(NSError arg0) {
-                if (arg0 == null) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(new Exception(arg0.localizedDescription()));
-                }
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                FIRAuth.auth().currentUser().updatePasswordCompletion(new String(newPassword), new FIRUser.Block_updatePasswordCompletion() {
+                    @Override
+                    public void call_updatePasswordCompletion(NSError arg0) {
+                        if (handleError(arg0, voidFuturePromise)) return;
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
             }
         });
     }
 
     @Override
-    public void delete(CompleteCallback callback) {
+    public Promise<Void> delete() {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        FIRAuth.auth().currentUser().deleteWithCompletion(new FIRUser.Block_deleteWithCompletion() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void call_deleteWithCompletion(NSError arg0) {
-                if (arg0 == null) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(new Exception(arg0.localizedDescription()));
-                }
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                FIRAuth.auth().currentUser().deleteWithCompletion(new FIRUser.Block_deleteWithCompletion() {
+                    @Override
+                    public void call_deleteWithCompletion(NSError arg0) {
+                        if (handleError(arg0, voidFuturePromise)) return;
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
             }
         });
     }
 
-    @Override
-    public void reload(CompleteCallback callback) {
-        if (FIRAuth.auth().currentUser() == null) {
-            throw new IllegalStateException();
+    private boolean handleError(NSError error, FuturePromise promise) {
+        if (error != null) {
+            promise.doFail(error.localizedDescription(), new Exception(error.localizedDescription()));
+            return true;
         }
-        FIRAuth.auth().currentUser().reloadWithCompletion(new FIRUser.Block_reloadWithCompletion() {
-            @Override
-            public void call_reloadWithCompletion(NSError arg0) {
-                if (arg0 == null) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(new Exception(arg0.localizedDescription()));
-                }
-            }
-        });
+        return false;
     }
-
 }

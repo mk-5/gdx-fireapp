@@ -16,7 +16,7 @@
 
 package mk.gdx.firebase.distributions;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Provides access to Firebase user methods.
@@ -31,44 +31,32 @@ public interface AuthUserDistribution {
 
 
     /**
-     * Updates user email and calls {@code callback} when complete.
+     * Updates user email
      *
      * @param newEmail The new email, not null
-     * @param callback Callback, may be null
      * @throws IllegalStateException When current user is not present
      */
-    void updateEmail(String newEmail, CompleteCallback callback);
+    Promise<Void> updateEmail(String newEmail);
 
     /**
-     * Sends email with verification link and calls {@code callback} when complete.
+     * Sends email with verification link
      *
-     * @param callback Callback, may be null
      * @throws IllegalStateException When current user is not present
      */
-    void sendEmailVerification(CompleteCallback callback);
+    Promise<Void> sendEmailVerification();
 
     /**
-     * Updates user password and calls {@code callback} when complete.
+     * Updates user password
      *
      * @param newPassword The new password, not null
-     * @param callback    Callback, may be null
      * @throws IllegalStateException When current user is not present
      */
-    void updatePassword(char[] newPassword, CompleteCallback callback);
+    Promise<Void> updatePassword(char[] newPassword);
 
     /**
-     * Deletes current user and calls {@code callback} when complete.
+     * Deletes current user
      *
-     * @param callback Callback, may be null
      * @throws IllegalStateException When current user is not present
      */
-    void delete(CompleteCallback callback);
-
-    /**
-     * Reload current user and calls {@code callback} when complete.
-     *
-     * @param callback Callback, may be null
-     * @throws IllegalStateException When current user is not present
-     */
-    void reload(CompleteCallback callback);
+    Promise<Void> delete();
 }

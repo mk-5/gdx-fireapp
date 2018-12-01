@@ -16,8 +16,10 @@
 
 package mk.gdx.firebase.html.auth;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.distributions.AuthUserDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * @see AuthUserDistribution
@@ -25,35 +27,55 @@ import mk.gdx.firebase.distributions.AuthUserDistribution;
 public class User implements AuthUserDistribution {
 
     @Override
-    public void updateEmail(String newEmail, CompleteCallback callback) {
+    public Promise<Void> updateEmail(final String newEmail) {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        AuthJS.firebaseUser().updateEmail(newEmail, callback);
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                AuthJS.firebaseUser().updateEmail(newEmail, voidFuturePromise);
+            }
+        });
     }
 
     @Override
-    public void sendEmailVerification(CompleteCallback callback) {
+    public Promise<Void> sendEmailVerification() {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        AuthJS.firebaseUser().sendEmailVerification(callback);
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                AuthJS.firebaseUser().sendEmailVerification(voidFuturePromise);
+            }
+        });
     }
 
     @Override
-    public void updatePassword(char[] newPassword, CompleteCallback callback) {
+    public Promise<Void> updatePassword(final char[] newPassword) {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        AuthJS.firebaseUser().updatePassword(new String(newPassword), callback);
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                AuthJS.firebaseUser().updatePassword(new String(newPassword), voidFuturePromise);
+            }
+        });
     }
 
     @Override
-    public void delete(CompleteCallback callback) {
+    public Promise<Void> delete() {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        AuthJS.firebaseUser().delete(callback);
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                AuthJS.firebaseUser().delete(voidFuturePromise);
+            }
+        });
     }
 
     @Override

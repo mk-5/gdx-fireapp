@@ -16,8 +16,8 @@
 
 package mk.gdx.firebase.auth;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.distributions.AuthUserDistribution;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Multi-module Firebase user representation.
@@ -55,32 +55,32 @@ public class GdxFirebaseUser implements AuthUserDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void updateEmail(String newEmail, CompleteCallback callback) {
-        userDistribution.updateEmail(newEmail, callback);
+    public Promise<Void> updateEmail(String newEmail) {
+        return userDistribution.updateEmail(newEmail);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void sendEmailVerification(CompleteCallback callback) {
-        userDistribution.sendEmailVerification(callback);
+    public Promise<Void> sendEmailVerification() {
+        return userDistribution.sendEmailVerification();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void updatePassword(char[] newPassword, CompleteCallback callback) {
-        userDistribution.updatePassword(newPassword, callback);
+    public Promise<Void> updatePassword(char[] newPassword) {
+        return userDistribution.updatePassword(newPassword);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void delete(CompleteCallback callback) {
-        userDistribution.delete(callback);
+    public Promise<Void> delete() {
+        return userDistribution.delete();
     }
 
     @Override

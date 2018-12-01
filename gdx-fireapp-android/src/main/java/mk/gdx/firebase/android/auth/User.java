@@ -16,14 +16,11 @@
 
 package mk.gdx.firebase.android.auth;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.distributions.AuthUserDistribution;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * @see AuthUserDistribution
@@ -31,87 +28,38 @@ import mk.gdx.firebase.distributions.AuthUserDistribution;
 public class User implements AuthUserDistribution {
 
     @Override
-    public void updateEmail(String newEmail, final CompleteCallback callback) {
+    public Promise<Void> updateEmail(String newEmail) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        FirebaseAuth.getInstance().getCurrentUser()
-                .updateEmail(newEmail)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (callback != null) {
-                            if (task.isSuccessful()) {
-                                callback.onSuccess();
-                            } else {
-                                callback.onError(task.getException());
-                            }
-                        }
-                    }
-                });
+        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+                .updateEmail(newEmail)));
     }
 
     @Override
-    public void sendEmailVerification(final CompleteCallback callback) {
+    public Promise<Void> sendEmailVerification() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        FirebaseAuth.getInstance().getCurrentUser()
-                .sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (callback != null) {
-                            if (task.isSuccessful()) {
-                                callback.onSuccess();
-                            } else {
-                                callback.onError(task.getException());
-                            }
-                        }
-                    }
-                });
+        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+                .sendEmailVerification()));
     }
 
     @Override
-    public void updatePassword(char[] newPassword, final CompleteCallback callback) {
+    public Promise<Void> updatePassword(char[] newPassword) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        FirebaseAuth.getInstance().getCurrentUser()
-                .updatePassword(new String(newPassword))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (callback != null) {
-                            if (task.isSuccessful()) {
-                                callback.onSuccess();
-                            } else {
-                                callback.onError(task.getException());
-                            }
-                        }
-                    }
-                });
+        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+                .updatePassword(new String(newPassword))));
     }
 
     @Override
-    public void delete(final CompleteCallback callback) {
+    public Promise<Void> delete() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        FirebaseAuth.getInstance().getCurrentUser()
-                .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (callback != null) {
-                            if (task.isSuccessful()) {
-                                callback.onSuccess();
-                            } else {
-                                callback.onError(task.getException());
-                            }
-                        }
-                    }
-                });
+        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser().delete()));
     }
 
     @Override

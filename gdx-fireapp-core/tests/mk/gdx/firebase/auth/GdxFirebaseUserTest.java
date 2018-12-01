@@ -26,7 +26,6 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 
 import mk.gdx.firebase.GdxAppTest;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 
 public class GdxFirebaseUserTest extends GdxAppTest {
 
@@ -71,61 +70,57 @@ public class GdxFirebaseUserTest extends GdxAppTest {
         // Given
         GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
         String email = "email";
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
         Whitebox.setInternalState(user, "userDistribution", userDistribution);
 
         // When
-        user.updateEmail(email, callback);
+        user.updateEmail(email);
 
         // Then
-        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).updateEmail(Mockito.eq(email), Mockito.refEq(callback));
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).updateEmail(Mockito.eq(email));
     }
 
     @Test
     public void sendEmailVerification() {
         // Given
         GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
         Whitebox.setInternalState(user, "userDistribution", userDistribution);
 
         // When
-        user.sendEmailVerification(callback);
+        user.sendEmailVerification();
 
         // Then
-        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).sendEmailVerification(Mockito.refEq(callback));
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).sendEmailVerification();
     }
 
     @Test
     public void updatePassword() {
         // Given
         GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         char[] password = {'a', 'b', 'c'};
         GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
         Whitebox.setInternalState(user, "userDistribution", userDistribution);
 
         // When
-        user.updatePassword(password, callback);
+        user.updatePassword(password);
 
         // Then
-        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).updatePassword(Mockito.refEq(password), Mockito.refEq(callback));
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).updatePassword(Mockito.refEq(password));
     }
 
     @Test
     public void delete() {
         // Given
         GdxFirebaseUser user = PowerMockito.spy(GdxFirebaseUser.create(new UserInfo.Builder().build()));
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         GdxFIRUser userDistribution = Mockito.mock(GdxFIRUser.class);
         Whitebox.setInternalState(user, "userDistribution", userDistribution);
 
         // When
-        user.delete(callback);
+        user.delete();
 
         // Then
-        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).delete(Mockito.refEq(callback));
+        Mockito.verify(userDistribution, VerificationModeFactory.times(1)).delete();
     }
 
     @Test

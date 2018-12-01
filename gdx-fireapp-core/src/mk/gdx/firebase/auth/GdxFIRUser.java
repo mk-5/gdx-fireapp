@@ -18,8 +18,8 @@ package mk.gdx.firebase.auth;
 
 
 import mk.gdx.firebase.PlatformDistributor;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.distributions.AuthUserDistribution;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Distribution for Firebase user methods.
@@ -27,23 +27,23 @@ import mk.gdx.firebase.distributions.AuthUserDistribution;
 class GdxFIRUser extends PlatformDistributor<AuthUserDistribution> implements AuthUserDistribution {
 
     @Override
-    public void updateEmail(String newEmail, CompleteCallback callback) {
-        platformObject.updateEmail(newEmail, callback);
+    public Promise<Void> updateEmail(String newEmail) {
+        return platformObject.updateEmail(newEmail);
     }
 
     @Override
-    public void sendEmailVerification(CompleteCallback callback) {
-        platformObject.sendEmailVerification(callback);
+    public Promise<Void> sendEmailVerification() {
+        return platformObject.sendEmailVerification();
     }
 
     @Override
-    public void updatePassword(char[] newPassword, CompleteCallback callback) {
-        platformObject.updatePassword(newPassword, callback);
+    public Promise<Void> updatePassword(char[] newPassword) {
+        return platformObject.updatePassword(newPassword);
     }
 
     @Override
-    public void delete(CompleteCallback callback) {
-        platformObject.delete(callback);
+    public Promise<Void> delete() {
+        return platformObject.delete();
     }
 
     @Override

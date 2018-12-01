@@ -167,11 +167,8 @@ public class Auth implements AuthDistribution {
                 FIRAuth.auth().sendPasswordResetWithEmailCompletion(email, new FIRAuth.Block_sendPasswordResetWithEmailCompletion() {
                     @Override
                     public void call_sendPasswordResetWithEmailCompletion(NSError arg0) {
-                        if (arg0 != null) {
-                            promise.doFail(new Exception(arg0.localizedDescription()));
-                        } else {
-                            promise.doComplete(null);
-                        }
+                        if (handleError(arg0, promise)) return;
+                        promise.doComplete(null);
                     }
                 });
             }

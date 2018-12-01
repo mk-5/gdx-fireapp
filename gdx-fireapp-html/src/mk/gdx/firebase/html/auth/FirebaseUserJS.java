@@ -18,7 +18,7 @@ package mk.gdx.firebase.html.auth;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * JSON representation of Firebase user.
@@ -46,35 +46,35 @@ class FirebaseUserJS extends JavaScriptObject {
 
     public final native boolean isNULL() /*-{ return this['isNULL'] != 'undefined' && this['isNULL'] == true; }-*/;
 
-    public final native void updateEmail(String newEmail, CompleteCallback callback) /*-{
+    public final native void updateEmail(String newEmail, FuturePromise promise) /*-{
         this.updateEmail(newEmail).then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
-    public final native void sendEmailVerification(CompleteCallback callback) /*-{
+    public final native void sendEmailVerification(FuturePromise promise) /*-{
         this.sendEmailVerification().then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+             promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
-    public final native void updatePassword(String newPassword, CompleteCallback callback) /*-{
+    public final native void updatePassword(String newPassword, FuturePromise promise) /*-{
         this.updatePassword(newPassword).then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+           promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+           promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
-    public final native void delete(CompleteCallback callback) /*-{
+    public final native void delete(FuturePromise promise) /*-{
         this["delete"]().then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+             promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 

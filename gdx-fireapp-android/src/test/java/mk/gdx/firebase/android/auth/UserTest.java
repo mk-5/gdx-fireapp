@@ -33,7 +33,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.functional.BiConsumer;
+import mk.gdx.firebase.functional.Consumer;
 
 @PrepareForTest({FirebaseAuth.class, GdxNativesLoader.class})
 public class UserTest extends AndroidContextTest {
@@ -63,7 +64,7 @@ public class UserTest extends AndroidContextTest {
         User user = new User();
 
         // When
-        user.updateEmail("test", Mockito.mock(CompleteCallback.class));
+        user.updateEmail("test");
 
         // Then
         Assert.fail();
@@ -75,7 +76,7 @@ public class UserTest extends AndroidContextTest {
         User user = new User();
 
         // When
-        user.sendEmailVerification(Mockito.mock(CompleteCallback.class));
+        user.sendEmailVerification();
 
         // Then
         Assert.fail();
@@ -87,7 +88,7 @@ public class UserTest extends AndroidContextTest {
         User user = new User();
 
         // When
-        user.updatePassword(new char[]{'a', 'b'}, Mockito.mock(CompleteCallback.class));
+        user.updatePassword(new char[]{'a', 'b'});
 
         // Then
         Assert.fail();
@@ -99,7 +100,7 @@ public class UserTest extends AndroidContextTest {
         User user = new User();
 
         // When
-        user.delete(Mockito.mock(CompleteCallback.class));
+        user.delete();
 
         // Then
         Assert.fail();
@@ -110,18 +111,18 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.when(firebaseUser.updateEmail(Mockito.anyString())).thenReturn(task);
         String arg1 = "newEmail";
 
         // When
-        user.updateEmail(arg1, callback);
+        user.updateEmail(arg1).then(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).updateEmail(arg1);
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
@@ -129,18 +130,18 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        BiConsumer consumer = Mockito.mock(BiConsumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(firebaseUser.updateEmail(Mockito.anyString())).thenReturn(task);
         String arg1 = "newEmail";
 
         // When
-        user.updateEmail(arg1, callback);
+        user.updateEmail(arg1).fail(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).updateEmail(arg1);
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.nullable(Exception.class));
     }
 
     @Test
@@ -148,17 +149,17 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.when(firebaseUser.sendEmailVerification()).thenReturn(task);
 
         // When
-        user.sendEmailVerification(callback);
+        user.sendEmailVerification().then(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).sendEmailVerification();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
@@ -166,17 +167,17 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        BiConsumer consumer = Mockito.mock(BiConsumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(firebaseUser.sendEmailVerification()).thenReturn(task);
 
         // When
-        user.sendEmailVerification(callback);
+        user.sendEmailVerification().fail(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).sendEmailVerification();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.nullable(Exception.class));
     }
 
     @Test
@@ -184,18 +185,18 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.when(firebaseUser.updatePassword(Mockito.anyString())).thenReturn(task);
         char[] arg1 = {'a', 'b', 'c'};
 
         // When
-        user.updatePassword(arg1, callback);
+        user.updatePassword(arg1).then(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).updatePassword(Mockito.eq(new String(arg1)));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
@@ -203,18 +204,18 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        BiConsumer consumer = Mockito.mock(BiConsumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(firebaseUser.updatePassword(Mockito.anyString())).thenReturn(task);
         char[] arg1 = {'a', 'b', 'c'};
 
         // When
-        user.updatePassword(arg1, callback);
+        user.updatePassword(arg1).fail(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).updatePassword(Mockito.eq(new String(arg1)));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.nullable(Exception.class));
     }
 
     @Test
@@ -222,17 +223,17 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        Consumer consumer = Mockito.mock(Consumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(true);
         Mockito.when(firebaseUser.delete()).thenReturn(task);
 
         // When
-        user.delete(callback);
+        user.delete().then(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).delete();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any());
     }
 
     @Test
@@ -240,17 +241,17 @@ public class UserTest extends AndroidContextTest {
         // Given
         User user = new User();
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        BiConsumer consumer = Mockito.mock(BiConsumer.class);
         Mockito.when(firebaseAuth.getCurrentUser()).thenReturn(firebaseUser);
         Mockito.when(task.isSuccessful()).thenReturn(false);
         Mockito.when(firebaseUser.delete()).thenReturn(task);
 
         // When
-        user.delete(callback);
+        user.delete().fail(consumer);
 
         // Then
         Mockito.verify(firebaseUser, VerificationModeFactory.times(1)).delete();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.nullable(Exception.class));
     }
 
     @Test
