@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,28 +19,35 @@ package mk.gdx.firebase.html.database;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
-import java.util.HashMap;
-import java.util.Map;
+import mk.gdx.firebase.callbacks.TransactionCallback;
 
 /**
- * Transforms {@link java.util.Map} to JSON string.
+ * Takes JSON data from javascript, process it as java object and return back as json.
  */
-class MapTransformer {
+class JsonDataModifier<T> {
+    private Class<T> wantedType;
+    private TransactionCallback transactionCallback;
 
-    private MapTransformer() {
-        //
+    JsonDataModifier(Class<T> wantedType, TransactionCallback transactionCallback) {
+        this.transactionCallback = transactionCallback;
+        this.wantedType = wantedType;
     }
 
     /**
-     * @param map Map, not null
-     * @return JSON representation of given map
+     * Returns modified json data.
+     *
+     * @param oldJsonData Old data as json string.
+     * @return New data as json string
      */
-    static String mapToJSON(Map<String, Object> map) {
+    @SuppressWarnings("unchecked")
+    public String modify(String oldJsonData) {
+        T oldData = JsonProcessor.process(wantedType, oldJsonData);
+        T newData = (T) transactionCallback.run(oldData);
         Json json = new Json();
         json.setTypeName(null);
         json.setQuoteLongValues(true);
         json.setIgnoreUnknownFields(true);
         json.setOutputType(JsonWriter.OutputType.json);
-        return json.toJson(map, HashMap.class);
+        return json.toJson(newData, wantedType);
     }
 }

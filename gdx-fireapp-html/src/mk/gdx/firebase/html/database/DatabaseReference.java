@@ -23,7 +23,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  * <p>
  * More info here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference">https://firebase.google.com/docs/reference/js/firebase.database.Reference</a>
  */
-public class DatabaseReference extends JavaScriptObject {
+class DatabaseReference extends JavaScriptObject {
 
     protected DatabaseReference() {
     }

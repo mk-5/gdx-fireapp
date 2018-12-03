@@ -37,24 +37,14 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
-import mk.gdx.firebase.html.database.json.JsonDataCallback;
-import mk.gdx.firebase.html.database.json.JsonDataModifier;
-import mk.gdx.firebase.html.database.queries.ConnectionStatusQuery;
-import mk.gdx.firebase.html.database.queries.OnDataChangeQuery;
-import mk.gdx.firebase.html.database.queries.PushQuery;
-import mk.gdx.firebase.html.database.queries.ReadValueQuery;
-import mk.gdx.firebase.html.database.queries.RemoveValueQuery;
-import mk.gdx.firebase.html.database.queries.RunTransactionQuery;
-import mk.gdx.firebase.html.database.queries.SetValueQuery;
-import mk.gdx.firebase.html.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.FuturePromise;
 
-@PrepareForTest({ScriptRunner.class, ConnectionStatusQuery.class,
-        SetValueQuery.class, ReadValueQuery.class, OnDataChangeQuery.class, PushQuery.class,
-        RemoveValueQuery.class, UpdateChildrenQuery.class, RunTransactionQuery.class, DatabaseReference.class
+@PrepareForTest({ScriptRunner.class, QueryConnectionStatus.class,
+        QuerySetValue.class, QueryReadValue.class, QueryOnDataChange.class, QueryPush.class,
+        QueryRemoveValue.class, QueryUpdateChildren.class, QueryRunTransaction.class, DatabaseReference.class
 //        , Database.class
 })
 public class DatabaseTest {
@@ -84,17 +74,17 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         ConnectedListener connectedListener = Mockito.mock(ConnectedListener.class);
-        PowerMockito.mockStatic(ConnectionStatusQuery.class);
-        ConnectionStatusQuery connectionStatusQuery = PowerMockito.spy(new ConnectionStatusQuery(database));
-        PowerMockito.whenNew(ConnectionStatusQuery.class).withAnyArguments().thenReturn(connectionStatusQuery);
+        PowerMockito.mockStatic(QueryConnectionStatus.class);
+        QueryConnectionStatus queryConnectionStatus = PowerMockito.spy(new QueryConnectionStatus(database));
+        PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(queryConnectionStatus);
 
         // When
         database.onConnect(connectedListener);
 
         // Then
 //        PowerMockito.verifyNew(ConnectionStatusQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(ConnectionStatusQuery.class);
-        ConnectionStatusQuery.onConnect(Mockito.refEq(connectedListener));
+        PowerMockito.verifyStatic(QueryConnectionStatus.class);
+        QueryConnectionStatus.onConnect(Mockito.refEq(connectedListener));
     }
 
     @Test
@@ -114,9 +104,9 @@ public class DatabaseTest {
     public void setValue() throws Exception {
         // Given
         Database database = new Database();
-        PowerMockito.mockStatic(SetValueQuery.class);
-        SetValueQuery query = PowerMockito.spy(new SetValueQuery(database));
-        PowerMockito.whenNew(SetValueQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QuerySetValue.class);
+        QuerySetValue query = PowerMockito.spy(new QuerySetValue(database));
+        PowerMockito.whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
         String testValue = "test_value";
         String testReference = "test_reference";
 
@@ -125,8 +115,8 @@ public class DatabaseTest {
                 .setValue(testValue);
 
         // Then
-        PowerMockito.verifyStatic(SetValueQuery.class);
-        SetValueQuery.setWithPromise(Mockito.eq(testReference), Mockito.eq(testValue), Mockito.any(FuturePromise.class));
+        PowerMockito.verifyStatic(QuerySetValue.class);
+        QuerySetValue.setWithPromise(Mockito.eq(testReference), Mockito.eq(testValue), Mockito.any(FuturePromise.class));
     }
 
     @Test
@@ -134,9 +124,9 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         DataCallback callback = Mockito.mock(DataCallback.class);
-        PowerMockito.mockStatic(ReadValueQuery.class);
-        ReadValueQuery query = PowerMockito.spy(new ReadValueQuery(database));
-        PowerMockito.whenNew(ReadValueQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryReadValue.class);
+        QueryReadValue query = PowerMockito.spy(new QueryReadValue(database));
+        PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
         Class dataType = String.class;
 
@@ -145,8 +135,8 @@ public class DatabaseTest {
 
         // Then
 //        PowerMockito.verifyNew(ReadValueQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(ReadValueQuery.class);
-        ReadValueQuery.once(Mockito.any(DatabaseReference.class), Mockito.any(JsonDataCallback.class));
+        PowerMockito.verifyStatic(QueryReadValue.class);
+        QueryReadValue.once(Mockito.any(DatabaseReference.class), Mockito.any(JsonDataCallback.class));
     }
 
     @Test
@@ -154,9 +144,9 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         DataChangeListener listener = Mockito.mock(DataChangeListener.class);
-        PowerMockito.mockStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery query = PowerMockito.spy(new OnDataChangeQuery(database));
-        PowerMockito.whenNew(OnDataChangeQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryOnDataChange.class);
+        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
+        PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
         Class dataType = String.class;
 
@@ -165,17 +155,17 @@ public class DatabaseTest {
 
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery.onValue(Mockito.eq(testReference), Mockito.any(DatabaseReference.class));
+        PowerMockito.verifyStatic(QueryOnDataChange.class);
+        QueryOnDataChange.onValue(Mockito.eq(testReference), Mockito.any(DatabaseReference.class));
     }
 
     @Test
     public void onDataChange_detach() throws Exception {
         // Given
         Database database = new Database();
-        PowerMockito.mockStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery query = PowerMockito.spy(new OnDataChangeQuery(database));
-        PowerMockito.whenNew(OnDataChangeQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryOnDataChange.class);
+        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
+        PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
         Class dataType = String.class;
 
@@ -184,17 +174,17 @@ public class DatabaseTest {
 
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery.offValue(Mockito.eq(testReference));
+        PowerMockito.verifyStatic(QueryOnDataChange.class);
+        QueryOnDataChange.offValue(Mockito.eq(testReference));
     }
 
     @Test
     public void push() throws Exception {
         // Given
         Database database = new Database();
-        PowerMockito.mockStatic(PushQuery.class);
-        PushQuery query = PowerMockito.spy(new PushQuery(database));
-        PowerMockito.whenNew(PushQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryPush.class);
+        QueryPush query = PowerMockito.spy(new QueryPush(database));
+        PowerMockito.whenNew(QueryPush.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
 
         // When
@@ -202,25 +192,25 @@ public class DatabaseTest {
 
         // Then
 //        PowerMockito.verifyNew(PushQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(PushQuery.class);
-        PushQuery.push(Mockito.eq(testReference));
+        PowerMockito.verifyStatic(QueryPush.class);
+        QueryPush.push(Mockito.eq(testReference));
     }
 
     @Test
     public void removeValue() throws Exception {
         // Given
         Database database = new Database();
-        PowerMockito.mockStatic(RemoveValueQuery.class);
-        RemoveValueQuery query = PowerMockito.spy(new RemoveValueQuery(database));
-        PowerMockito.whenNew(RemoveValueQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryRemoveValue.class);
+        QueryRemoveValue query = PowerMockito.spy(new QueryRemoveValue(database));
+        PowerMockito.whenNew(QueryRemoveValue.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
 
         // When
         database.inReference(testReference).removeValue();
 
         // Then
-        PowerMockito.verifyStatic(RemoveValueQuery.class);
-        RemoveValueQuery.removeWithPromise(Mockito.eq(testReference), Mockito.any(FuturePromise.class));
+        PowerMockito.verifyStatic(QueryRemoveValue.class);
+        QueryRemoveValue.removeWithPromise(Mockito.eq(testReference), Mockito.any(FuturePromise.class));
     }
 
     @Test
@@ -228,9 +218,9 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery query = PowerMockito.spy(new UpdateChildrenQuery(database));
-        PowerMockito.whenNew(UpdateChildrenQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryUpdateChildren.class);
+        QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database));
+        PowerMockito.whenNew(QueryUpdateChildren.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
         Map data = Mockito.mock(Map.class);
 
@@ -238,8 +228,8 @@ public class DatabaseTest {
         database.inReference(testReference).updateChildren(data);
 
         // Then
-        PowerMockito.verifyStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery.updateWithPromise(Mockito.eq(testReference), Mockito.anyString(), Mockito.any(FuturePromise.class));
+        PowerMockito.verifyStatic(QueryUpdateChildren.class);
+        QueryUpdateChildren.updateWithPromise(Mockito.eq(testReference), Mockito.anyString(), Mockito.any(FuturePromise.class));
     }
 
     @Test
@@ -248,9 +238,9 @@ public class DatabaseTest {
         Database database = new Database();
         CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        PowerMockito.mockStatic(RunTransactionQuery.class);
-        RunTransactionQuery query = PowerMockito.spy(new RunTransactionQuery(database));
-        PowerMockito.whenNew(RunTransactionQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryRunTransaction.class);
+        QueryRunTransaction query = PowerMockito.spy(new QueryRunTransaction(database));
+        PowerMockito.whenNew(QueryRunTransaction.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
         Class dataType = Long.class;
 
@@ -259,8 +249,8 @@ public class DatabaseTest {
 
         // Then
 //        PowerMockito.verifyNew(RunTransactionQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(RunTransactionQuery.class);
-        RunTransactionQuery.transaction(Mockito.eq(testReference), Mockito.any(JsonDataModifier.class), Mockito.refEq(callback));
+        PowerMockito.verifyStatic(QueryRunTransaction.class);
+        QueryRunTransaction.transaction(Mockito.eq(testReference), Mockito.any(JsonDataModifier.class), Mockito.refEq(callback));
     }
 
     @Test

@@ -38,9 +38,6 @@ import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.html.database.providers.JsFilteringProvider;
-import mk.gdx.firebase.html.database.resolvers.DatabaseReferenceFilterResolver;
-import mk.gdx.firebase.html.database.resolvers.DatabaseReferenceOrderByResolver;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class, ArrayReflection.class, ReflectionCache.class})
@@ -65,16 +62,16 @@ public class GwtDatabaseQueryTest {
     @Test
     public void run() {
         // Given
-        JsFilteringProvider jsFilteringProvider = Mockito.mock(JsFilteringProvider.class);
-        DatabaseReferenceFilterResolver filterResolver = Mockito.mock(DatabaseReferenceFilterResolver.class);
-        DatabaseReferenceOrderByResolver orderByResolver = Mockito.mock(DatabaseReferenceOrderByResolver.class);
-        Mockito.when(jsFilteringProvider.createFilterResolver()).thenReturn(filterResolver);
-        Mockito.when(jsFilteringProvider.createOrderByResolver()).thenReturn(orderByResolver);
-        Mockito.when(jsFilteringProvider.setFilters(Mockito.any(Array.class))).thenReturn(jsFilteringProvider);
-        Mockito.when(jsFilteringProvider.setOrderByClause(Mockito.any(OrderByClause.class))).thenReturn(jsFilteringProvider);
-        Mockito.when(jsFilteringProvider.setQuery(Mockito.any(DatabaseReference.class))).thenReturn(jsFilteringProvider);
+        ProviderJsFiltering providerJsFiltering = Mockito.mock(ProviderJsFiltering.class);
+        ResolverDatabaseReferenceFilter filterResolver = Mockito.mock(ResolverDatabaseReferenceFilter.class);
+        ResolverDatabaseReferenceOrderBy orderByResolver = Mockito.mock(ResolverDatabaseReferenceOrderBy.class);
+        Mockito.when(providerJsFiltering.createFilterResolver()).thenReturn(filterResolver);
+        Mockito.when(providerJsFiltering.createOrderByResolver()).thenReturn(orderByResolver);
+        Mockito.when(providerJsFiltering.setFilters(Mockito.any(Array.class))).thenReturn(providerJsFiltering);
+        Mockito.when(providerJsFiltering.setOrderByClause(Mockito.any(OrderByClause.class))).thenReturn(providerJsFiltering);
+        Mockito.when(providerJsFiltering.setQuery(Mockito.any(DatabaseReference.class))).thenReturn(providerJsFiltering);
         GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(Mockito.mock(Database.class));
-        gwtDatabaseQuery.jsFilteringProvider = jsFilteringProvider;
+        gwtDatabaseQuery.providerJsFiltering = providerJsFiltering;
         Array<Filter> filters = new Array<>();
         OrderByClause orderByClause = new OrderByClause(OrderByMode.ORDER_BY_KEY, null);
         filters.add(new Filter(FilterType.LIMIT_FIRST, 2));
@@ -86,10 +83,10 @@ public class GwtDatabaseQueryTest {
         gwtDatabaseQuery.run();
 
         // Then
-        Mockito.verify(jsFilteringProvider, VerificationModeFactory.times(1)).setFilters(Mockito.any(Array.class));
-        Mockito.verify(jsFilteringProvider, VerificationModeFactory.times(1)).setOrderByClause(Mockito.any(OrderByClause.class));
-        Mockito.verify(jsFilteringProvider, VerificationModeFactory.times(1)).setQuery(Mockito.nullable(DatabaseReference.class));
-        Mockito.verify(jsFilteringProvider, VerificationModeFactory.times(1)).applyFiltering();
+        Mockito.verify(providerJsFiltering, VerificationModeFactory.times(1)).setFilters(Mockito.any(Array.class));
+        Mockito.verify(providerJsFiltering, VerificationModeFactory.times(1)).setOrderByClause(Mockito.any(OrderByClause.class));
+        Mockito.verify(providerJsFiltering, VerificationModeFactory.times(1)).setQuery(Mockito.nullable(DatabaseReference.class));
+        Mockito.verify(providerJsFiltering, VerificationModeFactory.times(1)).applyFiltering();
     }
 
     @Test

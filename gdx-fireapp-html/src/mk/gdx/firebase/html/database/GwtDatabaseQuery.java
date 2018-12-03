@@ -22,24 +22,23 @@ import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
-import mk.gdx.firebase.html.database.providers.JsFilteringProvider;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 
 /**
  * Provides flow for html firebase call.
  */
-public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
+abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
 
     protected String databaseReferencePath;
-    protected JsFilteringProvider jsFilteringProvider;
+    protected ProviderJsFiltering providerJsFiltering;
 
     protected DatabaseReference databaseReference;
     private Array<Filter> filtersToApply;
     private OrderByClause orderByToApply;
 
-    public GwtDatabaseQuery(Database databaseDistribution) {
+    GwtDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
-        jsFilteringProvider = new JsFilteringProvider();
+        providerJsFiltering = new ProviderJsFiltering();
     }
 
     @Override
@@ -56,11 +55,11 @@ public abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
                 databaseReference = DatabaseReference.of(databaseReferencePath);
                 if (filtersToApply != null || orderByToApply != null) {
                     GdxFIRLogger.log("Applies filters and sorting to database reference...");
-                    jsFilteringProvider
+                    providerJsFiltering
                             .setFilters(filtersToApply)
                             .setOrderByClause(orderByToApply)
                             .setQuery(databaseReference);
-                    databaseReference = jsFilteringProvider.applyFiltering();
+                    databaseReference = providerJsFiltering.applyFiltering();
                     filtersToApply = null;
                     orderByToApply = null;
                 }

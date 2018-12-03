@@ -31,14 +31,6 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
-import mk.gdx.firebase.html.database.queries.ConnectionStatusQuery;
-import mk.gdx.firebase.html.database.queries.OnDataChangeQuery;
-import mk.gdx.firebase.html.database.queries.PushQuery;
-import mk.gdx.firebase.html.database.queries.ReadValueQuery;
-import mk.gdx.firebase.html.database.queries.RemoveValueQuery;
-import mk.gdx.firebase.html.database.queries.RunTransactionQuery;
-import mk.gdx.firebase.html.database.queries.SetValueQuery;
-import mk.gdx.firebase.html.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -64,7 +56,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public void onConnect(final ConnectedListener connectedListener) {
-        new ConnectionStatusQuery(this).withArgs(connectedListener).execute();
+        new QueryConnectionStatus(this).withArgs(connectedListener).execute();
     }
 
     /**
@@ -84,7 +76,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new SetValueQuery(Database.this)
+                new QuerySetValue(Database.this)
                         .withArgs(value)
                         .with(voidFuturePromise)
                         .execute();
@@ -97,7 +89,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback) {
-        new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
+        new QueryReadValue(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
@@ -105,7 +97,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener) {
-        new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+        new QueryOnDataChange(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
     }
 
     /**
@@ -132,7 +124,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public DatabaseDistribution push() {
-        new PushQuery(this).execute();
+        new QueryPush(this).execute();
         return this;
     }
 
@@ -144,7 +136,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new RemoveValueQuery(Database.this)
+                new QueryRemoveValue(Database.this)
                         .with(voidFuturePromise)
                         .execute();
             }
@@ -159,7 +151,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new UpdateChildrenQuery(Database.this)
+                new QueryUpdateChildren(Database.this)
                         .withArgs(data)
                         .with(voidFuturePromise)
                         .execute();
@@ -172,7 +164,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback) {
-        new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
+        new QueryRunTransaction(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
     /**
