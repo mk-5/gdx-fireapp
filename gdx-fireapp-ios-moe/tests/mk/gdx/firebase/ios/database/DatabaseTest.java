@@ -47,16 +47,6 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
-import mk.gdx.firebase.ios.database.observers.DataObserversManager;
-import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserver;
-import mk.gdx.firebase.ios.database.queries.ConnectionStatusQuery;
-import mk.gdx.firebase.ios.database.queries.OnDataChangeQuery;
-import mk.gdx.firebase.ios.database.queries.ReadValueQuery;
-import mk.gdx.firebase.ios.database.queries.RemoveValueQuery;
-import mk.gdx.firebase.ios.database.queries.RunTransactionQuery;
-import mk.gdx.firebase.ios.database.queries.SetValueQuery;
-import mk.gdx.firebase.ios.database.queries.UpdateChildrenQuery;
-import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
@@ -65,9 +55,9 @@ import mk.gdx.firebase.listeners.DataChangeListener;
  */
 @PrepareForTest({
         NatJ.class, FIRDatabase.class,
-        ConnectionStatusQuery.class,
-        SetValueQuery.class, ReadValueQuery.class, OnDataChangeQuery.class,
-        RemoveValueQuery.class, UpdateChildrenQuery.class, RunTransactionQuery.class,
+        QueryConnectionStatus.class,
+        QuerySetValue.class, QueryReadValue.class, QueryOnDataChange.class,
+        QueryRemoveValue.class, QueryUpdateChildren.class, QueryRunTransaction.class,
         NSString.class, DataProcessor.class, NSDictionary.class, NSMutableDictionary.class, NSDictionaryHelper.class
 })
 public class DatabaseTest extends GdxIOSAppTest {
@@ -97,8 +87,8 @@ public class DatabaseTest extends GdxIOSAppTest {
 
     @AfterClass
     public static void afterClass() {
-        ((LongArray) Whitebox.getInternalState(ConnectionStatusQuery.class, "handles")).clear();
-        ((DataObserversManager) Whitebox.getInternalState(OnDataChangeQuery.class, "observersManager")).removeListenersForPath("/test");
+        ((LongArray) Whitebox.getInternalState(QueryConnectionStatus.class, "handles")).clear();
+        ((DataObserversManager) Whitebox.getInternalState(QueryOnDataChange.class, "observersManager")).removeListenersForPath("/test");
     }
 
     @Test
@@ -106,13 +96,13 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         ConnectedListener connectedListener = Mockito.mock(ConnectedListener.class);
-        PowerMockito.mockStatic(ConnectionStatusQuery.class);
+        PowerMockito.mockStatic(QueryConnectionStatus.class);
 //        ConnectionStatusQuery query = PowerMockito.spy(new ConnectionStatusQuery(database));
-        ConnectionStatusQuery query = PowerMockito.mock(ConnectionStatusQuery.class);
+        QueryConnectionStatus query = PowerMockito.mock(QueryConnectionStatus.class);
         Mockito.when(query.with(Mockito.any(Array.class))).thenReturn(query);
         Mockito.when(query.with(Mockito.any(OrderByClause.class))).thenReturn(query);
         Mockito.when(query.withArgs()).thenReturn(query);
-        PowerMockito.whenNew(ConnectionStatusQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(query);
 
         // When
         database.onConnect(connectedListener);
@@ -142,9 +132,9 @@ public class DatabaseTest extends GdxIOSAppTest {
     public void setValue() throws Exception {
         // Given
         Database database = new Database();
-        PowerMockito.mockStatic(SetValueQuery.class);
-        SetValueQuery query = PowerMockito.spy(new SetValueQuery(database));
-        PowerMockito.whenNew(SetValueQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QuerySetValue.class);
+        QuerySetValue query = PowerMockito.spy(new QuerySetValue(database));
+        PowerMockito.whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
 
         // When
         database.inReference("/test").setValue("test_value");
@@ -160,9 +150,9 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         DataCallback callback = Mockito.mock(DataCallback.class);
-        PowerMockito.mockStatic(ReadValueQuery.class);
-        ReadValueQuery query = PowerMockito.spy(new ReadValueQuery(database));
-        PowerMockito.whenNew(ReadValueQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryReadValue.class);
+        QueryReadValue query = PowerMockito.spy(new QueryReadValue(database));
+        PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
@@ -179,9 +169,9 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         DataChangeListener listener = Mockito.mock(DataChangeListener.class);
-        PowerMockito.mockStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery query = PowerMockito.spy(new OnDataChangeQuery(database));
-        PowerMockito.whenNew(OnDataChangeQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryOnDataChange.class);
+        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
+        PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
@@ -199,12 +189,12 @@ public class DatabaseTest extends GdxIOSAppTest {
         Database database = new Database();
         long handleValue = 10L;
         DataChangeListener listener = null;
-        PowerMockito.mockStatic(OnDataChangeQuery.class);
-        OnDataChangeQuery query = PowerMockito.spy(new OnDataChangeQuery(database));
-        PowerMockito.whenNew(OnDataChangeQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryOnDataChange.class);
+        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
+        PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
         String databasePath = "/test";
-        ((DataObserversManager) Whitebox.getInternalState(OnDataChangeQuery.class, "observersManager")).addNewListener(databasePath, handleValue);
+        ((DataObserversManager) Whitebox.getInternalState(QueryOnDataChange.class, "observersManager")).addNewListener(databasePath, handleValue);
 
         // When
         database.inReference("/test").onDataChange(dataType, listener);
@@ -268,9 +258,9 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(RemoveValueQuery.class);
-        RemoveValueQuery query = PowerMockito.spy(new RemoveValueQuery(database));
-        PowerMockito.whenNew(RemoveValueQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryRemoveValue.class);
+        QueryRemoveValue query = PowerMockito.spy(new QueryRemoveValue(database));
+        PowerMockito.whenNew(QueryRemoveValue.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
@@ -284,9 +274,9 @@ public class DatabaseTest extends GdxIOSAppTest {
     public void updateChildren1() throws Exception {
         // Given
         Database database = new Database();
-        PowerMockito.mockStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery query = PowerMockito.spy(new UpdateChildrenQuery(database));
-        PowerMockito.whenNew(UpdateChildrenQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryUpdateChildren.class);
+        QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database));
+        PowerMockito.whenNew(QueryUpdateChildren.class).withAnyArguments().thenReturn(query);
         Map mapData = Mockito.mock(Map.class);
 
         // When
@@ -302,9 +292,9 @@ public class DatabaseTest extends GdxIOSAppTest {
         Database database = new Database();
         CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        PowerMockito.mockStatic(RunTransactionQuery.class);
-        RunTransactionQuery query = PowerMockito.spy(new RunTransactionQuery(database));
-        PowerMockito.whenNew(RunTransactionQuery.class).withAnyArguments().thenReturn(query);
+        PowerMockito.mockStatic(QueryRunTransaction.class);
+        QueryRunTransaction query = PowerMockito.spy(new QueryRunTransaction(database));
+        PowerMockito.whenNew(QueryRunTransaction.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When

@@ -29,9 +29,6 @@ import apple.foundation.NSNumber;
 import apple.foundation.NSString;
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.ios.exceptions.ConvertingException;
-import mk.gdx.firebase.ios.helpers.NSArrayHelper;
-import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
-import mk.gdx.firebase.ios.helpers.NSNumberHelper;
 
 /**
  * Is responsible for transform ios objects to normal Java objects.
@@ -47,7 +44,7 @@ import mk.gdx.firebase.ios.helpers.NSNumberHelper;
  * In case of transform from {@link NSDictionary} to POJO object,
  * {@link NSDictionary} is transformed to Json string then it is transformed by {@link com.badlogic.gdx.utils.Json#fromJson(Class, String)}
  */
-public class DataProcessor {
+class DataProcessor {
 
     private DataProcessor() {
 
@@ -62,7 +59,7 @@ public class DataProcessor {
      * @return {@code iosObject} java representation. For ex. {@link NSString} was transformed to {@link String}
      */
     @SuppressWarnings("unchecked")
-    public static <T> T iosDataToJava(Object iosObject, Class<T> wantedType) {
+    static <T> T iosDataToJava(Object iosObject, Class<T> wantedType) {
         Class resultType = iosObject.getClass();
         T result = null;
         try {
@@ -101,7 +98,7 @@ public class DataProcessor {
      * @return Transformed object.  If {@link NSObject} instance has passed object was transformed - otherwise {@code data} itself was returned.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T processPrimitiveData(Object data, Class<T> wantedType) {
+    static <T> T processPrimitiveData(Object data, Class<T> wantedType) {
         T result = null;
         if (data.getClass() == wantedType) {
             return (T) data;
@@ -133,7 +130,7 @@ public class DataProcessor {
      * @return Java object which is equals to multi-os-engine object representation.
      */
     @SuppressWarnings("unchecked")
-    public static Object iosDataToJava(Object iosObject) {
+    static Object iosDataToJava(Object iosObject) {
         if (iosObject instanceof NSString) {
             return DataProcessor.processPrimitiveData(iosObject, String.class);
         } else if (iosObject instanceof NSNumber) {
@@ -153,7 +150,7 @@ public class DataProcessor {
      * @return {@link NSObject} instance equals to {@code javaObject}.
      */
     @SuppressWarnings("unchecked")
-    public static NSObject javaDataToIos(Object javaObject) {
+    static NSObject javaDataToIos(Object javaObject) {
         if (javaObject instanceof String) {
             return NSString.alloc().initWithString((String) javaObject);
         } else if (javaObject instanceof Boolean) {

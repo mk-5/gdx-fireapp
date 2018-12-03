@@ -18,7 +18,6 @@ package mk.gdx.firebase.ios.database;
 
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
-import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFilteringProvider;
 
 /**
  * Provides flow for ios firebase database call.
@@ -32,17 +31,17 @@ import mk.gdx.firebase.ios.database.providers.FIRDatabaseQueryFilteringProvider;
  *
  * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
-public abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
+abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with FIRDatabaseReference instance.";
     protected static final String GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE = "Given database path returned null value";
 
     protected FIRDatabaseQuery query;
-    protected FIRDatabaseQueryFilteringProvider filtersProvider;
+    protected ProviderFIRDatabaseQueryFiltering filtersProvider;
     protected String databasePath;
 
-    public IosDatabaseQuery(Database databaseDistribution) {
+    IosDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
-        filtersProvider = new FIRDatabaseQueryFilteringProvider();
+        filtersProvider = new ProviderFIRDatabaseQueryFiltering();
     }
 
     @Override

@@ -33,13 +33,6 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
-import mk.gdx.firebase.ios.database.queries.ConnectionStatusQuery;
-import mk.gdx.firebase.ios.database.queries.OnDataChangeQuery;
-import mk.gdx.firebase.ios.database.queries.ReadValueQuery;
-import mk.gdx.firebase.ios.database.queries.RemoveValueQuery;
-import mk.gdx.firebase.ios.database.queries.RunTransactionQuery;
-import mk.gdx.firebase.ios.database.queries.SetValueQuery;
-import mk.gdx.firebase.ios.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -69,7 +62,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public void onConnect(ConnectedListener connectedListener) {
-        new ConnectionStatusQuery(this).withArgs(connectedListener).execute();
+        new QueryConnectionStatus(this).withArgs(connectedListener).execute();
     }
 
     /**
@@ -90,7 +83,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new SetValueQuery(Database.this)
+                new QuerySetValue(Database.this)
                         .withArgs(value)
                         .with(voidFuturePromise)
                         .execute();
@@ -105,7 +98,7 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
+        new QueryReadValue(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
@@ -115,7 +108,7 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+        new QueryOnDataChange(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
     }
 
     /**
@@ -154,7 +147,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new RemoveValueQuery(Database.this)
+                new QueryRemoveValue(Database.this)
                         .with(voidFuturePromise)
                         .execute();
             }
@@ -169,7 +162,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new UpdateChildrenQuery(Database.this)
+                new QueryUpdateChildren(Database.this)
                         .withArgs(data)
                         .with(voidFuturePromise)
                         .execute();
@@ -182,7 +175,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
-        new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
+        new QueryRunTransaction(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
     /**

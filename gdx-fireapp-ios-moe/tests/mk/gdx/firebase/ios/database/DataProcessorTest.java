@@ -36,9 +36,6 @@ import apple.foundation.NSNull;
 import apple.foundation.NSNumber;
 import apple.foundation.NSString;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
-import mk.gdx.firebase.ios.helpers.NSArrayHelper;
-import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
-import mk.gdx.firebase.ios.helpers.NSNumberHelper;
 
 @PrepareForTest({NatJ.class, NSString.class, NSNumber.class,
         NSArray.class, NSDictionary.class, NSNull.class, NSMutableArray.class,
