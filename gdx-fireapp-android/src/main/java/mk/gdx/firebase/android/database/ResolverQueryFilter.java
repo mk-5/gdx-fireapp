@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.resolvers;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.Query;
 
@@ -24,11 +24,11 @@ import mk.gdx.firebase.database.FilterType;
 /**
  * Provides filtering for {@code Query} instance.
  */
-public class QueryFilterResolver implements FilterResolver<Query, Query> {
+class ResolverQueryFilter implements FilterResolver<Query, Query> {
 
-    public static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
-    public static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
-    public static final String MISSING_FILTER_ARGUMENTS = "Missing filter arguments.";
+    private static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
+    private static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
+    private static final String MISSING_FILTER_ARGUMENTS = "Missing filter arguments.";
 
     /**
      * Apply filtering to the database ref and return appropriate query instance.

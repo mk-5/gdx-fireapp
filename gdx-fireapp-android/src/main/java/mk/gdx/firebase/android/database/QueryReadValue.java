@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.resolvers.DataCallbackOnDataResolver;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
@@ -32,9 +29,9 @@ import mk.gdx.firebase.database.validators.ReadValueValidator;
 /**
  * Provides call to {@link com.google.firebase.database.Query#addListenerForSingleValueEvent(ValueEventListener)}.
  */
-public class ReadValueQuery extends AndroidDatabaseQuery<Void> {
+class QueryReadValue extends AndroidDatabaseQuery<Void> {
 
-    public ReadValueQuery(Database databaseDistribution) {
+    QueryReadValue(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
@@ -71,7 +68,7 @@ public class ReadValueQuery extends AndroidDatabaseQuery<Void> {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            DataCallbackOnDataResolver.resolve(dataType, orderByClause, dataSnapshot, callback);
+            ResolverDataCallbackOnData.resolve(dataType, orderByClause, dataSnapshot, callback);
         }
 
         @Override

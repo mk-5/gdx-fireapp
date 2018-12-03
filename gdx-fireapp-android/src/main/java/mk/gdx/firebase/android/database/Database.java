@@ -22,13 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Map;
 
-import mk.gdx.firebase.android.database.queries.ConnectionStatusQuery;
-import mk.gdx.firebase.android.database.queries.OnDataChangeQuery;
-import mk.gdx.firebase.android.database.queries.ReadValueQuery;
-import mk.gdx.firebase.android.database.queries.RemoveValueQuery;
-import mk.gdx.firebase.android.database.queries.RunTransactionQuery;
-import mk.gdx.firebase.android.database.queries.SetValueQuery;
-import mk.gdx.firebase.android.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
@@ -73,7 +66,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public void onConnect(final ConnectedListener listener) {
-        new ConnectionStatusQuery(this).withArgs(listener).execute();
+        new QueryConnectionStatus(this).withArgs(listener).execute();
     }
 
     /**
@@ -94,7 +87,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new SetValueQuery(Database.this)
+                new QuerySetValue(Database.this)
                         .withArgs(value)
                         .with(voidFuturePromise)
                         .execute();
@@ -109,7 +102,7 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, E extends T> void readValue(final Class<T> dataType, final DataCallback<E> callback) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new ReadValueQuery(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
+        new QueryReadValue(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
     }
 
     /**
@@ -118,7 +111,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new OnDataChangeQuery(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+        new QueryOnDataChange(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
     }
 
     /**
@@ -158,7 +151,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new RemoveValueQuery(Database.this)
+                new QueryRemoveValue(Database.this)
                         .with(voidFuturePromise)
                         .execute();
             }
@@ -173,7 +166,7 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new UpdateChildrenQuery(Database.this)
+                new QueryUpdateChildren(Database.this)
                         .withArgs(data)
                         .with(voidFuturePromise)
                         .execute();
@@ -187,7 +180,7 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback) {
-        new RunTransactionQuery(this).withArgs(dataType, transactionCallback, completeCallback).execute();
+        new QueryRunTransaction(this).withArgs(dataType, transactionCallback, completeCallback).execute();
     }
 
     /**

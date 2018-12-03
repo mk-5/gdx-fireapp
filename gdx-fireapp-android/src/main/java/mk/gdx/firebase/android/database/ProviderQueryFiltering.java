@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.providers;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.Query;
 
-import mk.gdx.firebase.android.database.resolvers.QueryFilterResolver;
-import mk.gdx.firebase.android.database.resolvers.QueryOrderByResolver;
 import mk.gdx.firebase.database.SortingFilteringProvider;
 
 /**
  * Provides filter and order-by application into given {@code Query} instance.
  */
-public class QueryFilteringProvider extends SortingFilteringProvider<Query, QueryFilterResolver, QueryOrderByResolver> {
+class ProviderQueryFiltering extends SortingFilteringProvider<Query, ResolverQueryFilter, ResolverQueryOrderBy> {
 
     @Override
-    public QueryFilterResolver createFilterResolver() {
-        return new QueryFilterResolver();
+    public ResolverQueryFilter createFilterResolver() {
+        return new ResolverQueryFilter();
     }
 
     @Override
-    public QueryOrderByResolver createOrderByResolver() {
-        return new QueryOrderByResolver();
+    public ResolverQueryOrderBy createOrderByResolver() {
+        return new ResolverQueryOrderBy();
     }
 }

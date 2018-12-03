@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DatabaseReference;
 
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.listeners.QueryCompletionListener;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -28,8 +25,8 @@ import mk.gdx.firebase.promises.FuturePromise;
 /**
  * Provides setValue execution with firebase database reference.
  */
-public class SetValueQuery extends AndroidDatabaseQuery<Void> {
-    public SetValueQuery(Database databaseDistribution) {
+class QuerySetValue extends AndroidDatabaseQuery<Void> {
+    QuerySetValue(Database databaseDistribution) {
         super(databaseDistribution);
     }
 

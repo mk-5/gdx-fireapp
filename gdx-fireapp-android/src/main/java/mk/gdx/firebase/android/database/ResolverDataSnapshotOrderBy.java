@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.resolvers;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;
@@ -27,9 +27,9 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 /**
  * Gets data from DatabaseSnapshot with ordering preserved.
  */
-public class DataSnapshotOrderByResolver {
+class ResolverDataSnapshotOrderBy {
 
-    private DataSnapshotOrderByResolver() {
+    private ResolverDataSnapshotOrderBy() {
         //
     }
 

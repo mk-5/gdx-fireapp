@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.listeners;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,11 +25,11 @@ import mk.gdx.firebase.promises.FuturePromise;
 /**
  * Wraps {@link CompleteCallback} with {@link DatabaseReference.CompletionListener}
  */
-public class QueryCompletionListener implements DatabaseReference.CompletionListener {
+class QueryCompletionListener implements DatabaseReference.CompletionListener {
 
     private FuturePromise promise;
 
-    public QueryCompletionListener(FuturePromise promise) {
+    QueryCompletionListener(FuturePromise promise) {
         this.promise = promise;
     }
 

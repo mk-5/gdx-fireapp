@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.resolvers;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.google.firebase.database.Query;
@@ -30,7 +30,7 @@ import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 
 @PrepareForTest({GdxNativesLoader.class, Query.class})
-public class QueryOrderByResolverTest extends AndroidContextTest {
+public class ResolverQueryOrderByTest extends AndroidContextTest {
 
     @Test
     public void resolve_orderByChild() {
@@ -39,7 +39,7 @@ public class QueryOrderByResolverTest extends AndroidContextTest {
         orderByClause.setOrderByMode(OrderByMode.ORDER_BY_CHILD);
         orderByClause.setArgument("test_argument");
         Query query = PowerMockito.mock(Query.class);
-        QueryOrderByResolver resolver = new QueryOrderByResolver();
+        ResolverQueryOrderBy resolver = new ResolverQueryOrderBy();
 
         // When
         resolver.resolve(orderByClause, query);
@@ -54,7 +54,7 @@ public class QueryOrderByResolverTest extends AndroidContextTest {
         OrderByClause orderByClause = new OrderByClause();
         orderByClause.setOrderByMode(OrderByMode.ORDER_BY_CHILD);
         Query query = PowerMockito.mock(Query.class);
-        QueryOrderByResolver resolver = new QueryOrderByResolver();
+        ResolverQueryOrderBy resolver = new ResolverQueryOrderBy();
 
         // When
         resolver.resolve(orderByClause, query);
@@ -69,7 +69,7 @@ public class QueryOrderByResolverTest extends AndroidContextTest {
         OrderByClause orderByClause = new OrderByClause();
         orderByClause.setOrderByMode(OrderByMode.ORDER_BY_KEY);
         Query query = PowerMockito.mock(Query.class);
-        QueryOrderByResolver resolver = new QueryOrderByResolver();
+        ResolverQueryOrderBy resolver = new ResolverQueryOrderBy();
 
         // When
         resolver.resolve(orderByClause, query);
@@ -84,7 +84,7 @@ public class QueryOrderByResolverTest extends AndroidContextTest {
         OrderByClause orderByClause = new OrderByClause();
         orderByClause.setOrderByMode(OrderByMode.ORDER_BY_VALUE);
         Query query = PowerMockito.mock(Query.class);
-        QueryOrderByResolver resolver = new QueryOrderByResolver();
+        ResolverQueryOrderBy resolver = new ResolverQueryOrderBy();
 
         // When
         resolver.resolve(orderByClause, query);

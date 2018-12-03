@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.resolvers;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DataSnapshot;
 
+import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
-import mk.gdx.firebase.listeners.DataChangeListener;
 
 /**
- * Resolves data listener with ordering preserved.
+ * Resolves data callback with ordering preserved.
  */
-public class DataListenerOnDataChangeResolver {
+class ResolverDataCallbackOnData {
 
-    private DataListenerOnDataChangeResolver() {
+    private ResolverDataCallbackOnData() {
         //
     }
 
     // TODO - docs
     @SuppressWarnings("unchecked")
-    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataChangeListener<E> dataChangeListener) {
-        if (DataSnapshotOrderByResolver.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot)) {
-            dataChangeListener.onChange((E) DataSnapshotOrderByResolver.resolve(dataSnapshot));
+    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, DataCallback<E> dataCallback) {
+        if (ResolverDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot)) {
+            dataCallback.onData((E) ResolverDataSnapshotOrderBy.resolve(dataSnapshot));
         } else {
-            dataChangeListener.onChange((E) dataSnapshot.getValue());
+            dataCallback.onData((E) dataSnapshot.getValue());
         }
     }
 }

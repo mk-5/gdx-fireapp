@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.handlers;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +28,7 @@ import mk.gdx.firebase.callbacks.TransactionCallback;
 /**
  * Provides transaction invocation
  */
-public class TransactionHandler<R> implements Transaction.Handler {
+class TransactionHandler<R> implements Transaction.Handler {
 
     private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
@@ -43,7 +43,7 @@ public class TransactionHandler<R> implements Transaction.Handler {
      * @param transactionCallback Transaction callback, not null
      * @param completeCallback    Complete callback, may be null
      */
-    public TransactionHandler(TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
+    TransactionHandler(TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
         this.transactionCallback = transactionCallback;
         this.completeCallback = completeCallback;
     }

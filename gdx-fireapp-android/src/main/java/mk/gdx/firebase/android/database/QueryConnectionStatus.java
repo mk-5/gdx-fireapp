@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.google.firebase.database.DataSnapshot;
@@ -24,8 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
 import mk.gdx.firebase.listeners.ConnectedListener;
@@ -33,13 +31,13 @@ import mk.gdx.firebase.listeners.ConnectedListener;
 /**
  * Provides asking for connection status.
  */
-public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void> {
+class QueryConnectionStatus extends AndroidDatabaseQuery<Void> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
 
     private static final Array<ConnectionValueListener> listeners = new Array<>();
 
-    public ConnectionStatusQuery(Database databaseDistribution) {
+    QueryConnectionStatus(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
@@ -72,11 +70,11 @@ public class ConnectionStatusQuery extends AndroidDatabaseQuery<Void> {
      * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
      * and getting information from {@code .info/connected} path.
      */
-    private class ConnectionValueListener implements ValueEventListener {
+    private static class ConnectionValueListener implements ValueEventListener {
 
         private ConnectedListener connectedListener;
 
-        public ConnectionValueListener(ConnectedListener connectedListener) {
+        ConnectionValueListener(ConnectedListener connectedListener) {
             this.connectedListener = connectedListener;
         }
 

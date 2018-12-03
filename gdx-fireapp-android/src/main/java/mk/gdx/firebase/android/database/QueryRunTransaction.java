@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DatabaseReference;
 
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.handlers.TransactionHandler;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
@@ -29,8 +26,8 @@ import mk.gdx.firebase.database.validators.RunTransactionValidator;
 /**
  * Provides setValue execution with firebase database reference.
  */
-public class RunTransactionQuery extends AndroidDatabaseQuery<Void> {
-    public RunTransactionQuery(Database databaseDistribution) {
+class QueryRunTransaction extends AndroidDatabaseQuery<Void> {
+    QueryRunTransaction(Database databaseDistribution) {
         super(databaseDistribution);
     }
 

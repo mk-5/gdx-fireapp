@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DatabaseReference;
 
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.listeners.QueryCompletionListener;
+import java.util.Map;
+
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
+import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 import mk.gdx.firebase.promises.FuturePromise;
 
 /**
- * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
+ * Provides {@link DatabaseReference#updateChildren(Map)} execution with firebase database reference.
  */
-public class RemoveValueQuery extends AndroidDatabaseQuery<Void> {
-    public RemoveValueQuery(Database databaseDistribution) {
+class QueryUpdateChildren extends AndroidDatabaseQuery<Void> {
+    QueryUpdateChildren(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
@@ -41,13 +41,13 @@ public class RemoveValueQuery extends AndroidDatabaseQuery<Void> {
 
     @Override
     protected ArgumentsValidator createArgumentsValidator() {
-        return null;
+        return new UpdateChildrenValidator();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected Void run() {
-        ((DatabaseReference) query).removeValue(new QueryCompletionListener((FuturePromise) promise));
+        ((DatabaseReference) query).updateChildren((Map<String, Object>) arguments.get(0), new QueryCompletionListener((FuturePromise) promise));
         return null;
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.google.firebase.database.DataSnapshot;
@@ -32,13 +32,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.resolvers.DataCallbackOnDataResolver;
 import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 
-@PrepareForTest({GdxNativesLoader.class, DataCallbackOnDataResolver.class, FirebaseDatabase.class})
-public class ReadValueQueryTest extends AndroidContextTest {
+@PrepareForTest({GdxNativesLoader.class, ResolverDataCallbackOnData.class, FirebaseDatabase.class})
+public class QueryReadValueTest extends AndroidContextTest {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -46,7 +44,7 @@ public class ReadValueQueryTest extends AndroidContextTest {
     @Override
     public void setup() throws Exception {
         super.setup();
-        PowerMockito.mockStatic(DataCallbackOnDataResolver.class);
+        PowerMockito.mockStatic(ResolverDataCallbackOnData.class);
         PowerMockito.mockStatic(FirebaseDatabase.class);
         firebaseDatabase = PowerMockito.mock(FirebaseDatabase.class);
         Mockito.when(FirebaseDatabase.getInstance()).thenReturn(firebaseDatabase);
@@ -67,14 +65,14 @@ public class ReadValueQueryTest extends AndroidContextTest {
             }
         }).when(databaseReference).addListenerForSingleValueEvent(Mockito.any(ValueEventListener.class));
         database.inReference("test");
-        ReadValueQuery query = new ReadValueQuery(database);
+        QueryReadValue query = new QueryReadValue(database);
 
         // When
-        ((ReadValueQuery) query.withArgs(String.class, Mockito.mock(DataCallback.class))).execute();
+        ((QueryReadValue) query.withArgs(String.class, Mockito.mock(DataCallback.class))).execute();
 
         // Then
-        PowerMockito.verifyStatic(DataCallbackOnDataResolver.class);
-        DataCallbackOnDataResolver.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.any(DataCallback.class));
+        PowerMockito.verifyStatic(ResolverDataCallbackOnData.class);
+        ResolverDataCallbackOnData.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.any(DataCallback.class));
     }
 
     @Test
@@ -90,11 +88,11 @@ public class ReadValueQueryTest extends AndroidContextTest {
             }
         }).when(databaseReference).addListenerForSingleValueEvent(Mockito.any(ValueEventListener.class));
         database.inReference("test");
-        ReadValueQuery query = new ReadValueQuery(database);
+        QueryReadValue query = new QueryReadValue(database);
         DataCallback callback = Mockito.mock(DataCallback.class);
 
         // When
-        ((ReadValueQuery) query.withArgs(String.class, callback)).execute();
+        ((QueryReadValue) query.withArgs(String.class, callback)).execute();
 
         // Then
         Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));

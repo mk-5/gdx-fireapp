@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.providers;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxNativesLoader;
@@ -34,12 +34,12 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 
 
 @PrepareForTest({GdxNativesLoader.class})
-public class QueryFilteringProviderTest extends AndroidContextTest {
+public class ProviderQueryFilteringTest extends AndroidContextTest {
 
     @Test
     public void applyFiltering1() {
         // Given
-        QueryFilteringProvider provider = new QueryFilteringProvider();
+        ProviderQueryFiltering provider = new ProviderQueryFiltering();
         OrderByClause orderByClause = new OrderByClause(OrderByMode.ORDER_BY_KEY, "test");
         Array<Filter> filters = new Array<>(new Filter[]{new Filter(FilterType.LIMIT_FIRST, 2)});
         Query query = Mockito.mock(Query.class);
@@ -59,7 +59,7 @@ public class QueryFilteringProviderTest extends AndroidContextTest {
     @Test
     public void createFilterResolver() {
         // Given
-        QueryFilteringProvider provider = new QueryFilteringProvider();
+        ProviderQueryFiltering provider = new ProviderQueryFiltering();
 
         // When
         Object result = provider.createFilterResolver();
@@ -71,7 +71,7 @@ public class QueryFilteringProviderTest extends AndroidContextTest {
     @Test
     public void createOrderByResolver() {
         // Given
-        QueryFilteringProvider provider = new QueryFilteringProvider();
+        ProviderQueryFiltering provider = new ProviderQueryFiltering();
 
         // When
         Object result = provider.createOrderByResolver();

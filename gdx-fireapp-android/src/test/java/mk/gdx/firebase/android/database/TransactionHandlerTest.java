@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.handlers;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.google.firebase.database.DataSnapshot;

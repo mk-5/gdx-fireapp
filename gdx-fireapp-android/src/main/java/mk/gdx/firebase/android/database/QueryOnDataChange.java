@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.Array;
 import com.google.firebase.database.DataSnapshot;
@@ -22,9 +22,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.resolvers.DataListenerOnDataChangeResolver;
 import mk.gdx.firebase.database.DataListenersManager;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
@@ -34,11 +31,11 @@ import mk.gdx.firebase.listeners.DataChangeListener;
 /**
  * Provides call to {@link com.google.firebase.database.Query#addValueEventListener(ValueEventListener)}.
  */
-public class OnDataChangeQuery extends AndroidDatabaseQuery<Void> {
+class QueryOnDataChange extends AndroidDatabaseQuery<Void> {
 
     private final static DataListenersManager<ValueEventListener> dataListenersManager = new DataListenersManager<>();
 
-    public OnDataChangeQuery(Database databaseDistribution) {
+    QueryOnDataChange(Database databaseDistribution) {
         super(databaseDistribution);
     }
 
@@ -86,7 +83,7 @@ public class OnDataChangeQuery extends AndroidDatabaseQuery<Void> {
         @Override
         @SuppressWarnings("unchecked")
         public void onDataChange(DataSnapshot dataSnapshot) {
-            DataListenerOnDataChangeResolver.resolve(dataType, orderByClause, dataSnapshot, dataChangeListener);
+            ResolverDataListenerOnDataChange.resolve(dataType, orderByClause, dataSnapshot, dataChangeListener);
         }
 
         @Override

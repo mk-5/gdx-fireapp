@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.android.database.queries;
+package mk.gdx.firebase.android.database;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.google.firebase.database.DatabaseReference;
@@ -23,32 +23,25 @@ import com.google.firebase.database.ValueEventListener;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
-import org.powermock.reflect.Whitebox;
 
 import java.util.Map;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
-import mk.gdx.firebase.android.database.Database;
-import mk.gdx.firebase.android.database.providers.QueryFilteringProvider;
-import mk.gdx.firebase.database.DataListenersManager;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.listeners.DataChangeListener;
 
 @PrepareForTest({
         GdxNativesLoader.class, FirebaseDatabase.class,
-        QueryFilteringProvider.class
+        ProviderQueryFiltering.class
 //        OnDataChangeQuery.class,
 })
-public class OnDataChangeQueryTest extends AndroidContextTest {
+public class QueryOnDataChangeTest extends AndroidContextTest {
 
     private FirebaseDatabase firebaseDatabase;
 
@@ -64,10 +57,10 @@ public class OnDataChangeQueryTest extends AndroidContextTest {
     public void createArgumentsValidator() {
         // Given
         Database databaseDistribution = Mockito.mock(Database.class);
-        OnDataChangeQuery onDataChangeQuery = new OnDataChangeQuery(databaseDistribution);
+        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
 
         // When
-        ArgumentsValidator argumentsValidator = onDataChangeQuery.createArgumentsValidator();
+        ArgumentsValidator argumentsValidator = queryOnDataChange.createArgumentsValidator();
 
         // Then
         Assert.assertNotNull(argumentsValidator);
@@ -82,11 +75,11 @@ public class OnDataChangeQueryTest extends AndroidContextTest {
         DataChangeListener dataChangeListener = Mockito.mock(DataChangeListener.class);
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
-        OnDataChangeQuery onDataChangeQuery = new OnDataChangeQuery(databaseDistribution);
+        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
 
         // When
         databaseDistribution.inReference("/test");
-        onDataChangeQuery.withArgs(Map.class, dataChangeListener).execute();
+        queryOnDataChange.withArgs(Map.class, dataChangeListener).execute();
 
         // Then
         Mockito.verify(databaseReference, VerificationModeFactory.times(1)).addValueEventListener(Mockito.any(ValueEventListener.class));
@@ -99,11 +92,11 @@ public class OnDataChangeQueryTest extends AndroidContextTest {
         DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
-        OnDataChangeQuery onDataChangeQuery = new OnDataChangeQuery(databaseDistribution);
+        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
 
         // When
         databaseDistribution.inReference("/test");
-        onDataChangeQuery.withArgs(Map.class, null).execute();
+        queryOnDataChange.withArgs(Map.class, null).execute();
 
         // Then
         Mockito.verify(databaseReference, VerificationModeFactory.times(0)).addValueEventListener(Mockito.any(ValueEventListener.class));

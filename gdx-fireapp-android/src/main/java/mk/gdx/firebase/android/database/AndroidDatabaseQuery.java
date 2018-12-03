@@ -18,7 +18,6 @@ package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.Query;
 
-import mk.gdx.firebase.android.database.providers.QueryFilteringProvider;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 /**
@@ -33,16 +32,16 @@ import mk.gdx.firebase.database.queries.GdxFireappQuery;
  *
  * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
-public abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
-    protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with DatabaseReference instance.";
+abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
+    static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with DatabaseReference instance.";
 
-    protected String databasePath;
+    String databasePath;
     protected Query query;
-    protected QueryFilteringProvider filtersProvider;
+    ProviderQueryFiltering filtersProvider;
 
-    public AndroidDatabaseQuery(Database databaseDistribution) {
+    AndroidDatabaseQuery(Database databaseDistribution) {
         super(databaseDistribution);
-        filtersProvider = new QueryFilteringProvider();
+        filtersProvider = new ProviderQueryFiltering();
     }
 
     @Override
