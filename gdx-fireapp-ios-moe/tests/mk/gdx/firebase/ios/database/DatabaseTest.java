@@ -152,24 +152,6 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
 //      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).setValue(Mockito.any());
-    }
-
-    @Test
-    public void setValue1() throws Exception {
-        // Given
-        Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(SetValueQuery.class);
-        SetValueQuery query = PowerMockito.spy(new SetValueQuery(database));
-        PowerMockito.whenNew(SetValueQuery.class).withAnyArguments().thenReturn(query);
-
-        // When
-        database.inReference("/test").setValue("test_value", callback);
-
-        // Then
-//      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).setValueWithCompletionBlock(Mockito.any(), Mockito.any(FIRDatabaseReferenceCompleteObserver.class));
     }
 
@@ -282,24 +264,6 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void removeValue() throws Exception {
-        // Given
-        Database database = new Database();
-        PowerMockito.mockStatic(RemoveValueQuery.class);
-        RemoveValueQuery query = PowerMockito.spy(new RemoveValueQuery(database));
-        PowerMockito.whenNew(RemoveValueQuery.class).withAnyArguments().thenReturn(query);
-        Class dataType = String.class;
-
-        // When
-        database.inReference("/test").removeValue();
-
-        // Then
-//      PowerMockito.verifyNew(RemoveValueQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValue();
-    }
-
-    @Test
     public void removeValue1() throws Exception {
         // Given
         Database database = new Database();
@@ -310,16 +274,14 @@ public class DatabaseTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").removeValue(callback);
+        database.inReference("/test").removeValue();
 
         // Then
-//      PowerMockito.verifyNew(RemoveValueQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any());
     }
 
     @Test
-    public void updateChildren() throws Exception {
+    public void updateChildren1() throws Exception {
         // Given
         Database database = new Database();
         PowerMockito.mockStatic(UpdateChildrenQuery.class);
@@ -331,27 +293,6 @@ public class DatabaseTest extends GdxIOSAppTest {
         database.inReference("/test").updateChildren(mapData);
 
         // Then
-//      PowerMockito.verifyNew(UpdateChildrenQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValues(Mockito.nullable(NSDictionary.class));
-    }
-
-    @Test
-    public void updateChildren1() throws Exception {
-        // Given
-        Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery query = PowerMockito.spy(new UpdateChildrenQuery(database));
-        PowerMockito.whenNew(UpdateChildrenQuery.class).withAnyArguments().thenReturn(query);
-        Map mapData = Mockito.mock(Map.class);
-
-        // When
-        database.inReference("/test").updateChildren(mapData, callback);
-
-        // Then
-//      PowerMockito.verifyNew(UpdateChildrenQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(Mockito.nullable(NSDictionary.class), Mockito.any());
     }
 

@@ -24,7 +24,7 @@ import org.mockito.Mockito;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 public class UpdateChildrenValidatorTest {
 
@@ -47,7 +47,7 @@ public class UpdateChildrenValidatorTest {
         // Given
         UpdateChildrenValidator validator = new UpdateChildrenValidator();
         Array arguments = new Array();
-        arguments.addAll(Mockito.mock(Map.class), Mockito.mock(CompleteCallback.class));
+        arguments.addAll(Mockito.mock(Map.class), Mockito.mock(FuturePromise.class));
 
         // When
         validator.validate(arguments);

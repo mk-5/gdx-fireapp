@@ -24,7 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 public class QueryCompletionListenerTest extends AndroidContextTest {
 
@@ -33,14 +33,14 @@ public class QueryCompletionListenerTest extends AndroidContextTest {
         // Given
         DatabaseError databaseError = null;
         DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        QueryCompletionListener listener = new QueryCompletionListener(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        QueryCompletionListener listener = new QueryCompletionListener(promise);
 
         // When
         listener.onComplete(databaseError, databaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.any());
     }
 
     @Test
@@ -48,13 +48,13 @@ public class QueryCompletionListenerTest extends AndroidContextTest {
         // Given
         DatabaseError databaseError = Mockito.mock(DatabaseError.class);
         DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        QueryCompletionListener listener = new QueryCompletionListener(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        QueryCompletionListener listener = new QueryCompletionListener(promise);
 
         // When
         listener.onComplete(databaseError, databaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 }

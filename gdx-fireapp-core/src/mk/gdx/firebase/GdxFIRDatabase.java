@@ -31,6 +31,7 @@ import mk.gdx.firebase.deserialization.TransactionMitmConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Gets access to Firebase Database API in multi-modules.
@@ -91,16 +92,8 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value) {
-        platformObject.setValue(value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(Object value, CompleteCallback completeCallback) {
-        platformObject.setValue(value, completeCallback);
+    public Promise<Void> setValue(Object value) {
+        return platformObject.setValue(value);
     }
 
     /**
@@ -156,32 +149,16 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void removeValue() {
-        platformObject.removeValue();
+    public Promise<Void> removeValue() {
+        return platformObject.removeValue();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeValue(CompleteCallback completeCallback) {
-        platformObject.removeValue(completeCallback);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateChildren(Map<String, Object> data) {
-        platformObject.updateChildren(data);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateChildren(Map<String, Object> data, CompleteCallback completeCallback) {
-        platformObject.updateChildren(data, completeCallback);
+    public Promise<Void> updateChildren(Map<String, Object> data) {
+        return platformObject.updateChildren(data);
     }
 
     /**

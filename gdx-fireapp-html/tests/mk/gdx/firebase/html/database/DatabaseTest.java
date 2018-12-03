@@ -50,6 +50,7 @@ import mk.gdx.firebase.html.database.queries.UpdateChildrenQuery;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, ConnectionStatusQuery.class,
         SetValueQuery.class, ReadValueQuery.class, OnDataChangeQuery.class, PushQuery.class,
@@ -120,32 +121,12 @@ public class DatabaseTest {
         String testReference = "test_reference";
 
         // When
-        database.inReference(testReference).setValue(testValue);
+        database.inReference(testReference)
+                .setValue(testValue);
 
         // Then
-//        PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(SetValueQuery.class);
-        SetValueQuery.set(Mockito.eq(testReference), Mockito.eq(testValue));
-    }
-
-    @Test
-    public void setValue1() throws Exception {
-        // Given
-        Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(SetValueQuery.class);
-        SetValueQuery query = PowerMockito.spy(new SetValueQuery(database));
-        PowerMockito.whenNew(SetValueQuery.class).withAnyArguments().thenReturn(query);
-        String testValue = "test_value";
-        String testReference = "test_reference";
-
-        // When
-        database.inReference(testReference).setValue(testValue, callback);
-
-        // Then
-//        PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(SetValueQuery.class);
-        SetValueQuery.setWithCallback(Mockito.eq(testReference), Mockito.eq(testValue), Mockito.refEq(callback));
+        SetValueQuery.setWithPromise(Mockito.eq(testReference), Mockito.eq(testValue), Mockito.any(FuturePromise.class));
     }
 
     @Test
@@ -238,34 +219,15 @@ public class DatabaseTest {
         database.inReference(testReference).removeValue();
 
         // Then
-//        PowerMockito.verifyNew(RemoveValueQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(RemoveValueQuery.class);
-        RemoveValueQuery.remove(Mockito.eq(testReference));
-    }
-
-    @Test
-    public void removeValue1() throws Exception {
-        // Given
-        Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(RemoveValueQuery.class);
-        RemoveValueQuery query = PowerMockito.spy(new RemoveValueQuery(database));
-        PowerMockito.whenNew(RemoveValueQuery.class).withAnyArguments().thenReturn(query);
-        String testReference = "test_reference";
-
-        // When
-        database.inReference(testReference).removeValue(callback);
-
-        // Then
-//        PowerMockito.verifyNew(RemoveValueQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(RemoveValueQuery.class);
-        RemoveValueQuery.removeWithCallback(Mockito.eq(testReference), Mockito.refEq(callback));
+        RemoveValueQuery.removeWithPromise(Mockito.eq(testReference), Mockito.any(FuturePromise.class));
     }
 
     @Test
     public void updateChildren() throws Exception {
         // Given
         Database database = new Database();
+        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         PowerMockito.mockStatic(UpdateChildrenQuery.class);
         UpdateChildrenQuery query = PowerMockito.spy(new UpdateChildrenQuery(database));
         PowerMockito.whenNew(UpdateChildrenQuery.class).withAnyArguments().thenReturn(query);
@@ -276,29 +238,8 @@ public class DatabaseTest {
         database.inReference(testReference).updateChildren(data);
 
         // Then
-//        PowerMockito.verifyNew(UpdateChildrenQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery.update(Mockito.eq(testReference), Mockito.anyString());
-    }
-
-    @Test
-    public void updateChildren1() throws Exception {
-        // Given
-        Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        PowerMockito.mockStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery query = PowerMockito.spy(new UpdateChildrenQuery(database));
-        PowerMockito.whenNew(UpdateChildrenQuery.class).withAnyArguments().thenReturn(query);
-        String testReference = "test_reference";
-        Map data = Mockito.mock(Map.class);
-
-        // When
-        database.inReference(testReference).updateChildren(data, callback);
-
-        // Then
-//        PowerMockito.verifyNew(UpdateChildrenQuery.class).withArguments(Mockito.any());
-        PowerMockito.verifyStatic(UpdateChildrenQuery.class);
-        UpdateChildrenQuery.updateWithCallback(Mockito.eq(testReference), Mockito.anyString(), Mockito.refEq(callback));
+        UpdateChildrenQuery.updateWithPromise(Mockito.eq(testReference), Mockito.anyString(), Mockito.any(FuturePromise.class));
     }
 
     @Test

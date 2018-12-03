@@ -20,24 +20,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Wraps {@link CompleteCallback} with {@link DatabaseReference.CompletionListener}
  */
 public class QueryCompletionListener implements DatabaseReference.CompletionListener {
 
-    private CompleteCallback completeCallback;
+    private FuturePromise promise;
 
-    public QueryCompletionListener(CompleteCallback completeCallback) {
-        this.completeCallback = completeCallback;
+    public QueryCompletionListener(FuturePromise promise) {
+        this.promise = promise;
     }
 
     @Override
     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+        if (promise == null) return;
         if (databaseError != null) {
-            completeCallback.onError(databaseError.toException());
+            promise.doFail(databaseError.toException());
         } else {
-            completeCallback.onSuccess();
+            promise.doComplete(null);
         }
     }
 }

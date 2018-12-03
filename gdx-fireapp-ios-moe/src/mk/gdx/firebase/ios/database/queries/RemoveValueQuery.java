@@ -17,12 +17,11 @@
 package mk.gdx.firebase.ios.database.queries;
 
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.RemoveValueValidator;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
 import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserver;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides call to {@link FIRDatabaseReference#removeValue()}.
@@ -41,17 +40,13 @@ public class RemoveValueQuery extends IosDatabaseQuery<Void> {
 
     @Override
     protected ArgumentsValidator createArgumentsValidator() {
-        return new RemoveValueValidator();
+        return null;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected Void run() {
-        if (arguments.size == 0) {
-            ((FIRDatabaseReference) query).removeValue();
-        } else if (arguments.size == 1) {
-            ((FIRDatabaseReference) query).removeValueWithCompletionBlock(new FIRDatabaseReferenceCompleteObserver((CompleteCallback) arguments.get(0)));
-        }
+        ((FIRDatabaseReference) query).removeValueWithCompletionBlock(new FIRDatabaseReferenceCompleteObserver((FuturePromise) promise));
         return null;
     }
 }

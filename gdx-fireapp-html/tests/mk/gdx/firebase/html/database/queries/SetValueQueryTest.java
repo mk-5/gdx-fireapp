@@ -27,12 +27,12 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
 import mk.gdx.firebase.html.database.Database;
 import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class SetValueQueryTest {
@@ -74,10 +74,9 @@ public class SetValueQueryTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         SetValueQuery query = new SetValueQuery(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
 
         // When
-        ((SetValueQuery) query.withArgs("test", callback)).execute();
+        ((SetValueQuery) query.withArgs("test").with(Mockito.mock(FuturePromise.class))).execute();
 
         // Then
         Assert.fail("Native method should be run");

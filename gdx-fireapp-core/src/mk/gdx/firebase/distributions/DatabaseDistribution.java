@@ -25,6 +25,7 @@ import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Provides access to Firebase database.
@@ -68,18 +69,7 @@ public interface DatabaseDistribution {
      * @param value Any value which you want to store. Given object will be transformed to Firebase-like data type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      */
-    void setValue(Object value);
-
-    /**
-     * Sets value for path given by {@code inReference(String)} and gives response by {@code CompleteCallback}.
-     *
-     * @param value            Any value which you want to store. Given object will be transformed to Firebase-like data type.
-     * @param completeCallback Callback that handles response
-     * @throws RuntimeException if {@link #inReference(String)} was not call before.
-     * @see CompleteCallback
-     */
-    void setValue(Object value, CompleteCallback completeCallback);
-
+    Promise<Void> setValue(Object value);
 
     /**
      * Reads value from path given by {@code inReference(String)} and gives response by {@code DataCallback}.
@@ -154,18 +144,7 @@ public interface DatabaseDistribution {
      *
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      */
-    void removeValue();
-
-    /**
-     * Removes value for path given by {@code inReference(String)} and gives response by {@code DataChangeListener}.
-     * <p>
-     * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
-     *
-     * @param completeCallback Complete callback
-     * @throws RuntimeException if {@link #inReference(String)} was not call before.
-     * @see CompleteCallback
-     */
-    void removeValue(CompleteCallback completeCallback);
+    Promise<Void> removeValue();
 
     /**
      * Updates children's for path given by {@code inReference(String)}.
@@ -175,18 +154,7 @@ public interface DatabaseDistribution {
      * @param data New data
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      */
-    void updateChildren(Map<String, Object> data);
-
-    /**
-     * Updates children's for path given by {@code inReference(String)} and gives response by {@code CompleteCallback}.
-     * <p>
-     * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
-     *
-     * @param data             New data
-     * @param completeCallback Callback when done
-     * @throws RuntimeException if {@link #inReference(String)} was not call before.
-     */
-    void updateChildren(Map<String, Object> data, CompleteCallback completeCallback);
+    Promise<Void> updateChildren(Map<String, Object> data);
 
     /**
      * Provides transaction for value describe by path given by {@code inReference(String)} and gives response by {@code CompleteCallback}

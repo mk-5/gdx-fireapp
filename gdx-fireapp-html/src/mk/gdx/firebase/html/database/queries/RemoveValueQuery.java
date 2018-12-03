@@ -16,11 +16,10 @@
 
 package mk.gdx.firebase.html.database.queries;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.RemoveValueValidator;
 import mk.gdx.firebase.html.database.Database;
 import mk.gdx.firebase.html.database.GwtDatabaseQuery;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides removeValue javascript execution.
@@ -32,18 +31,16 @@ public class RemoveValueQuery extends GwtDatabaseQuery {
 
     @Override
     protected void runJS() {
-        if (arguments.size == 0) {
+        if (promise == null) {
             remove(databaseReferencePath);
-        } else if (arguments.size == 1) {
-            removeWithCallback(databaseReferencePath, (CompleteCallback) arguments.get(0));
         } else {
-            throw new IllegalStateException();
+            removeWithPromise(databaseReferencePath, (FuturePromise) promise);
         }
     }
 
     @Override
     protected ArgumentsValidator createArgumentsValidator() {
-        return new RemoveValueValidator();
+        return null;
     }
 
     /**
@@ -58,18 +55,17 @@ public class RemoveValueQuery extends GwtDatabaseQuery {
     }-*/;
 
     /**
-     * Calls firebase.database().remove method with callback.
+     * Calls firebase.database().remove
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove">https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove</a>
      *
      * @param reference Reference path, not null
-     * @param callback  Callback
      */
-    public static native void removeWithCallback(String reference, CompleteCallback callback) /*-{
+    public static native void removeWithPromise(String reference, FuturePromise promise) /*-{
         $wnd.firebase.database().ref(reference).remove().then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
         })['catch'](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }

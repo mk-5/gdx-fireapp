@@ -29,7 +29,6 @@ import apple.foundation.NSString;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
@@ -83,24 +82,6 @@ public class SetValueQueryTest extends GdxIOSAppTest {
         query.withArgs(value).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).setValue(Mockito.any(NSString.class));
-    }
-
-    @Test
-    public void run_withCallback() throws Exception {
-        // Given
-        PowerMockito.mockStatic(Database.class);
-        Database database = PowerMockito.mock(Database.class);
-        PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
-        Whitebox.setInternalState(database, "databasePath", "/test");
-        SetValueQuery query = new SetValueQuery(database);
-        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
-        String value = "test";
-
-        // When
-        query.withArgs(value, completeCallback).execute();
-
-        // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).setValueWithCompletionBlock(Mockito.any(NSString.class), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).setValueWithCompletionBlock(Mockito.any(NSString.class), Mockito.any(FIRDatabaseReference.Block_setValueWithCompletionBlock.class));
     }
 }

@@ -27,12 +27,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.RemoveValueValidator;
 import mk.gdx.firebase.html.database.Database;
 import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class RemoveValueQueryTest {
@@ -59,10 +58,10 @@ public class RemoveValueQueryTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         RemoveValueQuery query = new RemoveValueQuery(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
 
         // When
-        ((RemoveValueQuery) query.withArgs(callback)).execute();
+        ((RemoveValueQuery) query.with(Mockito.mock(FuturePromise.class)))
+                .execute();
 
         // Then
         Assert.fail("Native method should be run");
@@ -74,7 +73,6 @@ public class RemoveValueQueryTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         RemoveValueQuery query = new RemoveValueQuery(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
 
         // When
         query.execute();
@@ -92,6 +90,6 @@ public class RemoveValueQueryTest {
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
 
         // Then
-        Assert.assertTrue(argumentsValidator instanceof RemoveValueValidator);
+        Assert.assertNull(argumentsValidator);
     }
 }

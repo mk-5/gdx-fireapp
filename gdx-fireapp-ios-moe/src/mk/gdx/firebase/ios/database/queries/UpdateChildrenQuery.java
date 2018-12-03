@@ -18,13 +18,13 @@ package mk.gdx.firebase.ios.database.queries;
 
 import apple.foundation.NSDictionary;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 import mk.gdx.firebase.ios.database.Database;
 import mk.gdx.firebase.ios.database.IosDatabaseQuery;
 import mk.gdx.firebase.ios.database.observers.FIRDatabaseReferenceCompleteObserver;
 import mk.gdx.firebase.ios.helpers.NSDictionaryHelper;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides call to {@link FIRDatabaseReference#updateChildValues(NSDictionary)} ()}.
@@ -49,13 +49,7 @@ public class UpdateChildrenQuery extends IosDatabaseQuery<Void> {
     @Override
     @SuppressWarnings("unchecked")
     protected Void run() {
-        if (arguments.size == 1) {
-            ((FIRDatabaseReference) query).updateChildValues(NSDictionaryHelper.toNSDictionary(arguments.get(0)));
-        } else if (arguments.size == 2) {
-            ((FIRDatabaseReference) query).updateChildValuesWithCompletionBlock(NSDictionaryHelper.toNSDictionary(arguments.get(0)), new FIRDatabaseReferenceCompleteObserver((CompleteCallback) arguments.get(1)));
-        } else {
-            throw new IllegalStateException();
-        }
+        ((FIRDatabaseReference) query).updateChildValuesWithCompletionBlock(NSDictionaryHelper.toNSDictionary(arguments.get(0)), new FIRDatabaseReferenceCompleteObserver((FuturePromise) promise));
         return null;
     }
 }

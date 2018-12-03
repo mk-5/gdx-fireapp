@@ -21,17 +21,17 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
- * Validates arguments for {@link DatabaseDistribution#updateChildren(Map)} and {@link DatabaseDistribution#updateChildren(Map, CompleteCallback)}
+ * Validates arguments for {@link DatabaseDistribution#updateChildren(Map)}
  */
 public class UpdateChildrenValidator implements ArgumentsValidator {
 
     private static final String MESSAGE1 = "Database#updateChildren needs at least 1 argument";
     private static final String MESSAGE2 = "The first argument should be null or Map";
-    private static final String MESSAGE3 = "The second argument should be null or CompleteCallback";
+    private static final String MESSAGE3 = "The second argument should be null or FuturePromise";
 
     @Override
     public void validate(Array<Object> arguments) {
@@ -39,7 +39,7 @@ public class UpdateChildrenValidator implements ArgumentsValidator {
             throw new IllegalArgumentException(MESSAGE1);
         if (arguments.get(0) != null && !(arguments.get(0) instanceof Map))
             throw new IllegalArgumentException(MESSAGE2);
-        if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof CompleteCallback))
+        if (arguments.size > 1 && arguments.get(1) != null && !(arguments.get(1) instanceof FuturePromise))
             throw new IllegalArgumentException(MESSAGE3);
     }
 }

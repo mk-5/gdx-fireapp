@@ -18,7 +18,7 @@ package mk.gdx.firebase.ios.database.observers;
 
 import apple.foundation.NSError;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Wraps {@link mk.gdx.firebase.callbacks.CompleteCallback} with ios completion observer.
@@ -26,17 +26,18 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 public class FIRDatabaseReferenceCompleteObserver implements FIRDatabaseReference.Block_setValueWithCompletionBlock,
         FIRDatabaseReference.Block_removeValueWithCompletionBlock, FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock {
 
-    private CompleteCallback completeCallback;
+    private FuturePromise promise;
 
-    public FIRDatabaseReferenceCompleteObserver(CompleteCallback completeCallback) {
-        this.completeCallback = completeCallback;
+    public FIRDatabaseReferenceCompleteObserver(FuturePromise promise) {
+        this.promise = promise;
     }
 
     protected void process(NSError arg0, FIRDatabaseReference arg1) {
+        if (promise == null) return;
         if (arg0 != null) {
-            completeCallback.onError(new Exception(arg0.localizedDescription()));
+            promise.doFail(new Exception(arg0.localizedDescription()));
         } else {
-            completeCallback.onSuccess();
+            promise.doComplete(null);
         }
     }
 

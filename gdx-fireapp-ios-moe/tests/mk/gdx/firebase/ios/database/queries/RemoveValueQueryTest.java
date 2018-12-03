@@ -28,9 +28,7 @@ import org.powermock.reflect.Whitebox;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
-import mk.gdx.firebase.database.validators.RemoveValueValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 import mk.gdx.firebase.ios.database.Database;
 
@@ -59,7 +57,7 @@ public class RemoveValueQueryTest extends GdxIOSAppTest {
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
 
         // Then
-        Assert.assertTrue(argumentsValidator instanceof RemoveValueValidator);
+        Assert.assertNull(argumentsValidator);
     }
 
     @Test
@@ -75,23 +73,7 @@ public class RemoveValueQueryTest extends GdxIOSAppTest {
         query.execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValue();
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any(FIRDatabaseReference.Block_removeValueWithCompletionBlock.class));
     }
 
-    @Test
-    public void run_withCallback() throws Exception {
-        // Given
-        PowerMockito.mockStatic(Database.class);
-        Database database = PowerMockito.mock(Database.class);
-        PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
-        Whitebox.setInternalState(database, "databasePath", "/test");
-        RemoveValueQuery query = new RemoveValueQuery(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-
-        // When
-        query.withArgs(callback).execute();
-
-        // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any());
-    }
 }

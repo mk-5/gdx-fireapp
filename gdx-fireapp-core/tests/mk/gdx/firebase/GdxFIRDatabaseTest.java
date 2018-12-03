@@ -74,13 +74,11 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     @Test
     public void setValue1() {
         // Given
-        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
-
         // When
-        GdxFIRDatabase.instance().setValue("test", completeCallback);
+        GdxFIRDatabase.instance().setValue("test");
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).setValue(Mockito.eq("test"), Mockito.refEq(completeCallback));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).setValue(Mockito.eq("test"));
     }
 
     @Test
@@ -178,18 +176,6 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     }
 
     @Test
-    public void removeValue1() {
-        // Given
-        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
-
-        // When
-        GdxFIRDatabase.instance().removeValue(completeCallback);
-
-        // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).removeValue(Mockito.refEq(completeCallback));
-    }
-
-    @Test
     public void updateChildren() {
         // Given
         Map map = new HashMap();
@@ -199,19 +185,6 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
 
         // Then
         Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).updateChildren(Mockito.refEq(map));
-    }
-
-    @Test
-    public void updateChildren1() {
-        // Given
-        Map map = new HashMap();
-        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
-
-        // When
-        GdxFIRDatabase.instance().updateChildren(map, completeCallback);
-
-        // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).updateChildren(Mockito.refEq(map), Mockito.refEq(completeCallback));
     }
 
     @Test

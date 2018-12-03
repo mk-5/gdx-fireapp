@@ -22,6 +22,7 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Abstraction for firebase database query.
@@ -40,6 +41,7 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R> {
     protected OrderByClause orderByClause;
     protected Array<Object> arguments;
     protected ArgumentsValidator argumentsValidator;
+    protected Promise<R> promise;
 
     public GdxFireappQuery(T databaseDistribution) {
         this.databaseDistribution = databaseDistribution;
@@ -60,6 +62,11 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R> {
 
     public GdxFireappQuery with(OrderByClause orderByClause) {
         this.orderByClause = orderByClause;
+        return this;
+    }
+
+    public GdxFireappQuery with(Promise<R> promise) {
+        this.promise = promise;
         return this;
     }
 

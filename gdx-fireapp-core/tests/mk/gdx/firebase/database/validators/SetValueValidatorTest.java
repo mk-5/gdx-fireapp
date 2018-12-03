@@ -20,9 +20,6 @@ import com.badlogic.gdx.utils.Array;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import mk.gdx.firebase.callbacks.CompleteCallback;
 
 public class SetValueValidatorTest {
 
@@ -32,20 +29,6 @@ public class SetValueValidatorTest {
         SetValueValidator validator = new SetValueValidator();
         Array arguments = new Array();
         arguments.add("test");
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        // no exception
-    }
-
-    @Test
-    public void validate2() {
-        // Given
-        SetValueValidator validator = new SetValueValidator();
-        Array arguments = new Array();
-        arguments.addAll(10, Mockito.mock(CompleteCallback.class));
 
         // When
         validator.validate(arguments);
@@ -66,20 +49,6 @@ public class SetValueValidatorTest {
 
         // Then
         // no exception
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error2() {
-        // Given
-        SetValueValidator validator = new SetValueValidator();
-        Array arguments = new Array();
-        arguments.addAll(String.class, null);
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
     }
 
     @Test(expected = IllegalArgumentException.class)

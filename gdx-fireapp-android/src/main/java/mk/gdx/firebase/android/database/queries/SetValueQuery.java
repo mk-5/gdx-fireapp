@@ -21,9 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import mk.gdx.firebase.android.database.AndroidDatabaseQuery;
 import mk.gdx.firebase.android.database.Database;
 import mk.gdx.firebase.android.database.listeners.QueryCompletionListener;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.SetValueValidator;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides setValue execution with firebase database reference.
@@ -47,13 +47,8 @@ public class SetValueQuery extends AndroidDatabaseQuery<Void> {
 
     @Override
     protected Void run() {
-        if (arguments.size == 1) {
-            ((DatabaseReference) query).setValue(arguments.get(0));
-        } else if (arguments.size == 2) {
-            ((DatabaseReference) query).setValue(arguments.get(0), new QueryCompletionListener((CompleteCallback) arguments.get(1)));
-        } else {
-            throw new IllegalStateException();
-        }
+
+        ((DatabaseReference) query).setValue(arguments.get(0), new QueryCompletionListener((FuturePromise) promise));
         return null;
     }
 }

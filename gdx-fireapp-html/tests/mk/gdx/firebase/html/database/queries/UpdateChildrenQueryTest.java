@@ -29,12 +29,12 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 import mk.gdx.firebase.html.database.Database;
 import mk.gdx.firebase.html.database.DatabaseReference;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class UpdateChildrenQueryTest {
@@ -76,10 +76,9 @@ public class UpdateChildrenQueryTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         UpdateChildrenQuery query = new UpdateChildrenQuery(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
 
         // When
-        ((UpdateChildrenQuery) query.withArgs(Mockito.mock(Map.class), callback)).execute();
+        ((UpdateChildrenQuery) query.withArgs(Mockito.mock(Map.class)).with(Mockito.mock(FuturePromise.class))).execute();
 
         // Then
         Assert.fail("Native method should be run");

@@ -39,8 +39,11 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Android Firebase database API implementation.
@@ -87,16 +90,16 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void setValue(Object value) {
-        new SetValueQuery(this).withArgs(value).execute();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(Object value, final CompleteCallback completeCallback) {
-        new SetValueQuery(this).withArgs(value, completeCallback).execute();
+    public Promise<Void> setValue(final Object value) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                new SetValueQuery(Database.this)
+                        .withArgs(value)
+                        .with(voidFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**
@@ -151,32 +154,31 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void removeValue() {
-        new RemoveValueQuery(this).execute();
+    public Promise<Void> removeValue() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                new RemoveValueQuery(Database.this)
+                        .with(voidFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeValue(final CompleteCallback completeCallback) {
-        new RemoveValueQuery(this).withArgs(completeCallback).execute();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateChildren(Map<String, Object> data) {
-        new UpdateChildrenQuery(this).withArgs(data).execute();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateChildren(Map<String, Object> data, final CompleteCallback completeCallback) {
-        new UpdateChildrenQuery(this).withArgs(data, completeCallback).execute();
+    public Promise<Void> updateChildren(final Map<String, Object> data) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                new UpdateChildrenQuery(Database.this)
+                        .withArgs(data)
+                        .with(voidFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**
@@ -224,11 +226,10 @@ public class Database implements DatabaseDistribution {
      * <p>
      * Flow-terminate operations are: <uL>
      * <li>{@link #setValue(Object)}</li>
-     * <li>{@link #setValue(Object, CompleteCallback)}</li>
+     * <li>{@link #setValue(Object)}</li>
      * <li>{@link #readValue(Class, DataCallback)}</li>
      * <li>{@link #onDataChange(Class, DataChangeListener)}</li>
      * <li>{@link #updateChildren(Map)}</li>
-     * <li>{@link #updateChildren(Map, CompleteCallback)}</li>
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>
      */

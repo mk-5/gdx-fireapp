@@ -25,8 +25,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import apple.foundation.NSError;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({NatJ.class, NSError.class, FIRDatabaseReference.class})
 public class FIRDatabaseReferenceCompleteObserverTest extends GdxIOSAppTest {
@@ -42,70 +42,70 @@ public class FIRDatabaseReferenceCompleteObserverTest extends GdxIOSAppTest {
     public void process() {
         // Given
         FIRDatabaseReference firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(promise);
 
         // When
         observer.process(null, firDatabaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.any());
     }
 
     @Test
     public void process_withError() {
         // Given
         FIRDatabaseReference firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(promise);
         NSError nsError = Mockito.mock(NSError.class);
 
         // When
         observer.process(nsError, firDatabaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.any(Exception.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.any(Exception.class));
     }
 
     @Test
     public void call_setValueWithCompletionBlock() {
         // Given
         FIRDatabaseReference firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(promise);
 
         // When
         observer.call_setValueWithCompletionBlock(null, firDatabaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.any());
     }
 
     @Test
     public void call_removeValueWithCompletionBlock() {
         // Given
         FIRDatabaseReference firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(promise);
 
         // When
         observer.call_removeValueWithCompletionBlock(null, firDatabaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.any());
     }
 
     @Test
     public void call_updateChildValuesWithCompletionBlock() {
         // Given
         FIRDatabaseReference firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        FIRDatabaseReferenceCompleteObserver observer = new FIRDatabaseReferenceCompleteObserver(promise);
 
         // When
         observer.call_updateChildValuesWithCompletionBlock(null, firDatabaseReference);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.any());
     }
 }

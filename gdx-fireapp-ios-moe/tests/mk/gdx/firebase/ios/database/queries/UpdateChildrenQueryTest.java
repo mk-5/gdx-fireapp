@@ -32,7 +32,6 @@ import apple.foundation.NSMutableDictionary;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
@@ -87,7 +86,7 @@ public class UpdateChildrenQueryTest extends GdxIOSAppTest {
         query.withArgs(data).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValues(Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(Mockito.any(), Mockito.any(FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -105,23 +104,5 @@ public class UpdateChildrenQueryTest extends GdxIOSAppTest {
 
         // Then
         Assert.fail();
-    }
-
-    @Test
-    public void run_withCallback() throws Exception {
-        // Given
-        PowerMockito.mockStatic(Database.class);
-        Database database = PowerMockito.mock(Database.class);
-        PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
-        Whitebox.setInternalState(database, "databasePath", "/test");
-        UpdateChildrenQuery query = new UpdateChildrenQuery(database);
-        Map data = Mockito.mock(Map.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-
-        // When
-        query.withArgs(data, callback).execute();
-
-        // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(Mockito.any(), Mockito.any());
     }
 }

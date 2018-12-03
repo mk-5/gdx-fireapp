@@ -54,7 +54,7 @@ public class ReadValueQuery extends IosDatabaseQuery<Void> {
     /**
      * Observer read value block. Wraps {@code DataCallback}
      */
-    private class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1 {
+    private static class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1 {
 
         private Class type;
         private DataCallback dataCallback;
@@ -87,7 +87,7 @@ public class ReadValueQuery extends IosDatabaseQuery<Void> {
         }
     }
 
-    private class ReadValueCancelBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2 {
+    private static class ReadValueCancelBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2 {
 
         private DataCallback dataCallback;
 

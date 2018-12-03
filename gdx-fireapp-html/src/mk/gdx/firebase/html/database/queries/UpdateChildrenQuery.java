@@ -18,12 +18,12 @@ package mk.gdx.firebase.html.database.queries;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.UpdateChildrenValidator;
 import mk.gdx.firebase.html.database.Database;
 import mk.gdx.firebase.html.database.GwtDatabaseQuery;
 import mk.gdx.firebase.html.database.MapTransformer;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides update javascript execution.
@@ -36,12 +36,10 @@ public class UpdateChildrenQuery extends GwtDatabaseQuery {
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        if (arguments.size == 1) {
+        if (promise == null) {
             update(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)));
-        } else if (arguments.size == 2) {
-            updateWithCallback(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)), (CompleteCallback) arguments.get(1));
         } else {
-            throw new IllegalStateException();
+            updateWithPromise(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)), (FuturePromise) promise);
         }
     }
 
@@ -78,9 +76,8 @@ public class UpdateChildrenQuery extends GwtDatabaseQuery {
      *
      * @param reference   Reference path, not null
      * @param stringValue String value representation
-     * @param callback    Callback
      */
-    public static native void updateWithCallback(String reference, String stringValue, CompleteCallback callback) /*-{
+    public static native void updateWithPromise(String reference, String stringValue, FuturePromise promise) /*-{
         var val;
         try{
             val = JSON.parse(stringValue);
@@ -88,9 +85,9 @@ public class UpdateChildrenQuery extends GwtDatabaseQuery {
             val = stringValue;
         }
         $wnd.firebase.database().ref(reference).update(val).then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
         })['catch'](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+             promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }
