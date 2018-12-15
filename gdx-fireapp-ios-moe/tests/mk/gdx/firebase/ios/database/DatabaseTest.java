@@ -39,7 +39,6 @@ import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -149,14 +148,13 @@ public class DatabaseTest extends GdxIOSAppTest {
     public void readValue() throws Exception {
         // Given
         Database database = new Database();
-        DataCallback callback = Mockito.mock(DataCallback.class);
         PowerMockito.mockStatic(QueryReadValue.class);
         QueryReadValue query = PowerMockito.spy(new QueryReadValue(database));
         PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").readValue(dataType, callback);
+        database.inReference("/test").readValue(dataType);
 
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
@@ -349,7 +347,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Database database = new Database();
 
         // When
-        database.readValue(String.class, Mockito.mock(DataCallback.class));
+        database.readValue(String.class);
 
         // Then
         Assert.fail();

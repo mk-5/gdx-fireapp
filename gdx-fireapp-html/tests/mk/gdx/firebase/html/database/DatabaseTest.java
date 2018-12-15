@@ -136,7 +136,7 @@ public class DatabaseTest {
         // Then
 //        PowerMockito.verifyNew(ReadValueQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(QueryReadValue.class);
-        QueryReadValue.once(Mockito.any(DatabaseReference.class), Mockito.any(JsonDataCallback.class));
+        QueryReadValue.once(Mockito.any(DatabaseReference.class), Mockito.any(JsonPromiseWrapper.class));
     }
 
     @Test

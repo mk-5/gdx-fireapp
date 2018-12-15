@@ -31,19 +31,19 @@ import mk.gdx.firebase.html.GdxHtmlAppTest;
 
 
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class, JsonProcessor.class})
-public class JsonDataCallbackTest extends GdxHtmlAppTest {
+public class JsonPromiseWrapperTest extends GdxHtmlAppTest {
 
     @Test
     public void onData() {
         // Given
         DataCallback dataCallback = Mockito.mock(DataCallback.class);
-        JsonDataCallback<String> jsonDataCallback = new JsonDataCallback<>(String.class, dataCallback);
+        JsonPromiseWrapper<String> jsonPromiseWrapper = new JsonPromiseWrapper<>(String.class, dataCallback);
         String data = "test";
         PowerMockito.mockStatic(JsonProcessor.class);
         Mockito.when(JsonProcessor.process(Mockito.any(Class.class), Mockito.anyString())).thenReturn(data);
 
         // When
-        jsonDataCallback.onData(data);
+        jsonPromiseWrapper.onData(data);
 
         // Then
         Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onData(Mockito.eq("test"));
@@ -55,11 +55,11 @@ public class JsonDataCallbackTest extends GdxHtmlAppTest {
     public void onError() {
         // Given
         DataCallback dataCallback = Mockito.mock(DataCallback.class);
-        JsonDataCallback<String> jsonDataCallback = new JsonDataCallback<>(String.class, dataCallback);
+        JsonPromiseWrapper<String> jsonPromiseWrapper = new JsonPromiseWrapper<>(String.class, dataCallback);
         Exception exception = Mockito.mock(Exception.class);
 
         // When
-        jsonDataCallback.onError(exception);
+        jsonPromiseWrapper.onError(exception);
 
         // Then
         Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onError(Mockito.refEq(exception));

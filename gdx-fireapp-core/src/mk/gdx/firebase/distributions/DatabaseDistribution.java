@@ -34,11 +34,9 @@ import mk.gdx.firebase.promises.Promise;
  * To do that you need to call {@link #inReference(String)} before each of following methods:<p>
  * <ul>
  * <li>{@link #setValue(Object)}
- * <li>{@link #setValue(Object, CompleteCallback)}
  * <li>{@link #updateChildren(Map)}
- * <li>{@link #updateChildren(Map, CompleteCallback)}
  * <li>{@link #onDataChange(Class, DataChangeListener)}
- * <li>{@link #readValue(Class, DataCallback)}
+ * <li>{@link #readValue(Class)}
  * <li>{@link #push()}
  * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}
  * </ul><p>
@@ -77,13 +75,12 @@ public interface DatabaseDistribution {
      * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataCallbackMitmConverter}
      *
      * @param dataType Class you want to retrieve
-     * @param callback Callback that handles response
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
      * @param <R>      More specific type of data you want to retrieve associated with {@code callback} - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      * @see DataCallback
      */
-    <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback);
+    <T, R extends T> Promise<R> readValue(Class<T> dataType);
 
     /**
      * Handles value changes for path given by {@code inReference(String)} and gives response by {@code DataChangeListener}.
@@ -104,7 +101,7 @@ public interface DatabaseDistribution {
     /**
      * Applies filter to the next database query.
      * <p>
-     * It should be applied only before {@link #readValue(Class, DataCallback)} or {@link #onDataChange(Class, DataChangeListener)} execution.
+     * It should be applied only before {@link #readValue(Class)} or {@link #onDataChange(Class, DataChangeListener)} execution.
      * You can read more about filtering here: <a href="https://firebase.google.com/docs/database/android/lists-of-data">firebase filtering</a>
      *
      * @param filterType      Filter type that you want to applied, not null

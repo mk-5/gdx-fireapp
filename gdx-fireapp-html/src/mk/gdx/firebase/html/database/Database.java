@@ -88,8 +88,19 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void readValue(final Class<T> dataType, final DataCallback<R> callback) {
-        new QueryReadValue(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
+    public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
+        return FuturePromise.of(new Consumer<FuturePromise<R>>() {
+            @Override
+            public void accept(FuturePromise<R> rFuturePromise) {
+                // TODO - nie zrobione
+                new QueryReadValue(Database.this)
+                        .with(filters)
+                        .with(orderByClause)
+                        .withArgs(dataType)
+                        .with(rFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**

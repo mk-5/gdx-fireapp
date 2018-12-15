@@ -28,11 +28,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import java.util.List;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({GdxNativesLoader.class, ResolverDataSnapshotOrderBy.class})
-public class ResolverDataCallbackOnDataTest extends AndroidContextTest {
+public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
 
     @Override
     public void setup() throws Exception {
@@ -48,13 +48,13 @@ public class ResolverDataCallbackOnDataTest extends AndroidContextTest {
                 .thenReturn(true);
         List list = Mockito.mock(List.class);
         Mockito.when(ResolverDataSnapshotOrderBy.resolve(Mockito.any(DataSnapshot.class))).thenReturn(list);
-        DataCallback dataCallback = Mockito.mock(DataCallback.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
 
         // When
-        ResolverDataCallbackOnData.resolve(String.class, Mockito.mock(OrderByClause.class), Mockito.mock(DataSnapshot.class), dataCallback);
+        ResolverFuturePromiseOnData.resolve(String.class, Mockito.mock(OrderByClause.class), Mockito.mock(DataSnapshot.class), promise);
 
         // Then
-        Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onData(Mockito.refEq(list));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.refEq(list));
     }
 
     @Test
@@ -63,14 +63,14 @@ public class ResolverDataCallbackOnDataTest extends AndroidContextTest {
         Mockito.when(ResolverDataSnapshotOrderBy.shouldResolveOrderBy(
                 Mockito.any(OrderByClause.class), Mockito.any(Class.class), Mockito.any(DataSnapshot.class)))
                 .thenReturn(false);
-        DataCallback dataCallback = Mockito.mock(DataCallback.class);
+        FuturePromise futurePromise = Mockito.mock(FuturePromise.class);
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getValue()).thenReturn("snapshot_value");
 
         // When
-        ResolverDataCallbackOnData.resolve(String.class, Mockito.mock(OrderByClause.class), dataSnapshot, dataCallback);
+        ResolverFuturePromiseOnData.resolve(String.class, Mockito.mock(OrderByClause.class), dataSnapshot, futurePromise);
 
         // Then
-        Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onData(Mockito.eq("snapshot_value"));
+        Mockito.verify(futurePromise, VerificationModeFactory.times(1)).doComplete(Mockito.eq("snapshot_value"));
     }
 }

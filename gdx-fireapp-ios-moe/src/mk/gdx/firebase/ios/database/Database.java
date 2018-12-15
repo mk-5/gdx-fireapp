@@ -23,7 +23,6 @@ import java.util.Map;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.FilteringStateEnsurer;
@@ -96,9 +95,19 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> void readValue(Class<T> dataType, DataCallback<R> callback) {
+    public <T, R extends T> Promise<R> readValue(Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new QueryReadValue(this).with(filters).with(orderByClause).withArgs(dataType, callback).execute();
+        return FuturePromise.of(new Consumer<FuturePromise<R>>() {
+            @Override
+            public void accept(FuturePromise<R> rFuturePromise) {
+                new QueryReadValue(Database.this)
+                        .with(filters)
+                        .with(orderByClause)
+                        .with(rFuturePromise)
+                        .withArgs(dataType)
+                        .execute();
+            }
+        });
     }
 
     /**
@@ -214,7 +223,7 @@ public class Database implements DatabaseDistribution {
      * <p>
      * Flow-terminate operations are: <uL>
      * <li>{@link #setValue(Object)}</li>
-     * <li>{@link #readValue(Class, DataCallback)}</li>
+     * <li>{@link #readValue(Class)}</li>
      * <li>{@link #onDataChange(Class, DataChangeListener)}</li>
      * <li>{@link #updateChildren(Map)}</li>
      * <li>{@link #updateChildren(Map)}</li>

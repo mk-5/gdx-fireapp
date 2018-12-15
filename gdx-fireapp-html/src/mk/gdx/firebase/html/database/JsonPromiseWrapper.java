@@ -17,6 +17,7 @@
 package mk.gdx.firebase.html.database;
 
 import mk.gdx.firebase.callbacks.DataCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Wraps data callback into callback with String as return type.
@@ -26,16 +27,13 @@ import mk.gdx.firebase.callbacks.DataCallback;
  *
  * @param <T> Result type after json string converting process
  */
-class JsonDataCallback<T> implements DataCallback<String> {
+class JsonPromiseWrapper<T> extends FuturePromise<String> {
     private Class<?> wantedType;
-    private DataCallback dataCallback;
+    private FuturePromise promise;
 
-    /**
-     * @param dataCallback Callback, not null
-     */
-    JsonDataCallback(Class<?> wantedType, DataCallback dataCallback) {
+    JsonPromiseWrapper(Class<?> wantedType, FuturePromise promise) {
         this.wantedType = wantedType;
-        this.dataCallback = dataCallback;
+        this.promise = promise;
     }
 
     /**
@@ -45,13 +43,13 @@ class JsonDataCallback<T> implements DataCallback<String> {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void onData(String data) {
+    public void doComplete(String data) {
         T result = JsonProcessor.process(wantedType, data);
-        dataCallback.onData(result);
+        promise.doComplete(result);
     }
 
     @Override
-    public void onError(Exception e) {
-        dataCallback.onError(e);
+    public void doFail(Throwable throwable) {
+        promise.doFail(throwable);
     }
 }

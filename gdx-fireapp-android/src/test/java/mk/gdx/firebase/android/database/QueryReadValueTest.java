@@ -32,10 +32,10 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.promises.FuturePromise;
 
-@PrepareForTest({GdxNativesLoader.class, ResolverDataCallbackOnData.class, FirebaseDatabase.class})
+@PrepareForTest({GdxNativesLoader.class, ResolverFuturePromiseOnData.class, FirebaseDatabase.class})
 public class QueryReadValueTest extends AndroidContextTest {
 
     private FirebaseDatabase firebaseDatabase;
@@ -44,7 +44,7 @@ public class QueryReadValueTest extends AndroidContextTest {
     @Override
     public void setup() throws Exception {
         super.setup();
-        PowerMockito.mockStatic(ResolverDataCallbackOnData.class);
+        PowerMockito.mockStatic(ResolverFuturePromiseOnData.class);
         PowerMockito.mockStatic(FirebaseDatabase.class);
         firebaseDatabase = PowerMockito.mock(FirebaseDatabase.class);
         Mockito.when(FirebaseDatabase.getInstance()).thenReturn(firebaseDatabase);
@@ -68,11 +68,11 @@ public class QueryReadValueTest extends AndroidContextTest {
         QueryReadValue query = new QueryReadValue(database);
 
         // When
-        ((QueryReadValue) query.withArgs(String.class, Mockito.mock(DataCallback.class))).execute();
+        ((QueryReadValue) query.withArgs(String.class)).execute();
 
         // Then
-        PowerMockito.verifyStatic(ResolverDataCallbackOnData.class);
-        ResolverDataCallbackOnData.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.any(DataCallback.class));
+        PowerMockito.verifyStatic(ResolverFuturePromiseOnData.class);
+        ResolverFuturePromiseOnData.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.nullable(FuturePromise.class));
     }
 
     @Test
@@ -89,12 +89,12 @@ public class QueryReadValueTest extends AndroidContextTest {
         }).when(databaseReference).addListenerForSingleValueEvent(Mockito.any(ValueEventListener.class));
         database.inReference("test");
         QueryReadValue query = new QueryReadValue(database);
-        DataCallback callback = Mockito.mock(DataCallback.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
 
         // When
-        ((QueryReadValue) query.withArgs(String.class, callback)).execute();
+        ((QueryReadValue) query.withArgs(String.class).with(promise)).execute();
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 }

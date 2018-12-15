@@ -21,10 +21,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides call to {@link com.google.firebase.database.Query#addListenerForSingleValueEvent(ValueEventListener)}.
@@ -44,7 +44,7 @@ class QueryReadValue extends AndroidDatabaseQuery<Void> {
     @SuppressWarnings("unchecked")
     protected Void run() {
         filtersProvider.applyFiltering()
-                .addListenerForSingleValueEvent(new SingleValueListener((Class) arguments.get(0), (DataCallback) arguments.get(1), orderByClause));
+                .addListenerForSingleValueEvent(new SingleValueListener((Class) arguments.get(0), (FuturePromise) promise, orderByClause));
         return null;
     }
 
@@ -54,26 +54,26 @@ class QueryReadValue extends AndroidDatabaseQuery<Void> {
      * @param <T> Class of object that we want to listen for change. For ex. List
      * @param <E> Return type of object that we want to listen for change. For ex. List<MyClass>
      */
-    private class SingleValueListener<T, E extends T> implements ValueEventListener {
+    private static class SingleValueListener<T, E extends T> implements ValueEventListener {
 
         private Class<T> dataType;
-        private DataCallback<E> callback;
+        private FuturePromise<E> promise;
         private OrderByClause orderByClause;
 
-        private SingleValueListener(Class<T> dataType, DataCallback<E> callback, OrderByClause orderByClause) {
+        private SingleValueListener(Class<T> dataType, FuturePromise<E> promise, OrderByClause orderByClause) {
             this.dataType = dataType;
-            this.callback = callback;
+            this.promise = promise;
             this.orderByClause = orderByClause;
         }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            ResolverDataCallbackOnData.resolve(dataType, orderByClause, dataSnapshot, callback);
+            ResolverFuturePromiseOnData.resolve(dataType, orderByClause, dataSnapshot, promise);
         }
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            callback.onError(databaseError.toException());
+            promise.doFail(databaseError.toException());
         }
     }
 }

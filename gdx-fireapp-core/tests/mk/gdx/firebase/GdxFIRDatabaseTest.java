@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -85,20 +84,20 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     public void readValue() {
         // Given
         // When
-        GdxFIRDatabase.instance().readValue(String.class, Mockito.mock(DataCallback.class));
+        GdxFIRDatabase.instance().readValue(String.class);
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).readValue(Mockito.eq(String.class), Mockito.any(DataCallback.class));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).readValue(Mockito.eq(String.class));
     }
 
     @Test
     public void readValue2() {
         // Given
         // When
-        GdxFIRDatabase.instance().readValue(GdxFIRDatabaseTest.class, Mockito.mock(DataCallback.class));
+        GdxFIRDatabase.instance().readValue(GdxFIRDatabaseTest.class);
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).readValue(Mockito.eq(Map.class), Mockito.any(DataCallback.class));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).readValue(Mockito.eq(Map.class));
     }
 
     @Test

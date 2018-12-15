@@ -18,25 +18,21 @@ package mk.gdx.firebase.database.validators;
 
 import com.badlogic.gdx.utils.Array;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 
 /**
- * Validates arguments for {@link DatabaseDistribution#readValue(Class, DataCallback)}
+ * Validates arguments for {@link DatabaseDistribution#readValue(Class)}
  */
 public class ReadValueValidator implements ArgumentsValidator {
 
-    private static final String MESSAGE1 = "Database#readValue needs at least 2 arguments";
+    private static final String MESSAGE1 = "Database#readValue needs only 1 argument";
     private static final String MESSAGE2 = "The first argument should be class type";
-    private static final String MESSAGE3 = "The second argument should be DataCallback";
 
     @Override
     public void validate(Array<Object> arguments) {
-        if (arguments.size != 2)
+        if (arguments.size != 1)
             throw new IllegalArgumentException(MESSAGE1);
         if (!(arguments.get(0) instanceof Class))
             throw new IllegalArgumentException(MESSAGE2);
-        if (!(arguments.get(1) instanceof DataCallback))
-            throw new IllegalArgumentException(MESSAGE3);
     }
 }

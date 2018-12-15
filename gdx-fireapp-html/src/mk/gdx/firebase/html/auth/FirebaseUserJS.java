@@ -48,33 +48,33 @@ class FirebaseUserJS extends JavaScriptObject {
 
     public final native void updateEmail(String newEmail, FuturePromise promise) /*-{
         this.updateEmail(newEmail).then(function(){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
     public final native void sendEmailVerification(FuturePromise promise) /*-{
         this.sendEmailVerification().then(function(){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-             promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+             promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
     public final native void updatePassword(String newPassword, FuturePromise promise) /*-{
         this.updatePassword(newPassword).then(function(){
-           promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+           promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-           promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+           promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
     public final native void delete(FuturePromise promise) /*-{
         this["delete"]().then(function(){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-             promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+             promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 

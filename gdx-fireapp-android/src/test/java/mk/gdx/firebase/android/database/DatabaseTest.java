@@ -33,7 +33,6 @@ import java.util.Map;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -42,6 +41,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
 
 @PrepareForTest({
@@ -138,11 +138,10 @@ public class DatabaseTest extends AndroidContextTest {
         PowerMockito.mockStatic(QueryReadValue.class);
         Database database = new Database();
         QueryReadValue query = Mockito.spy(new QueryReadValue(database));
-        DataCallback dataCallback = Mockito.mock(DataCallback.class);
         PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.inReference("/test").readValue(String.class, dataCallback);
+        ((FuturePromise) database.inReference("/test").readValue(String.class)).doComplete(null);
 
         // Then
         PowerMockito.verifyNew(QueryReadValue.class);

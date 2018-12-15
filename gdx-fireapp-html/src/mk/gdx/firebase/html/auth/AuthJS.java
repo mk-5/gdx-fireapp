@@ -38,14 +38,14 @@ class AuthJS {
     static native void signInAnonymously(final FuturePromise promise) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
-                promise.@mk.gdx.firebase.promises.Promise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
                     @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
                 );
             }
             removeAuthListener();
         });
         $wnd.firebase.auth().signInAnonymously()['catch'](function(error) {
-           promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Exception;)(
+           promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(
             @java.lang.Exception::new(Ljava/lang/String;)(error.message)
           );
         });
@@ -54,14 +54,14 @@ class AuthJS {
     static native void signInWithEmailAndPassword(final String email, final String password, final FuturePromise promise) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
-                promise.@mk.gdx.firebase.promises.Promise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
                     @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
                 );
             }
             removeAuthListener();
         });
         $wnd.firebase.auth().signInWithEmailAndPassword(email, password)['catch'](function(error) {
-            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Throwable;)(
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });
@@ -69,11 +69,11 @@ class AuthJS {
 
     static native void createUserWithEmailAndPassword(final String email, final String password, final FuturePromise promise) /*-{
         $wnd.firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
                 @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
             );
         })['catch'](function(error) {
-            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Throwable;)(
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });
@@ -82,14 +82,14 @@ class AuthJS {
     static native void signInWithToken(final String token, final FuturePromise promise) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
-                promise.@mk.gdx.firebase.promises.Promise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
                     @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
                 );
             }
             removeAuthListener();
         });
         $wnd.firebase.auth().signInWithCustomToken(token)['catch'](function(error) {
-            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Throwable;)(
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });
@@ -97,13 +97,13 @@ class AuthJS {
 
     static native void signOut(final FuturePromise promise) /*-{
         if( $wnd.firebase.auth().currentUser == null ){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
             return;
         }
         $wnd.firebase.auth().signOut().then(function(){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })['catch'](function(error) {
-            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Throwable;)(
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });
@@ -111,9 +111,9 @@ class AuthJS {
 
     static native void sendPasswordResetEmail(String email, final FuturePromise promise) /*-{
         $wnd.firebase.auth().sendPasswordResetEmail(email).then(function(){
-            promise.@mk.gdx.firebase.promises.Promise::doComplete(Ljava/lang/Void;)(null);
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            promise.@mk.gdx.firebase.promises.Promise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 
