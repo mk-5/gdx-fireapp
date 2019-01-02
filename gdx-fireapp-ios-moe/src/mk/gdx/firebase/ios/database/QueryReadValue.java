@@ -20,10 +20,11 @@ import apple.foundation.NSError;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.MapConverterPromise;
 
 /**
  * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
@@ -42,8 +43,8 @@ class QueryReadValue extends IosDatabaseQuery<Void> {
     @SuppressWarnings("unchecked")
     protected Void run() {
         filtersProvider.applyFiltering().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value,
-                new ReadValueBlock((Class) arguments.get(0), orderByClause, (DataCallback) arguments.get(1)),
-                new ReadValueCancelBlock((DataCallback) arguments.get(1)));
+                new ReadValueBlock((Class) arguments.get(0), orderByClause, (MapConverterPromise) promise),
+                new ReadValueCancelBlock((MapConverterPromise) promise));
         return null;
     }
 
@@ -53,19 +54,19 @@ class QueryReadValue extends IosDatabaseQuery<Void> {
     private static class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1 {
 
         private Class type;
-        private DataCallback dataCallback;
+        private MapConverterPromise promise;
         private OrderByClause orderByClause;
 
-        private ReadValueBlock(Class type, OrderByClause orderByClause, DataCallback dataCallback) {
+        private ReadValueBlock(Class type, OrderByClause orderByClause, MapConverterPromise promise) {
             this.type = type;
             this.orderByClause = orderByClause;
-            this.dataCallback = dataCallback;
+            this.promise = promise;
         }
 
         @Override
         public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1(FIRDataSnapshot arg0, String arg1) {
             if (arg0.value() == null) {
-                dataCallback.onError(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
+                promise.doFail(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
                 Object data = null;
                 try {
@@ -75,25 +76,25 @@ class QueryReadValue extends IosDatabaseQuery<Void> {
                         data = ResolverFIRDataSnapshotOrderBy.resolve(arg0);
                     }
                 } catch (Exception e) {
-                    dataCallback.onError(e);
+                    promise.doFail(e);
                     return;
                 }
-                dataCallback.onData(data);
+                promise.doCompleteWithConversion(data);
             }
         }
     }
 
     private static class ReadValueCancelBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2 {
 
-        private DataCallback dataCallback;
+        private FuturePromise promise;
 
-        private ReadValueCancelBlock(DataCallback dataCallback) {
-            this.dataCallback = dataCallback;
+        private ReadValueCancelBlock(FuturePromise promise) {
+            this.promise = promise;
         }
 
         @Override
         public void call_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2(NSError arg0) {
-            dataCallback.onError(new Exception(arg0.localizedDescription()));
+            promise.doFail(new Exception(arg0.localizedDescription()));
         }
     }
 }

@@ -23,9 +23,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import mk.gdx.firebase.callbacks.DataCallback;
-import mk.gdx.firebase.listeners.DataChangeListener;
-
-import static org.junit.Assert.*;
 
 public class ReadValueValidatorTest {
 
@@ -34,7 +31,7 @@ public class ReadValueValidatorTest {
         // Given
         ReadValueValidator validator = new ReadValueValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(DataCallback.class));
+        arguments.addAll(String.class);
 
         // When
         validator.validate(arguments);
@@ -48,20 +45,6 @@ public class ReadValueValidatorTest {
         // Given
         ReadValueValidator validator = new ReadValueValidator();
         Array arguments = new Array();
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error2() {
-        // Given
-        ReadValueValidator validator = new ReadValueValidator();
-        Array arguments = new Array();
-        arguments.addAll(String.class);
 
         // When
         validator.validate(arguments);

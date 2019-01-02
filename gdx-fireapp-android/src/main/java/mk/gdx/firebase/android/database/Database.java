@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRDatabase;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
@@ -35,6 +36,7 @@ import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.MapConverterPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -101,9 +103,9 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, E extends T> Promise<E> readValue(final Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return FuturePromise.of(new Consumer<FuturePromise<E>>() {
+        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<E>>() {
             @Override
-            public void accept(FuturePromise<E> eFuturePromise) {
+            public void accept(MapConverterPromise<E> eFuturePromise) {
                 new QueryReadValue(Database.this).with(filters)
                         .with(orderByClause)
                         .withArgs(dataType)
@@ -117,9 +119,21 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener) {
+    @SuppressWarnings("unchecked")
+    public <T, R extends T> Promise<R> onDataChange(final Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        new QueryOnDataChange(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+            @Override
+            public void accept(MapConverterPromise<R> rFuturePromise) {
+                // TODO - not implemented
+                new QueryOnDataChange(Database.this)
+                        .with(filters)
+                        .with(orderByClause)
+                        .with(rFuturePromise)
+                        .withArgs(dataType)
+                        .execute();
+            }
+        });
     }
 
     /**

@@ -36,7 +36,7 @@ public class MapMitmConverter {
     /**
      * @param mapConverter Map converter implementation, not null
      */
-    MapMitmConverter(FirebaseMapConverter mapConverter) {
+    public MapMitmConverter(FirebaseMapConverter mapConverter) {
         this.mapConverter = mapConverter;
     }
 
@@ -46,13 +46,13 @@ public class MapMitmConverter {
      * If {@code data} is a Map, convert directly.
      * If {@code data} is a List, go through all elements and do conversion on each element.
      *
-     * @param mapConversionType Type to which map will be transformed
+     * @param wantedType Type to which map will be transformed
      * @param data              Results to go through and convert founded maps, may be null
      * @return Converted data or same data if no Map founded, may be null.
      * @throws MapConversionNotPossibleException If can't do conversion
      */
     @SuppressWarnings("unchecked")
-    Object doMitmConversion(Class<?> mapConversionType, Object data) {
+    public Object doMitmConversion(Class<?> wantedType, Object data) {
         if (data == null) return null;
         // If client tell us to do map conversion and is not possible - throw exception.
         if (!isConversionPossible(data))
@@ -60,7 +60,7 @@ public class MapMitmConverter {
         // Check if Map is covered by data in some way, otherwise throw exception.
         if (ClassReflection.isAssignableFrom(Map.class, data.getClass())) {
             // First case - Map, do simple conversion.
-            data = mapConverter.convert((Map) data, mapConversionType);
+            data = mapConverter.convert((Map) data, wantedType);
         } else if (ClassReflection.isAssignableFrom(List.class, data.getClass())) {
             // Second case - List, go through all elements and convert it to map.
             for (int i = ((List) data).size() - 1; i >= 0; i--) {
@@ -69,7 +69,7 @@ public class MapMitmConverter {
                     GdxFIRLogger.log("@MapConversion: One of list value are not a Map - value was dropped. Element type: " + (element != null ? element.getClass() : "null"));
                     ((List) data).remove(i);
                 } else {
-                    ((List) data).set(i, mapConverter.convert((Map) element, mapConversionType));
+                    ((List) data).set(i, mapConverter.convert((Map) element, wantedType));
                 }
             }
         }

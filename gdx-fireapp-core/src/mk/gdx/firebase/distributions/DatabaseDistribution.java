@@ -89,14 +89,15 @@ public interface DatabaseDistribution {
      * <p>
      * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter}
      *
+     * TODO - how to detach listeners?
+     *
      * @param dataType Class you want to retrieve
-     * @param listener Listener, may by null - if null all listeners for specified database reference will be removed.
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
      * @param <R>      More specific type of data you want to retrieve associated with {@code listener} - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
      * @see DataChangeListener
      */
-    <T, R extends T> void onDataChange(Class<T> dataType, DataChangeListener<R> listener);
+    <T, R extends T> Promise<R> onDataChange(Class<T> dataType);
 
     /**
      * Applies filter to the next database query.

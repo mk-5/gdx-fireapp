@@ -29,7 +29,7 @@ import java.util.List;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.database.pojos.OrderByClause;
-import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.MapConverterPromise;
 
 @PrepareForTest({GdxNativesLoader.class, ResolverDataSnapshotOrderBy.class})
 public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
@@ -48,7 +48,7 @@ public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
                 .thenReturn(true);
         List list = Mockito.mock(List.class);
         Mockito.when(ResolverDataSnapshotOrderBy.resolve(Mockito.any(DataSnapshot.class))).thenReturn(list);
-        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        MapConverterPromise promise = Mockito.mock(MapConverterPromise.class);
 
         // When
         ResolverFuturePromiseOnData.resolve(String.class, Mockito.mock(OrderByClause.class), Mockito.mock(DataSnapshot.class), promise);
@@ -63,7 +63,7 @@ public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
         Mockito.when(ResolverDataSnapshotOrderBy.shouldResolveOrderBy(
                 Mockito.any(OrderByClause.class), Mockito.any(Class.class), Mockito.any(DataSnapshot.class)))
                 .thenReturn(false);
-        FuturePromise futurePromise = Mockito.mock(FuturePromise.class);
+        MapConverterPromise futurePromise = Mockito.mock(MapConverterPromise.class);
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getValue()).thenReturn("snapshot_value");
 

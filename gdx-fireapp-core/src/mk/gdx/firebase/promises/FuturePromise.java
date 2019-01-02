@@ -34,7 +34,7 @@ public class FuturePromise<T> implements Promise<T> {
     private static final int FAIL = 1;
     private static final int INIT = 0;
 
-    private Consumer<T> thenConsumer;
+    protected Consumer<T> thenConsumer;
     private BiConsumer<String, ? super Throwable> failConsumer;
     private Runnable alwaysRunnable;
     private Array<FuturePromise<T>> thenPromises = new Array<>();

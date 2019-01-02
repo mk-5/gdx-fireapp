@@ -22,13 +22,11 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.deserialization.TransactionMitmConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.listeners.ConnectedListener;
-import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -106,20 +104,21 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
 //        } else {
 //            return platformObject.readValue(dataType, mitmConverter.getGenericDataCallback());
 //        }
-        return null;
+        return platformObject.readValue(dataType);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <T, E extends T> void onDataChange(Class<T> dataType, DataChangeListener<E> listener) {
-        DataChangeListenerMitmConverter<T, E> mitmConverter = new DataChangeListenerMitmConverter<T, E>(dataType, listener, mapConverter);
-        if (mitmConverter.isPojo(dataType)) {
-            platformObject.onDataChange(Map.class, mitmConverter.getPojoListener());
-        } else {
-            platformObject.onDataChange(dataType, mitmConverter.getGenericListener());
-        }
+    public <T, E extends T> Promise<E> onDataChange(Class<T> dataType) {
+//        DataChangeListenerMitmConverter<T, E> mitmConverter = new DataChangeListenerMitmConverter<T, E>(dataType, listener, mapConverter);
+//        if (mitmConverter.isPojo(dataType)) {
+//            platformObject.onDataChange(Map.class, mitmConverter.getPojoListener());
+//        } else {
+//            platformObject.onDataChange(dataType, mitmConverter.getGenericListener());
+//        }
+        return platformObject.onDataChange(dataType);
     }
 
     /**
@@ -196,7 +195,15 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * @param mapConverter Map convert instance, not null
      */
     public void setMapConverter(FirebaseMapConverter mapConverter) {
+        if (mapConverter == null) throw new IllegalArgumentException();
         this.mapConverter = mapConverter;
+    }
+
+    /**
+     * @return Map converter instance, not null
+     */
+    public FirebaseMapConverter getMapConverter() {
+        return mapConverter;
     }
 
     /**

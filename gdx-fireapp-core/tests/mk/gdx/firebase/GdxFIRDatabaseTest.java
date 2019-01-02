@@ -94,7 +94,7 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     public void readValue2() {
         // Given
         // When
-        GdxFIRDatabase.instance().readValue(GdxFIRDatabaseTest.class);
+        GdxFIRDatabase.instance().readValue(Map.class);
 
         // Then
         Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).readValue(Mockito.eq(Map.class));

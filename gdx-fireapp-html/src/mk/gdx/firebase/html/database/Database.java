@@ -21,8 +21,8 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
+import mk.gdx.firebase.GdxFIRDatabase;
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -32,8 +32,8 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.listeners.ConnectedListener;
-import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.MapConverterPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -89,9 +89,9 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
-        return FuturePromise.of(new Consumer<FuturePromise<R>>() {
+        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
             @Override
-            public void accept(FuturePromise<R> rFuturePromise) {
+            public void accept(MapConverterPromise<R> rFuturePromise) {
                 // TODO - nie zrobione
                 new QueryReadValue(Database.this)
                         .with(filters)
@@ -107,8 +107,20 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void onDataChange(final Class<T> dataType, final DataChangeListener<R> listener) {
-        new QueryOnDataChange(this).with(filters).with(orderByClause).withArgs(dataType, listener).execute();
+    @SuppressWarnings("unchecked")
+    public <T, R extends T> Promise<R> onDataChange(final Class<T> dataType) {
+        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+            @Override
+            public void accept(MapConverterPromise<R> rMapConverterPromise) {
+                // TODO - not implemented
+                new QueryOnDataChange(Database.this)
+                        .with(filters)
+                        .with(orderByClause)
+                        .with(rMapConverterPromise)
+                        .withArgs(dataType)
+                        .execute();
+            }
+        });
     }
 
     /**
@@ -219,8 +231,8 @@ public class Database implements DatabaseDistribution {
      * <p>
      * Flow-terminate operations are: <uL>
      * <li>{@link #setValue(Object)}</li>
-     * <li>{@link #readValue(Class, DataCallback)}</li>
-     * <li>{@link #onDataChange(Class, DataChangeListener)}</li>
+     * <li>{@link #readValue(Class)}</li>
+     * <li>{@link #onDataChange(Class)}</li>
      * <li>{@link #updateChildren(Map)}</li>
      * <li>{@link #updateChildren(Map)}</li>
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
