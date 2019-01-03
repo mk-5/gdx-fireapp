@@ -58,3 +58,6 @@
 
 **[1.9.1]**  
 \- API Addition: #reload() method in User API
+
+**[1.9.2]**
+\- fix: #13 [iOS Database] Can't read string value

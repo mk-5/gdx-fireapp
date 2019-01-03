@@ -124,6 +124,17 @@ public class DataProcessorTest extends GdxIOSAppTest {
         Assert.assertTrue(resultFloat instanceof Float);
     }
 
+    @Test
+    public void iosDataToJava_sameReturnTypeAsWanted() {
+        // Given
+        final String data = "abc";
+
+        // When
+        final String result = DataProcessor.iosDataToJava(data, String.class);
+
+        // Then
+        Assert.assertEquals(data, result);
+    }
 
     @Test
     public void iosDataToJava_array() throws Exception {

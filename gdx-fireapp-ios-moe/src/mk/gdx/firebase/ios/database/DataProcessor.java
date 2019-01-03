@@ -66,8 +66,10 @@ public class DataProcessor {
         Class resultType = iosObject.getClass();
         T result = null;
         try {
-            if (NSNull.class.isAssignableFrom(iosObject.getClass())) {
+            if (iosObject == null || NSNull.class.isAssignableFrom(iosObject.getClass())) {
                 return null;
+            } else if (wantedType.isAssignableFrom(iosObject.getClass())) {
+                return (T) iosObject;
             } else if (NSString.class.isAssignableFrom(resultType) && wantedType == String.class) {
                 result = processPrimitiveData(iosObject, wantedType);
             } else if (NSNumber.class.isAssignableFrom(resultType) && (Number.class.isAssignableFrom(wantedType) || wantedType == Boolean.class)) {
