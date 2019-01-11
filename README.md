@@ -96,6 +96,7 @@ For some examples please look at [examples wiki page](https://github.com/mk-5/gd
 
 - Better wiki/documentation
 - Promises instead of callbacks
+- Remote configuration API
 - Facebook, github authorization
 - Messaging
 - Upload task monitoring
