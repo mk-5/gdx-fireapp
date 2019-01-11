@@ -17,7 +17,6 @@ import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.listeners.ConnectedListener;
-import mk.gdx.firebase.listeners.DataChangeListener;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -104,30 +103,30 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     public void onDataChange() {
         // Given
         // When
-        GdxFIRDatabase.instance().onDataChange(String.class, Mockito.mock(DataChangeListener.class));
+        GdxFIRDatabase.instance().onDataChange(String.class);
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(String.class), Mockito.any(DataChangeListener.class));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(String.class));
     }
 
     @Test
     public void onDataChange2() {
         // Given
         // When
-        GdxFIRDatabase.instance().onDataChange(GdxFIRDatabaseTest.class, Mockito.mock(DataChangeListener.class));
+        GdxFIRDatabase.instance().onDataChange(GdxFIRDatabaseTest.class);
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(Map.class), Mockito.any(DataChangeListener.class));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(GdxFIRDatabaseTest.class));
     }
 
     @Test
     public void onDataChange_withNull() {
         // Given
         // When
-        GdxFIRDatabase.instance().onDataChange(Map.class, null);
+        GdxFIRDatabase.instance().onDataChange(null);
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.eq(Map.class), (DataChangeListener<Map>) Mockito.isNull());
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onDataChange(Mockito.nullable(Class.class));
     }
 
     @Test

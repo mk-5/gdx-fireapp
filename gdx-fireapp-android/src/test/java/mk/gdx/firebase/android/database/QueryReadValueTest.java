@@ -33,7 +33,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.database.pojos.OrderByClause;
-import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 @PrepareForTest({GdxNativesLoader.class, ResolverFuturePromiseOnData.class, FirebaseDatabase.class})
 public class QueryReadValueTest extends AndroidContextTest {
@@ -72,7 +72,7 @@ public class QueryReadValueTest extends AndroidContextTest {
 
         // Then
         PowerMockito.verifyStatic(ResolverFuturePromiseOnData.class);
-        ResolverFuturePromiseOnData.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.nullable(FuturePromise.class));
+        ResolverFuturePromiseOnData.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.nullable(ConverterPromise.class));
     }
 
     @Test
@@ -89,10 +89,10 @@ public class QueryReadValueTest extends AndroidContextTest {
         }).when(databaseReference).addListenerForSingleValueEvent(Mockito.any(ValueEventListener.class));
         database.inReference("test");
         QueryReadValue query = new QueryReadValue(database);
-        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
-        ((QueryReadValue) query.withArgs(String.class).with(promise)).execute();
+        query.with(promise).withArgs(String.class).execute();
 
         // Then
         Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));

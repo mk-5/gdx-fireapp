@@ -32,7 +32,9 @@ import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
+
+import static org.mockito.Mockito.mock;
 
 @PrepareForTest({NatJ.class, FIRDatabase.class, FIRDatabaseReference.class, FIRDatabaseQuery.class, Database.class})
 public class QueryOnDataChangeTest extends GdxIOSAppTest {
@@ -44,8 +46,8 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
     public void setup() {
         super.setup();
         PowerMockito.mockStatic(FIRDatabase.class);
-        firDatabase = Mockito.mock(FIRDatabase.class);
-        firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
+        firDatabase = mock(FIRDatabase.class);
+        firDatabaseReference = mock(FIRDatabaseReference.class);
         Mockito.when(firDatabase.referenceWithPath(Mockito.anyString())).thenReturn(firDatabaseReference);
         Mockito.when(FIRDatabase.database()).thenReturn(firDatabase);
     }
@@ -58,7 +60,7 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryOnDataChange query = new QueryOnDataChange(Mockito.mock(Database.class));
+        QueryOnDataChange query = new QueryOnDataChange(mock(Database.class));
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
@@ -79,11 +81,10 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
         Whitebox.setInternalState(database, "databasePath", "/test");
         QueryOnDataChange query = new QueryOnDataChange(database);
         Class dataType = String.class;
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
 
 
         // When
-        query.withArgs(dataType, listener).execute();
+        query.with(mock(ConverterPromise.class)).withArgs(dataType).execute();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());
@@ -104,11 +105,10 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
         Whitebox.setInternalState(database, "databasePath", "/test");
         QueryOnDataChange query = new QueryOnDataChange(database);
         Class dataType = String.class;
-        DataChangeListener listener = null;
 
 
         // When
-        query.withArgs(dataType, listener).execute();
+        query.with(mock(ConverterPromise.class)).withArgs((Object[]) null).execute();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeObserverWithHandle(Mockito.eq(handleValue));

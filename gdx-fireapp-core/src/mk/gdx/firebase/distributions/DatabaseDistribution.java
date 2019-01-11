@@ -19,12 +19,10 @@ package mk.gdx.firebase.distributions;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.listeners.ConnectedListener;
-import mk.gdx.firebase.listeners.DataChangeListener;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -35,7 +33,7 @@ import mk.gdx.firebase.promises.Promise;
  * <ul>
  * <li>{@link #setValue(Object)}
  * <li>{@link #updateChildren(Map)}
- * <li>{@link #onDataChange(Class, DataChangeListener)}
+ * <li>{@link #onDataChange(Class)}
  * <li>{@link #readValue(Class)}
  * <li>{@link #push()}
  * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}
@@ -72,13 +70,12 @@ public interface DatabaseDistribution {
     /**
      * Reads value from path given by {@code inReference(String)} and gives response by {@code DataCallback}.
      * <p>
-     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataCallbackMitmConverter}
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.MapConverter}
      *
      * @param dataType Class you want to retrieve
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
      * @param <R>      More specific type of data you want to retrieve associated with {@code callback} - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
-     * @see DataCallback
      */
     <T, R extends T> Promise<R> readValue(Class<T> dataType);
 
@@ -87,7 +84,7 @@ public interface DatabaseDistribution {
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      * <p>
-     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.DataChangeListenerMitmConverter}
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.MapConverter}
      *
      * TODO - how to detach listeners?
      *
@@ -95,14 +92,13 @@ public interface DatabaseDistribution {
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
      * @param <R>      More specific type of data you want to retrieve associated with {@code listener} - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call before.
-     * @see DataChangeListener
      */
     <T, R extends T> Promise<R> onDataChange(Class<T> dataType);
 
     /**
      * Applies filter to the next database query.
      * <p>
-     * It should be applied only before {@link #readValue(Class)} or {@link #onDataChange(Class, DataChangeListener)} execution.
+     * It should be applied only before {@link #readValue(Class)} or {@link #onDataChange(Class)} execution.
      * You can read more about filtering here: <a href="https://firebase.google.com/docs/database/android/lists-of-data">firebase filtering</a>
      *
      * @param filterType      Filter type that you want to applied, not null

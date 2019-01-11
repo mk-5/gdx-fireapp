@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,6 @@ import com.badlogic.gdx.utils.Array;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import mk.gdx.firebase.callbacks.DataCallback;
 
 public class ReadValueValidatorTest {
 
@@ -72,7 +69,7 @@ public class ReadValueValidatorTest {
         // Given
         ReadValueValidator validator = new ReadValueValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(DataCallback.class), Mockito.mock(DataCallback.class));
+        arguments.addAll(String.class, String.class, String.class);
 
         // When
         validator.validate(arguments);

@@ -18,13 +18,12 @@ package mk.gdx.firebase.html.database;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
-import mk.gdx.firebase.promises.ModifierPromise;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 /**
  * Provides setValue execution.
  */
-class QueryReadValue extends GwtDatabaseQuery {
-    private JsonPromiseWrapper jsPromiseWrapper;
+class QueryReadValue<R> extends GwtDatabaseQuery<R> {
 
     QueryReadValue(Database databaseDistribution) {
         super(databaseDistribution);
@@ -33,8 +32,8 @@ class QueryReadValue extends GwtDatabaseQuery {
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        ((ModifierPromise) promise).with(new JsonPromiseModifier((Class) arguments.get(0)));
-        once(databaseReference, (ModifierPromise) promise);
+        ((ConverterPromise) promise).with(new JsonPromiseModifier((Class) arguments.get(0)));
+        once(databaseReference, (ConverterPromise) promise);
     }
 
     @Override
@@ -48,7 +47,7 @@ class QueryReadValue extends GwtDatabaseQuery {
      *
      * @param databaseReference DatabaseReference path, not null
      */
-    static native void once(DatabaseReference databaseReference, ModifierPromise promise) /*-{
+    static native void once(DatabaseReference databaseReference, ConverterPromise promise) /*-{
         var orderByCalled = databaseReference.orderByCalled_;
         databaseReference.once("value").then(function(snapshot){
             var val;
@@ -61,9 +60,9 @@ class QueryReadValue extends GwtDatabaseQuery {
                 });
                 val = JSON.stringify(tmp);
             }
-            promise.@mk.gdx.firebase.promises.ModifierPromise::doCompleteModify(Ljava/lang/String;)(val);
+            promise.@mk.gdx.firebase.promises.ConverterPromise::doComplete(Ljava/lang/String;)(val);
         })['catch'](function(error){
-         promise.@mk.gdx.firebase.promises.ModifierPromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+         promise.@mk.gdx.firebase.promises.ConverterPromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }

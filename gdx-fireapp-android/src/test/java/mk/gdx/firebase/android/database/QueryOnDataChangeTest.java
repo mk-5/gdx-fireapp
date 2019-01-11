@@ -34,7 +34,7 @@ import java.util.Map;
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 @PrepareForTest({
         GdxNativesLoader.class, FirebaseDatabase.class,
@@ -70,16 +70,16 @@ public class QueryOnDataChangeTest extends AndroidContextTest {
     @Test
     public void run() throws Exception {
         // Given
-        Database databaseDistribution = Mockito.spy(Database.class);
-        DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
-        DataChangeListener dataChangeListener = Mockito.mock(DataChangeListener.class);
+        final Database databaseDistribution = Mockito.spy(Database.class);
+        final DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
-        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
+        final QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
+        final ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
         databaseDistribution.inReference("/test");
-        queryOnDataChange.withArgs(Map.class, dataChangeListener).execute();
+        queryOnDataChange.with(promise).withArgs(Map.class).execute();
 
         // Then
         Mockito.verify(databaseReference, VerificationModeFactory.times(1)).addValueEventListener(Mockito.any(ValueEventListener.class));
@@ -88,15 +88,16 @@ public class QueryOnDataChangeTest extends AndroidContextTest {
     @Test
     public void run_detach() throws Exception {
         // Given
-        Database databaseDistribution = Mockito.spy(Database.class);
-        DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
+        final Database databaseDistribution = Mockito.spy(Database.class);
+        final DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
         QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
+        final ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
         databaseDistribution.inReference("/test");
-        queryOnDataChange.withArgs(Map.class, null).execute();
+        queryOnDataChange.with(promise).withArgs(new Object[]{null}).execute();
 
         // Then
         Mockito.verify(databaseReference, VerificationModeFactory.times(0)).addValueEventListener(Mockito.any(ValueEventListener.class));

@@ -20,10 +20,6 @@ import com.badlogic.gdx.utils.Array;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import mk.gdx.firebase.callbacks.DataCallback;
-import mk.gdx.firebase.listeners.DataChangeListener;
 
 public class OnDataValidatorTest {
 
@@ -32,21 +28,7 @@ public class OnDataValidatorTest {
         // Given
         OnDataValidator validator = new OnDataValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(DataChangeListener.class));
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        // no exception
-    }
-
-    @Test
-    public void validate2() {
-        // Given
-        OnDataValidator validator = new OnDataValidator();
-        Array arguments = new Array();
-        arguments.addAll(String.class, null);
+        arguments.addAll(String.class);
 
         // When
         validator.validate(arguments);
@@ -73,35 +55,7 @@ public class OnDataValidatorTest {
         // Given
         OnDataValidator validator = new OnDataValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class);
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error3() {
-        // Given
-        OnDataValidator validator = new OnDataValidator();
-        Array arguments = new Array();
         arguments.addAll(String.class, String.class);
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error4() {
-        // Given
-        OnDataValidator validator = new OnDataValidator();
-        Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(DataChangeListener.class), Mockito.mock(DataCallback.class));
 
         // When
         validator.validate(arguments);

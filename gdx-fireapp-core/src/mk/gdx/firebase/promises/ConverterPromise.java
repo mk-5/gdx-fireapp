@@ -20,38 +20,53 @@ import mk.gdx.firebase.annotations.MapConversion;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.deserialization.MapMitmConverter;
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.reflection.AnnotationFinder;
 
 /**
  * @param <R> Output promise type
  */
-public class MapConverterPromise<R> extends FuturePromise<R> {
+public class ConverterPromise<T, R> extends FuturePromise<R> {
 
     private MapMitmConverter mapConverter;
+    private Function<T, R> modifier;
 
-    public MapConverterPromise<R> with(FirebaseMapConverter converter) {
+    public ConverterPromise<T, R> with(Function<T, R> modifier) {
+        this.modifier = modifier;
+        return this;
+    }
+
+    public ConverterPromise<T, R> with(FirebaseMapConverter converter) {
         this.mapConverter = new MapMitmConverter(converter);
         return this;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public synchronized void doCompleteWithConversion(Object object) {
+    public synchronized void doComplete(Object object) {
         if (mapConverter == null)
             throw new IllegalStateException();
-        MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer);
-        if (mapConversionAnnotation != null) {
-            object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
+        if (modifier != null) {
+            object = (R) modifier.apply((T) object);
+        }
+        if (thenConsumer != null) {
+            MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer);
+            if (mapConversionAnnotation != null) {
+                object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
+                // TODO - need it?
 //            if (ClassReflection.isAssignableFrom(List.class, dataType) && data.getClass() == mapConversionAnnotation.value()) {
 //                data = Collections.singletonList(data);
 //            }
+            }
         }
         super.doComplete((R) object);
     }
 
-    public static <R> MapConverterPromise<R> of(FirebaseMapConverter mapConverter, Consumer<MapConverterPromise<R>> consumer) {
-        MapConverterPromise<R> promise = new MapConverterPromise<>();
-        promise.with(mapConverter);
-        consumer.accept(promise);
+    @SuppressWarnings("unchecked")
+    public static <T, R> ConverterPromise<T, R> of(Object consumer) {
+        if (!(consumer instanceof Consumer)) throw new IllegalArgumentException();
+        ConverterPromise<T, R> promise = new ConverterPromise<>();
+        ((Consumer<ConverterPromise<T, R>>) consumer).accept(promise);
         return promise;
     }
 }

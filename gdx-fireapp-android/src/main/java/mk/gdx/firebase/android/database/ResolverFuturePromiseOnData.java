@@ -19,7 +19,7 @@ package mk.gdx.firebase.android.database;
 import com.google.firebase.database.DataSnapshot;
 
 import mk.gdx.firebase.database.pojos.OrderByClause;
-import mk.gdx.firebase.promises.MapConverterPromise;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 /**
  * Resolves data callback with ordering preserved.
@@ -34,11 +34,11 @@ class ResolverFuturePromiseOnData {
 
     // TODO - docs
     @SuppressWarnings("unchecked")
-    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, MapConverterPromise<E> promise) {
+    public static <T, E extends T> void resolve(Class<T> dataType, OrderByClause orderByClause, DataSnapshot dataSnapshot, ConverterPromise<T, E> promise) {
         if (ResolverDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot)) {
-            promise.doCompleteWithConversion(ResolverDataSnapshotOrderBy.resolve(dataSnapshot));
+            promise.doComplete(ResolverDataSnapshotOrderBy.resolve(dataSnapshot));
         } else {
-            promise.doCompleteWithConversion(dataSnapshot.getValue());
+            promise.doComplete(dataSnapshot.getValue());
         }
     }
 }

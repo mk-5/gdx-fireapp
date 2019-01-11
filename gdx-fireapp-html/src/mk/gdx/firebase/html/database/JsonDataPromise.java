@@ -16,38 +16,38 @@
 
 package mk.gdx.firebase.html.database;
 
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Wraps data listener into callback with String as return type.
  * <p>
- * On GWT platform it is not possible to use generic types inside javascript so it is a need to wrap our {@link DataChangeListener} and parse
+ * On GWT platform it is not possible to use generic types inside javascript so it is a need to wrap our {@link FuturePromise} and parse
  * json string from javascript to Java object.
  *
  * @param <R> Result type after json string converting process
  */
-class JsonDataListener<R> implements DataChangeListener<String> {
+class JsonDataPromise<R> extends FuturePromise<String> {
 
     private Class<R> wantedType;
-    private DataChangeListener dataListener;
+    private FuturePromise<R> promise;
 
     /**
-     * @param dataListener Listener, not null
+     * @param promise Listener, not null
      */
-    JsonDataListener(Class<R> wantedType, DataChangeListener dataListener) {
+    JsonDataPromise(Class<R> wantedType, FuturePromise<R> promise) {
         this.wantedType = wantedType;
-        this.dataListener = dataListener;
+        this.promise = promise;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onChange(String data) {
+    public void doComplete(String data) {
         R result = JsonProcessor.process(wantedType, data);
-        dataListener.onChange(result);
+        promise.doComplete(result);
     }
 
     @Override
-    public void onCanceled(Exception e) {
-        dataListener.onCanceled(e);
+    public void doFail(Throwable t) {
+        promise.doFail(t);
     }
 }

@@ -27,7 +27,7 @@ import mk.gdx.firebase.html.firebase.ScriptRunner;
 /**
  * Provides flow for html firebase call.
  */
-abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
+abstract class GwtDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
 
     protected String databaseReferencePath;
     protected ProviderJsFiltering providerJsFiltering;
@@ -48,7 +48,7 @@ abstract class GwtDatabaseQuery extends GdxFireappQuery<Database, Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
+    protected R run() {
         ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReferencePath) {
             @Override
             public void run() {

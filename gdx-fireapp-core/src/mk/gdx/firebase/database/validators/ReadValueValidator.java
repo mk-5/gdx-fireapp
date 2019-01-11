@@ -32,7 +32,7 @@ public class ReadValueValidator implements ArgumentsValidator {
     public void validate(Array<Object> arguments) {
         if (arguments.size != 1)
             throw new IllegalArgumentException(MESSAGE1);
-        if (!(arguments.get(0) instanceof Class))
+        if (arguments.get(0) == null || !(arguments.get(0) instanceof Class))
             throw new IllegalArgumentException(MESSAGE2);
     }
 }

@@ -32,8 +32,8 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FuturePromise;
-import mk.gdx.firebase.promises.MapConverterPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -89,15 +89,17 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
-        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
             @Override
-            public void accept(MapConverterPromise<R> rFuturePromise) {
-                // TODO - nie zrobione
+            @SuppressWarnings("unchecked")
+            public void accept(ConverterPromise<T, R> rConverterPromise) {
+                // TODO - check
+                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
                 new QueryReadValue(Database.this)
                         .with(filters)
                         .with(orderByClause)
+                        .with(rConverterPromise)
                         .withArgs(dataType)
-                        .with(rFuturePromise)
                         .execute();
             }
         });
@@ -109,14 +111,15 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<R> onDataChange(final Class<T> dataType) {
-        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
             @Override
-            public void accept(MapConverterPromise<R> rMapConverterPromise) {
+            public void accept(ConverterPromise<T, R> rConverterPromise) {
+                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
                 // TODO - not implemented
                 new QueryOnDataChange(Database.this)
                         .with(filters)
                         .with(orderByClause)
-                        .with(rMapConverterPromise)
+                        .with(rConverterPromise)
                         .withArgs(dataType)
                         .execute();
             }

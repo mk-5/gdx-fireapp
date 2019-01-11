@@ -27,10 +27,13 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.ConverterPromise;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class QueryReadValueTest {
@@ -54,13 +57,13 @@ public class QueryReadValueTest {
     @Test(expected = UnsatisfiedLinkError.class)
     public void runJS() {
         // Given
-        Database database = Mockito.spy(Database.class);
+        Database database = spy(Database.class);
         database.inReference("/test");
         QueryReadValue query = new QueryReadValue(database);
-        DataCallback callback = Mockito.mock(DataCallback.class);
+        ConverterPromise promise = mock(ConverterPromise.class);
 
         // When
-        ((QueryReadValue) query.withArgs(String.class, callback)).execute();
+        query.with(promise).withArgs(String.class).execute();
 
         // Then
         Assert.fail("Native method should be run");
@@ -69,7 +72,7 @@ public class QueryReadValueTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryReadValue query = new QueryReadValue(Mockito.mock(Database.class));
+        QueryReadValue query = new QueryReadValue(mock(Database.class));
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

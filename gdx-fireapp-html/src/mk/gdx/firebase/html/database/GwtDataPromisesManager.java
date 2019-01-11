@@ -19,30 +19,24 @@ package mk.gdx.firebase.html.database;
 import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.database.DataListenersManager;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Keeps reference do DataListenersManager and provides static methods for javascript calls.
  */
-class GwtDataListenersManager {
-    private static final DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<DataChangeListener>();
+class GwtDataPromisesManager {
+    private static final DataListenersManager<FuturePromise> listenersManager = new DataListenersManager<>();
 
-    private GwtDataListenersManager() {
+    private GwtDataPromisesManager() {
         //
     }
 
     /**
-     * @param refPath  Reference path, not null
-     * @param listener Listener, may be null
+     * @param refPath Reference path, not null
+     * @param promise Listener, may be null
      */
-    static void addDataListener(String refPath, DataChangeListener listener) {
-        if (listenersManager.hasListeners(refPath)) {
-            if (listener == null) {
-                listenersManager.removeListenersForPath(refPath);
-            }
-        } else if (listener != null) {
-            listenersManager.addNewListener(refPath, listener);
-        }
+    static void addDataPromise(String refPath, FuturePromise promise) {
+        listenersManager.addNewListener(refPath, promise);
     }
 
     /**
@@ -51,22 +45,22 @@ class GwtDataListenersManager {
      * @param referencePath Reference path, not null
      * @return True if listener is already attached.
      */
-    public static boolean hasListener(String referencePath) {
+    static boolean hasPromise(String referencePath) {
         return listenersManager.hasListeners(referencePath);
     }
 
     /**
-     * Calls listener added by {@code addDataListener}.
+     * Calls listener added by {@code addDataPromise}.
      *
      * @param refPath  Database ref path
      * @param newValue New value as json string
      */
-    static void callListener(String refPath, String newValue) {
+    static void callPromise(String refPath, String newValue) {
         if (!listenersManager.hasListeners(refPath))
             return;
-        Array<DataChangeListener> listeners = listenersManager.getListeners(refPath);
-        for (DataChangeListener listener : listeners)
-            listener.onChange(newValue);
+        Array<FuturePromise> promises = listenersManager.getListeners(refPath);
+        for (FuturePromise promise : promises)
+            promise.doComplete(newValue);
     }
 
     /**
@@ -74,7 +68,7 @@ class GwtDataListenersManager {
      *
      * @param refPath Database reference path
      */
-    static void removeDataListener(String refPath) {
+    static void removeDataPromise(String refPath) {
         if (listenersManager.hasListeners(refPath))
             listenersManager.removeListenersForPath(refPath);
     }

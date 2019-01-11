@@ -18,6 +18,7 @@ package mk.gdx.firebase.html.database;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,17 +35,17 @@ import org.powermock.reflect.Whitebox;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.listeners.ConnectedListener;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, QueryConnectionStatus.class,
         QuerySetValue.class, QueryReadValue.class, QueryOnDataChange.class, QueryPush.class,
-        QueryRemoveValue.class, QueryUpdateChildren.class, QueryRunTransaction.class, DatabaseReference.class
+        QueryRemoveValue.class, QueryUpdateChildren.class, QueryRunTransaction.class, DatabaseReference.class,
+        ClassReflection.class
 //        , Database.class
 })
 public class DatabaseTest {
@@ -56,6 +57,7 @@ public class DatabaseTest {
 
     @Before
     public void setUp() throws Exception {
+        PowerMockito.mockStatic(ClassReflection.class);
         PowerMockito.mockStatic(DatabaseReference.class);
         PowerMockito.mockStatic(ScriptRunner.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
@@ -123,35 +125,36 @@ public class DatabaseTest {
     public void readValue() throws Exception {
         // Given
         Database database = new Database();
-        DataCallback callback = Mockito.mock(DataCallback.class);
         PowerMockito.mockStatic(QueryReadValue.class);
         QueryReadValue query = PowerMockito.spy(new QueryReadValue(database));
         PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
+        Gdx.app = Mockito.mock(Application.class);
         Class dataType = String.class;
 
+
         // When
-        database.inReference(testReference).readValue(dataType, callback);
+        ((FuturePromise) database.inReference(testReference).readValue(dataType)).doComplete(testReference);
 
         // Then
 //        PowerMockito.verifyNew(ReadValueQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(QueryReadValue.class);
-        QueryReadValue.once(Mockito.any(DatabaseReference.class), Mockito.any(JsonPromiseWrapper.class));
+        QueryReadValue.once(Mockito.any(DatabaseReference.class), Mockito.any(ConverterPromise.class));
     }
 
     @Test
     public void onDataChange() throws Exception {
         // Given
         Database database = new Database();
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
         PowerMockito.mockStatic(QueryOnDataChange.class);
         QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
         PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
+        Gdx.app = Mockito.mock(Application.class);
         String testReference = "test_reference";
         Class dataType = String.class;
 
         // When
-        database.inReference(testReference).onDataChange(dataType, listener);
+        ((FuturePromise) database.inReference(testReference).onDataChange(dataType)).doComplete(testReference);
 
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
@@ -167,10 +170,11 @@ public class DatabaseTest {
         QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
         PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
-        Class dataType = String.class;
+        Class dataType = null;
+        Gdx.app = Mockito.mock(Application.class);
 
         // When
-        database.inReference(testReference).onDataChange(dataType, null);
+        ((FuturePromise) database.inReference(testReference).onDataChange(dataType)).doComplete(testReference);
 
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
@@ -315,7 +319,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.onDataChange(String.class, Mockito.mock(DataChangeListener.class));
+        database.onDataChange(String.class);
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
@@ -323,7 +327,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.readValue(String.class, Mockito.mock(DataCallback.class));
+        database.readValue(String.class);
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)

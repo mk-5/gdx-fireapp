@@ -29,7 +29,7 @@ import java.util.List;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.database.pojos.OrderByClause;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 @PrepareForTest({GdxNativesLoader.class, ResolverDataSnapshotOrderBy.class})
 public class ResolverDataListenerOnDataChangeTest extends AndroidContextTest {
@@ -48,13 +48,13 @@ public class ResolverDataListenerOnDataChangeTest extends AndroidContextTest {
                 .thenReturn(true);
         List list = Mockito.mock(List.class);
         Mockito.when(ResolverDataSnapshotOrderBy.resolve(Mockito.any(DataSnapshot.class))).thenReturn(list);
-        DataChangeListener dataListener = Mockito.mock(DataChangeListener.class);
+        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
-        ResolverDataListenerOnDataChange.resolve(String.class, Mockito.mock(OrderByClause.class), Mockito.mock(DataSnapshot.class), dataListener);
+        ResolverDataListenerOnDataChange.resolve(String.class, Mockito.mock(OrderByClause.class), Mockito.mock(DataSnapshot.class), promise);
 
         // Then
-        Mockito.verify(dataListener, VerificationModeFactory.times(1)).onChange(Mockito.refEq(list));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.refEq(list));
     }
 
     @Test
@@ -63,14 +63,14 @@ public class ResolverDataListenerOnDataChangeTest extends AndroidContextTest {
         Mockito.when(ResolverDataSnapshotOrderBy.shouldResolveOrderBy(
                 Mockito.any(OrderByClause.class), Mockito.any(Class.class), Mockito.any(DataSnapshot.class)))
                 .thenReturn(false);
-        DataChangeListener dataListener = Mockito.mock(DataChangeListener.class);
+        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getValue()).thenReturn("snapshot_value");
 
         // When
-        ResolverDataListenerOnDataChange.resolve(String.class, Mockito.mock(OrderByClause.class), dataSnapshot, dataListener);
+        ResolverDataListenerOnDataChange.resolve(String.class, Mockito.mock(OrderByClause.class), dataSnapshot, promise);
 
         // Then
-        Mockito.verify(dataListener, VerificationModeFactory.times(1)).onChange(Mockito.eq("snapshot_value"));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.eq("snapshot_value"));
     }
 }

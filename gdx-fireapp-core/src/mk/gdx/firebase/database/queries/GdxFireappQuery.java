@@ -22,6 +22,8 @@ import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
+import mk.gdx.firebase.promises.ConverterPromise;
+import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -31,41 +33,50 @@ import mk.gdx.firebase.promises.Promise;
  * <p>
  * Keeps order of each query part execution inside {@link #execute()} so it will be the same for each platform.
  *
- * @param <T> Target DatabaseDistribution
+ * @param <D> Target DatabaseDistribution
  * @param <R> Query execution return type
  */
-public abstract class GdxFireappQuery<T extends DatabaseDistribution, R> {
+public abstract class GdxFireappQuery<D extends DatabaseDistribution, R> {
 
-    protected T databaseDistribution;
+    protected D databaseDistribution;
     protected Array<Filter> filters;
     protected OrderByClause orderByClause;
     protected Array<Object> arguments;
     protected ArgumentsValidator argumentsValidator;
     protected Promise<R> promise;
 
-    public GdxFireappQuery(T databaseDistribution) {
+    public GdxFireappQuery(D databaseDistribution) {
         this.databaseDistribution = databaseDistribution;
         filters = new Array<>();
         arguments = new Array<>();
         argumentsValidator = createArgumentsValidator();
     }
 
-    public GdxFireappQuery withArgs(Object... arguments) {
-        this.arguments.addAll(arguments);
+    public GdxFireappQuery<D, R> withArgs(Object... arguments) {
+        if (arguments == null) {
+            this.arguments.add(null);
+        } else {
+            this.arguments.addAll(arguments);
+        }
         return this;
     }
 
-    public GdxFireappQuery with(Array<Filter> filters) {
+    public GdxFireappQuery<D, R> with(Array<Filter> filters) {
         this.filters.addAll(filters);
         return this;
     }
 
-    public GdxFireappQuery with(OrderByClause orderByClause) {
+    public GdxFireappQuery<D, R> with(OrderByClause orderByClause) {
         this.orderByClause = orderByClause;
         return this;
     }
 
-    public GdxFireappQuery with(Promise<R> promise) {
+    public GdxFireappQuery<D, R> with(FuturePromise<R> promise) {
+        this.promise = promise;
+        return this;
+    }
+
+    public GdxFireappQuery<D, R> with(ConverterPromise<?, R> promise) {
         this.promise = promise;
         return this;
     }
@@ -81,6 +92,10 @@ public abstract class GdxFireappQuery<T extends DatabaseDistribution, R> {
         arguments.clear();
         return result;
     }
+
+//    public <R extends T, T> GdxFireappQuery with(ConverterPromise<T, R> promise) {
+//        return null;
+//    }
 
     protected void prepare() {
         // To overwrite

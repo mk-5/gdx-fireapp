@@ -22,33 +22,33 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.Promise;
 
 public class DataListenersManagerTest {
 
     @Test
     public void addNewListener() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<>();
-        DataChangeListener dataChangeListener = Mockito.mock(DataChangeListener.class);
+        DataListenersManager<Promise> listenersManager = new DataListenersManager<>();
+        Promise promise = Mockito.mock(Promise.class);
         String path = "/test";
 
         // When
-        listenersManager.addNewListener(path, dataChangeListener);
+        listenersManager.addNewListener(path, promise);
 
         // Then
         Assert.assertNotNull(listenersManager.getListeners(path));
         Assert.assertTrue(listenersManager.getListeners(path).size == 1);
-        Assert.assertTrue(listenersManager.getListeners(path).get(0) == dataChangeListener);
+        Assert.assertTrue(listenersManager.getListeners(path).get(0) == promise);
     }
 
     @Test
     public void removeListenersForPath() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<>();
-        DataChangeListener dataChangeListener = Mockito.mock(DataChangeListener.class);
+        DataListenersManager<Promise> listenersManager = new DataListenersManager<>();
+        Promise promise = Mockito.mock(Promise.class);
         String path = "/test";
-        listenersManager.addNewListener(path, dataChangeListener);
+        listenersManager.addNewListener(path, promise);
 
         // When
         listenersManager.removeListenersForPath(path);
@@ -61,11 +61,11 @@ public class DataListenersManagerTest {
     @Test
     public void hasListeners() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<>();
-        DataChangeListener dataChangeListener = Mockito.mock(DataChangeListener.class);
+        DataListenersManager<Promise> listenersManager = new DataListenersManager<>();
+        Promise promise = Mockito.mock(Promise.class);
         String path = "/test";
         String wrongPath = "/test_wrong";
-        listenersManager.addNewListener(path, dataChangeListener);
+        listenersManager.addNewListener(path, promise);
 
         // When
         boolean hasListeners = listenersManager.hasListeners(path);
@@ -79,15 +79,15 @@ public class DataListenersManagerTest {
     @Test
     public void getListeners() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = new DataListenersManager<>();
-        DataChangeListener dataChangeListener = Mockito.mock(DataChangeListener.class);
+        DataListenersManager<Promise> listenersManager = new DataListenersManager<>();
+        Promise promise = Mockito.mock(Promise.class);
         String path = "/test";
         String wrongPath = "/test_wrong";
-        listenersManager.addNewListener(path, dataChangeListener);
+        listenersManager.addNewListener(path, promise);
 
         // When
-        Array<DataChangeListener> listenerArray = listenersManager.getListeners(path);
-        Array<DataChangeListener> listenerArray2 = listenersManager.getListeners(wrongPath);
+        Array<Promise> listenerArray = listenersManager.getListeners(path);
+        Array<Promise> listenerArray2 = listenersManager.getListeners(wrongPath);
 
         // Then
         Assert.assertNotNull(listenerArray);

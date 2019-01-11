@@ -25,12 +25,12 @@ import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 /**
  * Provides call to {@link FIRDatabaseQuery#observeEventTypeWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2)}.
  */
-class QueryOnDataChange extends IosDatabaseQuery<Void> {
+class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
     private static final DataObserversManager observersManager = new DataObserversManager();
 
     QueryOnDataChange(Database databaseDistribution) {
@@ -44,11 +44,11 @@ class QueryOnDataChange extends IosDatabaseQuery<Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
-        if (arguments.get(1) != null) {
+    protected R run() {
+        if (arguments.get(0) != null) {
             long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
-                    new DataChangeBlock((Class) arguments.get(0), orderByClause, (DataChangeListener) arguments.get(1)),
-                    new DataChangeCancelBlock((DataChangeListener) arguments.get(1)));
+                    new DataChangeBlock((Class) arguments.get(0), orderByClause, (ConverterPromise) promise),
+                    new DataChangeCancelBlock((ConverterPromise) promise));
             observersManager.addNewListener(databasePath, handle);
         } else {
             if (observersManager.hasListeners(databasePath)) {
@@ -67,20 +67,20 @@ class QueryOnDataChange extends IosDatabaseQuery<Void> {
     private class DataChangeBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1 {
 
         private Class type;
-        private DataChangeListener dataChangeListener;
+        private ConverterPromise promise;
         private OrderByClause orderByClause;
 
-        private DataChangeBlock(Class type, OrderByClause orderByClause, DataChangeListener dataChangeListener) {
+        private DataChangeBlock(Class type, OrderByClause orderByClause, ConverterPromise promise) {
             this.type = type;
             this.orderByClause = orderByClause;
-            this.dataChangeListener = dataChangeListener;
+            this.promise = promise;
         }
 
 
         @Override
         public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0) {
             if (arg0.value() == null) {
-                dataChangeListener.onCanceled(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
+                promise.doComplete(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
                 Object data = null;
                 try {
@@ -90,10 +90,10 @@ class QueryOnDataChange extends IosDatabaseQuery<Void> {
                         data = ResolverFIRDataSnapshotOrderBy.resolve(arg0);
                     }
                 } catch (Exception e) {
-                    dataChangeListener.onCanceled(e);
+                    promise.doFail(e);
                     return;
                 }
-                dataChangeListener.onChange(data);
+                promise.doComplete(data);
             }
         }
     }
@@ -103,15 +103,15 @@ class QueryOnDataChange extends IosDatabaseQuery<Void> {
      */
     private class DataChangeCancelBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2 {
 
-        private DataChangeListener dataChangeListener;
+        private ConverterPromise promise;
 
-        private DataChangeCancelBlock(DataChangeListener dataChangeListener) {
-            this.dataChangeListener = dataChangeListener;
+        private DataChangeCancelBlock(ConverterPromise promise) {
+            this.promise = promise;
         }
 
         @Override
         public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0) {
-            dataChangeListener.onCanceled(new Exception(arg0.localizedDescription()));
+            promise.doFail(new Exception(arg0.localizedDescription()));
         }
     }
 }

@@ -16,16 +16,10 @@
 
 package mk.gdx.firebase.html.database;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.promises.FuturePromise;
 
 /**
- * Wraps data callback into callback with String as return type.
- * <p>
- * On GWT platform it is not possible to use generic types inside javascript so it is a need to wrap our {@link DataCallback} and parse
- * json string from javascript to Java object.
- *
- * @param <T> Result type after json string converting process
+ * FIXME - remove
  */
 class JsonPromiseWrapper<T> extends FuturePromise<String> {
     private Class<?> wantedType;

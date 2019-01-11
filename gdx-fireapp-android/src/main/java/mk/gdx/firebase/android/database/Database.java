@@ -34,9 +34,8 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.listeners.ConnectedListener;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FuturePromise;
-import mk.gdx.firebase.promises.MapConverterPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -103,13 +102,14 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, E extends T> Promise<E> readValue(final Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<E>>() {
+        return ConverterPromise.of(new Consumer<ConverterPromise<T, E>>() {
             @Override
-            public void accept(MapConverterPromise<E> eFuturePromise) {
+            public void accept(ConverterPromise<T, E> teConverterPromise) {
+                teConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
                 new QueryReadValue(Database.this).with(filters)
                         .with(orderByClause)
                         .withArgs(dataType)
-                        .with(eFuturePromise)
+                        .with(teConverterPromise)
                         .execute();
             }
         });
@@ -122,14 +122,14 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<R> onDataChange(final Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
             @Override
-            public void accept(MapConverterPromise<R> rFuturePromise) {
-                // TODO - not implemented
+            public void accept(ConverterPromise<T, R> trConverterPromise) {
+                trConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
                 new QueryOnDataChange(Database.this)
                         .with(filters)
                         .with(orderByClause)
-                        .with(rFuturePromise)
+                        .with(trConverterPromise)
                         .withArgs(dataType)
                         .execute();
             }
@@ -243,7 +243,7 @@ public class Database implements DatabaseDistribution {
      * <li>{@link #setValue(Object)}</li>
      * <li>{@link #setValue(Object)}</li>
      * <li>{@link #readValue(Class)}</li>
-     * <li>{@link #onDataChange(Class, DataChangeListener)}</li>
+     * <li>{@link #onDataChange(Class)}</li>
      * <li>{@link #updateChildren(Map)}</li>
      * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
      * </uL>

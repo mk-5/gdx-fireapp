@@ -26,7 +26,8 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 
 import mk.gdx.firebase.database.DataListenersManager;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 public class GwtDataListenersManagerTest {
 
@@ -36,45 +37,43 @@ public class GwtDataListenersManagerTest {
     @Test
     public void addDataListener_detach() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = Mockito.mock(DataListenersManager.class);
+        DataListenersManager<Promise> listenersManager = Mockito.mock(DataListenersManager.class);
         Mockito.when(listenersManager.hasListeners(Mockito.anyString())).thenReturn(true);
-        Whitebox.setInternalState(GwtDataListenersManager.class, "listenersManager", listenersManager);
+        Whitebox.setInternalState(GwtDataPromisesManager.class, "listenersManager", listenersManager);
         String arg = "/test";
 
         // When
-        GwtDataListenersManager.addDataListener(arg, null);
+        GwtDataPromisesManager.removeDataPromise(arg);
 
         // Then
-        Mockito.verify(listenersManager, VerificationModeFactory.times(1)).hasListeners(Mockito.eq(arg));
         Mockito.verify(listenersManager, VerificationModeFactory.times(1)).removeListenersForPath(Mockito.eq(arg));
     }
 
     @Test
     public void addDataListener() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = Mockito.mock(DataListenersManager.class);
+        DataListenersManager<FuturePromise> listenersManager = Mockito.mock(DataListenersManager.class);
         Mockito.when(listenersManager.hasListeners(Mockito.anyString())).thenReturn(false);
-        Whitebox.setInternalState(GwtDataListenersManager.class, "listenersManager", listenersManager);
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
+        Whitebox.setInternalState(GwtDataPromisesManager.class, "listenersManager", listenersManager);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
         String arg = "/test";
 
         // When
-        GwtDataListenersManager.addDataListener(arg, listener);
+        GwtDataPromisesManager.addDataPromise(arg, promise);
 
         // Then
-        Mockito.verify(listenersManager, VerificationModeFactory.times(1)).hasListeners(Mockito.eq(arg));
-        Mockito.verify(listenersManager, VerificationModeFactory.times(1)).addNewListener(Mockito.eq(arg), Mockito.refEq(listener));
+        Mockito.verify(listenersManager, VerificationModeFactory.times(1)).addNewListener(Mockito.eq(arg), Mockito.refEq(promise));
     }
 
     @Test
     public void callListener_withoutListener() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = Mockito.mock(DataListenersManager.class);
+        DataListenersManager<FuturePromise> listenersManager = Mockito.mock(DataListenersManager.class);
         Mockito.when(listenersManager.hasListeners(Mockito.anyString())).thenReturn(false);
-        Whitebox.setInternalState(GwtDataListenersManager.class, "listenersManager", listenersManager);
+        Whitebox.setInternalState(GwtDataPromisesManager.class, "listenersManager", listenersManager);
 
         // When
-        GwtDataListenersManager.callListener("/not-exists", "test");
+        GwtDataPromisesManager.callPromise("/not-exists", "test");
 
         // Then
         Mockito.verify(listenersManager, VerificationModeFactory.times(0)).getListeners(Mockito.anyString());
@@ -83,31 +82,31 @@ public class GwtDataListenersManagerTest {
     @Test
     public void callListener() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = Mockito.mock(DataListenersManager.class);
-        Array<DataChangeListener> listeners = new Array<>();
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
-        listeners.add(listener);
+        DataListenersManager<FuturePromise> listenersManager = Mockito.mock(DataListenersManager.class);
+        Array<FuturePromise> promises = new Array<>();
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        promises.add(promise);
         Mockito.when(listenersManager.hasListeners(Mockito.anyString())).thenReturn(true);
-        Mockito.when(listenersManager.getListeners(Mockito.anyString())).thenReturn(listeners);
-        Whitebox.setInternalState(GwtDataListenersManager.class, "listenersManager", listenersManager);
+        Mockito.when(listenersManager.getListeners(Mockito.anyString())).thenReturn(promises);
+        Whitebox.setInternalState(GwtDataPromisesManager.class, "listenersManager", listenersManager);
 
         // When
-        GwtDataListenersManager.callListener("/exists", "test");
+        GwtDataPromisesManager.callPromise("/exists", "test");
 
         // Then
-        Mockito.verify(listener, VerificationModeFactory.times(1)).onChange(Mockito.anyString());
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.anyString());
     }
 
     @Test
     public void removeDataListener() {
         // Given
-        DataListenersManager<DataChangeListener> listenersManager = Mockito.mock(DataListenersManager.class);
+        DataListenersManager<FuturePromise> listenersManager = Mockito.mock(DataListenersManager.class);
         Mockito.when(listenersManager.hasListeners(Mockito.anyString())).thenReturn(true);
-        Whitebox.setInternalState(GwtDataListenersManager.class, "listenersManager", listenersManager);
+        Whitebox.setInternalState(GwtDataPromisesManager.class, "listenersManager", listenersManager);
         String arg = "/test";
 
         // When
-        GwtDataListenersManager.removeDataListener(arg);
+        GwtDataPromisesManager.removeDataPromise(arg);
 
         // Then
         Mockito.verify(listenersManager, VerificationModeFactory.times(1)).removeListenersForPath(Mockito.eq(arg));

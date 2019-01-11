@@ -23,13 +23,13 @@ import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
+import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FuturePromise;
-import mk.gdx.firebase.promises.MapConverterPromise;
 
 /**
  * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
  */
-class QueryReadValue extends IosDatabaseQuery<Void> {
+class QueryReadValue<R> extends IosDatabaseQuery<R> {
     QueryReadValue(Database databaseDistribution) {
         super(databaseDistribution);
     }
@@ -41,10 +41,10 @@ class QueryReadValue extends IosDatabaseQuery<Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
+    protected R run() {
         filtersProvider.applyFiltering().observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(FIRDataEventType.Value,
-                new ReadValueBlock((Class) arguments.get(0), orderByClause, (MapConverterPromise) promise),
-                new ReadValueCancelBlock((MapConverterPromise) promise));
+                new ReadValueBlock((Class) arguments.get(0), orderByClause, (ConverterPromise) promise),
+                new ReadValueCancelBlock((ConverterPromise) promise));
         return null;
     }
 
@@ -54,10 +54,10 @@ class QueryReadValue extends IosDatabaseQuery<Void> {
     private static class ReadValueBlock implements FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1 {
 
         private Class type;
-        private MapConverterPromise promise;
+        private ConverterPromise promise;
         private OrderByClause orderByClause;
 
-        private ReadValueBlock(Class type, OrderByClause orderByClause, MapConverterPromise promise) {
+        private ReadValueBlock(Class type, OrderByClause orderByClause, ConverterPromise promise) {
             this.type = type;
             this.orderByClause = orderByClause;
             this.promise = promise;
@@ -79,7 +79,7 @@ class QueryReadValue extends IosDatabaseQuery<Void> {
                     promise.doFail(e);
                     return;
                 }
-                promise.doCompleteWithConversion(data);
+                promise.doComplete(data);
             }
         }
     }

@@ -28,10 +28,12 @@ import org.powermock.reflect.Whitebox;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
+import mk.gdx.firebase.promises.ConverterPromise;
+
+import static org.mockito.Mockito.mock;
 
 @PrepareForTest({NatJ.class, FIRDatabase.class, FIRDatabaseReference.class, FIRDatabaseQuery.class, Database.class})
 public class QueryReadValueTest extends GdxIOSAppTest {
@@ -43,8 +45,8 @@ public class QueryReadValueTest extends GdxIOSAppTest {
     public void setup() {
         super.setup();
         PowerMockito.mockStatic(FIRDatabase.class);
-        firDatabase = Mockito.mock(FIRDatabase.class);
-        firDatabaseReference = Mockito.mock(FIRDatabaseReference.class);
+        firDatabase = mock(FIRDatabase.class);
+        firDatabaseReference = mock(FIRDatabaseReference.class);
         Mockito.when(firDatabase.referenceWithPath(Mockito.anyString())).thenReturn(firDatabaseReference);
         Mockito.when(FIRDatabase.database()).thenReturn(firDatabase);
     }
@@ -52,7 +54,7 @@ public class QueryReadValueTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryReadValue queryReadValue = new QueryReadValue(Mockito.mock(Database.class));
+        QueryReadValue queryReadValue = new QueryReadValue(mock(Database.class));
 
         // When
         ArgumentsValidator argumentsValidator = queryReadValue.createArgumentsValidator();
@@ -70,10 +72,9 @@ public class QueryReadValueTest extends GdxIOSAppTest {
         Whitebox.setInternalState(database, "databasePath", "/test");
         QueryReadValue query = new QueryReadValue(database);
         Class dataType = String.class;
-        DataCallback callback = Mockito.mock(DataCallback.class);
 
         // When
-        query.withArgs(dataType, callback).execute();
+        query.with(mock(ConverterPromise.class)).withArgs(dataType).execute();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());

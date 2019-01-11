@@ -30,7 +30,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class QueryOnDataChangeTest {
@@ -57,10 +57,10 @@ public class QueryOnDataChangeTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         QueryOnDataChange query = new QueryOnDataChange(database);
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
+        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
-        ((QueryOnDataChange) query.withArgs(String.class, listener)).execute();
+        query.withArgs(String.class).execute();
 
         // Then
         Assert.fail("Native method should be run");
@@ -72,10 +72,9 @@ public class QueryOnDataChangeTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         QueryOnDataChange query = new QueryOnDataChange(database);
-        DataChangeListener listener = null;
 
         // When
-        ((QueryOnDataChange) query.withArgs(String.class, listener)).execute();
+        query.withArgs((Object[]) null).execute();
 
         // Then
         Assert.fail("Native method should be run");

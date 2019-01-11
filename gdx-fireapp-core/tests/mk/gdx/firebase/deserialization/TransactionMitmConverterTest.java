@@ -27,7 +27,6 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import mk.gdx.firebase.annotations.MapConversion;
@@ -47,7 +46,7 @@ public class TransactionMitmConverterTest {
         TransactionCallback callback = Mockito.mock(TransactionCallback.class);
         FirebaseMapConverter firebaseMapConverter = Mockito.mock(FirebaseMapConverter.class);
         TransactionMitmConverter stringCallbackMitmConverter = new TransactionMitmConverter(String.class, callback, firebaseMapConverter);
-        TransactionMitmConverter genericCallbackMitmConverter = new TransactionMitmConverter(DataCallbackMitmConverterTest.class, callback, firebaseMapConverter);
+        TransactionMitmConverter genericCallbackMitmConverter = new TransactionMitmConverter(TransactionMitmConverterTest.class, callback, firebaseMapConverter);
 
         // When
         TransactionCallback stringResultCallback = stringCallbackMitmConverter.get();

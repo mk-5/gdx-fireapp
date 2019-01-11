@@ -27,25 +27,25 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.html.GdxHtmlAppTest;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class, JsonProcessor.class})
-public class JsonDataListenerTest extends GdxHtmlAppTest {
+public class JsonDataPromiseTest extends GdxHtmlAppTest {
 
     @Test
     public void onChange() {
         // Given
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
-        JsonDataListener<String> jsonDataListener = new JsonDataListener<>(String.class, listener);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        JsonDataPromise<String> jsonDataPromise = new JsonDataPromise<>(String.class, promise);
         String data = "test";
         PowerMockito.mockStatic(JsonProcessor.class);
         Mockito.when(JsonProcessor.process(Mockito.any(Class.class), Mockito.anyString())).thenReturn(data);
 
         // When
-        jsonDataListener.onChange(data);
+        jsonDataPromise.doComplete(data);
 
         // Then
-        Mockito.verify(listener, VerificationModeFactory.times(1)).onChange(Mockito.eq("test"));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.eq("test"));
         PowerMockito.verifyStatic(JsonProcessor.class, VerificationModeFactory.times(1));
         JsonProcessor.process(Mockito.eq(String.class), Mockito.eq(data));
     }
@@ -53,14 +53,14 @@ public class JsonDataListenerTest extends GdxHtmlAppTest {
     @Test
     public void onCanceled() {
         // Given
-        DataChangeListener listener = Mockito.mock(DataChangeListener.class);
-        JsonDataListener<String> jsonDataListener = new JsonDataListener<>(String.class, listener);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        JsonDataPromise<String> jsonDataPromise = new JsonDataPromise<>(String.class, promise);
         Exception exception = Mockito.mock(Exception.class);
 
         // When
-        jsonDataListener.onCanceled(exception);
+        jsonDataPromise.doFail(exception);
 
         // Then
-        Mockito.verify(listener, VerificationModeFactory.times(1)).onCanceled(Mockito.refEq(exception));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.refEq(exception));
     }
 }

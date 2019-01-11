@@ -29,7 +29,7 @@ import java.util.List;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.database.pojos.OrderByClause;
-import mk.gdx.firebase.promises.MapConverterPromise;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 @PrepareForTest({GdxNativesLoader.class, ResolverDataSnapshotOrderBy.class})
 public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
@@ -48,7 +48,7 @@ public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
                 .thenReturn(true);
         List list = Mockito.mock(List.class);
         Mockito.when(ResolverDataSnapshotOrderBy.resolve(Mockito.any(DataSnapshot.class))).thenReturn(list);
-        MapConverterPromise promise = Mockito.mock(MapConverterPromise.class);
+        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
         ResolverFuturePromiseOnData.resolve(String.class, Mockito.mock(OrderByClause.class), Mockito.mock(DataSnapshot.class), promise);
@@ -63,14 +63,14 @@ public class ResolverFuturePromiseOnDataTest extends AndroidContextTest {
         Mockito.when(ResolverDataSnapshotOrderBy.shouldResolveOrderBy(
                 Mockito.any(OrderByClause.class), Mockito.any(Class.class), Mockito.any(DataSnapshot.class)))
                 .thenReturn(false);
-        MapConverterPromise futurePromise = Mockito.mock(MapConverterPromise.class);
+        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getValue()).thenReturn("snapshot_value");
 
         // When
-        ResolverFuturePromiseOnData.resolve(String.class, Mockito.mock(OrderByClause.class), dataSnapshot, futurePromise);
+        ResolverFuturePromiseOnData.resolve(String.class, Mockito.mock(OrderByClause.class), dataSnapshot, promise);
 
         // Then
-        Mockito.verify(futurePromise, VerificationModeFactory.times(1)).doComplete(Mockito.eq("snapshot_value"));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.eq("snapshot_value"));
     }
 }

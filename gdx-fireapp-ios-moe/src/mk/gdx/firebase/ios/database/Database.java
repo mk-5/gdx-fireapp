@@ -34,8 +34,8 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FuturePromise;
-import mk.gdx.firebase.promises.MapConverterPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -98,9 +98,10 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<R> readValue(Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
             @Override
-            public void accept(MapConverterPromise<R> rFuturePromise) {
+            public void accept(ConverterPromise<T, R> rFuturePromise) {
+                rFuturePromise.with(GdxFIRDatabase.instance().getMapConverter());
                 new QueryReadValue(Database.this)
                         .with(filters)
                         .with(orderByClause)
@@ -118,9 +119,10 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<R> onDataChange(Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return MapConverterPromise.of(GdxFIRDatabase.instance().getMapConverter(), new Consumer<MapConverterPromise<R>>() {
+        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
             @Override
-            public void accept(MapConverterPromise<R> rFuturePromise) {
+            public void accept(ConverterPromise<T, R> rFuturePromise) {
+                rFuturePromise.with(GdxFIRDatabase.instance().getMapConverter());
                 new QueryOnDataChange(Database.this)
                         .with(filters)
                         .with(orderByClause)

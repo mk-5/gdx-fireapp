@@ -88,22 +88,8 @@ public class FuturePromise<T> implements Promise<T> {
         return this;
     }
 
-    /**
-     * Sets 'then promise', it will be called before {@link #thenConsumer}.
-     *
-     * TODO
-     *
-     * @param promise Promise, not null
-     */
-    public synchronized FuturePromise<T> thenPromise(FuturePromise<T> promise) {
+    public synchronized FuturePromise<T> with(FuturePromise<T> promise) {
         thenPromises.add(promise);
-        // Split given promise fail with this promise fail.
-        promise.fail(new BiConsumer<String, Throwable>() {
-            @Override
-            public void accept(String s, Throwable throwable) {
-                doFail(s, throwable);
-            }
-        });
         return this;
     }
 
@@ -114,7 +100,7 @@ public class FuturePromise<T> implements Promise<T> {
 
         if (thenPromises.size > 0) {
             for (FuturePromise<T> promise : thenPromises) {
-                promise.thenConsumer.accept(result);
+                promise.doComplete(result);
             }
         }
 
@@ -133,6 +119,11 @@ public class FuturePromise<T> implements Promise<T> {
     public synchronized void doFail(String reason, Throwable throwable) {
         if (state != INIT) {
             return;
+        }
+        if (thenPromises.size > 0) {
+            for (FuturePromise<T> promise : thenPromises) {
+                promise.doFail(reason, throwable);
+            }
         }
         if (failConsumer != null) {
             failConsumer.accept(reason, throwable);

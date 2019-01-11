@@ -26,8 +26,8 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import mk.gdx.firebase.callbacks.DataCallback;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
+import mk.gdx.firebase.promises.FuturePromise;
 
 
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class, JsonProcessor.class})
@@ -36,17 +36,17 @@ public class JsonPromiseWrapperTest extends GdxHtmlAppTest {
     @Test
     public void onData() {
         // Given
-        DataCallback dataCallback = Mockito.mock(DataCallback.class);
-        JsonPromiseWrapper<String> jsonPromiseWrapper = new JsonPromiseWrapper<>(String.class, dataCallback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        JsonPromiseWrapper<String> jsonPromiseWrapper = new JsonPromiseWrapper<>(String.class, promise);
         String data = "test";
         PowerMockito.mockStatic(JsonProcessor.class);
         Mockito.when(JsonProcessor.process(Mockito.any(Class.class), Mockito.anyString())).thenReturn(data);
 
         // When
-        jsonPromiseWrapper.onData(data);
+        jsonPromiseWrapper.doComplete(data);
 
         // Then
-        Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onData(Mockito.eq("test"));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.eq("test"));
         PowerMockito.verifyStatic(JsonProcessor.class, VerificationModeFactory.times(1));
         JsonProcessor.process(Mockito.eq(String.class), Mockito.eq(data));
     }
@@ -54,14 +54,14 @@ public class JsonPromiseWrapperTest extends GdxHtmlAppTest {
     @Test
     public void onError() {
         // Given
-        DataCallback dataCallback = Mockito.mock(DataCallback.class);
-        JsonPromiseWrapper<String> jsonPromiseWrapper = new JsonPromiseWrapper<>(String.class, dataCallback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        JsonPromiseWrapper<String> jsonPromiseWrapper = new JsonPromiseWrapper<>(String.class, promise);
         Exception exception = Mockito.mock(Exception.class);
 
         // When
-        jsonPromiseWrapper.onError(exception);
+        jsonPromiseWrapper.doFail(exception);
 
         // Then
-        Mockito.verify(dataCallback, VerificationModeFactory.times(1)).onError(Mockito.refEq(exception));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.refEq(exception));
     }
 }

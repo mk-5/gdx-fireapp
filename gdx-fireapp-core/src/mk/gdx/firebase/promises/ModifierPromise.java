@@ -27,11 +27,6 @@ public class ModifierPromise<T, R> extends FuturePromise<R> {
 
     private Function<T, R> modifier;
 
-    public ModifierPromise<T, R> with(Function<T, R> modifier) {
-        this.modifier = modifier;
-        return this;
-    }
-
     public synchronized void doCompleteModify(T modifiedResult) {
         if (modifier == null)
             throw new IllegalStateException();

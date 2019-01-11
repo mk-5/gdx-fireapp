@@ -24,12 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
-import mk.gdx.firebase.promises.MapConverterPromise;
+import mk.gdx.firebase.promises.ConverterPromise;
 
 /**
  * Provides call to {@link com.google.firebase.database.Query#addListenerForSingleValueEvent(ValueEventListener)}.
  */
-class QueryReadValue extends AndroidDatabaseQuery<Void> {
+class QueryReadValue<R> extends AndroidDatabaseQuery<R> {
 
     QueryReadValue(Database databaseDistribution) {
         super(databaseDistribution);
@@ -42,9 +42,9 @@ class QueryReadValue extends AndroidDatabaseQuery<Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
+    protected R run() {
         filtersProvider.applyFiltering()
-                .addListenerForSingleValueEvent(new SingleValueListener((Class) arguments.get(0), (MapConverterPromise) promise, orderByClause));
+                .addListenerForSingleValueEvent(new SingleValueListener((Class) arguments.get(0), (ConverterPromise) promise, orderByClause));
         return null;
     }
 
@@ -57,10 +57,10 @@ class QueryReadValue extends AndroidDatabaseQuery<Void> {
     private static class SingleValueListener<T, E extends T> implements ValueEventListener {
 
         private Class<T> dataType;
-        private MapConverterPromise<E> promise;
+        private ConverterPromise<T, E> promise;
         private OrderByClause orderByClause;
 
-        private SingleValueListener(Class<T> dataType, MapConverterPromise<E> promise, OrderByClause orderByClause) {
+        private SingleValueListener(Class<T> dataType, ConverterPromise<T, E> promise, OrderByClause orderByClause) {
             this.dataType = dataType;
             this.promise = promise;
             this.orderByClause = orderByClause;

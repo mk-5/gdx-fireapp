@@ -18,7 +18,7 @@ package mk.gdx.firebase.html.database;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
-import mk.gdx.firebase.listeners.DataChangeListener;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides setValue execution.
@@ -30,10 +30,10 @@ class QueryOnDataChange extends GwtDatabaseQuery {
 
     @Override
     protected void runJS() {
-        if (arguments.get(1) != null && !GwtDataListenersManager.hasListener(databaseReferencePath)) {
-            GwtDataListenersManager.addDataListener(databaseReferencePath, new JsonDataListener((Class) arguments.get(0), (DataChangeListener) arguments.get(1)));
+        if (arguments.get(0) != null && !GwtDataPromisesManager.hasPromise(databaseReferencePath)) {
+            GwtDataPromisesManager.addDataPromise(databaseReferencePath, new JsonDataPromise((Class) arguments.get(0), (FuturePromise) promise));
             onValue(databaseReferencePath, databaseReference);
-        } else if (arguments.get(1) == null) {
+        } else if (arguments.get(0) == null) {
             offValue(databaseReferencePath);
         }
     }
@@ -44,7 +44,7 @@ class QueryOnDataChange extends GwtDatabaseQuery {
     }
 
     /**
-     * Attaches listener from {@link GwtDataListenersManager} to given reference.
+     * Attaches listener from {@link GwtDataPromisesManager} to given reference.
      *
      * @param reference Reference path, not null
      */
@@ -65,7 +65,7 @@ class QueryOnDataChange extends GwtDatabaseQuery {
              });
              val = JSON.stringify(tmp);
           }
-          @mk.gdx.firebase.html.database.GwtDataListenersManager::callListener(Ljava/lang/String;Ljava/lang/String;)(ref,val);
+          @mk.gdx.firebase.html.database.GwtDataListenersManager::callPromise(Ljava/lang/String;Ljava/lang/String;)(ref,val);
         });
     }-*/;
 
@@ -82,7 +82,7 @@ class QueryOnDataChange extends GwtDatabaseQuery {
         $wnd.valueListenersOrderByCalled[reference] = false;
         var listener = $wnd.valueListeners[reference] || null;
         $wnd.firebase.database().ref(reference).off('value', listener);
-        @mk.gdx.firebase.html.database.GwtDataListenersManager::removeDataListener(Ljava/lang/String;)(reference);
+        @mk.gdx.firebase.html.database.GwtDataListenersManager::removeDataPromise(Ljava/lang/String;)(reference);
     }-*/;
 
 }
