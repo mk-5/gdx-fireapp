@@ -61,3 +61,6 @@
 
 **[1.9.2]**
 \- fix: #13 [iOS Database] Can't read string value
+
+**[1.9.3]**
+\- fix Android API: Wrong string/number param recognizing while sending analytics event
