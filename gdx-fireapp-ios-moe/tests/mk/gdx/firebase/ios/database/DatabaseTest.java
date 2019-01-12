@@ -17,7 +17,6 @@
 package mk.gdx.firebase.ios.database;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.LongArray;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -48,7 +47,6 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
-import mk.gdx.firebase.listeners.ConnectedListener;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -93,7 +91,6 @@ public class DatabaseTest extends GdxIOSAppTest {
 
     @AfterClass
     public static void afterClass() {
-        ((LongArray) Whitebox.getInternalState(QueryConnectionStatus.class, "handles")).clear();
         ((DataObserversManager) Whitebox.getInternalState(QueryOnDataChange.class, "observersManager")).removeListenersForPath("/test");
     }
 
@@ -101,7 +98,6 @@ public class DatabaseTest extends GdxIOSAppTest {
     public void onConnect() throws Exception {
         // Given
         Database database = new Database();
-        ConnectedListener connectedListener = mock(ConnectedListener.class);
         PowerMockito.mockStatic(QueryConnectionStatus.class);
 //        ConnectionStatusQuery query = PowerMockito.spy(new ConnectionStatusQuery(database));
         QueryConnectionStatus query = PowerMockito.mock(QueryConnectionStatus.class);
@@ -111,7 +107,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.onConnect(connectedListener);
+        database.onConnect();
 
         // Then
         // Can't verify new because of PowerMockitoRunner and JaCoCo coverage. Rule does not work here because of MOE

@@ -16,25 +16,23 @@
 
 package mk.gdx.firebase.ios.database;
 
-import com.badlogic.gdx.utils.LongArray;
-
 import apple.foundation.NSNumber;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
+import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.FutureListenerPromise;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides call to {@link FIRDatabaseReference#observeEventTypeWithBlock(long, FIRDatabaseReference.Block_observeEventTypeWithBlock)}  ()} for "".info/connected""
  */
-class QueryConnectionStatus extends IosDatabaseQuery<Void> {
+class QueryConnectionStatus extends IosDatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
-    private static final LongArray handles = new LongArray();
-
 
     QueryConnectionStatus(Database databaseDistribution) {
         super(databaseDistribution);
@@ -52,38 +50,47 @@ class QueryConnectionStatus extends IosDatabaseQuery<Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
-        synchronized (handles) {
-            if (arguments.get(0) != null) {
-                handles.add(query.observeEventTypeWithBlock(FIRDataEventType.Value, new ConnectionBlock((ConnectedListener) arguments.get(0))));
-            } else {
-                for (int i = handles.size - 1; i >= 0; i--) {
-                    query.removeObserverWithHandle(handles.get(i));
-                }
-                handles.clear();
-            }
-        }
+    protected ConnectionStatus run() {
+        final long handle = query.observeEventTypeWithBlock(FIRDataEventType.Value, new ConnectionBlock((FuturePromise) promise));
+        ((FutureListenerPromise) promise).onCancel(new CancelBlockAction(query, handle));
         return null;
     }
 
-    /**
-     * Wraps {@link ConnectedListener} with ios connection callback.
-     */
-    private class ConnectionBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlock {
+    private static class CancelBlockAction implements Runnable {
 
-        private ConnectedListener connectedListener;
+        private final FIRDatabaseQuery query;
+        private final long handle;
 
-        private ConnectionBlock(ConnectedListener connectedListener) {
-            this.connectedListener = connectedListener;
+        private CancelBlockAction(FIRDatabaseQuery query, long handle) {
+            this.query = query;
+            this.handle = handle;
         }
 
         @Override
+        public void run() {
+            query.removeObserverWithHandle(handle);
+        }
+    }
+
+    /**
+     * Wraps {@link FuturePromise} with ios connection callback.
+     */
+    static class ConnectionBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlock {
+
+        private FuturePromise promise;
+
+        private ConnectionBlock(FuturePromise promise) {
+            this.promise = promise;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
         public void call_observeEventTypeWithBlock(FIRDataSnapshot arg0) {
             boolean connected = ((NSNumber) arg0.value()).boolValue();
             if (connected) {
-                connectedListener.onConnect();
+                promise.doComplete(ConnectionStatus.CONNECTED);
             } else {
-                connectedListener.onDisconnect();
+                promise.doComplete(ConnectionStatus.DISCONNECTED);
             }
         }
     }

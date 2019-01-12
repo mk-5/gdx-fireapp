@@ -20,13 +20,14 @@ import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.deserialization.TransactionMitmConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.ListenerPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -71,8 +72,8 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public void onConnect(ConnectedListener connectedListener) {
-        platformObject.onConnect(connectedListener);
+    public ListenerPromise<ConnectionStatus> onConnect() {
+        return platformObject.onConnect();
     }
 
     /**

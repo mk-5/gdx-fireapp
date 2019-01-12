@@ -32,13 +32,13 @@ public class FuturePromise<T> implements Promise<T> {
     private static final int COMPLETE = 3;
     private static final int FAIL_LAZY = 2;
     private static final int FAIL = 1;
-    private static final int INIT = 0;
+    protected static final int INIT = 0;
 
     protected Consumer<T> thenConsumer;
     private BiConsumer<String, ? super Throwable> failConsumer;
     private Runnable alwaysRunnable;
     private Array<FuturePromise<T>> thenPromises = new Array<>();
-    private int state;
+    protected int state;
     // Following vars is only for lazy consumers call.
     private T completeResult;
     private String failReason;

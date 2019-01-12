@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2019 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.database.validators;
+package mk.gdx.firebase.database;
 
-
-import com.badlogic.gdx.utils.Array;
-
-import mk.gdx.firebase.distributions.DatabaseDistribution;
-
-/**
- * Validates arguments for {@link DatabaseDistribution#onConnect()}
- */
-public class OnConnectionValidator implements ArgumentsValidator {
-
-    @Override
-    public void validate(Array<Object> arguments) {
-    }
+public enum ConnectionStatus {
+    CONNECTED,
+    DISCONNECTED;
 }

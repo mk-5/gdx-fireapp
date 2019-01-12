@@ -81,12 +81,12 @@ public class DatabaseTest {
         PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(queryConnectionStatus);
 
         // When
-        database.onConnect(connectedListener);
+        database.onConnect();
 
         // Then
 //        PowerMockito.verifyNew(ConnectionStatusQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(QueryConnectionStatus.class);
-        QueryConnectionStatus.onConnect(Mockito.refEq(connectedListener));
+        QueryConnectionStatus.onConnect(Mockito.any(FuturePromise.class));
     }
 
     @Test

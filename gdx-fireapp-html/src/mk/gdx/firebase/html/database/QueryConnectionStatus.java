@@ -18,7 +18,8 @@ package mk.gdx.firebase.html.database;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.FutureListenerPromise;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides connection-status ask javascript execution.
@@ -35,7 +36,13 @@ class QueryConnectionStatus extends GwtDatabaseQuery {
 
     @Override
     protected void runJS() {
-        onConnect((ConnectedListener) arguments.get(0));
+        onConnect((FuturePromise) promise);
+        ((FutureListenerPromise) promise).onCancel(new Runnable() {
+            @Override
+            public void run() {
+                offConnect();
+            }
+        });
     }
 
     @Override
@@ -47,17 +54,23 @@ class QueryConnectionStatus extends GwtDatabaseQuery {
      * Set connected/disconnected listener.
      * <p>
      * You can read more here: <a href="https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state">https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state</a>
+     * <p>
+     * TODO - check doComplete with enum here
      *
-     * @param listener Connected listener, not null
+     * @param promise FuturePromise, not null
      */
-    public static native void onConnect(ConnectedListener listener) /*-{
+    public static native void onConnect(FuturePromise promise) /*-{
         $wnd.firebase.database().ref(".info/connected").on("value", function(snap){
             if (snap.val() === true) {
-                listener.@mk.gdx.firebase.listeners.ConnectedListener::onConnect()();
+                promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/database/ConnectionStatus)(ConnectionStatus.CONNECTED);
             } else {
-                listener.@mk.gdx.firebase.listeners.ConnectedListener::onDisconnect()();
+                promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/database/ConnectionStatus)(ConnectionStatus.DISCONNECTED);
             }
         });
+    }-*/;
+
+    public static native void offConnect() /*-{
+        $wnd.firebase.database().ref(".info/connected").off("value");
     }-*/;
 
 }

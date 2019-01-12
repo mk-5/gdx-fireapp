@@ -43,10 +43,10 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
         ConnectedListener connectedListener = Mockito.mock(ConnectedListener.class);
 
         // When
-        GdxFIRDatabase.instance().onConnect(connectedListener);
+        GdxFIRDatabase.instance().onConnect();
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onConnect(Mockito.refEq(connectedListener));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).onConnect();
     }
 
     @Test

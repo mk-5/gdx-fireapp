@@ -16,26 +16,26 @@
 
 package mk.gdx.firebase.android.database;
 
-import com.badlogic.gdx.utils.Array;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import mk.gdx.firebase.GdxFIRLogger;
+import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.FutureListenerPromise;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides asking for connection status.
  */
-class QueryConnectionStatus extends AndroidDatabaseQuery<Void> {
+class QueryConnectionStatus extends AndroidDatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
-
-    private static final Array<ConnectionValueListener> listeners = new Array<>();
 
     QueryConnectionStatus(Database databaseDistribution) {
         super(databaseDistribution);
@@ -52,18 +52,28 @@ class QueryConnectionStatus extends AndroidDatabaseQuery<Void> {
     }
 
     @Override
-    protected Void run() {
-        synchronized (listeners) {
-            if (arguments.get(0) != null) {
-                listeners.add(new ConnectionValueListener((ConnectedListener) arguments.get(0)));
-                query.addValueEventListener(listeners.peek());
-            } else if (arguments.get(0) == null && listeners.size > 0) {
-                for (ConnectionValueListener listener : listeners)
-                    query.removeEventListener(listener);
-                listeners.clear();
-            }
-        }
+    protected ConnectionStatus run() {
+        final ConnectionValueListener valueListener = new ConnectionValueListener((FuturePromise) promise);
+        query.addValueEventListener(valueListener);
+        ((FutureListenerPromise) promise).onCancel(new CancelListenerAction(valueListener, query));
         return null;
+    }
+
+    private static class CancelListenerAction implements Runnable {
+
+        private final ConnectionValueListener valueListener;
+        private final Query query;
+
+
+        private CancelListenerAction(ConnectionValueListener valueListener, Query query) {
+            this.valueListener = valueListener;
+            this.query = query;
+        }
+
+        @Override
+        public void run() {
+            query.removeEventListener(valueListener);
+        }
     }
 
     /**
@@ -72,26 +82,29 @@ class QueryConnectionStatus extends AndroidDatabaseQuery<Void> {
      */
     private static class ConnectionValueListener implements ValueEventListener {
 
-        private ConnectedListener connectedListener;
+        private FuturePromise promise;
 
-        ConnectionValueListener(ConnectedListener connectedListener) {
-            this.connectedListener = connectedListener;
+        ConnectionValueListener(FuturePromise promise) {
+            this.promise = promise;
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (connectedListener == null) return;
-            boolean connected = dataSnapshot.getValue(Boolean.class);
-            if (connected) {
-                connectedListener.onConnect();
+            if (promise == null) return;
+            Boolean connected = dataSnapshot.getValue(Boolean.class);
+            if (connected != null && connected) {
+                promise.doComplete(ConnectionStatus.CONNECTED);
             } else {
-                connectedListener.onDisconnect();
+                promise.doComplete(ConnectionStatus.DISCONNECTED);
             }
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void onCancelled(DatabaseError databaseError) {
             GdxFIRLogger.log(CONNECTION_LISTENER_CANCELED, databaseError.toException());
+            promise.doFail(CONNECTION_LISTENER_CANCELED, databaseError.toException());
         }
     }
 }

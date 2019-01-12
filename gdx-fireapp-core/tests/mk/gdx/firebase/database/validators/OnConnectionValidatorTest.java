@@ -18,11 +18,7 @@ package mk.gdx.firebase.database.validators;
 
 import com.badlogic.gdx.utils.Array;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import mk.gdx.firebase.listeners.ConnectedListener;
 
 public class OnConnectionValidatorTest {
 
@@ -31,53 +27,10 @@ public class OnConnectionValidatorTest {
         // Given
         OnConnectionValidator validator = new OnConnectionValidator();
         Array arguments = new Array();
-        arguments.addAll(Mockito.mock(ConnectedListener.class));
-
         // When
         validator.validate(arguments);
 
         // Then
         // Ok - no exception
-    }
-
-    @Test
-    public void validate2() {
-        // Given
-        OnConnectionValidator validator = new OnConnectionValidator();
-        Array arguments = new Array();
-        arguments.add(null);
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        // Ok - no exception
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error() {
-        // Given
-        OnConnectionValidator validator = new OnConnectionValidator();
-        Array arguments = new Array();
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error2() {
-        // Given
-        OnConnectionValidator validator = new OnConnectionValidator();
-        Array arguments = new Array();
-        arguments.addAll("test");
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
     }
 }

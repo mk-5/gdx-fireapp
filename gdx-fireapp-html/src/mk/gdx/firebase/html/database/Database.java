@@ -24,6 +24,7 @@ import java.util.Map;
 import mk.gdx.firebase.GdxFIRDatabase;
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
@@ -31,9 +32,10 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
-import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.promises.ConverterPromise;
+import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.ListenerPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -55,8 +57,16 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void onConnect(final ConnectedListener connectedListener) {
-        new QueryConnectionStatus(this).withArgs(connectedListener).execute();
+    public ListenerPromise<ConnectionStatus> onConnect() {
+        return FutureListenerPromise.of(new Consumer<FutureListenerPromise<ConnectionStatus>>() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void accept(FutureListenerPromise<ConnectionStatus> futurePromise) {
+                new QueryConnectionStatus(Database.this)
+                        .with(futurePromise)
+                        .execute();
+            }
+        });
     }
 
     /**

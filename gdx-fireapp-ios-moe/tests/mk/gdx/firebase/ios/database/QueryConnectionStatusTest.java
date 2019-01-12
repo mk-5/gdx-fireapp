@@ -16,8 +16,6 @@
 
 package mk.gdx.firebase.ios.database;
 
-import com.badlogic.gdx.utils.LongArray;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,7 +24,6 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.moe.natj.general.NatJ;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.reflect.Whitebox;
 
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
@@ -34,7 +31,7 @@ import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.FutureListenerPromise;
 
 
 @PrepareForTest({FIRDatabase.class, NatJ.class})
@@ -42,7 +39,6 @@ public class QueryConnectionStatusTest extends GdxIOSAppTest {
 
     @After
     public void afterClass() {
-        ((LongArray) Whitebox.getInternalState(QueryConnectionStatus.class, "handles")).clear();
     }
 
     @Test
@@ -84,18 +80,17 @@ public class QueryConnectionStatusTest extends GdxIOSAppTest {
         Mockito.when(firDatabaseQuery.observeEventTypeWithBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlock) Mockito.any())).thenReturn(handleValue);
         Database database = Mockito.mock(Database.class);
         QueryConnectionStatus query = new QueryConnectionStatus(database);
-        ConnectedListener listener = Mockito.mock(ConnectedListener.class);
+        FutureListenerPromise promise = Mockito.spy(FutureListenerPromise.class);
 
         // When
-        query.withArgs(listener).execute();
+        query.with(promise).execute();
 
         // Then
         Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).observeEventTypeWithBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlock) Mockito.any());
-        Assert.assertTrue(((LongArray) Whitebox.getInternalState(QueryConnectionStatus.class, "handles")).contains(handleValue));
     }
 
     @Test
-    public void run_withValidNullArgument() {
+    public void run_withCancel() {
         // Given
         long handleValue = 10L;
         PowerMockito.mockStatic(FIRDatabase.class);
@@ -103,17 +98,16 @@ public class QueryConnectionStatusTest extends GdxIOSAppTest {
         PowerMockito.when(FIRDatabase.database()).thenReturn(firDatabase);
         FIRDatabaseReference firDatabaseQuery = Mockito.mock(FIRDatabaseReference.class);
         Mockito.when(firDatabase.referenceWithPath(Mockito.anyString())).thenReturn(firDatabaseQuery);
-        Mockito.when(firDatabaseQuery.observeEventTypeWithBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlock) Mockito.any())).thenReturn(handleValue);
+        Mockito.when(firDatabaseQuery.observeEventTypeWithBlock(Mockito.anyLong(), (QueryConnectionStatus.ConnectionBlock) Mockito.any())).thenReturn(handleValue);
         Database database = Mockito.mock(Database.class);
         QueryConnectionStatus query = new QueryConnectionStatus(database);
-        ConnectedListener listener = null;
-        ((LongArray) Whitebox.getInternalState(QueryConnectionStatus.class, "handles")).add(handleValue);
+        FutureListenerPromise promise = Mockito.spy(FutureListenerPromise.class);
 
         // When
-        query.withArgs(listener).execute();
+        query.with(promise).execute();
+        promise.cancel();
 
         // Then
         Mockito.verify(firDatabaseQuery, VerificationModeFactory.times(1)).removeObserverWithHandle(Mockito.eq(handleValue));
-        Assert.assertTrue(((LongArray) Whitebox.getInternalState(QueryConnectionStatus.class, "handles")).size == 0);
     }
 }

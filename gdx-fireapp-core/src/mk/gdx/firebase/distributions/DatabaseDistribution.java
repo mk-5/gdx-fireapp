@@ -20,9 +20,10 @@ import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.ListenerPromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -46,10 +47,8 @@ public interface DatabaseDistribution {
      * Listens for database connection events.
      * <p>
      * Catch moment when application is going to to be connected or disconnected to the database.
-     *
-     * @param connectedListener Listener that handles moments when connection status was change, if null: connection listeners will be detached.
      */
-    void onConnect(ConnectedListener connectedListener);
+    ListenerPromise<ConnectionStatus> onConnect();
 
     /**
      * Sets database path you want to deal with in next action.
@@ -85,7 +84,7 @@ public interface DatabaseDistribution {
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      * <p>
      * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.MapConverter}
-     *
+     * <p>
      * TODO - how to detach listeners?
      *
      * @param dataType Class you want to retrieve

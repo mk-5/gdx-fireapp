@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.database.validators;
-
-
-import com.badlogic.gdx.utils.Array;
-
-import mk.gdx.firebase.distributions.DatabaseDistribution;
+package mk.gdx.firebase.promises;
 
 /**
- * Validates arguments for {@link DatabaseDistribution#onConnect()}
+ * Listener promise
  */
-public class OnConnectionValidator implements ArgumentsValidator {
+public interface ListenerPromise<T> extends Promise<T> {
 
-    @Override
-    public void validate(Array<Object> arguments) {
-    }
+    /**
+     * Cancel this promise
+     */
+    ListenerPromise<T> cancel();
 }
