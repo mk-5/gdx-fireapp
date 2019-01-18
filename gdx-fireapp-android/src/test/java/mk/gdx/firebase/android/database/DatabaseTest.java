@@ -76,24 +76,6 @@ public class DatabaseTest extends AndroidContextTest {
     }
 
     @Test
-    public void onDataChange_withNullListener() throws Exception {
-        // Given
-        PowerMockito.mockStatic(QueryOnDataChange.class);
-        QueryOnDataChange query = PowerMockito.mock(QueryOnDataChange.class);
-        PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
-        when(query.with(Mockito.nullable(Array.class))).thenReturn(query);
-        when(query.with(Mockito.nullable(OrderByClause.class))).thenReturn(query);
-        when(query.withArgs(Mockito.any(), Mockito.any())).thenReturn(query);
-        Database database = new Database();
-
-        // When
-        database.inReference("/test").onDataChange(Map.class);
-
-        // Then
-        PowerMockito.verifyNew(QueryOnDataChange.class);
-    }
-
-    @Test
     public void onConnect() throws Exception {
         // Given
         PowerMockito.mockStatic(QueryConnectionStatus.class);

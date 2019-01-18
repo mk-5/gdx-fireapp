@@ -93,13 +93,14 @@ public class QueryOnDataChangeTest extends AndroidContextTest {
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
         QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
-        final ConverterPromise promise = Mockito.mock(ConverterPromise.class);
+        final ConverterPromise promise = Mockito.spy(ConverterPromise.class);
 
         // When
         databaseDistribution.inReference("/test");
-        queryOnDataChange.with(promise).withArgs(new Object[]{null}).execute();
+        queryOnDataChange.with(promise).withArgs(String.class).execute();
+        promise.cancel();
 
         // Then
-        Mockito.verify(databaseReference, VerificationModeFactory.times(0)).addValueEventListener(Mockito.any(ValueEventListener.class));
+        Mockito.verify(databaseReference, VerificationModeFactory.times(1)).removeEventListener(Mockito.any(ValueEventListener.class));
     }
 }

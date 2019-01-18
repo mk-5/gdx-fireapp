@@ -16,8 +16,6 @@
 
 package mk.gdx.firebase.ios.database;
 
-import com.badlogic.gdx.utils.Array;
-
 import apple.foundation.NSError;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
@@ -26,12 +24,12 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.promises.ConverterPromise;
+import mk.gdx.firebase.promises.FutureListenerPromise;
 
 /**
  * Provides call to {@link FIRDatabaseQuery#observeEventTypeWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2)}.
  */
 class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
-    private static final DataObserversManager observersManager = new DataObserversManager();
 
     QueryOnDataChange(Database databaseDistribution) {
         super(databaseDistribution);
@@ -45,19 +43,10 @@ class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
     @Override
     @SuppressWarnings("unchecked")
     protected R run() {
-        if (arguments.get(0) != null) {
-            long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
-                    new DataChangeBlock((Class) arguments.get(0), orderByClause, (ConverterPromise) promise),
-                    new DataChangeCancelBlock((ConverterPromise) promise));
-            observersManager.addNewListener(databasePath, handle);
-        } else {
-            if (observersManager.hasListeners(databasePath)) {
-                Array<Long> handles = observersManager.getListeners(databasePath);
-                for (Long handle : handles)
-                    query.removeObserverWithHandle(handle);
-                observersManager.removeListenersForPath(databasePath);
-            }
-        }
+        long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
+                new DataChangeBlock((Class) arguments.get(0), orderByClause, (ConverterPromise) promise),
+                new DataChangeCancelBlock((ConverterPromise) promise));
+        ((FutureListenerPromise) promise).onCancel(new CancelAction(handle, query));
         return null;
     }
 
@@ -112,6 +101,22 @@ class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
         @Override
         public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0) {
             promise.doFail(new Exception(arg0.localizedDescription()));
+        }
+    }
+
+    private static class CancelAction implements Runnable {
+
+        private final long handle;
+        private final FIRDatabaseQuery query;
+
+        private CancelAction(long handle, FIRDatabaseQuery query) {
+            this.handle = handle;
+            this.query = query;
+        }
+
+        @Override
+        public void run() {
+            query.removeObserverWithHandle(handle);
         }
     }
 }

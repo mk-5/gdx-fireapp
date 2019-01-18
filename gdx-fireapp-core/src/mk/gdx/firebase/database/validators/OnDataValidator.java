@@ -27,13 +27,13 @@ import mk.gdx.firebase.distributions.DatabaseDistribution;
 public class OnDataValidator implements ArgumentsValidator {
 
     private static final String MESSAGE1 = "Database#onDataChange needs one argument";
-    private static final String MESSAGE2 = "The first argument should be class type or null";
+    private static final String MESSAGE2 = "The first argument should be class type";
 
     @Override
     public void validate(Array<Object> arguments) {
         if (arguments.size != 1)
             throw new IllegalArgumentException(MESSAGE1);
-        if (arguments.get(0) != null && !(arguments.get(0) instanceof Class))
+        if (!(arguments.get(0) instanceof Class))
             throw new IllegalArgumentException(MESSAGE2);
     }
 }

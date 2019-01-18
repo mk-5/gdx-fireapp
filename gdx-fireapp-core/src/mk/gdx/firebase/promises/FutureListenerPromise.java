@@ -25,7 +25,7 @@ import mk.gdx.firebase.functional.Consumer;
  */
 public class FutureListenerPromise<T> extends FuturePromise<T> implements ListenerPromise<T> {
 
-    private boolean canceled;
+    protected boolean canceled;
     private Runnable onCancel;
 
     @Override

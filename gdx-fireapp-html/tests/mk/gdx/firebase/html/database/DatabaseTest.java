@@ -40,12 +40,13 @@ import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.promises.ConverterPromise;
+import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, QueryConnectionStatus.class,
         QuerySetValue.class, QueryReadValue.class, QueryOnDataChange.class, QueryPush.class,
         QueryRemoveValue.class, QueryUpdateChildren.class, QueryRunTransaction.class, DatabaseReference.class,
-        ClassReflection.class
+        ClassReflection.class, GwtDataPromisesManager.class
 //        , Database.class
 })
 public class DatabaseTest {
@@ -60,6 +61,7 @@ public class DatabaseTest {
         PowerMockito.mockStatic(ClassReflection.class);
         PowerMockito.mockStatic(DatabaseReference.class);
         PowerMockito.mockStatic(ScriptRunner.class);
+        PowerMockito.mockStatic(GwtDataPromisesManager.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -151,6 +153,7 @@ public class DatabaseTest {
         PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         Gdx.app = Mockito.mock(Application.class);
         String testReference = "test_reference";
+        PowerMockito.doReturn(false).when(GwtDataPromisesManager.class, "hasPromise", testReference);
         Class dataType = String.class;
 
         // When
@@ -170,11 +173,15 @@ public class DatabaseTest {
         QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
         PowerMockito.whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         String testReference = "test_reference";
-        Class dataType = null;
+        PowerMockito.doReturn(false).when(GwtDataPromisesManager.class, "hasPromise", testReference);
+        GwtDataPromisesManager.removeDataPromise(testReference);
         Gdx.app = Mockito.mock(Application.class);
 
         // When
-        ((FuturePromise) database.inReference(testReference).onDataChange(dataType)).doComplete(testReference);
+        FutureListenerPromise promise = ((FutureListenerPromise) database.inReference(testReference).onDataChange(String.class));
+        promise.doComplete(testReference);
+        PowerMockito.doReturn(true).when(GwtDataPromisesManager.class, "hasPromise", testReference);
+        promise.cancel();
 
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());

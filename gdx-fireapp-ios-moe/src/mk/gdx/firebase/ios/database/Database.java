@@ -107,7 +107,7 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<R> readValue(Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
+        return ConverterPromise.ofPromise(new Consumer<ConverterPromise<T, R>>() {
             @Override
             public void accept(ConverterPromise<T, R> rFuturePromise) {
                 rFuturePromise.with(GdxFIRDatabase.instance().getMapConverter());
@@ -126,9 +126,9 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> Promise<R> onDataChange(Class<T> dataType) {
+    public <T, R extends T> ListenerPromise<R> onDataChange(Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
+        return ConverterPromise.ofPromise(new Consumer<ConverterPromise<T, R>>() {
             @Override
             public void accept(ConverterPromise<T, R> rFuturePromise) {
                 rFuturePromise.with(GdxFIRDatabase.instance().getMapConverter());

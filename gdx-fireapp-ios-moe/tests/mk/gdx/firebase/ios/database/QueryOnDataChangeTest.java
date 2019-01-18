@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.ios.database;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -29,12 +28,17 @@ import org.powermock.reflect.Whitebox;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
+import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 import mk.gdx.firebase.promises.ConverterPromise;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @PrepareForTest({NatJ.class, FIRDatabase.class, FIRDatabaseReference.class, FIRDatabaseQuery.class, Database.class})
 public class QueryOnDataChangeTest extends GdxIOSAppTest {
@@ -50,11 +54,6 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
         firDatabaseReference = mock(FIRDatabaseReference.class);
         Mockito.when(firDatabase.referenceWithPath(Mockito.anyString())).thenReturn(firDatabaseReference);
         Mockito.when(FIRDatabase.database()).thenReturn(firDatabase);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        Whitebox.setInternalState(QueryOnDataChange.class, "observersManager", new DataObserversManager());
     }
 
     @Test
@@ -73,7 +72,6 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
     public void run() throws Exception {
         // Given
         DataObserversManager dataObserversManager = Mockito.spy(new DataObserversManager());
-        Whitebox.setInternalState(QueryOnDataChange.class, "observersManager", dataObserversManager);
         PowerMockito.mockStatic(Database.class);
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
@@ -88,7 +86,6 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());
-        Mockito.verify(dataObserversManager, VerificationModeFactory.times(1)).addNewListener(Mockito.anyString(), Mockito.any());
     }
 
     @Test
@@ -97,21 +94,25 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
         long handleValue = 10L;
         DataObserversManager dataObserversManager = Mockito.spy(new DataObserversManager());
         dataObserversManager.addNewListener("/test", handleValue);
-        Whitebox.setInternalState(QueryOnDataChange.class, "observersManager", dataObserversManager);
         PowerMockito.mockStatic(Database.class);
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "dbReference", firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
+        when(firDatabaseReference.observeEventTypeWithBlockWithCancelBlock(
+                eq(FIRDataEventType.Value),
+                any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
+                any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class))).thenReturn(handleValue);
         QueryOnDataChange query = new QueryOnDataChange(database);
+        ConverterPromise promise = spy(ConverterPromise.class);
         Class dataType = String.class;
 
 
         // When
-        query.with(mock(ConverterPromise.class)).withArgs((Object[]) null).execute();
+        query.with(promise).withArgs(dataType).execute();
+        promise.cancel();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeObserverWithHandle(Mockito.eq(handleValue));
-        Mockito.verify(dataObserversManager, VerificationModeFactory.times(1)).removeListenersForPath(Mockito.anyString());
     }
 }

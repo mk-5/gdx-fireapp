@@ -18,6 +18,7 @@ package mk.gdx.firebase.html.database;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
+import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
 
 /**
@@ -29,12 +30,12 @@ class QueryOnDataChange extends GwtDatabaseQuery {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void runJS() {
-        if (arguments.get(0) != null && !GwtDataPromisesManager.hasPromise(databaseReferencePath)) {
+        if (!GwtDataPromisesManager.hasPromise(databaseReferencePath)) {
             GwtDataPromisesManager.addDataPromise(databaseReferencePath, new JsonDataPromise((Class) arguments.get(0), (FuturePromise) promise));
             onValue(databaseReferencePath, databaseReference);
-        } else if (arguments.get(0) == null) {
-            offValue(databaseReferencePath);
+            ((FutureListenerPromise) promise).onCancel(new CancelListenerAction(databaseReferencePath));
         }
     }
 
@@ -85,4 +86,17 @@ class QueryOnDataChange extends GwtDatabaseQuery {
         @mk.gdx.firebase.html.database.GwtDataListenersManager::removeDataPromise(Ljava/lang/String;)(reference);
     }-*/;
 
+    private static class CancelListenerAction implements Runnable {
+
+        private final String databasePath;
+
+        private CancelListenerAction(String databasePath) {
+            this.databasePath = databasePath;
+        }
+
+        @Override
+        public void run() {
+            offValue(databasePath);
+        }
+    }
 }

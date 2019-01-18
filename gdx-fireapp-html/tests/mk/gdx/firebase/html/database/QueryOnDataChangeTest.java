@@ -55,12 +55,12 @@ public class QueryOnDataChangeTest {
     public void runJS() {
         // Given
         Database database = Mockito.spy(Database.class);
-        database.inReference("/test");
+        database.inReference("/test123");
         QueryOnDataChange query = new QueryOnDataChange(database);
         ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
-        query.withArgs(String.class).execute();
+        query.with(promise).withArgs(String.class).execute();
 
         // Then
         Assert.fail("Native method should be run");
@@ -72,9 +72,11 @@ public class QueryOnDataChangeTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         QueryOnDataChange query = new QueryOnDataChange(database);
+        ConverterPromise promise = Mockito.spy(ConverterPromise.class);
 
         // When
-        query.withArgs((Object[]) null).execute();
+        query.with(promise).withArgs(String.class).execute();
+        promise.cancel();
 
         // Then
         Assert.fail("Native method should be run");

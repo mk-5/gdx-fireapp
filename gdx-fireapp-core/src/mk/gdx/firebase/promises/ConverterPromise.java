@@ -26,7 +26,7 @@ import mk.gdx.firebase.reflection.AnnotationFinder;
 /**
  * @param <R> Output promise type
  */
-public class ConverterPromise<T, R> extends FuturePromise<R> {
+public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
 
     private MapMitmConverter mapConverter;
     private Function<T, R> modifier;
@@ -44,6 +44,7 @@ public class ConverterPromise<T, R> extends FuturePromise<R> {
     @Override
     @SuppressWarnings("unchecked")
     public synchronized void doComplete(Object object) {
+        if (canceled) return;
         if (mapConverter == null)
             throw new IllegalStateException();
         if (modifier != null) {
@@ -63,10 +64,9 @@ public class ConverterPromise<T, R> extends FuturePromise<R> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T, R> ConverterPromise<T, R> of(Object consumer) {
-        if (!(consumer instanceof Consumer)) throw new IllegalArgumentException();
+    public static <T, R> ConverterPromise<T, R> ofPromise(Consumer<ConverterPromise<T, R>> consumer) {
         ConverterPromise<T, R> promise = new ConverterPromise<>();
-        ((Consumer<ConverterPromise<T, R>>) consumer).accept(promise);
+        consumer.accept(promise);
         return promise;
     }
 }

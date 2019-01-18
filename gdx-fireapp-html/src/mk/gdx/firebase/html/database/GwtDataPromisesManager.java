@@ -55,6 +55,7 @@ class GwtDataPromisesManager {
      * @param refPath  Database ref path
      * @param newValue New value as json string
      */
+    @SuppressWarnings("unchecked")
     static void callPromise(String refPath, String newValue) {
         if (!listenersManager.hasListeners(refPath))
             return;
@@ -69,8 +70,7 @@ class GwtDataPromisesManager {
      * @param refPath Database reference path
      */
     static void removeDataPromise(String refPath) {
-        if (listenersManager.hasListeners(refPath))
-            listenersManager.removeListenersForPath(refPath);
+        listenersManager.removeListenersForPath(refPath);
     }
 
 }

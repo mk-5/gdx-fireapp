@@ -112,7 +112,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <T, E extends T> Promise<E> onDataChange(Class<T> dataType) {
+    public <T, E extends T> ListenerPromise<E> onDataChange(Class<T> dataType) {
 //        DataChangeListenerMitmConverter<T, E> mitmConverter = new DataChangeListenerMitmConverter<T, E>(dataType, listener, mapConverter);
 //        if (mitmConverter.isPojo(dataType)) {
 //            platformObject.onDataChange(Map.class, mitmConverter.getPojoListener());

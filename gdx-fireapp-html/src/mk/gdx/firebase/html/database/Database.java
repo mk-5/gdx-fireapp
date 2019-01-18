@@ -99,7 +99,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
-        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
+        return ConverterPromise.ofPromise(new Consumer<ConverterPromise<T, R>>() {
             @Override
             @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> rConverterPromise) {
@@ -120,12 +120,11 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> Promise<R> onDataChange(final Class<T> dataType) {
-        return ConverterPromise.of(new Consumer<ConverterPromise<T, R>>() {
+    public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
+        return ConverterPromise.ofPromise(new Consumer<ConverterPromise<T, R>>() {
             @Override
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
-                // TODO - not implemented
                 new QueryOnDataChange(Database.this)
                         .with(filters)
                         .with(orderByClause)
