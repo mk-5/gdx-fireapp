@@ -10,12 +10,11 @@ import org.powermock.reflect.Whitebox;
 import java.util.HashMap;
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.listeners.ConnectedListener;
 
 import static org.junit.Assert.assertNotNull;
@@ -188,25 +187,21 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     @Test
     public void transaction() {
         // Given
-        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
-
         // When
-        GdxFIRDatabase.instance().transaction(Integer.class, Mockito.mock(TransactionCallback.class), completeCallback);
+        GdxFIRDatabase.instance().transaction(Integer.class, Mockito.mock(Function.class));
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(Integer.class), Mockito.any(TransactionCallback.class), Mockito.refEq(completeCallback));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(Integer.class), Mockito.any(Function.class));
     }
 
     @Test
     public void transaction2() {
         // Given
-        CompleteCallback completeCallback = Mockito.mock(CompleteCallback.class);
-
         // When (simulate POJO)
-        GdxFIRDatabase.instance().transaction(GdxFIRDatabaseTest.class, Mockito.mock(TransactionCallback.class), completeCallback);
+        GdxFIRDatabase.instance().transaction(GdxFIRDatabaseTest.class, Mockito.mock(Function.class));
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(Map.class), Mockito.any(TransactionCallback.class), Mockito.refEq(completeCallback));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(Map.class), Mockito.any(Function.class));
     }
 
     @Test

@@ -23,18 +23,17 @@ import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.FIRMutableData;
 import bindings.google.firebasedatabase.FIRTransactionResult;
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RunTransactionValidator;
+import mk.gdx.firebase.functional.Function;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides call to {@link FIRDatabaseReference#runTransactionBlockAndCompletionBlock(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0, FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1)}.
  */
-class QueryRunTransaction extends IosDatabaseQuery<Void> {
+class QueryRunTransaction<R> extends IosDatabaseQuery<R> {
     private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
-    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
 
     QueryRunTransaction(Database databaseDistribution) {
         super(databaseDistribution);
@@ -54,61 +53,53 @@ class QueryRunTransaction extends IosDatabaseQuery<Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
+    protected R run() {
         ((FIRDatabaseReference) query).runTransactionBlockAndCompletionBlock(
-                new RunTransactionBlock((Class) arguments.get(0), (TransactionCallback) arguments.get(1)),
-                new TransactionCompleteBlock(arguments.size == 3 ? (CompleteCallback) arguments.get(2) : null));
+                new RunTransactionBlock((Class) arguments.get(0), (Function<R, R>) arguments.get(1)),
+                new TransactionCompleteBlock((FuturePromise<Void>) promise));
         return null;
     }
 
-    private class RunTransactionBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0 {
+    private static class RunTransactionBlock<R> implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0 {
 
         private Class type;
-        private TransactionCallback transactionCallback;
+        private Function<R, R> transactionFunction;
 
-        private RunTransactionBlock(Class type, TransactionCallback transactionCallback) {
+        private RunTransactionBlock(Class type, Function<R, R> transactionFunction) {
             this.type = type;
-            this.transactionCallback = transactionCallback;
+            this.transactionFunction = transactionFunction;
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0) {
-            if (NSNull.class.isAssignableFrom(arg0.value().getClass())) {
+            if (arg0.value() == null || NSNull.class.isAssignableFrom(arg0.value().getClass())) {
                 GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
                 return FIRTransactionResult.abort();
             }
             Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), type);
-            arg0.setValue(DataProcessor.javaDataToIos(transactionCallback.run(transactionObject)));
+            arg0.setValue(DataProcessor.javaDataToIos(transactionFunction.apply((R) transactionObject)));
             return FIRTransactionResult.successWithValue(arg0);
         }
     }
 
-    private class TransactionCompleteBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1 {
+    private static class TransactionCompleteBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1 {
 
-        private CompleteCallback completeCallback;
+        private FuturePromise<Void> promise;
 
-        private TransactionCompleteBlock(CompleteCallback completeCallback) {
-            this.completeCallback = completeCallback;
+        private TransactionCompleteBlock(FuturePromise<Void> promise) {
+            this.promise = promise;
         }
 
         @Override
         public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2) {
             if (arg0 != null) {
-                if (completeCallback != null) {
-                    completeCallback.onError(new Exception(arg0.localizedDescription()));
-                } else {
-                    GdxFIRLogger.error(TRANSACTION_ERROR, new Exception(arg0.localizedDescription()));
-                }
+                promise.doFail(new Exception(arg0.localizedDescription()));
             } else {
                 if (arg1) {
-                    if (completeCallback != null)
-                        completeCallback.onSuccess();
+                    promise.doComplete(null);
                 } else {
-                    if (completeCallback != null) {
-                        completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_COMMIT));
-                    } else {
-                        GdxFIRLogger.log(TRANSACTION_NOT_ABLE_TO_COMMIT);
-                    }
+                    promise.doFail(new Exception(TRANSACTION_NOT_ABLE_TO_COMMIT));
                 }
             }
         }

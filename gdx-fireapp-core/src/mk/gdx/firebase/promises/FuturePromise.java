@@ -150,6 +150,10 @@ public class FuturePromise<T> implements Promise<T> {
         return state == FAIL;
     }
 
+    public Consumer<T> getThenConsumer() {
+        return thenConsumer;
+    }
+
     public static <R> FuturePromise<R> of(Consumer<FuturePromise<R>> consumer) {
         FuturePromise<R> promise = new FuturePromise<>();
         consumer.accept(promise);

@@ -23,6 +23,7 @@ import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.ListenerPromise;
 import mk.gdx.firebase.promises.Promise;
 
@@ -156,14 +157,12 @@ public interface DatabaseDistribution {
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      *
-     * @param dataType            Type of data you want to get.
-     * @param transactionCallback Callback called when transaction is complete.
-     * @param completeCallback    Can be null
+     * @param dataType            Type of data you want to get, not null
+     * @param transactionFunction Function to modify transaction data, not null
      * @throws RuntimeException if {@link #inReference(String)} was not call before call this method.
      * @see CompleteCallback
-     * @see TransactionCallback
      */
-    <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback);
+    <T, R extends T> Promise<Void> transaction(Class<T> dataType, Function<R, R> transactionFunction);
 
     /**
      * Keeps your data for offline usage.

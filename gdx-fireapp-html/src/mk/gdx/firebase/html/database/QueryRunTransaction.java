@@ -16,15 +16,15 @@
 
 package mk.gdx.firebase.html.database;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RunTransactionValidator;
+import mk.gdx.firebase.functional.Function;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides transaction javascript execution.
  */
-class QueryRunTransaction extends GwtDatabaseQuery {
+class QueryRunTransaction<R> extends GwtDatabaseQuery<R> {
     QueryRunTransaction(Database databaseDistribution) {
         super(databaseDistribution);
     }
@@ -32,7 +32,7 @@ class QueryRunTransaction extends GwtDatabaseQuery {
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        transaction(databaseReferencePath, new JsonDataModifier((Class) arguments.get(0), (TransactionCallback) arguments.get(1)), (CompleteCallback) arguments.get(2));
+        transaction(databaseReferencePath, new JsonDataModifier((Class) arguments.get(0), (Function) arguments.get(1)), (FuturePromise) promise);
     }
 
     @Override
@@ -43,11 +43,10 @@ class QueryRunTransaction extends GwtDatabaseQuery {
     /**
      * Modify database data in single transaction.
      *
-     * @param reference        Reference path, not null
-     * @param dataModifier     Json data modifier, not null
-     * @param completeCallback Complete callback, not null
+     * @param reference    Reference path, not null
+     * @param dataModifier Json data modifier, not null
      */
-    public static native void transaction(String reference, JsonDataModifier dataModifier, CompleteCallback completeCallback) /*-{
+    public static native void transaction(String reference, JsonDataModifier dataModifier, FuturePromise promise) /*-{
         $wnd.firebase.database().ref(reference).transaction(function(currentData){
             var newData = dataModifier.@mk.gdx.firebase.html.database.JsonDataModifier::modify(Ljava/lang/String;)(JSON.stringify(currentData));
             var val;
@@ -62,9 +61,9 @@ class QueryRunTransaction extends GwtDatabaseQuery {
                 var message = "";
                 if( error ) message = error.message;
                 else if( !committed ) message = "Transaction was aborted.";
-                callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(message));
+                promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
             }else{
-                callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+                promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
             }
         });
     }-*/;

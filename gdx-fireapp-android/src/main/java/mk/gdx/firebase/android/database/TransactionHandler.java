@@ -22,30 +22,32 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.annotations.MapConversion;
+import mk.gdx.firebase.functional.Function;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.reflection.AnnotationFinder;
 
 /**
- * Provides transaction invocation
+ * Provides transactionFunction invocation
  */
 class TransactionHandler<R> implements Transaction.Handler {
 
-    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
+    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transactionFunction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
-    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transaction - aborting";
+    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transactionFunction - aborting";
 
 
-    private TransactionCallback<R> transactionCallback;
-    private CompleteCallback completeCallback;
+    private Function<R, R> transactionFunction;
+    private FuturePromise<Void> promise;
 
 
     /**
-     * @param transactionCallback Transaction callback, not null
-     * @param completeCallback    Complete callback, may be null
+     * @param transactionFunction Transaction function, not null
+     * @param promise             Promise, may be null
      */
-    TransactionHandler(TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
-        this.transactionCallback = transactionCallback;
-        this.completeCallback = completeCallback;
+    TransactionHandler(Function<R, R> transactionFunction, FuturePromise<Void> promise) {
+        this.transactionFunction = transactionFunction;
+        this.promise = promise;
     }
 
     @Override
@@ -55,30 +57,29 @@ class TransactionHandler<R> implements Transaction.Handler {
             GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
             return Transaction.abort();
         }
-        R transactionData = (R) mutableData.getValue();
-        mutableData.setValue(transactionCallback.run(transactionData));
+        MapConversion mapConversionAnnotation = null;
+        R transactionData;
+        if (promise.getThenConsumer() != null) {
+            mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, promise.getThenConsumer());
+        }
+        if (mapConversionAnnotation != null) {
+            transactionData = (R) mutableData.getValue(mapConversionAnnotation.value());
+        } else {
+            transactionData = (R) mutableData.getValue();
+        }
+        mutableData.setValue(transactionFunction.apply(transactionData));
         return Transaction.success(mutableData);
     }
 
     @Override
     public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
         if (databaseError != null) {
-            if (completeCallback != null) {
-                completeCallback.onError(databaseError.toException());
-            } else {
-                GdxFIRLogger.error(TRANSACTION_ERROR, databaseError.toException());
-            }
+            promise.doFail(databaseError.toException());
         } else {
             if (b) {
-                if (completeCallback != null) {
-                    completeCallback.onSuccess();
-                }
+                promise.doComplete(null);
             } else {
-                if (completeCallback != null) {
-                    completeCallback.onError(new Exception(TRANSACTION_NOT_ABLE_TO_COMMIT));
-                } else {
-                    GdxFIRLogger.error(TRANSACTION_NOT_ABLE_TO_COMMIT);
-                }
+                promise.doFail(TRANSACTION_NOT_ABLE_TO_COMMIT, null);
             }
         }
     }

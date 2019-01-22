@@ -32,6 +32,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -198,8 +199,17 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback) {
-        new QueryRunTransaction(this).withArgs(dataType, transactionCallback, completeCallback).execute();
+    @SuppressWarnings("unchecked")
+    public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transactionFunction) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                new QueryRunTransaction(Database.this)
+                        .withArgs(dataType, transactionFunction)
+                        .with(voidFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**

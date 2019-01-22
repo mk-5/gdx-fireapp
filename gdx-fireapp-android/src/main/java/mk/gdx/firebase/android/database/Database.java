@@ -23,8 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRDatabase;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.FilteringStateEnsurer;
@@ -34,6 +32,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -210,8 +209,17 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> void transaction(final Class<T> dataType, final TransactionCallback<R> transactionCallback, final CompleteCallback completeCallback) {
-        new QueryRunTransaction(this).withArgs(dataType, transactionCallback, completeCallback).execute();
+    public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transaction) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                // TODO - converter
+                new QueryRunTransaction(Database.this)
+                        .withArgs(dataType, transaction)
+                        .with(voidFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**
@@ -254,7 +262,7 @@ public class Database implements DatabaseDistribution {
      * <li>{@link #readValue(Class)}</li>
      * <li>{@link #onDataChange(Class)}</li>
      * <li>{@link #updateChildren(Map)}</li>
-     * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
+     * <li>{@link #transaction(Class, Function)}</li>
      * </uL>
      */
     void terminateOperation() {

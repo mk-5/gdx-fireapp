@@ -30,8 +30,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.GdxFIRLogger;
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.functional.Function;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({GdxNativesLoader.class, MutableData.class, Transaction.class, GdxFIRLogger.class})
 public class TransactionHandlerTest extends AndroidContextTest {
@@ -47,9 +47,9 @@ public class TransactionHandlerTest extends AndroidContextTest {
     @Test
     public void doTransaction() {
         // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
+        Function transactionFunction = Mockito.mock(Function.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
         MutableData mutableData = Mockito.mock(MutableData.class);
         Mockito.when(mutableData.getValue()).thenReturn("test_value");
 
@@ -64,9 +64,9 @@ public class TransactionHandlerTest extends AndroidContextTest {
     @Test
     public void doTransaction_nullData() {
         // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
+        Function transactionFunction = Mockito.mock(Function.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
         MutableData mutableData = Mockito.mock(MutableData.class);
         Mockito.when(mutableData.getValue()).thenReturn(null);
 
@@ -81,9 +81,9 @@ public class TransactionHandlerTest extends AndroidContextTest {
     @Test
     public void onComplete_withErrorAndCallback() {
         // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
+        Function transactionFunction = Mockito.mock(Function.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
         DatabaseError databaseError = Mockito.mock(DatabaseError.class);
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         boolean status = true;
@@ -92,33 +92,15 @@ public class TransactionHandlerTest extends AndroidContextTest {
         transactionHandler.onComplete(databaseError, status, dataSnapshot);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
-    }
-
-    @Test
-    public void onComplete_withErrorAndWithoutCallback() {
-        // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = null;
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
-        DatabaseError databaseError = Mockito.mock(DatabaseError.class);
-        DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
-        boolean status = true;
-
-        // When
-        transactionHandler.onComplete(databaseError, status, dataSnapshot);
-
-        // Then
-        PowerMockito.verifyStatic(GdxFIRLogger.class);
-        GdxFIRLogger.error(Mockito.anyString(), Mockito.nullable(Exception.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 
     @Test
     public void onComplete_withoutErrorAndWithCallback_statusOk() {
         // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
+        Function transactionFunction = Mockito.mock(Function.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
         DatabaseError databaseError = null;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         boolean status = true;
@@ -127,15 +109,15 @@ public class TransactionHandlerTest extends AndroidContextTest {
         transactionHandler.onComplete(databaseError, status, dataSnapshot);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.nullable(Void.class));
     }
 
     @Test
     public void onComplete_withoutErrorAndWithCallback_statusError() {
         // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
+        Function transactionFunction = Mockito.mock(Function.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
         DatabaseError databaseError = null;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         boolean status = false;
@@ -144,24 +126,6 @@ public class TransactionHandlerTest extends AndroidContextTest {
         transactionHandler.onComplete(databaseError, status, dataSnapshot);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
-    }
-
-    @Test
-    public void onComplete_withoutErrorAndCallback_statusError() {
-        // Given
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
-        CompleteCallback callback = null;
-        TransactionHandler transactionHandler = new TransactionHandler(transactionCallback, callback);
-        DatabaseError databaseError = null;
-        DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
-        boolean status = false;
-
-        // When
-        transactionHandler.onComplete(databaseError, status, dataSnapshot);
-
-        // Then
-        PowerMockito.verifyStatic(GdxFIRLogger.class);
-        GdxFIRLogger.error(Mockito.anyString());
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.anyString(), Mockito.nullable(Throwable.class));
     }
 }

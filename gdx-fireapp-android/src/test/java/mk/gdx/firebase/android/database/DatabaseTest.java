@@ -33,14 +33,13 @@ import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRDatabase;
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.Promise;
 
 import static org.mockito.Mockito.mock;
@@ -240,12 +239,11 @@ public class DatabaseTest extends AndroidContextTest {
         QueryRunTransaction query = PowerMockito.mock(QueryRunTransaction.class);
         PowerMockito.whenNew(QueryRunTransaction.class).withAnyArguments().thenReturn(query);
         when(query.withArgs(Mockito.any())).thenReturn(query);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
+        Function transactionFunction = Mockito.mock(Function.class);
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").transaction(dataType, transactionCallback, callback);
+        database.inReference("/test").transaction(dataType, transactionFunction);
 
         // Then
         PowerMockito.verifyNew(QueryRunTransaction.class);

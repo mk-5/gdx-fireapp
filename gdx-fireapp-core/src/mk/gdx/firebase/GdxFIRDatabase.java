@@ -18,15 +18,13 @@ package mk.gdx.firebase;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.deserialization.MapConverter;
-import mk.gdx.firebase.deserialization.TransactionMitmConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.ListenerPromise;
 import mk.gdx.firebase.promises.Promise;
 
@@ -98,13 +96,6 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      */
     @Override
     public <T, E extends T> Promise<E> readValue(Class<T> dataType) {
-        // TODO - promise with MitmConverter?
-//        DataCallbackMitmConverter<T, E> mitmConverter = new DataCallbackMitmConverter<T, E>(dataType, callback, mapConverter);
-//        if (mitmConverter.isPojo(dataType)) {
-//            return platformObject.readValue(Map.class, mitmConverter.getPojoDataCallback());
-//        } else {
-//            return platformObject.readValue(dataType, mitmConverter.getGenericDataCallback());
-//        }
         return platformObject.readValue(dataType);
     }
 
@@ -113,12 +104,6 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      */
     @Override
     public <T, E extends T> ListenerPromise<E> onDataChange(Class<T> dataType) {
-//        DataChangeListenerMitmConverter<T, E> mitmConverter = new DataChangeListenerMitmConverter<T, E>(dataType, listener, mapConverter);
-//        if (mitmConverter.isPojo(dataType)) {
-//            platformObject.onDataChange(Map.class, mitmConverter.getPojoListener());
-//        } else {
-//            platformObject.onDataChange(dataType, mitmConverter.getGenericListener());
-//        }
         return platformObject.onDataChange(dataType);
     }
 
@@ -165,13 +150,15 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
-        TransactionMitmConverter<T, R> mitmConverter = new TransactionMitmConverter<T, R>(dataType, transactionCallback, mapConverter);
-        if (mitmConverter.isPojo(dataType)) {
-            platformObject.transaction(Map.class, mitmConverter.getPojoCallback(), completeCallback);
-        } else {
-            platformObject.transaction(dataType, mitmConverter.getGenericCallback(), completeCallback);
-        }
+    public <T, R extends T> Promise<Void> transaction(Class<T> dataType, Function<R, R> transaction) {
+//        TransactionMitmConverter<T, R> mitmConverter = new TransactionMitmConverter<T, R>(dataType, transactionCallback, mapConverter);
+//        if (mitmConverter.isPojo(dataType)) {
+//            platformObject.transaction(Map.class, mitmConverter.getPojoCallback(), completeCallback);
+//        } else {
+//            platformObject.transaction(dataType, mitmConverter.getGenericCallback(), completeCallback);
+//        }
+        // maybe conversion is not needed? TODO - check data types in transactions
+        return platformObject.transaction(dataType, transaction);
     }
 
     /**

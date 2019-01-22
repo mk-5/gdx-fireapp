@@ -18,15 +18,15 @@ package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DatabaseReference;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RunTransactionValidator;
+import mk.gdx.firebase.functional.Function;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides setValue execution with firebase database reference.
  */
-class QueryRunTransaction extends AndroidDatabaseQuery<Void> {
+class QueryRunTransaction<R> extends AndroidDatabaseQuery<R> {
     QueryRunTransaction(Database databaseDistribution) {
         super(databaseDistribution);
     }
@@ -45,8 +45,8 @@ class QueryRunTransaction extends AndroidDatabaseQuery<Void> {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected Void run() {
-        ((DatabaseReference) query).runTransaction(new TransactionHandler((TransactionCallback) arguments.get(1), arguments.get(2) != null ? (CompleteCallback) arguments.get(2) : null));
+    protected R run() {
+        ((DatabaseReference) query).runTransaction(new TransactionHandler((Function<R, R>) arguments.get(1), (FuturePromise<Void>) promise));
         return null;
     }
 }

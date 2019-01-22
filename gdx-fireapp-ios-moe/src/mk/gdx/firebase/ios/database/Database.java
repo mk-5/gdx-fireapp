@@ -34,6 +34,7 @@ import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -88,7 +89,7 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<Void> setValue(Object value) {
+    public Promise<Void> setValue(final Object value) {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
@@ -105,7 +106,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> Promise<R> readValue(Class<T> dataType) {
+    public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         return ConverterPromise.ofPromise(new Consumer<ConverterPromise<T, R>>() {
             @Override
@@ -126,7 +127,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T, R extends T> ListenerPromise<R> onDataChange(Class<T> dataType) {
+    public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         return ConverterPromise.ofPromise(new Consumer<ConverterPromise<T, R>>() {
             @Override
@@ -189,7 +190,7 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<Void> updateChildren(Map<String, Object> data) {
+    public Promise<Void> updateChildren(final Map<String, Object> data) {
         return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
@@ -205,8 +206,17 @@ public class Database implements DatabaseDistribution {
      * {@inheritDoc}
      */
     @Override
-    public <T, R extends T> void transaction(Class<T> dataType, TransactionCallback<R> transactionCallback, CompleteCallback completeCallback) {
-        new QueryRunTransaction(this).withArgs(dataType, transactionCallback, completeCallback).execute();
+    @SuppressWarnings("unchecked")
+    public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transactionFunction) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                new QueryRunTransaction(Database.this)
+                        .withArgs(dataType, transactionFunction)
+                        .with(voidFuturePromise)
+                        .execute();
+            }
+        });
     }
 
     /**
