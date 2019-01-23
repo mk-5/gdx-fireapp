@@ -39,13 +39,13 @@ import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.GdxFIRDatabase;
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
 import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -164,7 +164,12 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
 //      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1))
+                .observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(
+                        Mockito.anyLong(),
+                        Mockito.any(FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1.class),
+                        Mockito.any(FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2.class)
+                );
     }
 
     @Test
@@ -185,7 +190,11 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Then
 //      PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
 //      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(
+                Mockito.anyLong(),
+                Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
+                Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class)
+        );
     }
 
     @Test
@@ -278,7 +287,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         database.inReference("/test").removeValue();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any(FIRDatabaseReference.Block_removeValueWithCompletionBlock.class));
     }
 
     @Test
@@ -294,27 +303,32 @@ public class DatabaseTest extends GdxIOSAppTest {
         database.inReference("/test").updateChildren(mapData);
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(Mockito.nullable(NSDictionary.class), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(
+                Mockito.nullable(NSDictionary.class),
+                Mockito.any(FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock.class)
+        );
     }
 
     @Test
     public void transaction() throws Exception {
         // Given
         Database database = new Database();
-        CompleteCallback callback = mock(CompleteCallback.class);
-        TransactionCallback transactionCallback = mock(TransactionCallback.class);
+        Function transactionFunction = mock(Function.class);
         mockStatic(QueryRunTransaction.class);
         QueryRunTransaction query = PowerMockito.spy(new QueryRunTransaction(database));
         whenNew(QueryRunTransaction.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").transaction(dataType, transactionCallback, callback);
+        database.inReference("/test").transaction(dataType, transactionFunction);
 
         // Then
 //      PowerMockito.verifyNew(RunTransactionQuery.class).withArguments(Mockito.any());
 //      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(
+                Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0.class),
+                Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1.class)
+        );
     }
 
     @Test

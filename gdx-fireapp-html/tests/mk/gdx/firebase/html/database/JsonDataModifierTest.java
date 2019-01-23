@@ -27,7 +27,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.functional.Function;
 
 @PrepareForTest({JsonProcessor.class, Json.class, JsonDataModifier.class})
 public class JsonDataModifierTest {
@@ -43,11 +43,11 @@ public class JsonDataModifierTest {
         String jsonData = "test";
         PowerMockito.mockStatic(JsonProcessor.class);
         PowerMockito.mockStatic(Json.class);
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
+        Function function = Mockito.mock(Function.class);
         Json json = PowerMockito.mock(Json.class);
         PowerMockito.whenNew(Json.class).withAnyArguments().thenReturn(json);
-        JsonDataModifier<String> jsonDataModifier = new JsonDataModifier<String>(wantedType, transactionCallback);
-        Mockito.when(transactionCallback.run(Mockito.any())).thenReturn("test_transaction_callback");
+        JsonDataModifier<String> jsonDataModifier = new JsonDataModifier<String>(wantedType, function);
+        Mockito.when(function.apply(Mockito.any())).thenReturn("test_transaction_callback");
         Mockito.when(json.toJson(Mockito.any(), Mockito.any(Class.class))).thenReturn("test_json");
 
         // When
@@ -58,6 +58,6 @@ public class JsonDataModifierTest {
         Mockito.verify(json, VerificationModeFactory.times(1)).toJson(Mockito.eq("test_transaction_callback"), Mockito.eq(wantedType));
         PowerMockito.verifyStatic(JsonProcessor.class, VerificationModeFactory.times(1));
         JsonProcessor.process(Mockito.eq(String.class), Mockito.eq(jsonData));
-        Mockito.verify(transactionCallback, VerificationModeFactory.times(1)).run(Mockito.isNull());
+        Mockito.verify(function, VerificationModeFactory.times(1)).apply(Mockito.isNull());
     }
 }

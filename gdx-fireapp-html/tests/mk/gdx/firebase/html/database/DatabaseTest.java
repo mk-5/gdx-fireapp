@@ -35,13 +35,14 @@ import org.powermock.reflect.Whitebox;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 @PrepareForTest({ScriptRunner.class, QueryConnectionStatus.class,
         QuerySetValue.class, QueryReadValue.class, QueryOnDataChange.class, QueryPush.class,
@@ -247,8 +248,7 @@ public class DatabaseTest {
     public void transaction() throws Exception {
         // Given
         Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
+        Function function = Mockito.mock(Function.class);
         PowerMockito.mockStatic(QueryRunTransaction.class);
         QueryRunTransaction query = PowerMockito.spy(new QueryRunTransaction(database));
         PowerMockito.whenNew(QueryRunTransaction.class).withAnyArguments().thenReturn(query);
@@ -256,12 +256,12 @@ public class DatabaseTest {
         Class dataType = Long.class;
 
         // When
-        database.inReference(testReference).transaction(dataType, transactionCallback, callback);
+        Promise promise = database.inReference(testReference).transaction(dataType, function);
 
         // Then
 //        PowerMockito.verifyNew(RunTransactionQuery.class).withArguments(Mockito.any());
         PowerMockito.verifyStatic(QueryRunTransaction.class);
-        QueryRunTransaction.transaction(Mockito.eq(testReference), Mockito.any(JsonDataModifier.class), Mockito.refEq(callback));
+        QueryRunTransaction.transaction(Mockito.eq(testReference), Mockito.any(JsonDataModifier.class), (FuturePromise) Mockito.refEq(promise));
     }
 
     @Test
@@ -342,7 +342,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.transaction(String.class, Mockito.mock(TransactionCallback.class), Mockito.mock(CompleteCallback.class));
+        database.transaction(String.class, Mockito.mock(Function.class));
     }
 
     @Test

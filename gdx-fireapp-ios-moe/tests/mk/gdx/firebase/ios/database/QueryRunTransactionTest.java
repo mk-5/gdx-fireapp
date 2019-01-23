@@ -29,9 +29,9 @@ import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RunTransactionValidator;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
 @PrepareForTest({NatJ.class, FIRDatabase.class, FIRDatabaseReference.class, FIRDatabaseQuery.class, Database.class})
@@ -73,10 +73,13 @@ public class QueryRunTransactionTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        query.withArgs(dataType, Mockito.mock(TransactionCallback.class)).execute();
+        query.withArgs(dataType, Mockito.mock(Function.class)).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(
+                Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0.class),
+                Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1.class)
+        );
     }
 
     @Test
@@ -91,9 +94,12 @@ public class QueryRunTransactionTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        query.withArgs(dataType, Mockito.mock(TransactionCallback.class), callback).execute();
+        query.withArgs(dataType, Mockito.mock(Function.class), callback).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(
+                Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0.class),
+                Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1.class)
+        );
     }
 }

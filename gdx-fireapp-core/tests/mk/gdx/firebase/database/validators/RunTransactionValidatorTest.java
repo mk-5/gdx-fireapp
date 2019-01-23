@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.callbacks.TransactionCallback;
+import mk.gdx.firebase.functional.Function;
 
 public class RunTransactionValidatorTest {
 
@@ -32,21 +33,7 @@ public class RunTransactionValidatorTest {
         // Given
         RunTransactionValidator validator = new RunTransactionValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(TransactionCallback.class), Mockito.mock(CompleteCallback.class));
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        // no exception
-    }
-
-    @Test
-    public void validate2() {
-        // Given
-        RunTransactionValidator validator = new RunTransactionValidator();
-        Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(TransactionCallback.class), null);
+        arguments.addAll(String.class, Mockito.mock(Function.class));
 
         // When
         validator.validate(arguments);

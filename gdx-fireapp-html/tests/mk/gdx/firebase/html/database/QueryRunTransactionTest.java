@@ -27,11 +27,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RunTransactionValidator;
+import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({ScriptRunner.class, DatabaseReference.class})
 public class QueryRunTransactionTest {
@@ -58,11 +58,11 @@ public class QueryRunTransactionTest {
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
         QueryRunTransaction query = new QueryRunTransaction(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-        TransactionCallback transactionCallback = Mockito.mock(TransactionCallback.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        Function function = Mockito.mock(Function.class);
 
         // When
-        ((QueryRunTransaction) query.withArgs(String.class, transactionCallback, callback)).execute();
+        query.withArgs(String.class, function).with(promise).execute();
 
         // Then
         Assert.fail("Native method should be run");

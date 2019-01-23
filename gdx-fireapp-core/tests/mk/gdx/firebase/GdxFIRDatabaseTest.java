@@ -201,7 +201,7 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
         GdxFIRDatabase.instance().transaction(GdxFIRDatabaseTest.class, Mockito.mock(Function.class));
 
         // Then
-        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(Map.class), Mockito.any(Function.class));
+        Mockito.verify(databaseDistribution, VerificationModeFactory.times(1)).transaction(Mockito.eq(GdxFIRDatabaseTest.class), Mockito.any(Function.class));
     }
 
     @Test
