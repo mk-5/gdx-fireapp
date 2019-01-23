@@ -16,10 +16,11 @@
 package mk.gdx.firebase.ios.auth;
 
 import bindings.google.googlesignin.GIDSignIn;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Google authorization ios API
@@ -28,30 +29,45 @@ import mk.gdx.firebase.distributions.GoogleAuthDistribution;
  */
 public class GoogleAuth implements GoogleAuthDistribution {
 
-    private GoogleAuthProvider googleAuthProvider = new GoogleAuthProvider();
+    private final GoogleAuthProvider googleAuthProvider = new GoogleAuthProvider();
 
     @Override
-    public void signIn(AuthCallback callback) {
-        googleAuthProvider.initializeOnce();
-        googleAuthProvider.addSignInCallback(callback);
-        GIDSignIn.sharedInstance().signIn();
+    public Promise<GdxFirebaseUser> signIn() {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+            @Override
+            public void accept(FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
+                googleAuthProvider.initializeOnce();
+                googleAuthProvider.addSignInPromise(gdxFirebaseUserFuturePromise);
+                GIDSignIn.sharedInstance().signIn();
+            }
+        });
     }
 
     @Override
-    public void signOut(SignOutCallback callback) {
-        googleAuthProvider.initializeOnce();
-        try {
-            GIDSignIn.sharedInstance().signOut();
-            callback.onSuccess();
-        } catch (Exception e) {
-            callback.onFail(e);
-        }
+    public Promise<Void> signOut() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                googleAuthProvider.initializeOnce();
+                try {
+                    GIDSignIn.sharedInstance().signOut();
+                    voidFuturePromise.doComplete(null);
+                } catch (Exception e) {
+                    voidFuturePromise.doFail(e);
+                }
+            }
+        });
     }
 
     @Override
-    public void revokeAccess(CompleteCallback callback) {
-        googleAuthProvider.initializeOnce();
-        googleAuthProvider.addDisconnectCallback(callback);
-        GIDSignIn.sharedInstance().disconnect();
+    public Promise<Void> revokeAccess() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                googleAuthProvider.initializeOnce();
+                googleAuthProvider.addDisconnectPromise(voidFuturePromise);
+                GIDSignIn.sharedInstance().disconnect();
+            }
+        });
     }
 }

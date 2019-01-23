@@ -34,14 +34,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
+import mk.gdx.firebase.promises.FuturePromise;
 
 class GoogleSignInListener implements AndroidEventListener {
 
-    private AuthCallback authCallback;
+    private final FuturePromise<GdxFirebaseUser> promise;
 
-    GoogleSignInListener(AuthCallback authCallback) {
-        this.authCallback = authCallback;
+    GoogleSignInListener(FuturePromise<GdxFirebaseUser> promise) {
+        this.promise = promise;
     }
 
     @Override
@@ -56,14 +57,14 @@ class GoogleSignInListener implements AndroidEventListener {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    authCallback.onSuccess(GdxFIRAuth.instance().getCurrentUser());
+                                    promise.doComplete(GdxFIRAuth.instance().getCurrentUser());
                                 } else {
-                                    authCallback.onFail(task.getException());
+                                    promise.doFail(task.getException());
                                 }
                             }
                         });
             } catch (ApiException e) {
-                authCallback.onFail(new Exception(CommonStatusCodes.getStatusCodeString(e.getStatusCode()), e));
+                promise.doFail(new Exception(CommonStatusCodes.getStatusCodeString(e.getStatusCode()), e));
             }
         }
         ((AndroidApplication) Gdx.app).removeAndroidEventListener(this);

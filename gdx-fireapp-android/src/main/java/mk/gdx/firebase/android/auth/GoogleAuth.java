@@ -25,10 +25,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
+import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Google authorization android API implementation.
@@ -41,27 +42,14 @@ public class GoogleAuth implements GoogleAuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signIn(AuthCallback callback) {
-        GoogleSignInOptions gso = GoogleSignInOptionsFactory.factory();
-        ((AndroidApplication) Gdx.app).addAndroidEventListener(new GoogleSignInListener(callback));
-        ((AndroidApplication) Gdx.app).startActivityForResult(
-                GoogleSignIn.getClient((AndroidApplication) Gdx.app, gso).getSignInIntent(), Const.GOOGLE_SIGN_IN);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void signOut(final SignOutCallback callback) {
-        GoogleSignInClient client = GoogleSignIn.getClient((AndroidApplication) Gdx.app, GoogleSignInOptionsFactory.factory());
-        client.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+    public Promise<GdxFirebaseUser> signIn() {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    callback.onSuccess();
-                } else {
-                    callback.onFail(task.getException());
-                }
+            public void accept(FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
+                GoogleSignInOptions gso = GoogleSignInOptionsFactory.factory();
+                ((AndroidApplication) Gdx.app).addAndroidEventListener(new GoogleSignInListener(gdxFirebaseUserFuturePromise));
+                ((AndroidApplication) Gdx.app).startActivityForResult(
+                        GoogleSignIn.getClient((AndroidApplication) Gdx.app, gso).getSignInIntent(), Const.GOOGLE_SIGN_IN);
             }
         });
     }
@@ -70,16 +58,44 @@ public class GoogleAuth implements GoogleAuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void revokeAccess(final CompleteCallback callback) {
-        GoogleSignInClient client = GoogleSignIn.getClient((AndroidApplication) Gdx.app, GoogleSignInOptionsFactory.factory());
-        client.revokeAccess().addOnCompleteListener(new OnCompleteListener<Void>() {
+    public Promise<Void> signOut() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    callback.onSuccess();
-                } else {
-                    callback.onError(task.getException());
-                }
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                GoogleSignInClient client = GoogleSignIn.getClient((AndroidApplication) Gdx.app, GoogleSignInOptionsFactory.factory());
+                client.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            voidFuturePromise.doComplete(null);
+                        } else {
+                            voidFuturePromise.doFail(task.getException());
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Promise<Void> revokeAccess() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                GoogleSignInClient client = GoogleSignIn.getClient((AndroidApplication) Gdx.app, GoogleSignInOptionsFactory.factory());
+                client.revokeAccess().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            voidFuturePromise.doComplete(null);
+                        } else {
+                            voidFuturePromise.doFail(task.getException());
+                        }
+                    }
+                });
             }
         });
     }

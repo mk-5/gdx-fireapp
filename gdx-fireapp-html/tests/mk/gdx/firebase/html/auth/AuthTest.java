@@ -32,7 +32,6 @@ import org.powermock.core.classloader.annotations.SuppressStaticInitializationFo
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.callbacks.AuthCallback;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
@@ -158,7 +157,6 @@ public class AuthTest extends GdxHtmlAppTest {
         // Given
         Auth auth = new Auth();
         String token = "token";
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
         FuturePromise promise = (FuturePromise) auth.signInWithToken(token);

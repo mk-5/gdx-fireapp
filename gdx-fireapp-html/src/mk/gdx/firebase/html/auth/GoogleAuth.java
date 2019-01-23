@@ -17,13 +17,13 @@
 package mk.gdx.firebase.html.auth;
 
 import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
 import mk.gdx.firebase.functional.BiConsumer;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * @see GoogleAuthDistribution
@@ -34,11 +34,16 @@ public class GoogleAuth implements GoogleAuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signIn(final AuthCallback callback) {
-        ScriptRunner.firebaseScript(new Runnable() {
+    public Promise<GdxFirebaseUser> signIn() {
+        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void run() {
-                GoogleAuthJS.signIn(callback);
+            public void accept(final FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
+                ScriptRunner.firebaseScript(new Runnable() {
+                    @Override
+                    public void run() {
+                        GoogleAuthJS.signIn(gdxFirebaseUserFuturePromise);
+                    }
+                });
             }
         });
     }
@@ -47,16 +52,21 @@ public class GoogleAuth implements GoogleAuthDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void signOut(final SignOutCallback callback) {
-        GdxFIRAuth.instance().signOut().then(new Consumer<Void>() {
+    public Promise<Void> signOut() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void accept(Void aVoid) {
-                callback.onSuccess();
-            }
-        }).fail(new BiConsumer<String, Throwable>() {
-            @Override
-            public void accept(String s, Throwable throwable) {
-                callback.onFail((Exception) throwable);
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                GdxFIRAuth.instance().signOut().then(new Consumer<Void>() {
+                    @Override
+                    public void accept(Void aVoid) {
+                        voidFuturePromise.doComplete(null);
+                    }
+                }).fail(new BiConsumer<String, Throwable>() {
+                    @Override
+                    public void accept(String s, Throwable throwable) {
+                        voidFuturePromise.doFail((Exception) throwable);
+                    }
+                });
             }
         });
     }
@@ -64,19 +74,24 @@ public class GoogleAuth implements GoogleAuthDistribution {
     /**
      * {@inheritDoc}
      * <p>
-     * For gwt is the same as {@link #signOut(SignOutCallback)}.
+     * For gwt is the same as {@link #signOut()}.
      */
     @Override
-    public void revokeAccess(final CompleteCallback callback) {
-        signOut(new SignOutCallback() {
+    public Promise<Void> revokeAccess() {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void onSuccess() {
-                callback.onSuccess();
-            }
-
-            @Override
-            public void onFail(Exception e) {
-                callback.onError(e);
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                signOut().then(new Consumer<Void>() {
+                    @Override
+                    public void accept(Void aVoid) {
+                        voidFuturePromise.doComplete(null);
+                    }
+                }).fail(new BiConsumer<String, Throwable>() {
+                    @Override
+                    public void accept(String s, Throwable throwable) {
+                        voidFuturePromise.doFail(s, throwable);
+                    }
+                });
             }
         });
     }

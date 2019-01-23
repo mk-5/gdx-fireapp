@@ -22,13 +22,11 @@ import com.badlogic.gdx.utils.Array;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.moe.natj.general.NatJ;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.reflect.Whitebox;
 
 import apple.uikit.UITableViewController;
@@ -38,9 +36,8 @@ import bindings.google.firebasecore.FIROptions;
 import bindings.google.googlesignin.GIDSignIn;
 import bindings.google.googlesignin.protocol.GIDSignInDelegate;
 import bindings.google.googlesignin.protocol.GIDSignInUIDelegate;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({NatJ.class, GIDSignIn.class, FIRApp.class,
         FIROptions.class, UITableViewController.class, GIDSignInUIDelegate.class,
@@ -97,8 +94,8 @@ public class GoogleAuthProviderTest extends GdxIOSAppTest {
         PowerMockito.verifyStatic(FIRApp.class, VerificationModeFactory.times(1));
         FIRApp.defaultApp();
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).setClientID(Mockito.nullable(String.class));
-        Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).setDelegate(Mockito.any());
-        Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).setUiDelegate(Mockito.any());
+        Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).setDelegate(Mockito.any(GIDSignInDelegate.class));
+        Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).setUiDelegate(Mockito.nullable(GIDSignInUIDelegate.class));
 
     }
 
@@ -106,25 +103,25 @@ public class GoogleAuthProviderTest extends GdxIOSAppTest {
     public void addSignInCallback() {
         // Given
         GoogleAuthProvider googleAuthProvider = new GoogleAuthProvider();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
 
         // When
-        googleAuthProvider.addSignInCallback(callback);
+        googleAuthProvider.addSignInPromise(promise);
 
         // Then
-        Assert.assertTrue(((Array) Whitebox.getInternalState(googleAuthProvider, "signInCallbacks")).contains(callback, true));
+        Assert.assertTrue(((Array) Whitebox.getInternalState(googleAuthProvider, "signInPromises")).contains(promise, true));
     }
 
     @Test
     public void addDisconnectCallback() {
         // Given
         GoogleAuthProvider googleAuthProvider = new GoogleAuthProvider();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
 
         // When
-        googleAuthProvider.addDisconnectCallback(callback);
+        googleAuthProvider.addDisconnectPromise(promise);
 
         // Then
-        Assert.assertTrue(((Array) Whitebox.getInternalState(googleAuthProvider, "disconnectCallbacks")).contains(callback, true));
+        Assert.assertTrue(((Array) Whitebox.getInternalState(googleAuthProvider, "disconnectPromises")).contains(promise, true));
     }
 }

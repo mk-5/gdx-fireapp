@@ -15,7 +15,7 @@
  */
 package mk.gdx.firebase.html.auth;
 
-import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides calls for google authorization.
@@ -26,10 +26,10 @@ class GoogleAuthJS {
         //
     }
 
-    static native void signIn(final AuthCallback callback) /*-{
+    static native void signIn(final FuturePromise promise) /*-{
         if( $wnd.firebase.auth().currentUser != null ){
-            callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
-                    @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
+            promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
             );
             return;
         }
@@ -44,12 +44,12 @@ class GoogleAuthJS {
             method = "signInWithRedirect";
         }
         $wnd.firebase.auth()[method](provider).then(function(response){
-            callback.@mk.gdx.firebase.callbacks.AuthCallback::onSuccess(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+             promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
                 @mk.gdx.firebase.html.auth.AuthJS::getUserBridge()()
             );
         })['catch'](function(error) {
-            callback.@mk.gdx.firebase.callbacks.AuthCallback::onFail(Ljava/lang/Exception;)(
-                @java.lang.Exception::new(Ljava/lang/String;)(error.message)
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Exception;)(
+              @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });
     }-*/;

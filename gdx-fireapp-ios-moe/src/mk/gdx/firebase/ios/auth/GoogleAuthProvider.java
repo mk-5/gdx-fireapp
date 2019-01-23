@@ -39,8 +39,8 @@ import bindings.google.googlesignin.GIDSignIn;
 import bindings.google.googlesignin.protocol.GIDSignInDelegate;
 import bindings.google.googlesignin.protocol.GIDSignInUIDelegate;
 import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides google authorization.
@@ -48,8 +48,8 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 class GoogleAuthProvider {
 
     private boolean initialized;
-    private Array<AuthCallback> signInCallbacks = new Array<>();
-    private Array<CompleteCallback> disconnectCallbacks = new Array<>();
+    private Array<FuturePromise<GdxFirebaseUser>> signInPromises = new Array<>();
+    private Array<FuturePromise<Void>> disconnectPromises = new Array<>();
 
     synchronized boolean isInitialized() {
         return initialized;
@@ -66,12 +66,12 @@ class GoogleAuthProvider {
         initialized = true;
     }
 
-    synchronized void addSignInCallback(AuthCallback callback) {
-        signInCallbacks.add(callback);
+    synchronized void addSignInPromise(FuturePromise<GdxFirebaseUser> promise) {
+        signInPromises.add(promise);
     }
 
-    synchronized void addDisconnectCallback(CompleteCallback callback) {
-        disconnectCallbacks.add(callback);
+    synchronized void addDisconnectPromise(FuturePromise<Void> promise) {
+        disconnectPromises.add(promise);
     }
 
     @Runtime(ObjCRuntime.class)
@@ -81,9 +81,9 @@ class GoogleAuthProvider {
 
         @Override
         public void signInDidSignInForUserWithError(GIDSignIn signIn, GIDGoogleUser user, NSError error) {
-            if (signInCallbacks.size == 0) return;
-            final AuthCallback signInCallback = signInCallbacks.get(0);
-            signInCallbacks.removeIndex(0);
+            if (signInPromises.size == 0) return;
+            final FuturePromise<GdxFirebaseUser> signInPromises = GoogleAuthProvider.this.signInPromises.get(0);
+            GoogleAuthProvider.this.signInPromises.removeIndex(0);
             if (error == null) {
                 FIRAuthCredential credential = FIRGoogleAuthProvider.credentialWithIDTokenAccessToken(
                         user.authentication().idToken(), user.authentication().accessToken()
@@ -92,26 +92,26 @@ class GoogleAuthProvider {
                     @Override
                     public void call_signInAndRetrieveDataWithCredentialCompletion(FIRAuthDataResult arg0, NSError arg1) {
                         if (arg1 == null) {
-                            signInCallback.onSuccess(GdxFIRAuth.instance().getCurrentUser());
+                            signInPromises.doComplete(GdxFIRAuth.instance().getCurrentUser());
                         } else {
-                            signInCallback.onFail(new Exception(arg1.localizedDescription()));
+                            signInPromises.doFail(new Exception(arg1.localizedDescription()));
                         }
                     }
                 });
             } else {
-                signInCallback.onFail(new Exception(error.localizedDescription()));
+                signInPromises.doFail(new Exception(error.localizedDescription()));
             }
         }
 
         @Override
         public void signInDidDisconnectWithUserWithError(GIDSignIn signIn, GIDGoogleUser user, NSError error) {
-            if (disconnectCallbacks.size == 0) return;
-            final CompleteCallback callback = disconnectCallbacks.get(0);
-            disconnectCallbacks.removeIndex(0);
+            if (disconnectPromises.size == 0) return;
+            final FuturePromise<Void> promise = disconnectPromises.get(0);
+            disconnectPromises.removeIndex(0);
             if (error == null) {
-                callback.onSuccess();
+                promise.doComplete(null);
             } else {
-                callback.onError(new Exception(error.localizedDescription()));
+                promise.doFail(new Exception(error.localizedDescription()));
             }
         }
     }

@@ -16,10 +16,9 @@
 
 package mk.gdx.firebase;
 
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * @see GoogleAuthDistribution
@@ -37,24 +36,24 @@ public class GdxFIRGoogleAuth extends PlatformDistributor<GoogleAuthDistribution
      * {@inheritDoc}
      */
     @Override
-    public void signIn(AuthCallback callback) {
-        platformObject.signIn(callback);
+    public Promise<GdxFirebaseUser> signIn() {
+        return platformObject.signIn();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void signOut(SignOutCallback callback) {
-        platformObject.signOut(callback);
+    public Promise<Void> signOut() {
+        return platformObject.signOut();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void revokeAccess(CompleteCallback callback) {
-        platformObject.revokeAccess(callback);
+    public Promise<Void> revokeAccess() {
+        return platformObject.revokeAccess();
     }
 
     /**

@@ -16,9 +16,8 @@
 
 package mk.gdx.firebase.distributions;
 
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.auth.GdxFirebaseUser;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Provides authorization via Google.
@@ -30,22 +29,16 @@ public interface GoogleAuthDistribution {
 
     /**
      * Signs in into application using google account.
-     *
-     * @param callback Authorization callback, not null
      */
-    void signIn(AuthCallback callback);
+    Promise<GdxFirebaseUser> signIn();
 
     /**
-     * Sign-out current google user and gives response by {@code SignOutCallback}.
-     *
-     * @param callback Sign-out callback, not null
+     * Sign-out current google user.
      */
-    void signOut(SignOutCallback callback);
+    Promise<Void> signOut();
 
     /**
-     * Disconnects user from the app and gives response by {@code CompleteCallback}.
-     *
-     * @param callback Sign-out callback, not null
+     * Disconnects user from the app.
      */
-    void revokeAccess(CompleteCallback callback);
+    Promise<Void> revokeAccess();
 }

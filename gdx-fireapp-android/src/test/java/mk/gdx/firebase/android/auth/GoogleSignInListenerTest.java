@@ -43,7 +43,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import mk.gdx.firebase.GdxFIRAuth;
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.callbacks.AuthCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({GdxNativesLoader.class, GoogleSignIn.class, GoogleAuthProvider.class, FirebaseAuth.class, GdxFIRAuth.class})
 public class GoogleSignInListenerTest extends AndroidContextTest {
@@ -67,8 +67,8 @@ public class GoogleSignInListenerTest extends AndroidContextTest {
     @Test
     public void onActivityResult_wrongRequestCode() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-        GoogleSignInListener listener = new GoogleSignInListener(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        GoogleSignInListener listener = new GoogleSignInListener(promise);
         Intent intent = PowerMockito.mock(Intent.class);
         int requestCode = -1;
         int resultCode = -1;
@@ -83,8 +83,8 @@ public class GoogleSignInListenerTest extends AndroidContextTest {
     @Test
     public void onActivityResult_validRequestCode_successTask() throws Throwable {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-        GoogleSignInListener listener = new GoogleSignInListener(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        GoogleSignInListener listener = new GoogleSignInListener(promise);
         Intent intent = PowerMockito.mock(Intent.class);
         int requestCode = Const.GOOGLE_SIGN_IN;
         int resultCode = -1;
@@ -106,14 +106,14 @@ public class GoogleSignInListenerTest extends AndroidContextTest {
 
         // Then
         Mockito.verify(((AndroidApplication) Gdx.app), VerificationModeFactory.times(1)).removeAndroidEventListener(Mockito.refEq(listener));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.nullable(GdxFirebaseUser.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
     public void onActivityResult_validRequestCode_failTask() throws Throwable {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-        GoogleSignInListener listener = new GoogleSignInListener(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        GoogleSignInListener listener = new GoogleSignInListener(promise);
         Intent intent = PowerMockito.mock(Intent.class);
         int requestCode = Const.GOOGLE_SIGN_IN;
         int resultCode = -1;
@@ -135,14 +135,14 @@ public class GoogleSignInListenerTest extends AndroidContextTest {
 
         // Then
         Mockito.verify(((AndroidApplication) Gdx.app), VerificationModeFactory.times(1)).removeAndroidEventListener(Mockito.refEq(listener));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.nullable(Exception.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 
     @Test
     public void onActivityResult_validRequestCode_apiException() throws Throwable {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-        GoogleSignInListener listener = new GoogleSignInListener(callback);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
+        GoogleSignInListener listener = new GoogleSignInListener(promise);
         Intent intent = PowerMockito.mock(Intent.class);
         int requestCode = Const.GOOGLE_SIGN_IN;
         int resultCode = -1;
@@ -160,6 +160,6 @@ public class GoogleSignInListenerTest extends AndroidContextTest {
 
         // Then
         Mockito.verify(((AndroidApplication) Gdx.app), VerificationModeFactory.times(1)).removeAndroidEventListener(Mockito.refEq(listener));
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.nullable(Exception.class));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 }

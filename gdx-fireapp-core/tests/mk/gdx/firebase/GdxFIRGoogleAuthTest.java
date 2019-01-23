@@ -22,9 +22,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.GoogleAuthDistribution;
 
 import static org.junit.Assert.assertNotNull;
@@ -51,37 +48,31 @@ public class GdxFIRGoogleAuthTest extends GdxAppTest {
     @Test
     public void signIn() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-
         // When
-        GdxFIRAuth.instance().google().signIn(callback);
+        GdxFIRAuth.instance().google().signIn();
 
         // Then
-        Mockito.verify(googleAuthDistribution, VerificationModeFactory.times(1)).signIn(Mockito.refEq(callback));
+        Mockito.verify(googleAuthDistribution, VerificationModeFactory.times(1)).signIn();
     }
 
     @Test
     public void signOut() {
         // Given
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
-
         // When
-        GdxFIRAuth.instance().google().signOut(callback);
+        GdxFIRAuth.instance().google().signOut();
 
         // Then
-        Mockito.verify(googleAuthDistribution, VerificationModeFactory.times(1)).signOut(Mockito.refEq(callback));
+        Mockito.verify(googleAuthDistribution, VerificationModeFactory.times(1)).signOut();
     }
 
     @Test
     public void revokeAccess() {
         // Given
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
-
         // When
-        GdxFIRAuth.instance().google().revokeAccess(callback);
+        GdxFIRAuth.instance().google().revokeAccess();
 
         // Then
-        Mockito.verify(googleAuthDistribution, VerificationModeFactory.times(1)).revokeAccess(Mockito.refEq(callback));
+        Mockito.verify(googleAuthDistribution, VerificationModeFactory.times(1)).revokeAccess();
     }
 
     @Test

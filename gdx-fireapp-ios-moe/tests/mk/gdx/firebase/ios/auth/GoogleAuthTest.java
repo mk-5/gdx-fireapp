@@ -26,9 +26,6 @@ import org.powermock.reflect.Whitebox;
 
 import bindings.google.firebasecore.FIRApp;
 import bindings.google.googlesignin.GIDSignIn;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
 @PrepareForTest({NatJ.class, GIDSignIn.class, FIRApp.class, GoogleAuthProvider.class})
@@ -51,11 +48,10 @@ public class GoogleAuthTest extends GdxIOSAppTest {
     public void signIn() {
         // Given
         GoogleAuth googleAuth = new GoogleAuth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         Whitebox.setInternalState(googleAuth, "googleAuthProvider", Mockito.mock(GoogleAuthProvider.class));
 
         // When
-        googleAuth.signIn(callback);
+        googleAuth.signIn();
 
         // Then
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).signIn();
@@ -66,15 +62,13 @@ public class GoogleAuthTest extends GdxIOSAppTest {
     public void signOut() {
         // Given
         GoogleAuth googleAuth = new GoogleAuth();
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
         Whitebox.setInternalState(googleAuth, "googleAuthProvider", Mockito.mock(GoogleAuthProvider.class));
 
         // When
-        googleAuth.signOut(callback);
+        googleAuth.signOut();
 
         // Then
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).signOut();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
         Mockito.verifyNoMoreInteractions(gidSignIn);
     }
 
@@ -82,11 +76,10 @@ public class GoogleAuthTest extends GdxIOSAppTest {
     public void revokeAccess() {
         // Given
         GoogleAuth googleAuth = new GoogleAuth();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         Whitebox.setInternalState(googleAuth, "googleAuthProvider", Mockito.mock(GoogleAuthProvider.class));
 
         // When
-        googleAuth.revokeAccess(callback);
+        googleAuth.revokeAccess();
 
         // Then
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).disconnect();

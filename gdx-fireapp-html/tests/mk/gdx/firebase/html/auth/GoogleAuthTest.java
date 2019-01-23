@@ -28,12 +28,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
+
+import static org.mockito.ArgumentMatchers.refEq;
 
 @PrepareForTest({
         ScriptRunner.class, GoogleAuthJS.class, FirebaseUserJS.class, GdxFIRAuth.class
@@ -62,28 +61,26 @@ public class GoogleAuthTest {
     public void signIn() {
         // Given
         GoogleAuth googleAuth = new GoogleAuth();
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
 
         // When
-        googleAuth.signIn(callback);
+        Promise promise = googleAuth.signIn();
 
         // Then
         PowerMockito.verifyStatic(GoogleAuthJS.class);
-        GoogleAuthJS.signIn(Mockito.refEq(callback));
+        GoogleAuthJS.signIn((FuturePromise) refEq(promise));
     }
 
     @Test
     public void signOut() {
         // Given
         GoogleAuth googleAuth = new GoogleAuth();
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
         Auth auth = Mockito.mock(Auth.class);
         GdxFIRAuth gdxFIRAuth = Mockito.mock(GdxFIRAuth.class);
         Mockito.when(GdxFIRAuth.instance()).thenReturn(gdxFIRAuth);
         Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy(new FuturePromise<Void>()));
 
         // When
-        googleAuth.signOut(callback);
+        googleAuth.signOut();
 
         // Then
         Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut();
@@ -93,14 +90,13 @@ public class GoogleAuthTest {
     public void revokeAccess() {
         // Given
         GoogleAuth googleAuth = new GoogleAuth();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         Auth auth = Mockito.mock(Auth.class);
         GdxFIRAuth gdxFIRAuth = Mockito.mock(GdxFIRAuth.class);
         Mockito.when(GdxFIRAuth.instance()).thenReturn(gdxFIRAuth);
         Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy(new FuturePromise<Void>()));
 
         // When
-        googleAuth.revokeAccess(callback);
+        googleAuth.revokeAccess();
 
         // Then
         Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut();

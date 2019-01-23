@@ -39,9 +39,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
 import mk.gdx.firebase.android.utils.StringResource;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
+import mk.gdx.firebase.promises.FuturePromise;
+
+import static org.mockito.Mockito.spy;
 
 @PrepareForTest({GdxNativesLoader.class, GoogleSignInOptions.class, GoogleSignInClient.class, GoogleSignIn.class, StringResource.class})
 public class GoogleAuthTest extends AndroidContextTest {
@@ -64,12 +64,11 @@ public class GoogleAuthTest extends AndroidContextTest {
     @Test
     public void signIn() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
         // mock GoogleSignInOptions?
         GoogleAuth googleAuth = new GoogleAuth();
 
         // When
-        googleAuth.signIn(callback);
+        googleAuth.signIn();
 
         // Then
         Mockito.verify(((AndroidApplication) Gdx.app), VerificationModeFactory.times(1)).startActivityForResult(Mockito.nullable(Intent.class), Mockito.anyInt());
@@ -80,7 +79,6 @@ public class GoogleAuthTest extends AndroidContextTest {
     @Test
     public void signOut_ok() {
         // Given
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
         GoogleAuth googleAuth = new GoogleAuth();
         Task task = Mockito.mock(Task.class);
         final Task task2 = Mockito.mock(Task.class);
@@ -95,19 +93,18 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        googleAuth.signOut(callback);
+        FuturePromise promise = (FuturePromise) spy(googleAuth.signOut());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
         GoogleSignIn.getClient((Activity) Mockito.refEq(Gdx.app), Mockito.any(GoogleSignInOptions.class));
         Mockito.verify(googleSignInClient, VerificationModeFactory.times(1)).signOut();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+//        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.isNull());
     }
 
     @Test
     public void signOut_fail() {
         // Given
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
         GoogleAuth googleAuth = new GoogleAuth();
         Task task = Mockito.mock(Task.class);
         final Task task2 = Mockito.mock(Task.class);
@@ -122,19 +119,18 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        googleAuth.signOut(callback);
+        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
         GoogleSignIn.getClient((Activity) Mockito.refEq(Gdx.app), Mockito.any(GoogleSignInOptions.class));
         Mockito.verify(googleSignInClient, VerificationModeFactory.times(1)).signOut();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.nullable(Exception.class));
+//        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 
     @Test
     public void revokeAccess_ok() {
         // Given
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         GoogleAuth googleAuth = new GoogleAuth();
         Task task = Mockito.mock(Task.class);
         final Task task2 = Mockito.mock(Task.class);
@@ -149,19 +145,18 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        googleAuth.revokeAccess(callback);
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
         GoogleSignIn.getClient((Activity) Mockito.refEq(Gdx.app), Mockito.any(GoogleSignInOptions.class));
         Mockito.verify(googleSignInClient, VerificationModeFactory.times(1)).revokeAccess();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess();
+//        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.isNull());
     }
 
     @Test
     public void revokeAccess_fail() {
         // Given
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         GoogleAuth googleAuth = new GoogleAuth();
         Task task = Mockito.mock(Task.class);
         final Task task2 = Mockito.mock(Task.class);
@@ -176,12 +171,12 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        googleAuth.revokeAccess(callback);
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
         GoogleSignIn.getClient((Activity) Mockito.refEq(Gdx.app), Mockito.any(GoogleSignInOptions.class));
         Mockito.verify(googleSignInClient, VerificationModeFactory.times(1)).revokeAccess();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onError(Mockito.nullable(Exception.class));
+//        Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.nullable(Exception.class));
     }
 }

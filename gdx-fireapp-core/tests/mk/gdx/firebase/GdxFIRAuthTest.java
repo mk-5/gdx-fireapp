@@ -6,9 +6,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.SignOutCallback;
 import mk.gdx.firebase.distributions.AuthDistribution;
 
 import static org.junit.Assert.assertNotNull;
@@ -41,8 +38,6 @@ public class GdxFIRAuthTest extends GdxAppTest {
     @Test
     public void createUserWithEmailAndPassword() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-
         // When
         GdxFIRAuth.instance().createUserWithEmailAndPassword("user", "password".toCharArray());
 
@@ -52,9 +47,7 @@ public class GdxFIRAuthTest extends GdxAppTest {
 
     @Test
     public void signInWithEmailAndPassword() {
-        // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-
+        // Given\
         // When
         GdxFIRAuth.instance().signInWithEmailAndPassword("user", "password".toCharArray());
 
@@ -65,8 +58,6 @@ public class GdxFIRAuthTest extends GdxAppTest {
     @Test
     public void signInWithToken() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-
         // When
         GdxFIRAuth.instance().signInWithToken("token");
 
@@ -77,8 +68,6 @@ public class GdxFIRAuthTest extends GdxAppTest {
     @Test
     public void signInAnonymously() {
         // Given
-        AuthCallback callback = Mockito.mock(AuthCallback.class);
-
         // When
         GdxFIRAuth.instance().signInAnonymously();
 
@@ -89,7 +78,6 @@ public class GdxFIRAuthTest extends GdxAppTest {
     @Test
     public void sendPasswordResetEmail() {
         // Given
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         String arg1 = "email";
 
         // When
@@ -102,8 +90,6 @@ public class GdxFIRAuthTest extends GdxAppTest {
     @Test
     public void signOut() {
         // Given
-        SignOutCallback callback = Mockito.mock(SignOutCallback.class);
-
         // When
         GdxFIRAuth.instance().signOut();
 

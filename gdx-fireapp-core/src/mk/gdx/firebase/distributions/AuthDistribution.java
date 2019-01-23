@@ -17,8 +17,6 @@
 package mk.gdx.firebase.distributions;
 
 import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.callbacks.AuthCallback;
-import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
 
 /**
@@ -49,8 +47,6 @@ public interface AuthDistribution {
 
     /**
      * Signs in into application and gives response by {@code Promise}
-     * <p>
-     * If something is wrong {@link AuthCallback#onFail(Exception)} will be call.
      *
      * @param email    Firebase user email
      * @param password Firebase user password

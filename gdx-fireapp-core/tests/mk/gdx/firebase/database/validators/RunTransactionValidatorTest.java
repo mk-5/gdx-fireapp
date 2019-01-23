@@ -22,6 +22,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.Map;
+
 import mk.gdx.firebase.functional.Function;
 
 public class RunTransactionValidatorTest {
@@ -72,7 +74,7 @@ public class RunTransactionValidatorTest {
         // Given
         RunTransactionValidator validator = new RunTransactionValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(String.class));
+        arguments.addAll(String.class, Mockito.mock(Map.class));
 
         // When
         validator.validate(arguments);
