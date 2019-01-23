@@ -59,8 +59,13 @@ public class Analytics implements AnalyticsDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void setScreen(String name, Class<?> screenClass) {
-        FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app).setCurrentScreen((AndroidApplication) Gdx.app, name, screenClass.getSimpleName());
+    public void setScreen(final String name, final Class<?> screenClass) {
+        ((AndroidApplication) Gdx.app).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FirebaseAnalytics.getInstance((AndroidApplication) Gdx.app).setCurrentScreen((AndroidApplication) Gdx.app, name, screenClass.getSimpleName());
+            }
+        });
     }
 
     /**

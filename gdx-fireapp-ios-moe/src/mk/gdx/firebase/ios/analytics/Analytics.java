@@ -18,6 +18,7 @@ package mk.gdx.firebase.ios.analytics;
 
 import java.util.Map;
 
+import apple.c.Globals;
 import apple.foundation.NSDictionary;
 import apple.foundation.NSMutableDictionary;
 import apple.foundation.NSString;
@@ -55,8 +56,13 @@ public class Analytics implements AnalyticsDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void setScreen(String name, Class<?> screenClass) {
-        FIRAnalytics.setScreenNameScreenClass(name, screenClass.getSimpleName());
+    public void setScreen(final String name, final Class<?> screenClass) {
+        Globals.dispatch_async(Globals.dispatch_get_main_queue(), new Globals.Block_dispatch_async() {
+            @Override
+            public void call_dispatch_async() {
+                FIRAnalytics.setScreenNameScreenClass(name, screenClass.getSimpleName());
+            }
+        });
     }
 
     /**

@@ -64,3 +64,7 @@
 
 **[1.9.3]**
 \- fix Android API: Wrong string/number param recognizing while sending analytics event
+
+**[1.9.4]**
+\- fix Analytics API: Run setScreen on the main thread
+
