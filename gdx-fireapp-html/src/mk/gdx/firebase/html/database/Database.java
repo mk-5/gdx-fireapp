@@ -22,8 +22,6 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRDatabase;
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -257,7 +255,7 @@ public class Database implements DatabaseDistribution {
      * <li>{@link #onDataChange(Class)}</li>
      * <li>{@link #updateChildren(Map)}</li>
      * <li>{@link #updateChildren(Map)}</li>
-     * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}</li>
+     * <li>{@link #transaction(Class, Function)}</li>
      * </uL>
      */
     void terminateOperation() {

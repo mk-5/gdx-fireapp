@@ -22,8 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.functional.Function;
 
 public class RunTransactionValidatorTest {
@@ -74,21 +72,7 @@ public class RunTransactionValidatorTest {
         // Given
         RunTransactionValidator validator = new RunTransactionValidator();
         Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(CompleteCallback.class));
-
-        // When
-        validator.validate(arguments);
-
-        // Then
-        Assert.fail();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_error4() {
-        // Given
-        RunTransactionValidator validator = new RunTransactionValidator();
-        Array arguments = new Array();
-        arguments.addAll(String.class, Mockito.mock(TransactionCallback.class), "");
+        arguments.addAll(String.class, Mockito.mock(String.class));
 
         // When
         validator.validate(arguments);

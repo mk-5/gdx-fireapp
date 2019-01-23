@@ -19,7 +19,6 @@ package mk.gdx.firebase.distributions;
 import java.util.Map;
 
 import mk.gdx.firebase.callbacks.CompleteCallback;
-import mk.gdx.firebase.callbacks.TransactionCallback;
 import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -38,7 +37,7 @@ import mk.gdx.firebase.promises.Promise;
  * <li>{@link #onDataChange(Class)}
  * <li>{@link #readValue(Class)}
  * <li>{@link #push()}
- * <li>{@link #transaction(Class, TransactionCallback, CompleteCallback)}
+ * <li>{@link #transaction(Class, Function)}
  * </ul><p>
  * If you do not do this {@code RuntimeException} will be thrown.
  */
@@ -68,7 +67,7 @@ public interface DatabaseDistribution {
     Promise<Void> setValue(Object value);
 
     /**
-     * Reads value from path given by {@code inReference(String)} and gives response by {@code DataCallback}.
+     * Reads value from path given by {@code inReference(String)}.
      * <p>
      * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link mk.gdx.firebase.deserialization.MapConverter}
      *
@@ -80,7 +79,7 @@ public interface DatabaseDistribution {
     <T, R extends T> Promise<R> readValue(Class<T> dataType);
 
     /**
-     * Handles value changes for path given by {@code inReference(String)} and gives response by {@code DataChangeListener}.
+     * Handles value changes for path given by {@code inReference(String)}.
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      * <p>
@@ -150,9 +149,9 @@ public interface DatabaseDistribution {
     Promise<Void> updateChildren(Map<String, Object> data);
 
     /**
-     * Provides transaction for value describe by path given by {@code inReference(String)} and gives response by {@code CompleteCallback}
+     * Provides transaction for value at path give by {@code inReference(String)}
      * <p>
-     * Value that you want to change will be get in {@link TransactionCallback#run(Object)} - there you should<p>
+     * Value that you want to change will be get in {@link Function} - there you should
      * modify data and returns a new one.
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
