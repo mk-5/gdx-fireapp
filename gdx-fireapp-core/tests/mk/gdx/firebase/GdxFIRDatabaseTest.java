@@ -15,7 +15,6 @@ import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.FirebaseMapConverter;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.functional.Function;
-import mk.gdx.firebase.listeners.ConnectedListener;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -39,8 +38,6 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     @Test
     public void onConnect() {
         // Given
-        ConnectedListener connectedListener = Mockito.mock(ConnectedListener.class);
-
         // When
         GdxFIRDatabase.instance().onConnect();
 

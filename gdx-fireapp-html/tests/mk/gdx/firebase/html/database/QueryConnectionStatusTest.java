@@ -27,7 +27,7 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnConnectionValidator;
-import mk.gdx.firebase.listeners.ConnectedListener;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({DatabaseReference.class})
 public class QueryConnectionStatusTest {
@@ -46,7 +46,7 @@ public class QueryConnectionStatusTest {
         QueryConnectionStatus query = new QueryConnectionStatus(Mockito.mock(Database.class));
 
         // When
-        ((QueryConnectionStatus) query.withArgs(Mockito.mock(ConnectedListener.class))).runJS();
+        ((QueryConnectionStatus) query.with(Mockito.mock(FuturePromise.class))).runJS();
 
         // Then
         Assert.fail("Native method should be run");

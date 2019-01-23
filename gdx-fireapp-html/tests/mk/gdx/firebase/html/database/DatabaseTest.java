@@ -38,7 +38,6 @@ import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
-import mk.gdx.firebase.listeners.ConnectedListener;
 import mk.gdx.firebase.promises.ConverterPromise;
 import mk.gdx.firebase.promises.FutureListenerPromise;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -78,7 +77,6 @@ public class DatabaseTest {
     public void onConnect() throws Exception {
         // Given
         Database database = new Database();
-        ConnectedListener connectedListener = Mockito.mock(ConnectedListener.class);
         PowerMockito.mockStatic(QueryConnectionStatus.class);
         QueryConnectionStatus queryConnectionStatus = PowerMockito.spy(new QueryConnectionStatus(database));
         PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(queryConnectionStatus);
