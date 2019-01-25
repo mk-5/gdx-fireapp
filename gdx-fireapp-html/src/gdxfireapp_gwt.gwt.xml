@@ -14,9 +14,9 @@
     <extend-configuration-property name="gdx.reflect.include"
                                    value="mk.gdx.firebase.promises.ConverterPromise"/>
     <extend-configuration-property name="gdx.reflect.include"
-                                   value="mk.gdx.firebase.callbacks.CompleteCallback"/>
-    <extend-configuration-property name="gdx.reflect.include"
                                    value="mk.gdx.firebase.annotations.MapConversion"/>
     <extend-configuration-property name="gdx.reflect.include"
                                    value="mk.gdx.firebase.functional.Consumer"/>
+    <extend-configuration-property name="gdx.reflect.include"
+                                   value="mk.gdx.firebase.functional.Function"/>
 </module>

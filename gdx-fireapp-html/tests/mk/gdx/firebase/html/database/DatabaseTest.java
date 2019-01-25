@@ -34,7 +34,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
@@ -227,7 +226,6 @@ public class DatabaseTest {
     public void updateChildren() throws Exception {
         // Given
         Database database = new Database();
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         PowerMockito.mockStatic(QueryUpdateChildren.class);
         QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database));
         PowerMockito.whenNew(QueryUpdateChildren.class).withAnyArguments().thenReturn(query);

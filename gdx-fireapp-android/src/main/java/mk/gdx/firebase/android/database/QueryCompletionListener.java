@@ -19,11 +19,10 @@ package mk.gdx.firebase.android.database;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.promises.FuturePromise;
 
 /**
- * Wraps {@link CompleteCallback} with {@link DatabaseReference.CompletionListener}
+ * Wraps {@link FuturePromise} with {@link DatabaseReference.CompletionListener}
  */
 class QueryCompletionListener implements DatabaseReference.CompletionListener {
 

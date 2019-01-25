@@ -21,7 +21,7 @@ import bindings.google.firebasedatabase.FIRDatabaseReference;
 import mk.gdx.firebase.promises.FuturePromise;
 
 /**
- * Wraps {@link mk.gdx.firebase.callbacks.CompleteCallback} with ios completion observer.
+ * Wraps {@link mk.gdx.firebase.promises.FuturePromise} with ios completion observer.
  */
 class FIRDatabaseReferenceCompleteObserver implements FIRDatabaseReference.Block_setValueWithCompletionBlock,
         FIRDatabaseReference.Block_removeValueWithCompletionBlock, FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock {

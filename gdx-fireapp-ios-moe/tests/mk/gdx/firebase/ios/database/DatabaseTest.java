@@ -38,7 +38,6 @@ import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.GdxFIRDatabase;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.database.pojos.Filter;
@@ -277,7 +276,6 @@ public class DatabaseTest extends GdxIOSAppTest {
     public void removeValue1() throws Exception {
         // Given
         Database database = new Database();
-        CompleteCallback callback = mock(CompleteCallback.class);
         mockStatic(QueryRemoveValue.class);
         QueryRemoveValue query = PowerMockito.spy(new QueryRemoveValue(database));
         whenNew(QueryRemoveValue.class).withAnyArguments().thenReturn(query);

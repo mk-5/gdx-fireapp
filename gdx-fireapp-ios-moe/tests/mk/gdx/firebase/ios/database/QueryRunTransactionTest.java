@@ -28,7 +28,6 @@ import org.powermock.reflect.Whitebox;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.RunTransactionValidator;
 import mk.gdx.firebase.functional.Function;
@@ -90,11 +89,10 @@ public class QueryRunTransactionTest extends GdxIOSAppTest {
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
         QueryRunTransaction query = new QueryRunTransaction(database);
-        CompleteCallback callback = Mockito.mock(CompleteCallback.class);
         Class dataType = String.class;
 
         // When
-        query.withArgs(dataType, Mockito.mock(Function.class), callback).execute();
+        query.withArgs(dataType, Mockito.mock(Function.class)).execute();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(

@@ -18,7 +18,6 @@ package mk.gdx.firebase.distributions;
 
 import java.util.Map;
 
-import mk.gdx.firebase.callbacks.CompleteCallback;
 import mk.gdx.firebase.database.ConnectionStatus;
 import mk.gdx.firebase.database.FilterType;
 import mk.gdx.firebase.database.OrderByMode;
@@ -159,7 +158,6 @@ public interface DatabaseDistribution {
      * @param dataType            Type of data you want to get, not null
      * @param transactionFunction Function to modify transaction data, not null
      * @throws RuntimeException if {@link #inReference(String)} was not call before call this method.
-     * @see CompleteCallback
      */
     <T, R extends T> Promise<Void> transaction(Class<T> dataType, Function<R, R> transactionFunction);
 
