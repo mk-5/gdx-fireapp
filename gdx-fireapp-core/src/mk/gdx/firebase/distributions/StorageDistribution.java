@@ -20,14 +20,15 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.io.File;
 
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Provides access to Firebase Storage methods.
  */
 public interface StorageDistribution {
+
     /**
      * Uploads file data to storage.
      *
@@ -68,10 +69,9 @@ public interface StorageDistribution {
     /**
      * Deletes data from storage.
      *
-     * @param path     Path
-     * @param callback Callback
+     * @param path The reference path
      */
-    void delete(String path, DeleteCallback callback);
+    Promise<Void> delete(String path);
 
     /**
      * Sets bucket to deal with, url will be used for all future actions.

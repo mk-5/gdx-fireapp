@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.storage.DownloadUrl;
 
 public class DownloadUrlTest {
 

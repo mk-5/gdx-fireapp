@@ -17,13 +17,13 @@
 package mk.gdx.firebase.html.storage;
 
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.storage.DownloadUrl;
 import mk.gdx.firebase.storage.FileMetadata;
-import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * Resolves transformation from UploadTaskSnapshot to FileMetadata
  */
-public class SnapshotFileMetaDataResolver {
+class SnapshotFileMetaDataResolver {
 
     private SnapshotFileMetaDataResolver() {
         //
@@ -36,7 +36,7 @@ public class SnapshotFileMetaDataResolver {
      * @param snapshot UploadTaskSnapshot from javascript, not null
      * @return FileMetadata object filled with data
      */
-    public static FileMetadata resolve(final UploadTaskSnapshot snapshot) {
+    static FileMetadata resolve(final UploadTaskSnapshot snapshot) {
         FileMetadata.Builder builder = new FileMetadata.Builder();
         FullMetaData metaData = snapshot.getMetaData();
         if (metaData != null) {

@@ -23,12 +23,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.io.File;
 
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.helpers.ImageHelper;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * Gets access to Firebase Analytics API in multi-modules.
@@ -102,8 +102,8 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, DeleteCallback callback) {
-        platformObject.delete(path, callback);
+    public Promise<Void> delete(String path) {
+        return platformObject.delete(path);
     }
 
     /**

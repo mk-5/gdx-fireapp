@@ -36,11 +36,11 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.File;
 
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
 
 @PrepareForTest({
         ClassReflection.class, Constructor.class, ScriptInjector.class,
@@ -56,7 +56,7 @@ public class StorageTest extends GdxHtmlAppTest {
         PowerMockito.mockStatic(ScriptRunner.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
@@ -127,16 +127,15 @@ public class StorageTest extends GdxHtmlAppTest {
     public void delete() {
         // Given
         String path = "/test";
-        DeleteCallback callback = Mockito.mock(DeleteCallback.class);
         Storage storage = new Storage();
 
 
         // When
-        storage.delete(path, callback);
+        storage.delete(path);
 
         // Then
         PowerMockito.verifyStatic(StorageJS.class, VerificationModeFactory.times(1));
-        StorageJS.remove(Mockito.anyString(), Mockito.eq(path), Mockito.any(DeleteCallback.class));
+        StorageJS.remove(Mockito.anyString(), Mockito.eq(path), Mockito.any(FuturePromise.class));
     }
 
     @Test

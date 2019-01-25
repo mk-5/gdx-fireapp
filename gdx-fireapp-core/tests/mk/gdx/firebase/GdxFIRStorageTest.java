@@ -18,7 +18,6 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.io.File;
 
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
@@ -43,7 +42,7 @@ public class GdxFIRStorageTest extends GdxAppTest {
     }
 
     @Test
-    public void instance() throws Exception {
+    public void instance() {
         assertNotNull(GdxFIRStorage.instance());
     }
 
@@ -101,13 +100,11 @@ public class GdxFIRStorageTest extends GdxAppTest {
     @Test
     public void delete() {
         // Given
-        DeleteCallback callback = Mockito.mock(DeleteCallback.class);
-
         // When
-        GdxFIRStorage.instance().delete("firebase/file.data", callback);
+        GdxFIRStorage.instance().delete("firebase/file.data");
 
         // Then
-        Mockito.verify(storageDistribution, VerificationModeFactory.times(1)).delete(Mockito.eq("firebase/file.data"), Mockito.refEq(callback));
+        Mockito.verify(storageDistribution, VerificationModeFactory.times(1)).delete(Mockito.eq("firebase/file.data"));
     }
 
     @Test
@@ -129,14 +126,14 @@ public class GdxFIRStorageTest extends GdxAppTest {
         final byte[] byteData = {0, 0, 0, 0};
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((DownloadCallback) invocation.getArgument(2)).onSuccess(byteData);
                 return null;
             }
         }).when(storageDistribution).download(Mockito.anyString(), Mockito.anyLong(), Mockito.any(DownloadCallback.class));
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
@@ -157,7 +154,7 @@ public class GdxFIRStorageTest extends GdxAppTest {
         PowerMockito.when(ImageHelper.class, "createTextureFromBytes", Mockito.any()).thenReturn(Mockito.mock(TextureRegion.class));
         PowerMockito.when(ImageHelper.class, "createTextureFromBytes", Mockito.any(), Mockito.any(Consumer.class)).thenAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Consumer) invocation.getArgument(1)).accept(Mockito.mock(TextureRegion.class));
                 return null;
             }
@@ -167,14 +164,14 @@ public class GdxFIRStorageTest extends GdxAppTest {
         final byte[] byteData = {0, 0, 0, 0};
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((DownloadCallback) invocation.getArgument(2)).onSuccess(byteData);
                 return null;
             }
         }).when(storageDistribution).download(Mockito.anyString(), Mockito.anyLong(), Mockito.any(DownloadCallback.class));
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }

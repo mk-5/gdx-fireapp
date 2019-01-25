@@ -16,8 +16,6 @@
 
 package mk.gdx.firebase.storage;
 
-import mk.gdx.firebase.storage.functional.DownloadUrl;
-
 /**
  * POJO class that holds information about the file from Firebase storage.
  */

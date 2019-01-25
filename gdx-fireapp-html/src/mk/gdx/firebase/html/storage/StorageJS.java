@@ -16,8 +16,8 @@
 
 package mk.gdx.firebase.html.storage;
 
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.storage.FileMetadata;
 
 /**
@@ -48,16 +48,18 @@ class StorageJS {
     /**
      * Removes file given at {@code refPath}.
      *
-     * @param bucketUrl      Bucket url, may be null
-     * @param refPath        Storage reference path, not null
-     * @param deleteCallback Callback, not null
+     * @param bucketUrl     Bucket url, may be null
+     * @param refPath       Storage reference path, not null
+     * @param futurePromise FuturePromise, not null
      */
-    static native void remove(String bucketUrl, String refPath, DeleteCallback deleteCallback) /*-{
+    static native void remove(String bucketUrl, String refPath, FuturePromise<Void> futurePromise) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath)['delete']().then(function(){
-             deleteCallback.@mk.gdx.firebase.callbacks.DeleteCallback::onSuccess()();
+             promise.@mk.gdx.firebase.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })['catch'](function(error){
-            deleteCallback.@mk.gdx.firebase.callbacks.DeleteCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
+            promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
+                @java.lang.Exception::new(Ljava/lang/String;)(error.message)
+            );
         });
     }-*/;
 

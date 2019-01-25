@@ -33,13 +33,14 @@ import bindings.google.firebasestorage.FIRStorageDownloadTask;
 import bindings.google.firebasestorage.FIRStorageMetadata;
 import bindings.google.firebasestorage.FIRStorageReference;
 import bindings.google.firebasestorage.FIRStorageUploadTask;
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
+import mk.gdx.firebase.storage.DownloadUrl;
 import mk.gdx.firebase.storage.FileMetadata;
-import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * iOS Firebase storage API implementation.
@@ -135,12 +136,17 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, final DeleteCallback callback) {
-        firStorage().child(path).deleteWithCompletion(new FIRStorageReference.Block_deleteWithCompletion() {
+    public Promise<Void> delete(final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void call_deleteWithCompletion(NSError arg0) {
-                if (ErrorHandler.handleDeleteError(arg0, callback)) return;
-                callback.onSuccess();
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                firStorage().child(path).deleteWithCompletion(new FIRStorageReference.Block_deleteWithCompletion() {
+                    @Override
+                    public void call_deleteWithCompletion(NSError arg0) {
+                        if (ErrorHandler.handleDeleteError(arg0, voidFuturePromise)) return;
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
             }
         });
     }
@@ -197,41 +203,6 @@ public class Storage implements StorageDistribution {
                 }))
                 .setMd5Hash("")
                 .build();
-    }
-
-    /**
-     * Wraps error handling flow for different callbacks type.
-     * <p>
-     * Wrapped callbacks:
-     * <ul>
-     * <li>{@link DeleteCallback}
-     * <li>{@link UploadCallback}
-     * <li>{@link DownloadCallback}
-     */
-    private static class ErrorHandler {
-        private static boolean handleDeleteError(NSError error, DeleteCallback callback) {
-            if (error != null) {
-                callback.onFail(new RuntimeException(error.localizedDescription()));
-                return true;
-            }
-            return false;
-        }
-
-        private static boolean handleUploadError(NSError error, UploadCallback callback) {
-            if (error != null) {
-                callback.onFail(new RuntimeException(error.localizedDescription()));
-                return true;
-            }
-            return false;
-        }
-
-        private static boolean handleDownloadError(NSError error, DownloadCallback callback) {
-            if (error != null) {
-                callback.onFail(new RuntimeException(error.localizedDescription()));
-                return true;
-            }
-            return false;
-        }
     }
 
 }

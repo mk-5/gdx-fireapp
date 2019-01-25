@@ -23,11 +23,13 @@ import com.badlogic.gdx.utils.Base64Coder;
 
 import java.io.File;
 
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
+import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
 
 /**
  * GWT Firebase storage api.
@@ -93,11 +95,16 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void delete(final String path, final DeleteCallback callback) {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
+    public Promise<Void> delete(final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void run() {
-                StorageJS.remove(scriptBucketUrl, path, callback);
+            public void accept(final FuturePromise<Void> futurePromise) {
+                ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
+                    @Override
+                    public void run() {
+                        StorageJS.remove(scriptBucketUrl, path, futurePromise);
+                    }
+                });
             }
         });
     }

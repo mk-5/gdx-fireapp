@@ -32,13 +32,14 @@ import java.io.IOException;
 import java.util.UUID;
 
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.callbacks.DeleteCallback;
 import mk.gdx.firebase.callbacks.DownloadCallback;
 import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.functional.Consumer;
+import mk.gdx.firebase.promises.FuturePromise;
+import mk.gdx.firebase.promises.Promise;
+import mk.gdx.firebase.storage.DownloadUrl;
 import mk.gdx.firebase.storage.FileMetadata;
-import mk.gdx.firebase.storage.functional.DownloadUrl;
 
 /**
  * Android Firebase storage API implementation.
@@ -123,17 +124,22 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void delete(String path, @NonNull final DeleteCallback callback) {
-        StorageReference pathRef = firebaseStorage().getReference().child(path);
-        pathRef.delete().addOnFailureListener(new OnFailureListener() {
+    public Promise<Void> delete(final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                callback.onFail(e);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                callback.onSuccess();
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                StorageReference pathRef = firebaseStorage().getReference().child(path);
+                pathRef.delete().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        voidFuturePromise.doFail(e);
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
             }
         });
     }
