@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.OnDataValidator;
 import mk.gdx.firebase.promises.ConverterPromise;

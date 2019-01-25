@@ -26,8 +26,6 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 
 @RunWith(MockitoJUnitRunner.class)

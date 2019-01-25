@@ -20,7 +20,7 @@ import apple.foundation.NSError;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.database.validators.ReadValueValidator;
 import mk.gdx.firebase.promises.ConverterPromise;

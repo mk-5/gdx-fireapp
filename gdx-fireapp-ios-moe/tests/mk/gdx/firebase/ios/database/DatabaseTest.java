@@ -38,10 +38,10 @@ import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import mk.gdx.firebase.GdxFIRDatabase;
+import mk.gdx.firebase.database.Filter;
 import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Function;
@@ -115,7 +115,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void inReference() throws Exception {
+    public void inReference() {
         // Given
         Database database = new Database();
         String reference = "/test";
@@ -225,7 +225,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void filter() throws Exception {
+    public void filter() {
         // Given
         Database database = new Database();
 
@@ -246,13 +246,13 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void orderBy() throws Exception {
+    public void orderBy() {
         // Given
         Database database = new Database();
 
         // When
         database.orderBy(OrderByMode.ORDER_BY_KEY, "test_key");
-        OrderByClause orderByClause = ((OrderByClause) Whitebox.getInternalState(database, "orderByClause"));
+        OrderByClause orderByClause = Whitebox.getInternalState(database, "orderByClause");
 
         // Then
         Assert.assertEquals(OrderByMode.ORDER_BY_KEY, orderByClause.getOrderByMode());
@@ -260,7 +260,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void push() throws Exception {
+    public void push() {
         // Given
         Database database = new Database();
 
@@ -330,7 +330,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void setPersistenceEnabled() throws Exception {
+    public void setPersistenceEnabled() {
         // Given
         Database database = new Database();
 
@@ -342,7 +342,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void keepSynced() throws Exception {
+    public void keepSynced() {
         // Given
         Database database = new Database();
 
@@ -354,7 +354,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void dbReference() throws Exception {
+    public void dbReference() {
         // Given
         Database database = new Database();
 
@@ -367,7 +367,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
-    public void dbReference_missing() throws Exception {
+    public void dbReference_missing() {
         // Given
         GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
@@ -382,7 +382,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
-    public void dbReference_missing2() throws Exception {
+    public void dbReference_missing2() {
         // Given
         GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
@@ -397,7 +397,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
-    public void dbReference_missing3() throws Exception {
+    public void dbReference_missing3() {
         // Given
         Database database = new Database();
 
@@ -409,7 +409,7 @@ public class DatabaseTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void terminateOperation() throws Exception {
+    public void terminateOperation() {
         // Given
         Database database = new Database();
 

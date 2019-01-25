@@ -32,7 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.promises.ConverterPromise;
 
 @PrepareForTest({GdxNativesLoader.class, ResolverFuturePromiseOnData.class, FirebaseDatabase.class})
@@ -59,7 +59,7 @@ public class QueryReadValueTest extends AndroidContextTest {
         final DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((ValueEventListener) invocation.getArgument(0)).onDataChange(dataSnapshot);
                 return null;
             }
@@ -68,7 +68,7 @@ public class QueryReadValueTest extends AndroidContextTest {
         QueryReadValue query = new QueryReadValue(database);
 
         // When
-        ((QueryReadValue) query.withArgs(String.class)).execute();
+        query.withArgs(String.class).execute();
 
         // Then
         PowerMockito.verifyStatic(ResolverFuturePromiseOnData.class);
@@ -82,7 +82,7 @@ public class QueryReadValueTest extends AndroidContextTest {
         final DatabaseError databaseError = Mockito.mock(DatabaseError.class);
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((ValueEventListener) invocation.getArgument(0)).onCancelled(databaseError);
                 return null;
             }

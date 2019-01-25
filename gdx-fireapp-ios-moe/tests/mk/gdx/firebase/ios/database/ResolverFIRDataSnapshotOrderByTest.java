@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import bindings.google.firebasedatabase.FIRDataSnapshot;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
 @PrepareForTest({NatJ.class, FIRDataSnapshot.class})

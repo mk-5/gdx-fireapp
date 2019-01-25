@@ -19,8 +19,8 @@ package mk.gdx.firebase.html.database;
 import com.badlogic.gdx.utils.Array;
 
 import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.Filter;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.queries.GdxFireappQuery;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 

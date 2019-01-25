@@ -33,10 +33,10 @@ import java.util.Map;
 
 import mk.gdx.firebase.GdxFIRDatabase;
 import mk.gdx.firebase.android.AndroidContextTest;
+import mk.gdx.firebase.database.Filter;
 import mk.gdx.firebase.database.FilterType;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Function;

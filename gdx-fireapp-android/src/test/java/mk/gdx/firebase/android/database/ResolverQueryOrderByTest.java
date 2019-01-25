@@ -26,8 +26,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import mk.gdx.firebase.android.AndroidContextTest;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 
 @PrepareForTest({GdxNativesLoader.class, Query.class})
 public class ResolverQueryOrderByTest extends AndroidContextTest {

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 
 @PrepareForTest({GdxNativesLoader.class, DataSnapshot.class})
 public class ResolverDataSnapshotOrderByTest extends AndroidContextTest {

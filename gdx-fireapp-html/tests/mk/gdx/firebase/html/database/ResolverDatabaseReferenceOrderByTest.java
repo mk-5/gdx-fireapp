@@ -26,8 +26,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 
 @PrepareForTest({DatabaseReference.class})
 public class ResolverDatabaseReferenceOrderByTest {
@@ -38,7 +38,7 @@ public class ResolverDatabaseReferenceOrderByTest {
     public final PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         PowerMockito.mockStatic(DatabaseReference.class);
         databaseReference = PowerMockito.mock(DatabaseReference.class);
     }

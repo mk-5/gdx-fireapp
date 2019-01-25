@@ -18,9 +18,6 @@ package mk.gdx.firebase.database;
 
 import com.badlogic.gdx.utils.Array;
 
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
-
 /**
  * Provides filtering flow.
  *

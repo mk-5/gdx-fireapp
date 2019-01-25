@@ -18,8 +18,8 @@ package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.Query;
 
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByResolver;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 
 /**
  * Applies OrderByClause to the Query instance.

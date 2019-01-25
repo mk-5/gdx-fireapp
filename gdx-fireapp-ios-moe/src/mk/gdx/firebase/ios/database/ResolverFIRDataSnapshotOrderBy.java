@@ -23,7 +23,7 @@ import java.util.List;
 
 import apple.foundation.NSArray;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 
 /**
  * Gets data from FIRDataSnapshot with ordering preserved.

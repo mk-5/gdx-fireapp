@@ -17,8 +17,6 @@
 package mk.gdx.firebase.database;
 
 
-import mk.gdx.firebase.database.pojos.OrderByClause;
-
 /**
  * Applies OrderByClause to the target object instance.
  *

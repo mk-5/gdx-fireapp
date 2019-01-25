@@ -16,8 +16,8 @@
 
 package mk.gdx.firebase.html.database;
 
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByResolver;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 
 /**
  * Resolves order-by for javascript firebase db.

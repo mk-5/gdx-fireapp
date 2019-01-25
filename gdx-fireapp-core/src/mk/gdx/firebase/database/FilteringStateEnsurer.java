@@ -21,9 +21,6 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import java.util.List;
 
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
-
 /**
  * Ensures that filters will be applied in right context.
  */

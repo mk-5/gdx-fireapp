@@ -18,7 +18,7 @@ package mk.gdx.firebase.android.database;
 
 import com.google.firebase.database.DataSnapshot;
 
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.promises.ConverterPromise;
 
 /**

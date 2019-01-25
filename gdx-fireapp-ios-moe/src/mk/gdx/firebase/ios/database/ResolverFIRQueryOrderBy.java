@@ -17,8 +17,8 @@
 package mk.gdx.firebase.ios.database;
 
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByResolver;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 
 /**
  * Applies OrderByClause to the FIRDatabaseQuery instance.

@@ -23,8 +23,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.Filter;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 

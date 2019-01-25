@@ -24,8 +24,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.database.pojos.OrderByClause;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
 
 

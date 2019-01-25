@@ -18,8 +18,8 @@ package mk.gdx.firebase.database.queries;
 
 import com.badlogic.gdx.utils.Array;
 
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
+import mk.gdx.firebase.database.Filter;
+import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.validators.ArgumentsValidator;
 import mk.gdx.firebase.distributions.DatabaseDistribution;
 import mk.gdx.firebase.promises.ConverterPromise;

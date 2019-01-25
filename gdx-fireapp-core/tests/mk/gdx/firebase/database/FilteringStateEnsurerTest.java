@@ -24,9 +24,6 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-import mk.gdx.firebase.database.pojos.Filter;
-import mk.gdx.firebase.database.pojos.OrderByClause;
-
 public class FilteringStateEnsurerTest {
 
     @Test

@@ -19,6 +19,7 @@ package mk.gdx.firebase.database.pojos;
 import org.junit.Assert;
 import org.junit.Test;
 
+import mk.gdx.firebase.database.Filter;
 import mk.gdx.firebase.database.FilterType;
 
 public class FilterTest {
