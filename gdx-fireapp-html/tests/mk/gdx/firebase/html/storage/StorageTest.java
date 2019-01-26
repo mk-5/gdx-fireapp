@@ -34,10 +34,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.reflect.Whitebox;
 
-import java.io.File;
-
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.promises.FuturePromise;
@@ -69,7 +65,7 @@ public class StorageTest extends GdxHtmlAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.upload(Mockito.mock(FileHandle.class), "test", Mockito.mock(UploadCallback.class));
+        storage.upload(Mockito.mock(FileHandle.class), "test");
 
         // Then
         Mockito.verify(Gdx.app, VerificationModeFactory.times(1)).error(Mockito.anyString(), Mockito.anyString());
@@ -81,17 +77,16 @@ public class StorageTest extends GdxHtmlAppTest {
         byte[] data = {0, 0, 0, 0, 1, 1, 1, 1, 0};
         String path = "/test";
         String encodedData = "base64_encoded_data";
-        UploadCallback callback = Mockito.mock(UploadCallback.class);
         Mockito.when(Base64Coder.encode(Mockito.eq(data))).thenReturn(encodedData.toCharArray());
         Storage storage = new Storage();
 
 
         // When
-        storage.upload(data, path, callback);
+        storage.upload(data, path);
 
         // Then
         PowerMockito.verifyStatic(StorageJS.class, VerificationModeFactory.times(1));
-        StorageJS.upload(Mockito.anyString(), Mockito.eq(path), Mockito.eq(encodedData), Mockito.refEq(callback));
+        StorageJS.upload(Mockito.anyString(), Mockito.eq(path), Mockito.eq(encodedData), Mockito.any(FuturePromise.class));
     }
 
     @Test
@@ -100,7 +95,7 @@ public class StorageTest extends GdxHtmlAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.download("test", Mockito.mock(File.class), Mockito.mock(DownloadCallback.class));
+        storage.download("test", Mockito.mock(FileHandle.class));
 
         // Then
         Mockito.verify(Gdx.app, VerificationModeFactory.times(1)).error(Mockito.anyString(), Mockito.anyString());
@@ -110,17 +105,16 @@ public class StorageTest extends GdxHtmlAppTest {
     public void download1() {
         // Given
         String path = "/test";
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
         long bytesLimit = 1000;
         Storage storage = new Storage();
 
 
         // When
-        storage.download(path, bytesLimit, callback);
+        storage.download(path, bytesLimit);
 
         // Then
         PowerMockito.verifyStatic(StorageJS.class, VerificationModeFactory.times(1));
-        StorageJS.download(Mockito.anyString(), Mockito.eq(path), Mockito.any(UrlDownloadCallback.class));
+        StorageJS.download(Mockito.anyString(), Mockito.eq(path), Mockito.any(UrlDownloader.class));
     }
 
     @Test

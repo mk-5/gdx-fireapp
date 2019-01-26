@@ -21,14 +21,13 @@ import com.badlogic.gdx.utils.reflect.Constructor;
 import com.google.gwt.core.client.ScriptInjector;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.html.GdxHtmlAppTest;
+import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.storage.FileMetadata;
 
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class, UploadTaskSnapshot.class, SnapshotFileMetaDataResolver.class})
@@ -44,15 +43,15 @@ public class StorageJSTest extends GdxHtmlAppTest {
     @Test
     public void callUploadCallback() {
         // Given
-        UploadCallback callback = Mockito.mock(UploadCallback.class);
+        FuturePromise promise = Mockito.mock(FuturePromise.class);
         UploadTaskSnapshot snapshot = Mockito.mock(UploadTaskSnapshot.class);
         FileMetadata fileMetadata = Mockito.mock(FileMetadata.class);
         Mockito.when(SnapshotFileMetaDataResolver.resolve(Mockito.refEq(snapshot))).thenReturn(fileMetadata);
 
         // When
-        StorageJS.callUploadCallback(snapshot, callback);
+        StorageJS.callUploadPromise(snapshot, promise);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.refEq(fileMetadata));
+        Mockito.verify(promise, VerificationModeFactory.times(1)).doComplete(Mockito.refEq(fileMetadata));
     }
 }

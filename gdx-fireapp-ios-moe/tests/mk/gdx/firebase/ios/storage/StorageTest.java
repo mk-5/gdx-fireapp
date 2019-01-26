@@ -42,9 +42,9 @@ import bindings.google.firebasestorage.FIRStorageDownloadTask;
 import bindings.google.firebasestorage.FIRStorageMetadata;
 import bindings.google.firebasestorage.FIRStorageReference;
 import bindings.google.firebasestorage.FIRStorageUploadTask;
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
+
+import static org.mockito.Mockito.when;
 
 @PrepareForTest({
         NatJ.class, FIRStorageReference.class, FIRStorageMetadata.class, NSError.class,
@@ -84,21 +84,20 @@ public class StorageTest extends GdxIOSAppTest {
         }
         firStorage = Mockito.mock(FIRStorage.class);
         firStorageReference = Mockito.mock(FIRStorageReference.class);
-        Mockito.when(FIRStorage.storage()).thenReturn(firStorage);
-        Mockito.when(firStorage.referenceForURL(Mockito.anyString())).thenReturn(firStorageReference);
-        Mockito.when(firStorage.reference()).thenReturn(firStorageReference);
-        Mockito.when(firStorageReference.child(Mockito.anyString())).thenReturn(firStorageReference);
-        Mockito.when(PtrFactory.newByteArray(Mockito.any(byte[].class))).thenReturn(Mockito.mock(BytePtr.class));
+        when(FIRStorage.storage()).thenReturn(firStorage);
+        when(firStorage.referenceForURL(Mockito.anyString())).thenReturn(firStorageReference);
+        when(firStorage.reference()).thenReturn(firStorageReference);
+        when(firStorageReference.child(Mockito.anyString())).thenReturn(firStorageReference);
+        when(PtrFactory.newByteArray(Mockito.any(byte[].class))).thenReturn(Mockito.mock(BytePtr.class));
     }
 
     @Test
     public void upload() {
         // Given
         NSData nsData = PowerMockito.mock(NSData.class);
-        Mockito.when(NSData.dataWithContentsOfFile(Mockito.anyString())).thenReturn(nsData);
+        when(NSData.dataWithContentsOfFile(Mockito.anyString())).thenReturn(nsData);
         FileHandle fileHandle = Mockito.mock(FileHandle.class);
-        Mockito.when(fileHandle.file()).thenReturn(Mockito.mock(File.class));
-        UploadCallback callback = Mockito.mock(UploadCallback.class);
+        when(fileHandle.file()).thenReturn(Mockito.mock(File.class));
         Storage storage = new Storage();
         final FIRStorageMetadata firStorageMetadata = Mockito.mock(FIRStorageMetadata.class);
         Mockito.doAnswer(new Answer() {
@@ -108,14 +107,14 @@ public class StorageTest extends GdxIOSAppTest {
                 return null;
             }
         }).when(firStorageReference).putDataMetadataCompletion(Mockito.any(NSData.class), Mockito.any(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));
-        Mockito.when(FIRStorageMetadata.alloc()).thenReturn(firStorageMetadata);
-        Mockito.when(firStorageMetadata.init()).thenReturn(firStorageMetadata);
-        Mockito.when(firStorageMetadata.updated()).thenReturn(Mockito.mock(NSDate.class));
-        Mockito.when(firStorageMetadata.timeCreated()).thenReturn(Mockito.mock(NSDate.class));
+        when(FIRStorageMetadata.alloc()).thenReturn(firStorageMetadata);
+        when(firStorageMetadata.init()).thenReturn(firStorageMetadata);
+        when(firStorageMetadata.updated()).thenReturn(Mockito.mock(NSDate.class));
+        when(firStorageMetadata.timeCreated()).thenReturn(Mockito.mock(NSDate.class));
 
 
         // When
-        storage.upload(fileHandle, "test", callback);
+        storage.upload(fileHandle, "test");
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).putDataMetadataCompletion(Mockito.nullable(NSData.class), Mockito.nullable(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));
@@ -125,14 +124,13 @@ public class StorageTest extends GdxIOSAppTest {
     public void upload1() {
         // Given
         NSData nsData = PowerMockito.mock(NSData.class);
-        Mockito.when(NSData.dataWithBytesNoCopyLength(Mockito.any(BytePtr.class), Mockito.anyLong())).thenReturn(nsData);
+        when(NSData.dataWithBytesNoCopyLength(Mockito.any(BytePtr.class), Mockito.anyLong())).thenReturn(nsData);
         byte[] data = new byte[]{0, 0, 0, 0, 1, 1, 1, 1};
-        UploadCallback callback = Mockito.mock(UploadCallback.class);
         Storage storage = new Storage();
 
 
         // When
-        storage.upload(data, "test", callback);
+        storage.upload(data, "test");
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).putDataMetadataCompletion(Mockito.nullable(NSData.class), Mockito.nullable(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));
@@ -142,13 +140,13 @@ public class StorageTest extends GdxIOSAppTest {
     public void download_withTargetFile() {
         // Given
         NSURL nsData = PowerMockito.mock(NSURL.class);
-        Mockito.when(NSURL.fileURLWithPath(Mockito.anyString())).thenReturn(nsData);
-        File file = Mockito.mock(File.class);
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        when(NSURL.fileURLWithPath(Mockito.anyString())).thenReturn(nsData);
+        FileHandle file = Mockito.mock(FileHandle.class);
+        when(file.file()).thenReturn(Mockito.mock(File.class));
         Storage storage = new Storage();
 
         // When
-        storage.download("/test", file, callback);
+        storage.download("/test", file);
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).writeToFileCompletion(Mockito.nullable(NSURL.class), Mockito.any(FIRStorageReference.Block_writeToFileCompletion.class));
@@ -158,13 +156,12 @@ public class StorageTest extends GdxIOSAppTest {
     public void download_withNullTargetFile() {
         // Given
         NSURL nsData = Mockito.mock(NSURL.class);
-        Mockito.when(NSURL.fileURLWithPathIsDirectory(Mockito.nullable(String.class), Mockito.anyBoolean())).thenReturn(nsData);
-        File file = null;
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        when(NSURL.fileURLWithPathIsDirectory(Mockito.nullable(String.class), Mockito.anyBoolean())).thenReturn(nsData);
+        FileHandle file = null;
         Storage storage = new Storage();
 
         // When
-        storage.download("/test", file, callback);
+        storage.download("/test", file);
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).writeToFileCompletion(Mockito.nullable(NSURL.class), Mockito.any(FIRStorageReference.Block_writeToFileCompletion.class));
@@ -177,11 +174,10 @@ public class StorageTest extends GdxIOSAppTest {
         // Given
         NSURL nsData = PowerMockito.mock(NSURL.class);
         long byteLimit = Long.MAX_VALUE;
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
         Storage storage = new Storage();
 
         // When
-        storage.download("/test", byteLimit, callback);
+        storage.download("/test", byteLimit);
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).dataWithMaxSizeCompletion(Mockito.anyLong(), Mockito.any(FIRStorageReference.Block_dataWithMaxSizeCompletion.class));

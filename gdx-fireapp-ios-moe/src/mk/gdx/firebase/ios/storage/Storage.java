@@ -18,28 +18,13 @@ package mk.gdx.firebase.ios.storage;
 
 import com.badlogic.gdx.files.FileHandle;
 
-import org.moe.natj.general.ptr.BytePtr;
-import org.moe.natj.general.ptr.impl.PtrFactory;
-import org.moe.natj.objc.ObjCRuntime;
-
-import java.io.File;
-
-import apple.foundation.NSData;
 import apple.foundation.NSError;
-import apple.foundation.NSURL;
-import apple.foundation.c.Foundation;
 import bindings.google.firebasestorage.FIRStorage;
-import bindings.google.firebasestorage.FIRStorageDownloadTask;
-import bindings.google.firebasestorage.FIRStorageMetadata;
 import bindings.google.firebasestorage.FIRStorageReference;
-import bindings.google.firebasestorage.FIRStorageUploadTask;
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
-import mk.gdx.firebase.storage.DownloadUrl;
 import mk.gdx.firebase.storage.FileMetadata;
 
 /**
@@ -51,19 +36,18 @@ import mk.gdx.firebase.storage.FileMetadata;
 public class Storage implements StorageDistribution {
 
     private FIRStorageReference firStorage;
+    private static final UploadProcessor uploadProcessor = new UploadProcessor();
+    private static final DownloadProcessor downloadProcessor = new DownloadProcessor();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void upload(FileHandle file, String path, final UploadCallback callback) {
-        NSData nsData = NSData.dataWithContentsOfFile(file.file().getAbsolutePath());
-        FIRStorageUploadTask uploadTask = firStorage().child(path).putDataMetadataCompletion(nsData, null, new FIRStorageReference.Block_putDataMetadataCompletion() {
+    public Promise<FileMetadata> upload(final FileHandle file, final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
-            public void call_putDataMetadataCompletion(FIRStorageMetadata arg0, NSError arg1) {
-                if (ErrorHandler.handleUploadError(arg1, callback)) return;
-                FileMetadata fileMetadata = buildMetaData(arg0);
-                callback.onSuccess(fileMetadata);
+            public void accept(FuturePromise<FileMetadata> promise) {
+                uploadProcessor.upload(firStorage(), path, file, promise);
             }
         });
     }
@@ -72,40 +56,11 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void upload(byte[] data, String path, final UploadCallback callback) {
-        final BytePtr bytePtr = PtrFactory.newByteArray(data);
-//        NSData nsData = NSData.dataWithBytesLength(bytePtr, data.length);
-        NSData nsData = NSData.dataWithBytesNoCopyLength(bytePtr, data.length);
-        FIRStorageUploadTask uploadTask = firStorage().child(path).putDataMetadataCompletion(nsData, null, new FIRStorageReference.Block_putDataMetadataCompletion() {
+    public Promise<FileMetadata> upload(final byte[] data, final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
-            public void call_putDataMetadataCompletion(FIRStorageMetadata arg0, NSError arg1) {
-                if (ErrorHandler.handleUploadError(arg1, callback)) return;
-                FileMetadata fileMetadata = buildMetaData(arg0);
-                callback.onSuccess(fileMetadata);
-                bytePtr.free();
-            }
-        });
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void download(String path, final long bytesLimit, final DownloadCallback<byte[]> callback) {
-        firStorage().child(path).dataWithMaxSizeCompletion(bytesLimit, new FIRStorageReference.Block_dataWithMaxSizeCompletion() {
-            @Override
-            public void call_dataWithMaxSizeCompletion(final NSData arg0, NSError arg1) {
-                if (ErrorHandler.handleDownloadError(arg1, callback)) return;
-                ObjCRuntime.autoreleasepool(new Runnable() { // TODO - check this autorelease pool
-                    @Override
-                    public void run() {
-                        int length = (int) arg0.length();
-                        byte[] data = new byte[length];
-                        arg0.bytes().getBytePtr().copyTo(data);
-                        callback.onSuccess(data);
-                    }
-                });
+            public void accept(FuturePromise<FileMetadata> promise) {
+                uploadProcessor.upload(firStorage(), path, data, promise);
             }
         });
     }
@@ -114,20 +69,24 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, final DownloadCallback<File> callback) {
-        NSURL targetFileUrl;
-        if (targetFile == null) {
-            // Create temporary file
-            targetFileUrl = NSURL.fileURLWithPathIsDirectory(Foundation.NSTemporaryDirectory(), true).URLByAppendingPathComponent("" + System.nanoTime() + "_file");
-        } else {
-            targetFileUrl = NSURL.fileURLWithPath(targetFile.getAbsolutePath());
-        }
-        FIRStorageDownloadTask downloadTask = firStorage().child(path).writeToFileCompletion(targetFileUrl, new FIRStorageReference.Block_writeToFileCompletion() {
+    public Promise<byte[]> download(final String path, final long bytesLimit) {
+        return FuturePromise.of(new Consumer<FuturePromise<byte[]>>() {
             @Override
-            public void call_writeToFileCompletion(NSURL arg0, NSError arg1) {
-                if (ErrorHandler.handleDownloadError(arg1, callback)) return;
-                File file = new File(arg0.path());
-                callback.onSuccess(file);
+            public void accept(FuturePromise<byte[]> promise) {
+                downloadProcessor.processDownload(firStorage(), path, bytesLimit, promise);
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Promise<FileHandle> download(final String path, final FileHandle targetFile) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileHandle>>() {
+            @Override
+            public void accept(FuturePromise<FileHandle> promise) {
+                downloadProcessor.processDownload(firStorage(), path, targetFile, promise);
             }
         });
     }
@@ -143,7 +102,7 @@ public class Storage implements StorageDistribution {
                 firStorage().child(path).deleteWithCompletion(new FIRStorageReference.Block_deleteWithCompletion() {
                     @Override
                     public void call_deleteWithCompletion(NSError arg0) {
-                        if (ErrorHandler.handleDeleteError(arg0, voidFuturePromise)) return;
+                        if (ErrorHandler.handleError(arg0, voidFuturePromise)) return;
                         voidFuturePromise.doComplete(null);
                     }
                 });
@@ -168,41 +127,4 @@ public class Storage implements StorageDistribution {
             firStorage = FIRStorage.storage().reference();
         return firStorage;
     }
-
-    /**
-     * Transforms {@code FIRStorageMetadata} to {@code FileMetadata}.
-     * <p>
-     * Transformation is needed because of need of shared code between modules.
-     *
-     * @param firMetadata FIRStorageMetadata that you want to wrap by {@link FileMetadata}
-     * @return FileMetadata created of base of given {@code firMetadata}, not null.
-     */
-    private FileMetadata buildMetaData(final FIRStorageMetadata firMetadata) {
-        // UpdateTimeMillis is specified in seconds so have to multiply it by 1000.
-        /** https://developer.apple.com/documentation/foundation/timeinterval */
-        FIRStorageMetadata m = FIRStorageMetadata.alloc().init();
-        //  TODO - missing md5Hash
-        return new FileMetadata.Builder()
-                .setName(firMetadata.name())
-                .setUpdatedTimeMillis((long) (firMetadata.updated().timeIntervalSince1970() * 1000L))
-                .setSizeBytes(firMetadata.size())
-                .setPath(firMetadata.path())
-                .setCreationTimeMillis((long) (firMetadata.timeCreated().timeIntervalSince1970() * 1000L))
-                .setDownloadUrl(new DownloadUrl(new Consumer<Consumer<String>>() {
-                    @Override
-                    public void accept(final Consumer<String> urlConsumer) {
-                        firStorage().child(firMetadata.path()).downloadURLWithCompletion(new FIRStorageReference.Block_downloadURLWithCompletion() {
-                            @Override
-                            public void call_downloadURLWithCompletion(NSURL arg0, NSError arg1) {
-                                if (arg1 != null)
-                                    throw new RuntimeException(arg1.localizedDescription());
-                                urlConsumer.accept(arg0.absoluteURL().absoluteString());
-                            }
-                        });
-                    }
-                }))
-                .setMd5Hash("")
-                .build();
-    }
-
 }

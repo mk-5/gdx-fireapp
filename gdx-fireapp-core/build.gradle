@@ -1,4 +1,5 @@
 apply plugin: "java"
+apply plugin: "groovy"
 apply plugin: "maven-publish"
 
 sourceCompatibility = 1.7
@@ -6,7 +7,8 @@ targetCompatibility = 1.7
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 sourceSets.main.java.srcDirs = ["src/"]
-sourceSets.test.java.srcDirs = ["tests/"]
+sourceSets.test.java.srcDirs = ["tests/java"]
+sourceSets.test.groovy.srcDirs = ["tests/groovy"]
 
 jar {
     from sourceSets.main.allSource
@@ -25,6 +27,9 @@ dependencies {
     testCompile libs.powermock.api
     testCompile libs.powermock.xstream
     testCompile libs.systemrules
+    testCompile libs.spock.groovyAll
+    testCompile libs.spock.spockCore
+    testCompile libs.spock.byteBuddy
 }
 
 eclipse.project {

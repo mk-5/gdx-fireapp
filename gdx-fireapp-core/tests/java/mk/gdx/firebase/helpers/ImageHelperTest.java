@@ -27,7 +27,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
@@ -65,9 +64,10 @@ public class ImageHelperTest {
         // Given
         Consumer consumer = Mockito.mock(Consumer.class);
         byte[] bytes = {1, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+        ImageHelper imageHelper = new ImageHelper();
 
         // When
-        TextureRegion textureRegion = ImageHelper.createTextureFromBytes(bytes);
+        TextureRegion textureRegion = imageHelper.createTextureFromBytes(bytes);
 
         // Then
         Assert.assertNotNull(textureRegion);
@@ -79,9 +79,10 @@ public class ImageHelperTest {
         // Given
         Consumer consumer = Mockito.mock(Consumer.class);
         byte[] bytes = {1, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+        ImageHelper imageHelper = new ImageHelper();
 
         // When
-        ImageHelper.createTextureFromBytes(bytes, consumer);
+        imageHelper.createTextureFromBytes(bytes, consumer);
 
         // Then
         Mockito.verify(consumer).accept(Mockito.any());

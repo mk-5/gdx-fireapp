@@ -21,15 +21,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Base64Coder;
 
-import java.io.File;
-
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.html.firebase.ScriptRunner;
 import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
+import mk.gdx.firebase.storage.FileMetadata;
 
 /**
  * GWT Firebase storage api.
@@ -43,25 +40,29 @@ public class Storage implements StorageDistribution {
     /**
      * Not supported in WEB api - you do not have access to file system.
      *
-     * @param file     Source file
-     * @param path     Path
-     * @param callback Callback
+     * @param file Source file
+     * @param path Path
      */
     @Override
-    public void upload(FileHandle file, String path, UploadCallback callback) {
+    public Promise<FileMetadata> upload(FileHandle file, String path) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
-        // TODO - uploading internal files?
+        return new FuturePromise<>();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void upload(final byte[] data, final String path, final UploadCallback callback) {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
+    public Promise<FileMetadata> upload(final byte[] data, final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
-            public void run() {
-                StorageJS.upload(scriptBucketUrl, path, new String(Base64Coder.encode(data)), callback);
+            public void accept(final FuturePromise<FileMetadata> promise) {
+                ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
+                    @Override
+                    public void run() {
+                        StorageJS.upload(scriptBucketUrl, path, new String(Base64Coder.encode(data)), promise);
+                    }
+                });
             }
         });
     }
@@ -70,11 +71,16 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(final String path, long bytesLimit, final DownloadCallback<byte[]> callback) {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
+    public Promise<byte[]> download(final String path, long bytesLimit) {
+        return FuturePromise.of(new Consumer<FuturePromise<byte[]>>() {
             @Override
-            public void run() {
-                StorageJS.download(scriptBucketUrl, path, new UrlDownloadCallback(callback));
+            public void accept(final FuturePromise<byte[]> futurePromise) {
+                ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
+                    @Override
+                    public void run() {
+                        StorageJS.download(scriptBucketUrl, path, new UrlDownloader(futurePromise));
+                    }
+                });
             }
         });
     }
@@ -84,11 +90,11 @@ public class Storage implements StorageDistribution {
      *
      * @param path       Path
      * @param targetFile Target file, if null the temporary file will be created.
-     * @param callback   Callback
      */
     @Override
-    public void download(String path, File targetFile, DownloadCallback<File> callback) {
+    public Promise<FileHandle> download(String path, FileHandle targetFile) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
+        return new FuturePromise<>();
     }
 
     /**

@@ -34,11 +34,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
-import mk.gdx.firebase.callbacks.DownloadCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 
 @PrepareForTest({XMLHttpRequest.class, TypedArrays.class})
-public class UrlDownloadCallbackTest {
+public class UrlDownloaderTest {
 
     private XMLHttpRequest xmlHttpRequest;
 
@@ -46,14 +46,14 @@ public class UrlDownloadCallbackTest {
     public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         PowerMockito.mockStatic(XMLHttpRequest.class);
         PowerMockito.mockStatic(TypedArrays.class);
         xmlHttpRequest = PowerMockito.mock(XMLHttpRequest.class);
         Mockito.when(XMLHttpRequest.create()).thenReturn(xmlHttpRequest);
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((ReadyStateChangeHandler) invocation.getArgument(0)).onReadyStateChange(xmlHttpRequest);
                 return null;
             }
@@ -68,46 +68,46 @@ public class UrlDownloadCallbackTest {
     public void onSuccess() {
         // Given
         String downloadUrl = "http://url.with.token.com?token=abc";
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
-        UrlDownloadCallback urlDownloadCallback = new UrlDownloadCallback(callback);
+        FuturePromise futurePromise = Mockito.spy(FuturePromise.class);
+        UrlDownloader urlDownloader = new UrlDownloader(futurePromise);
         Mockito.when(xmlHttpRequest.getReadyState()).thenReturn(XMLHttpRequest.DONE);
         Mockito.when(xmlHttpRequest.getStatus()).thenReturn(200);
 
         // When
-        urlDownloadCallback.onSuccess(downloadUrl);
+        urlDownloader.onSuccess(downloadUrl);
 
         // Then
         Mockito.verify(xmlHttpRequest, VerificationModeFactory.times(1)).open(Mockito.eq("GET"), Mockito.eq(downloadUrl));
         Mockito.verify(xmlHttpRequest, VerificationModeFactory.times(1)).setRequestHeader(Mockito.eq("Authorization"), Mockito.eq("Bearer abc"));
         Mockito.verify(xmlHttpRequest, VerificationModeFactory.times(1)).send();
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onSuccess(Mockito.any(byte[].class));
+        Mockito.verify(futurePromise, VerificationModeFactory.times(1)).doComplete(Mockito.any(byte[].class));
     }
 
     @Test
     public void onSuccess_fail() {
         // Given
         String downloadUrl = "http://url.with.token.com?token=abc";
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
-        UrlDownloadCallback urlDownloadCallback = new UrlDownloadCallback(callback);
+        FuturePromise futurePromise = Mockito.spy(FuturePromise.class);
+        UrlDownloader urlDownloader = new UrlDownloader(futurePromise);
         Mockito.when(xmlHttpRequest.getReadyState()).thenReturn(XMLHttpRequest.DONE);
         Mockito.when(xmlHttpRequest.getStatus()).thenReturn(501);
 
         // When
-        urlDownloadCallback.onSuccess(downloadUrl);
+        urlDownloader.onSuccess(downloadUrl);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.any(Exception.class));
+        Mockito.verify(futurePromise, VerificationModeFactory.times(1)).doFail(Mockito.any(Exception.class));
     }
 
     @Test(expected = IllegalStateException.class)
     public void onSuccess_wrongUrl() {
         // Given
         String downloadUrl = "http://url.without.token.com";
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
-        UrlDownloadCallback urlDownloadCallback = new UrlDownloadCallback(callback);
+        FuturePromise futurePromise = Mockito.spy(FuturePromise.class);
+        UrlDownloader urlDownloader = new UrlDownloader(futurePromise);
 
         // When
-        urlDownloadCallback.onSuccess(downloadUrl);
+        urlDownloader.onSuccess(downloadUrl);
 
         // Then
         Assert.fail();
@@ -116,14 +116,14 @@ public class UrlDownloadCallbackTest {
     @Test
     public void onFail() {
         // Given
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
-        UrlDownloadCallback urlDownloadCallback = new UrlDownloadCallback(callback);
+        FuturePromise futurePromise = Mockito.spy(FuturePromise.class);
+        UrlDownloader urlDownloader = new UrlDownloader(futurePromise);
         Exception exception = Mockito.mock(Exception.class);
 
         // When
-        urlDownloadCallback.onFail(exception);
+        urlDownloader.onFail(exception);
 
         // Then
-        Mockito.verify(callback, VerificationModeFactory.times(1)).onFail(Mockito.refEq(exception));
+        Mockito.verify(futurePromise, VerificationModeFactory.times(1)).doFail(Mockito.refEq(exception));
     }
 }

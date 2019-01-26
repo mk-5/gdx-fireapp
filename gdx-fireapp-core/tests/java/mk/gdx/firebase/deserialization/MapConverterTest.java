@@ -17,7 +17,6 @@
 package mk.gdx.firebase.deserialization;
 
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +29,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +42,7 @@ public class MapConverterTest {
     public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         PowerMockito.mockStatic(GdxFIRLogger.class);
     }
 

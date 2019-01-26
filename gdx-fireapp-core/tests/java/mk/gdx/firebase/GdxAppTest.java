@@ -17,15 +17,12 @@
 package mk.gdx.firebase;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class GdxAppTest {

@@ -10,6 +10,10 @@ ext {
     systemRulesVersion = '1.18.0'
     gwtMockitoVersion = '1.1.8'
     crashlyticsVersion = '2.9.5'
+    playServicesVersion = '16.0.0'
+    spockVersion = '1.2-groovy-2.4'
+    groovyVersion = '2.4.15'
+    byteBuddyVersion = '1.8.21'
 }
 
 
@@ -49,5 +53,12 @@ libs.crashlytics = "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
 
 /* Play services */
 libs.playservices = [
-        auth: "com.google.android.gms:play-services-auth:16.0.0"
+        auth: "com.google.android.gms:play-services-auth:$playServicesVersion"
+]
+
+/* Spock */
+libs.spock = [
+        groovyAll: "org.codehaus.groovy:groovy-all:$groovyVersion",
+        spockCore: "org.spockframework:spock-core:$spockVersion",
+        byteBuddy: "net.bytebuddy:byte-buddy:$byteBuddyVersion"
 ]

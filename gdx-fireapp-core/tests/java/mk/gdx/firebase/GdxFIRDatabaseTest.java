@@ -31,7 +31,7 @@ public class GdxFIRDatabaseTest extends GdxAppTest {
     }
 
     @Test
-    public void instance() throws Exception {
+    public void instance() {
         assertNotNull(GdxFIRDatabase.instance());
     }
 

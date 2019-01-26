@@ -17,8 +17,6 @@
 package mk.gdx.firebase.ios.storage;
 
 import apple.foundation.NSError;
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.promises.FuturePromise;
 
 /**
@@ -29,25 +27,9 @@ import mk.gdx.firebase.promises.FuturePromise;
  * <li>{@link FuturePromise}
  */
 class ErrorHandler {
-    static boolean handleDeleteError(NSError error, FuturePromise promise) {
+    static boolean handleError(NSError error, FuturePromise promise) {
         if (error != null) {
             promise.doFail(new Exception(error.localizedDescription()));
-            return true;
-        }
-        return false;
-    }
-
-    static boolean handleUploadError(NSError error, UploadCallback callback) {
-        if (error != null) {
-            callback.onFail(new RuntimeException(error.localizedDescription()));
-            return true;
-        }
-        return false;
-    }
-
-    static boolean handleDownloadError(NSError error, DownloadCallback callback) {
-        if (error != null) {
-            callback.onFail(new RuntimeException(error.localizedDescription()));
             return true;
         }
         return false;

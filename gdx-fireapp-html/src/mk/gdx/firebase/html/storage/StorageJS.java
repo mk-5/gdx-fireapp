@@ -16,7 +16,6 @@
 
 package mk.gdx.firebase.html.storage;
 
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.storage.FileMetadata;
 
@@ -34,14 +33,14 @@ class StorageJS {
      *
      * @param bucketUrl        Bucket url, may be null
      * @param refPath          Storage reference path, not null
-     * @param downloadCallback Callback, not null
+     * @param urlDownloader Callback, not null
      */
-    static native void download(String bucketUrl, String refPath, UrlDownloadCallback downloadCallback) /*-{
+    static native void download(String bucketUrl, String refPath, UrlDownloader urlDownloader) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).getDownloadURL().then(function(url){
-             downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onSuccess(Ljava/lang/String;)(url);
+             urlDownloader.@mk.gdx.firebase.html.storage.UrlDownloader::onSuccess(Ljava/lang/String;)(url);
         })['catch'](function(error){
-            downloadCallback.@mk.gdx.firebase.html.storage.UrlDownloadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
+            urlDownloader.@mk.gdx.firebase.html.storage.UrlDownloader::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
         });
     }-*/;
 
@@ -69,14 +68,16 @@ class StorageJS {
      * @param bucketUrl        Bucket url, may be null
      * @param refPath          Storage reference path, not null
      * @param base64DataString Base64 data representation, not null
-     * @param uploadCallback   Callback, not null
+     * @param promise          Promise, not null
      */
-    static native void upload(String bucketUrl, String refPath, String base64DataString, UploadCallback uploadCallback) /*-{
+    static native void upload(String bucketUrl, String refPath, String base64DataString, FuturePromise<FileMetadata> promise) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).putString(base64DataString,'base64').then(function(snapshot){
-            @mk.gdx.firebase.html.storage.StorageJS::callUploadCallback(Lmk/gdx/firebase/html/storage/UploadTaskSnapshot;Lmk/gdx/firebase/callbacks/UploadCallback;)(snapshot, uploadCallback);
+            @mk.gdx.firebase.html.storage.StorageJS::callUploadPromise(Lmk/gdx/firebase/html/storage/UploadTaskSnapshot;Lmk/gdx/firebase/promises/FuturePromise;)(snapshot, promise);
         })['catch'](function(error){
-            uploadCallback.@mk.gdx.firebase.callbacks.UploadCallback::onFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)("Error: " + error.message));
+             promise.@mk.gdx.firebase.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
+                @java.lang.Exception::new(Ljava/lang/String;)(error.message)
+            );
         });
     }-*/;
 
@@ -84,10 +85,10 @@ class StorageJS {
      * Creates FileMetaData from {@code snapshot} and calls callback.
      *
      * @param snapshot Snapshot from firebase, not null
-     * @param callback Upload callback to cal, not null
+     * @param promise  Upload promise, not null
      */
-    static void callUploadCallback(UploadTaskSnapshot snapshot, UploadCallback callback) {
+    static void callUploadPromise(UploadTaskSnapshot snapshot, FuturePromise<FileMetadata> promise) {
         FileMetadata fileMetadata = SnapshotFileMetaDataResolver.resolve(snapshot);
-        callback.onSuccess(fileMetadata);
+        promise.doComplete(fileMetadata);
     }
 }

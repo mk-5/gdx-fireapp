@@ -16,19 +16,12 @@
 
 package mk.gdx.firebase;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import java.io.File;
-
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
-import mk.gdx.firebase.functional.Consumer;
-import mk.gdx.firebase.helpers.ImageHelper;
 import mk.gdx.firebase.promises.Promise;
+import mk.gdx.firebase.storage.FileMetadata;
 
 /**
  * Gets access to Firebase Analytics API in multi-modules.
@@ -70,32 +63,32 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public void upload(FileHandle file, String path, UploadCallback callback) {
-        platformObject.upload(file, path, callback);
+    public Promise<FileMetadata> upload(FileHandle file, String path) {
+        return platformObject.upload(file, path);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void upload(byte[] data, String path, UploadCallback callback) {
-        platformObject.upload(data, path, callback);
+    public Promise<FileMetadata> upload(byte[] data, String path) {
+        return platformObject.upload(data, path);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, long bytesLimit, DownloadCallback<byte[]> callback) {
-        platformObject.download(path, bytesLimit, callback);
+    public Promise<byte[]> download(String path, long bytesLimit) {
+        return platformObject.download(path, bytesLimit);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, DownloadCallback<File> callback) {
-        platformObject.download(path, targetFile, callback);
+    public Promise<FileHandle> download(String path, FileHandle targetFile) {
+        return platformObject.download(path, targetFile);
     }
 
     /**
@@ -126,36 +119,10 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * }
      * <p>
      *
-     * @param path     Path in FirebaseStorage bucket.
-     * @param callback This callback will be call after image is downloaded.
+     * @param path Path in FirebaseStorage bucket.
      */
-    public void downloadImage(String path, final DownloadCallback<TextureRegion> callback) {
-        download(path, Long.MAX_VALUE, new DownloadCallback<byte[]>() {
-            @Override
-            public void onSuccess(final byte[] result) {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (Gdx.app.getType() != Application.ApplicationType.WebGL) {
-                            TextureRegion region = ImageHelper.createTextureFromBytes(result);
-                            callback.onSuccess(region);
-                        } else {
-                            ImageHelper.createTextureFromBytes(result, new Consumer<TextureRegion>() {
-                                @Override
-                                public void accept(TextureRegion textureRegion) {
-                                    callback.onSuccess(textureRegion);
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onFail(Exception e) {
-                callback.onFail(e);
-            }
-        });
+    public Promise<TextureRegion> downloadImage(String path) {
+        return new TextureRegionDownloader(path).download();
     }
 
 

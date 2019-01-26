@@ -22,31 +22,29 @@ import com.google.gwt.typedarrays.shared.Uint8Array;
 import com.google.gwt.xhr.client.ReadyStateChangeHandler;
 import com.google.gwt.xhr.client.XMLHttpRequest;
 
-import mk.gdx.firebase.callbacks.DownloadCallback;
+import mk.gdx.firebase.promises.FuturePromise;
 
 /**
  * Provides access to download url of firebase storage file.
  */
-public class UrlDownloadCallback implements DownloadCallback<String> {
+class UrlDownloader {
 
-    private DownloadCallback originalCallback;
+    private final FuturePromise<byte[]> promise;
 
-    public UrlDownloadCallback(DownloadCallback originalCallback) {
-        this.originalCallback = originalCallback;
+    UrlDownloader(FuturePromise<byte[]> promise) {
+        this.promise = promise;
     }
 
-    @Override
     @SuppressWarnings("unchecked")
-    public void onSuccess(String downloadUrl) {
+    void onSuccess(String downloadUrl) {
         xmlHttpRequest(downloadUrl);
     }
 
     /**
      * @param e Exception describes what was wrong during authorization.
      */
-    @Override
-    public void onFail(Exception e) {
-        originalCallback.onFail(e);
+    void onFail(Exception e) {
+        promise.doFail(e);
     }
 
     @SuppressWarnings("unchecked")
@@ -67,9 +65,9 @@ public class UrlDownloadCallback implements DownloadCallback<String> {
                     byte[] buffer = new byte[array.length()];
                     for (int i = 0; i < array.length(); i++)
                         buffer[i] = (byte) array.get(i);
-                    originalCallback.onSuccess(buffer);
+                    promise.doComplete(buffer);
                 } else if (xhr.getReadyState() == XMLHttpRequest.DONE) {
-                    originalCallback.onFail(new Exception("XHR error, status code: " + xhr.getStatus()));
+                    promise.doFail(new Exception("XHR error, status code: " + xhr.getStatus()));
                 }
             }
         });

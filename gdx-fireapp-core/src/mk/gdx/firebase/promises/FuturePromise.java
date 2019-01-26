@@ -44,6 +44,10 @@ public class FuturePromise<T> implements Promise<T> {
     private String failReason;
     private Throwable failThrowable;
 
+    public FuturePromise() {
+        state = INIT;
+    }
+
     /**
      * Sets then consumer.
      *
@@ -51,8 +55,9 @@ public class FuturePromise<T> implements Promise<T> {
      */
     @Override
     public synchronized FuturePromise<T> then(Consumer<T> consumer) {
+        if (consumer == null) throw new IllegalArgumentException();
         thenConsumer = consumer;
-        if (thenConsumer != null && state == COMPLETE_LAZY) {
+        if (state == COMPLETE_LAZY) {
             thenConsumer.accept(completeResult);
             state = COMPLETE;
             completeResult = null;
@@ -67,8 +72,9 @@ public class FuturePromise<T> implements Promise<T> {
      */
     @Override
     public synchronized FuturePromise<T> fail(BiConsumer<String, ? super Throwable> consumer) {
+        if (consumer == null) throw new IllegalArgumentException();
         failConsumer = consumer;
-        if (failConsumer != null && state == FAIL_LAZY) {
+        if (state == FAIL_LAZY) {
             failConsumer.accept(failReason, failThrowable);
             state = FAIL;
             failReason = null;
@@ -84,12 +90,21 @@ public class FuturePromise<T> implements Promise<T> {
      */
     @Override
     public synchronized FuturePromise<T> always(Runnable runnable) {
+        if (runnable == null) throw new IllegalArgumentException();
         this.alwaysRunnable = runnable;
         return this;
     }
 
-    public synchronized FuturePromise<T> with(FuturePromise<T> promise) {
-        thenPromises.add(promise);
+    public synchronized FuturePromise<T> then(FuturePromise<T> promise) {
+        if (promise == null) throw new IllegalArgumentException();
+        // TODO - multiple lazy promises? ... maybe should be only one
+        if (state == COMPLETE_LAZY) {
+            promise.doComplete(completeResult);
+            state = COMPLETE;
+            completeResult = null;
+        } else {
+            thenPromises.add(promise);
+        }
         return this;
     }
 
@@ -97,13 +112,9 @@ public class FuturePromise<T> implements Promise<T> {
         if (state != INIT) {
             return;
         }
-
-        if (thenPromises.size > 0) {
-            for (FuturePromise<T> promise : thenPromises) {
-                promise.doComplete(result);
-            }
+        for (FuturePromise<T> promise : thenPromises) {
+            promise.doComplete(result);
         }
-
         if (thenConsumer != null) {
             thenConsumer.accept(result);
             state = COMPLETE;
@@ -119,11 +130,6 @@ public class FuturePromise<T> implements Promise<T> {
     public synchronized void doFail(String reason, Throwable throwable) {
         if (state != INIT) {
             return;
-        }
-        if (thenPromises.size > 0) {
-            for (FuturePromise<T> promise : thenPromises) {
-                promise.doFail(reason, throwable);
-            }
         }
         if (failConsumer != null) {
             failConsumer.accept(reason, throwable);

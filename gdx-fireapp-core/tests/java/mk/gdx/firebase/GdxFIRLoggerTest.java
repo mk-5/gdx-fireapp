@@ -48,14 +48,14 @@ public class GdxFIRLoggerTest extends GdxAppTest {
         ApplicationLogger applicationLogger = Mockito.mock(ApplicationLogger.class);
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 System.out.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
                 return null;
             }
         }).when(applicationLogger).log(Mockito.anyString(), Mockito.anyString());
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 System.out.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
                 ((Throwable) invocation.getArgument(2)).printStackTrace(System.out);
                 return null;
@@ -63,14 +63,14 @@ public class GdxFIRLoggerTest extends GdxAppTest {
         }).when(applicationLogger).log(Mockito.anyString(), Mockito.anyString(), Mockito.any(Throwable.class));
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 System.err.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
                 return null;
             }
         }).when(applicationLogger).error(Mockito.anyString(), Mockito.anyString());
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 System.err.println(invocation.getArgument(0) + ": " + invocation.getArgument(1));
                 ((Throwable) invocation.getArgument(2)).printStackTrace(System.err);
                 return null;
@@ -79,28 +79,28 @@ public class GdxFIRLoggerTest extends GdxAppTest {
         Mockito.when(Gdx.app.getApplicationLogger()).thenReturn(applicationLogger);
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Application) invocation.getMock()).getApplicationLogger().log((String) invocation.getArgument(0), (String) invocation.getArgument(1));
                 return null;
             }
         }).when(Gdx.app).log(Mockito.anyString(), Mockito.anyString());
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Application) invocation.getMock()).getApplicationLogger().log((String) invocation.getArgument(0), (String) invocation.getArgument(1), (Throwable) invocation.getArgument(2));
                 return null;
             }
         }).when(Gdx.app).log(Mockito.anyString(), Mockito.anyString(), Mockito.any(Throwable.class));
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Application) invocation.getMock()).getApplicationLogger().error((String) invocation.getArgument(0), (String) invocation.getArgument(1));
                 return null;
             }
         }).when(Gdx.app).error(Mockito.anyString(), Mockito.anyString());
         Mockito.doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Application) invocation.getMock()).getApplicationLogger().error((String) invocation.getArgument(0), (String) invocation.getArgument(1), (Throwable) invocation.getArgument(2));
                 return null;
             }

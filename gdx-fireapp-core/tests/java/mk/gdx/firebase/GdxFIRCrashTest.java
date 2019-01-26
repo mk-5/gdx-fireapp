@@ -22,7 +22,7 @@ public class GdxFIRCrashTest extends GdxAppTest {
     }
 
     @Test
-    public void instance() throws Exception {
+    public void instance() {
         assertNotNull(GdxFIRCrash.instance());
     }
 

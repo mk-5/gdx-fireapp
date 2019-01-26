@@ -40,10 +40,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import java.io.File;
 
 import mk.gdx.firebase.android.AndroidContextTest;
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
-import mk.gdx.firebase.functional.Consumer;
-import mk.gdx.firebase.storage.FileMetadata;
+
+import static org.mockito.Mockito.when;
 
 @PrepareForTest({GdxNativesLoader.class, FirebaseStorage.class})
 public class StorageTest extends AndroidContextTest {
@@ -57,10 +55,10 @@ public class StorageTest extends AndroidContextTest {
         PowerMockito.mockStatic(FirebaseStorage.class);
         firebaseStorage = Mockito.mock(FirebaseStorage.class);
         storageReference = Mockito.mock(StorageReference.class);
-        Mockito.when(FirebaseStorage.getInstance()).thenReturn(firebaseStorage);
-        Mockito.when(firebaseStorage.getReference()).thenReturn(storageReference);
-        Mockito.when(firebaseStorage.getReference().child(Mockito.anyString())).thenReturn(storageReference);
-        Mockito.when(firebaseStorage.getReference(Mockito.nullable(String.class))).thenReturn(storageReference);
+        when(FirebaseStorage.getInstance()).thenReturn(firebaseStorage);
+        when(firebaseStorage.getReference()).thenReturn(storageReference);
+        when(firebaseStorage.getReference().child(Mockito.anyString())).thenReturn(storageReference);
+        when(firebaseStorage.getReference(Mockito.nullable(String.class))).thenReturn(storageReference);
     }
 
     @Test
@@ -69,37 +67,24 @@ public class StorageTest extends AndroidContextTest {
         Storage storage = new Storage();
         FileHandle fileHandle = Mockito.mock(FileHandle.class);
         File file = Mockito.mock(File.class);
-        Mockito.when(fileHandle.file()).thenReturn(file);
-        UploadCallback callback = Mockito.mock(UploadCallback.class);
-        Mockito.doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) {
-                ((FileMetadata) invocation.getArgument(0)).getDownloadUrl().getUrl(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-
-                    }
-                });
-                return null;
-            }
-        }).when(callback).onSuccess(Mockito.any(FileMetadata.class));
+        when(fileHandle.file()).thenReturn(file);
         final UploadTask uploadTask = Mockito.mock(UploadTask.class);
         final Task task = Mockito.mock(Task.class);
         final UploadTask.TaskSnapshot taskSnapshot = Mockito.mock(UploadTask.TaskSnapshot.class);
         StorageMetadata storageMetadata = Mockito.mock(StorageMetadata.class);
-        Mockito.when(taskSnapshot.getMetadata()).thenReturn(storageMetadata);
-        Mockito.when(storageMetadata.getPath()).thenReturn("test");
-        Mockito.when(storageReference.putFile(Mockito.any(Uri.class))).thenReturn(uploadTask);
-        Mockito.when(storageReference.getDownloadUrl()).thenReturn(task);
-        Mockito.when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
+        when(taskSnapshot.getMetadata()).thenReturn(storageMetadata);
+        when(storageMetadata.getPath()).thenReturn("test");
+        when(storageReference.putFile(Mockito.any(Uri.class))).thenReturn(uploadTask);
+        when(storageReference.getDownloadUrl()).thenReturn(task);
+        when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnSuccessListener) invocation.getArgument(0)).onSuccess(Mockito.mock(Uri.class));
                 return null;
             }
         });
-        Mockito.when(uploadTask.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(uploadTask);
-        Mockito.when(uploadTask.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).thenAnswer(new Answer<Object>() {
+        when(uploadTask.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(uploadTask);
+        when(uploadTask.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).thenAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnSuccessListener) invocation.getArgument(0)).onSuccess(taskSnapshot);
@@ -108,7 +93,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.upload(fileHandle, "test", callback);
+        storage.upload(fileHandle, "test");
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).putFile(Mockito.any(Uri.class));
@@ -121,11 +106,10 @@ public class StorageTest extends AndroidContextTest {
         // Given
         Storage storage = new Storage();
         byte[] data = new byte[]{0, 0, 0, 1, 1, 1};
-        UploadCallback callback = Mockito.mock(UploadCallback.class);
         final UploadTask uploadTask = Mockito.mock(UploadTask.class);
-        Mockito.when(storageReference.putBytes(Mockito.any(byte[].class))).thenReturn(uploadTask);
-        Mockito.when(uploadTask.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(uploadTask);
-        Mockito.when(uploadTask.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
+        when(storageReference.putBytes(Mockito.any(byte[].class))).thenReturn(uploadTask);
+        when(uploadTask.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(uploadTask);
+        when(uploadTask.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnSuccessListener) invocation.getArgument(0)).onSuccess(Mockito.mock(UploadTask.TaskSnapshot.class));
@@ -134,7 +118,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.upload(data, "test", callback);
+        storage.upload(data, "test");
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).putBytes(Mockito.any(byte[].class));
@@ -146,12 +130,12 @@ public class StorageTest extends AndroidContextTest {
     public void download_file() {
         // Given
         Storage storage = new Storage();
-        File file = Mockito.mock(File.class);
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        FileHandle file = Mockito.mock(FileHandle.class);
+        when(file.file()).thenReturn(Mockito.mock(File.class));
         FileDownloadTask task = Mockito.mock(FileDownloadTask.class);
-        Mockito.when(storageReference.getFile(Mockito.any(File.class))).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
-        Mockito.when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
+        when(storageReference.getFile(Mockito.any(File.class))).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
+        when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnSuccessListener) invocation.getArgument(0)).onSuccess(Mockito.mock(FileDownloadTask.TaskSnapshot.class));
@@ -160,7 +144,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.download("test", file, callback);
+        storage.download("test", file);
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getFile(Mockito.any(File.class));
@@ -172,11 +156,11 @@ public class StorageTest extends AndroidContextTest {
     public void download_file_failure() {
         // Given
         Storage storage = new Storage();
-        File file = Mockito.mock(File.class);
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        FileHandle file = Mockito.mock(FileHandle.class);
+        when(file.file()).thenReturn(Mockito.mock(File.class));
         final FileDownloadTask task = Mockito.mock(FileDownloadTask.class);
-        Mockito.when(storageReference.getFile(Mockito.any(File.class))).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).then(new Answer<Object>() {
+        when(storageReference.getFile(Mockito.any(File.class))).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnFailureListener) invocation.getArgument(0)).onFailure(new Exception());
@@ -185,7 +169,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.download("test", file, callback);
+        storage.download("test", file);
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getFile(Mockito.any(File.class));
@@ -198,14 +182,13 @@ public class StorageTest extends AndroidContextTest {
         // Given
         Storage storage = new Storage();
         PowerMockito.mockStatic(File.class);
-        File file = null;
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
+        FileHandle file = null;
         FileDownloadTask task = Mockito.mock(FileDownloadTask.class);
-        Mockito.when(storageReference.getFile(Mockito.any(File.class))).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
+        when(storageReference.getFile(Mockito.any(File.class))).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
 
         // When
-        storage.download("test", file, callback);
+        storage.download("test", file);
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getFile(Mockito.any(File.class));
@@ -217,11 +200,10 @@ public class StorageTest extends AndroidContextTest {
     public void download1_path() {
         // Given
         Storage storage = new Storage();
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
         final Task task = Mockito.mock(Task.class);
-        Mockito.when(storageReference.getBytes(Mockito.anyLong())).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
-        Mockito.when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
+        when(storageReference.getBytes(Mockito.anyLong())).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
+        when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnSuccessListener) invocation.getArgument(0)).onSuccess(new byte[0]);
@@ -231,7 +213,7 @@ public class StorageTest extends AndroidContextTest {
         long byteLimit = 1000;
 
         // When
-        storage.download("test", byteLimit, callback);
+        storage.download("test", byteLimit);
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getBytes(Mockito.anyLong());
@@ -243,10 +225,9 @@ public class StorageTest extends AndroidContextTest {
     public void download1_path_failure() {
         // Given
         Storage storage = new Storage();
-        DownloadCallback callback = Mockito.mock(DownloadCallback.class);
         final Task task = Mockito.mock(Task.class);
-        Mockito.when(storageReference.getBytes(Mockito.anyLong())).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).then(new Answer<Object>() {
+        when(storageReference.getBytes(Mockito.anyLong())).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnFailureListener) invocation.getArgument(0)).onFailure(new Exception());
@@ -256,7 +237,7 @@ public class StorageTest extends AndroidContextTest {
         long byteLimit = 1000;
 
         // When
-        storage.download("test", byteLimit, callback);
+        storage.download("test", byteLimit);
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getBytes(Mockito.anyLong());
@@ -269,9 +250,9 @@ public class StorageTest extends AndroidContextTest {
         // Given
         Storage storage = new Storage();
         final Task task = Mockito.mock(Task.class);
-        Mockito.when(storageReference.delete()).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
-        Mockito.when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
+        when(storageReference.delete()).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
+        when(task.addOnSuccessListener(Mockito.any(OnSuccessListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnSuccessListener) invocation.getArgument(0)).onSuccess(null);
@@ -294,8 +275,8 @@ public class StorageTest extends AndroidContextTest {
         // Given
         Storage storage = new Storage();
         final Task task = Mockito.mock(Task.class);
-        Mockito.when(storageReference.delete()).thenReturn(task);
-        Mockito.when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).then(new Answer<Object>() {
+        when(storageReference.delete()).thenReturn(task);
+        when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).then(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 ((OnFailureListener) invocation.getArgument(0)).onFailure(new Exception());

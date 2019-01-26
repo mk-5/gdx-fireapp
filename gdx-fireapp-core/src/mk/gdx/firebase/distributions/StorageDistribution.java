@@ -18,11 +18,8 @@ package mk.gdx.firebase.distributions;
 
 import com.badlogic.gdx.files.FileHandle;
 
-import java.io.File;
-
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.promises.Promise;
+import mk.gdx.firebase.storage.FileMetadata;
 
 /**
  * Provides access to Firebase Storage methods.
@@ -32,38 +29,34 @@ public interface StorageDistribution {
     /**
      * Uploads file data to storage.
      *
-     * @param file     File you want to upload
-     * @param path     Target path at Firebase storage
-     * @param callback Callback
+     * @param file File you want to upload
+     * @param path Target path at Firebase storage
      */
-    void upload(FileHandle file, String path, UploadCallback callback);
+    Promise<FileMetadata> upload(FileHandle file, String path);
 
     /**
      * Uploads byte array data to storage.
      *
-     * @param data     Data to upload
-     * @param path     Target pat at Firebase storage
-     * @param callback Callback
+     * @param data Data to upload
+     * @param path Target pat at Firebase storage
      */
-    void upload(byte[] data, String path, UploadCallback callback);
+    Promise<FileMetadata> upload(byte[] data, String path);
 
     /**
      * Downloads data as byte array.
      *
      * @param path       Storage path
      * @param bytesLimit Bytes size
-     * @param callback   Callback
      */
-    void download(String path, long bytesLimit, DownloadCallback<byte[]> callback);
+    Promise<byte[]> download(String path, long bytesLimit);
 
     /**
      * Downloads data to file given by {@code targetFile}.
      *
      * @param path       Path
-     * @param targetFile Target file, if null the temporary file will be created.
-     * @param callback   Callback
+     * @param targetFile Target file, if null the temporary file will be create
      */
-    void download(String path, File targetFile, DownloadCallback<File> callback);
+    Promise<FileHandle> download(String path, FileHandle targetFile);
 
 
     /**

@@ -39,7 +39,7 @@ public class GdxFIRGoogleAuthTest extends GdxAppTest {
     }
 
     @Test
-    public void instance() throws Exception {
+    public void instance() {
         GdxFIRAuth instance = GdxFIRAuth.instance();
         assertNotNull(instance);
         assertNotNull(instance.google());

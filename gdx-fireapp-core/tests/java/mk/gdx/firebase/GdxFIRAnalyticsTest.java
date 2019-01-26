@@ -26,7 +26,7 @@ public class GdxFIRAnalyticsTest extends GdxAppTest {
     }
 
     @Test
-    public void instance() throws Exception {
+    public void instance() {
         GdxFIRAnalytics instance = GdxFIRAnalytics.instance();
         assertNotNull(instance);
     }

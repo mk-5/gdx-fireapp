@@ -16,29 +16,18 @@
 
 package mk.gdx.firebase.android.storage;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
-
-import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.callbacks.DownloadCallback;
-import mk.gdx.firebase.callbacks.UploadCallback;
 import mk.gdx.firebase.distributions.StorageDistribution;
 import mk.gdx.firebase.functional.Consumer;
 import mk.gdx.firebase.promises.FuturePromise;
 import mk.gdx.firebase.promises.Promise;
-import mk.gdx.firebase.storage.DownloadUrl;
 import mk.gdx.firebase.storage.FileMetadata;
 
 /**
@@ -49,42 +38,18 @@ import mk.gdx.firebase.storage.FileMetadata;
 public class Storage implements StorageDistribution {
 
     private FirebaseStorage firebaseStorage;
+    private static final UploadProcessor uploadProcessor = new UploadProcessor();
+    private static final DownloadProcessor downloadProcessor = new DownloadProcessor();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void upload(FileHandle file, String path, UploadCallback callback) {
-        StorageReference dataRef = firebaseStorage().getReference().child(path);
-        UploadTask uploadTask = dataRef.putFile(Uri.fromFile(file.file()));
-        processUpload(uploadTask, callback);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void upload(byte[] data, String path, @NonNull final UploadCallback callback) {
-        StorageReference dataRef = firebaseStorage().getReference().child(path);
-        UploadTask uploadTask = dataRef.putBytes(data);
-        processUpload(uploadTask, callback);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void download(String path, long bytesLimit, @NonNull final DownloadCallback<byte[]> callback) {
-        StorageReference pathRef = firebaseStorage().getReference().child(path);
-        pathRef.getBytes(bytesLimit).addOnFailureListener(new OnFailureListener() {
+    public Promise<FileMetadata> upload(final FileHandle file, final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                callback.onFail(e);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                callback.onSuccess(bytes);
+            public void accept(FuturePromise<FileMetadata> promise) {
+                uploadProcessor.processUpload(firebaseStorage(), path, file, promise);
             }
         });
     }
@@ -93,29 +58,37 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public void download(String path, File targetFile, @NonNull final DownloadCallback<File> callback) {
-        StorageReference pathRef = firebaseStorage().getReference().child(path);
-        if (targetFile == null) {
-            try {
-                targetFile = File.createTempFile(UUID.randomUUID().toString(), "");
-            } catch (IOException e) {
-                GdxFIRLogger.error("Error while creating temporary file.", e);
-            }
-        }
-        if (targetFile == null)
-            throw new IllegalArgumentException("Target file is null and is unable to create temporary file.");
-        final File finalTargetFile = targetFile;
-        pathRef.getFile(targetFile)
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onFail(e);
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+    public Promise<FileMetadata> upload(final byte[] data, final String path) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+            public void accept(FuturePromise<FileMetadata> promise) {
+                uploadProcessor.processUpload(firebaseStorage(), path, data, promise);
+            }
+        });
+    }
 
-                callback.onSuccess(finalTargetFile);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Promise<byte[]> download(final String path, final long bytesLimit) {
+        return FuturePromise.of(new Consumer<FuturePromise<byte[]>>() {
+            @Override
+            public void accept(FuturePromise<byte[]> futurePromise) {
+                downloadProcessor.processDownload(firebaseStorage(), path, bytesLimit, futurePromise);
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Promise<FileHandle> download(final String path, final FileHandle targetFile) {
+        return FuturePromise.of(new Consumer<FuturePromise<FileHandle>>() {
+            @Override
+            public void accept(FuturePromise<FileHandle> fileHandleFuturePromise) {
+                downloadProcessor.processDownload(firebaseStorage(), path, targetFile, fileHandleFuturePromise);
             }
         });
     }
@@ -161,58 +134,4 @@ public class Storage implements StorageDistribution {
             firebaseStorage = FirebaseStorage.getInstance();
         return firebaseStorage;
     }
-
-    /**
-     * Add onFailure and onSuccess listeners to uploadTask.
-     *
-     * @param uploadTask Upload task which we want to deal with.
-     * @param callback   Callback which will be call from {@link UploadTask#addOnFailureListener(OnFailureListener)} and {@link UploadTask#addOnSuccessListener(OnSuccessListener)}
-     */
-    private void processUpload(UploadTask uploadTask, final UploadCallback callback) {
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                callback.onFail(e);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                FileMetadata fileMetadata = buildMetadata(taskSnapshot);
-                callback.onSuccess(fileMetadata);
-            }
-        });
-    }
-
-    /**
-     * Transforms {@code UploadTask.TaskSnapshot} to {@code FileMetadata}.
-     * <p>
-     * Transformation is needed because of need of shared code between modules.
-     *
-     * @param taskSnapshot Snapshot of just uploaded data
-     * @return Firebase storage file metadata wrapped by {@link FileMetadata}
-     */
-    private FileMetadata buildMetadata(final UploadTask.TaskSnapshot taskSnapshot) {
-        FileMetadata.Builder builder = new FileMetadata.Builder();
-        if (taskSnapshot.getMetadata() != null) {
-            builder.setMd5Hash(taskSnapshot.getMetadata().getMd5Hash())
-                    .setName(taskSnapshot.getMetadata().getName())
-                    .setPath(taskSnapshot.getMetadata().getPath())
-                    .setSizeBytes(taskSnapshot.getMetadata().getSizeBytes())
-                    .setUpdatedTimeMillis(taskSnapshot.getMetadata().getUpdatedTimeMillis())
-                    .setCreationTimeMillis(taskSnapshot.getMetadata().getCreationTimeMillis())
-                    .setDownloadUrl(new DownloadUrl(new Consumer<Consumer<String>>() {
-                        @Override
-                        public void accept(final Consumer<String> stringConsumer) {
-                            firebaseStorage().getReference(taskSnapshot.getMetadata().getPath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    stringConsumer.accept(uri.toString());
-                                }
-                            });
-                        }
-                    }));
-        }
-        return builder.build();
-    }
-
 }
