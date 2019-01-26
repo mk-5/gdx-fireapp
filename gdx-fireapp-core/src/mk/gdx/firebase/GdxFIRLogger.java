@@ -24,7 +24,7 @@ import com.badlogic.gdx.Gdx;
  * Client can disable/enable logging by calling
  */
 public class GdxFIRLogger {
-    private static final String LOG_TAG = "GdxFireapp Api";
+    private static final String LOG_TAG = "GdxFireapp";
 
     private static boolean enabled;
 
