@@ -48,7 +48,7 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
         if (mapConverter == null)
             throw new IllegalStateException();
         if (modifier != null) {
-            object = (R) modifier.apply((T) object);
+            object = modifier.apply((T) object);
         }
         if (thenConsumer != null) {
             MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer);
@@ -66,7 +66,11 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
     @SuppressWarnings("unchecked")
     public static <T, R> ConverterPromise<T, R> ofPromise(Consumer<ConverterPromise<T, R>> consumer) {
         ConverterPromise<T, R> promise = new ConverterPromise<>();
-        consumer.accept(promise);
+        try {
+            consumer.accept(promise);
+        } catch (Exception e) {
+            promise.doFail(e);
+        }
         return promise;
     }
 }

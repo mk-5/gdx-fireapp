@@ -31,7 +31,7 @@ import mk.gdx.firebase.helpers.JavaCoreClassDetector;
 public class MapMitmConverter {
     static final String CANT_DO_MAP_CONVERSION_FROM_TYPE = "Can't do map conversion from type: ";
 
-    protected FirebaseMapConverter mapConverter;
+    private final FirebaseMapConverter mapConverter;
 
     /**
      * @param mapConverter Map converter implementation, not null
@@ -47,7 +47,7 @@ public class MapMitmConverter {
      * If {@code data} is a List, go through all elements and do conversion on each element.
      *
      * @param wantedType Type to which map will be transformed
-     * @param data              Results to go through and convert founded maps, may be null
+     * @param data       Results to go through and convert founded maps, may be null
      * @return Converted data or same data if no Map founded, may be null.
      * @throws MapConversionNotPossibleException If can't do conversion
      */

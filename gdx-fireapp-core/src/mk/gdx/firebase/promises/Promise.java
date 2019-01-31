@@ -44,4 +44,12 @@ public interface Promise<T> {
      * @param runnable Runnable, will be call when promise had been failed or completed.
      */
     Promise<T> always(Runnable runnable);
+
+    /**
+     * Sets this given promise after this promise.
+     *
+     * @param promise The future promise, not null
+     * @return self
+     */
+    Promise<T> after(Promise<?> promise);
 }

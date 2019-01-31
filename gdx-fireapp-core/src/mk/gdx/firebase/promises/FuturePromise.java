@@ -22,7 +22,7 @@ import mk.gdx.firebase.functional.BiConsumer;
 import mk.gdx.firebase.functional.Consumer;
 
 /**
- * Promise implementation.
+ * Promise of future.
  *
  * @param <T> The promise subject type
  */
@@ -32,21 +32,16 @@ public class FuturePromise<T> implements Promise<T> {
     private static final int COMPLETE = 3;
     private static final int FAIL_LAZY = 2;
     private static final int FAIL = 1;
-    protected static final int INIT = 0;
+    static final int INIT = 0;
 
-    protected Consumer<T> thenConsumer;
+    Consumer<T> thenConsumer;
+    protected int state = INIT;
     private BiConsumer<String, ? super Throwable> failConsumer;
     private Runnable alwaysRunnable;
     private Array<FuturePromise<T>> thenPromises = new Array<>();
-    protected int state;
-    // Following vars is only for lazy consumers call.
     private T completeResult;
     private String failReason;
     private Throwable failThrowable;
-
-    public FuturePromise() {
-        state = INIT;
-    }
 
     /**
      * Sets then consumer.
@@ -58,9 +53,13 @@ public class FuturePromise<T> implements Promise<T> {
         if (consumer == null) throw new IllegalArgumentException();
         thenConsumer = consumer;
         if (state == COMPLETE_LAZY) {
-            thenConsumer.accept(completeResult);
-            state = COMPLETE;
-            completeResult = null;
+            try {
+                thenConsumer.accept(completeResult);
+                state = COMPLETE;
+                completeResult = null;
+            } catch (ClassCastException e) {
+
+            }
         }
         return this;
     }
@@ -95,16 +94,43 @@ public class FuturePromise<T> implements Promise<T> {
         return this;
     }
 
+    /**
+     * Add 'then' promise which will be invoke with {@link #doComplete(Object)}
+     *
+     * @param promise The future promise, not null
+     * @return self
+     */
     public synchronized FuturePromise<T> then(FuturePromise<T> promise) {
         if (promise == null) throw new IllegalArgumentException();
         // TODO - multiple lazy promises? ... maybe should be only one
         if (state == COMPLETE_LAZY) {
-            promise.doComplete(completeResult);
-            state = COMPLETE;
-            completeResult = null;
+            try {
+                promise.doComplete(completeResult);
+                state = COMPLETE;
+                completeResult = null;
+            } catch (ClassCastException e) {
+
+            }
         } else {
             thenPromises.add(promise);
         }
+        return this;
+    }
+
+    /**
+     * Sets this given promise after this promise.
+     *
+     * @param promise The future promise, not null
+     * @return self
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public synchronized Promise<T> after(Promise<?> promise) {
+        // TODO - what if, .after(xx).after(xx)
+        if (!(promise instanceof FuturePromise)) {
+            throw new IllegalArgumentException();
+        }
+        ((FuturePromise) promise).then(this);
         return this;
     }
 
@@ -116,8 +142,12 @@ public class FuturePromise<T> implements Promise<T> {
             promise.doComplete(result);
         }
         if (thenConsumer != null) {
-            thenConsumer.accept(result);
-            state = COMPLETE;
+            try {
+                thenConsumer.accept(result);
+                state = COMPLETE;
+            } catch (ClassCastException e) {
+
+            }
         } else {
             completeResult = result;
             state = COMPLETE_LAZY;
@@ -162,7 +192,11 @@ public class FuturePromise<T> implements Promise<T> {
 
     public static <R> FuturePromise<R> of(Consumer<FuturePromise<R>> consumer) {
         FuturePromise<R> promise = new FuturePromise<>();
-        consumer.accept(promise);
+        try {
+            consumer.accept(promise);
+        } catch (Exception e) {
+            promise.doFail(e);
+        }
         return promise;
     }
 }

@@ -254,7 +254,7 @@ public class Database implements DatabaseDistribution {
     /**
      * Reset {@link #databaseReference} and {@link #databasePath} to initial state.
      * After each flow-terminate operation{@link #databaseReference} and {@link #databasePath} should be reset the initial value,
-     * it forces the users to call {@link #inReference(String)} before each flow-terminate operation.
+     * it forces the users to call {@link #inReference(String)} after each flow-terminate operation.
      * <p>
      * Flow-terminate operations are: <uL>
      * <li>{@link #setValue(Object)}</li>

@@ -73,7 +73,7 @@ class QueryOnDataChange extends GwtDatabaseQuery {
     /**
      * Remove value listeners for given path.
      * <p>
-     * If listener was not declared before - all value listeners for given path will be cleared.
+     * If listener was not declared after - all value listeners for given path will be cleared.
      *
      * @param reference Reference path, not null
      */

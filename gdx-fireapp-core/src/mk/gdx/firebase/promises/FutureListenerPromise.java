@@ -46,7 +46,11 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
     public static <R> FutureListenerPromise<R> of(Object consumer) {
         if (!(consumer instanceof Consumer)) throw new IllegalArgumentException();
         FutureListenerPromise<R> promise = new FutureListenerPromise<>();
-        ((Consumer<FutureListenerPromise<R>>) consumer).accept(promise);
+        try {
+            ((Consumer<FutureListenerPromise<R>>) consumer).accept(promise);
+        } catch (Exception e) {
+            promise.doFail(e);
+        }
         return promise;
     }
 
