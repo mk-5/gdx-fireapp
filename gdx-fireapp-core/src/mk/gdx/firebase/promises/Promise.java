@@ -39,11 +39,11 @@ public interface Promise<T> {
     Promise<T> fail(BiConsumer<String, ? super Throwable> consumer);
 
     /**
-     * Sets fail/complete runnable.
+     * Sets then consumer.
      *
-     * @param runnable Runnable, will be call when promise had been failed or completed.
+     * @param promise The next promise. The promise will not be executed until parent promise complete
      */
-    Promise<T> always(Runnable runnable);
+    <R> Promise<R> then(Promise<R> promise);
 
     /**
      * Sets this given promise after this promise.
@@ -52,4 +52,12 @@ public interface Promise<T> {
      * @return self
      */
     Promise<T> after(Promise<?> promise);
+
+    /**
+     * Run promise execution, should be execute when you will not attach .then or .fail to the promise.
+     * TODO - should name be 'exec'?
+     * <p>
+     * If you call {@link #then(Consumer)} or {@link #fail(BiConsumer)} it is not mandatory
+     */
+    Promise<T> exec();
 }

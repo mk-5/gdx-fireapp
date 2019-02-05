@@ -61,7 +61,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(String email, char[] password) {
-        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, new String(password))));
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, new String(password))));
     }
 
     /**
@@ -69,7 +69,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInWithEmailAndPassword(String email, char[] password) {
-        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInWithEmailAndPassword(email, new String(password))));
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInWithEmailAndPassword(email, new String(password))));
     }
 
     /**
@@ -77,7 +77,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInWithToken(String token) {
-        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInWithCustomToken(token)));
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInWithCustomToken(token)));
     }
 
     /**
@@ -85,7 +85,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInAnonymously() {
-        return FuturePromise.of(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInAnonymously()));
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().signInAnonymously()));
     }
 
     /**
@@ -93,7 +93,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<Void> signOut() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> promise) {
                 try {
@@ -111,7 +111,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<Void> sendPasswordResetEmail(final String email) {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> promise) {
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)

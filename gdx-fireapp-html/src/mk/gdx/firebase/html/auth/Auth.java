@@ -55,10 +55,10 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(final String email, final char[] password) {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(final FuturePromise<GdxFirebaseUser> promise) {
-                final FuturePromise<GdxFirebaseUser> creationPromise = new FuturePromise<>();
+                final FuturePromise<GdxFirebaseUser> creationPromise = FuturePromise.empty();
                 creationPromise.then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser gdxFirebaseUser) {
@@ -100,7 +100,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInWithEmailAndPassword(final String email, final char[] password) {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(final FuturePromise<GdxFirebaseUser> promise) {
                 ScriptRunner.firebaseScript(new Runnable() {
@@ -118,7 +118,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInWithToken(final String token) {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(final FuturePromise<GdxFirebaseUser> promise) {
                 ScriptRunner.firebaseScript(new Runnable() {
@@ -136,7 +136,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInAnonymously() {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(final FuturePromise<GdxFirebaseUser> promise) {
                 ScriptRunner.firebaseScript(new Runnable() {
@@ -154,7 +154,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<Void> signOut() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> promise) {
                 ScriptRunner.firebaseScript(new Runnable() {
@@ -172,7 +172,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<Void> sendPasswordResetEmail(final String email) {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> promise) {
                 ScriptRunner.firebaseScript(new Runnable() {

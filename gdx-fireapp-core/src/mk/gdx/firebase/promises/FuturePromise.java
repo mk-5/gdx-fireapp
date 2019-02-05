@@ -16,8 +16,6 @@
 
 package mk.gdx.firebase.promises;
 
-import com.badlogic.gdx.utils.Array;
-
 import mk.gdx.firebase.functional.BiConsumer;
 import mk.gdx.firebase.functional.Consumer;
 
@@ -28,20 +26,26 @@ import mk.gdx.firebase.functional.Consumer;
  */
 public class FuturePromise<T> implements Promise<T> {
 
-    private static final int COMPLETE_LAZY = 4;
     private static final int COMPLETE = 3;
-    private static final int FAIL_LAZY = 2;
     private static final int FAIL = 1;
     static final int INIT = 0;
 
-    Consumer<T> thenConsumer;
     protected int state = INIT;
-    private BiConsumer<String, ? super Throwable> failConsumer;
-    private Runnable alwaysRunnable;
-    private Array<FuturePromise<T>> thenPromises = new Array<>();
-    private T completeResult;
+    final ConsumerWrapper<T> thenConsumer;
+    private boolean pauseExecution;
+    private boolean afterTriggered;
+    private T lazyResult;
+    private FuturePromise thenPromise;
+    protected Runnable execution;
+    private final BiConsumerWrapper failConsumer;
     private String failReason;
     private Throwable failThrowable;
+    private FuturePromise parentPromise;
+
+    protected FuturePromise() {
+        thenConsumer = new ConsumerWrapper<>();
+        failConsumer = new BiConsumerWrapper();
+    }
 
     /**
      * Sets then consumer.
@@ -49,18 +53,14 @@ public class FuturePromise<T> implements Promise<T> {
      * @param consumer "Then" consumer, will be call when promise had been competed.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized FuturePromise<T> then(Consumer<T> consumer) {
         if (consumer == null) throw new IllegalArgumentException();
-        thenConsumer = consumer;
-        if (state == COMPLETE_LAZY) {
-            try {
-                thenConsumer.accept(completeResult);
-                state = COMPLETE;
-                completeResult = null;
-            } catch (ClassCastException e) {
-
-            }
+        thenConsumer.addConsumer(consumer);
+        if (state == COMPLETE) {
+            doComplete(lazyResult);
         }
+        exec();
         return this;
     }
 
@@ -72,25 +72,11 @@ public class FuturePromise<T> implements Promise<T> {
     @Override
     public synchronized FuturePromise<T> fail(BiConsumer<String, ? super Throwable> consumer) {
         if (consumer == null) throw new IllegalArgumentException();
-        failConsumer = consumer;
-        if (state == FAIL_LAZY) {
-            failConsumer.accept(failReason, failThrowable);
-            state = FAIL;
-            failReason = null;
-            failThrowable = null;
+        failConsumer.addConsumer(consumer);
+        if (state == FAIL) {
+            doFail(failReason, failThrowable);
         }
-        return this;
-    }
-
-    /**
-     * Sets fail/complete runnable.
-     *
-     * @param runnable Runnable, will be call when promise had been failed or completed.
-     */
-    @Override
-    public synchronized FuturePromise<T> always(Runnable runnable) {
-        if (runnable == null) throw new IllegalArgumentException();
-        this.alwaysRunnable = runnable;
+        exec();
         return this;
     }
 
@@ -100,21 +86,18 @@ public class FuturePromise<T> implements Promise<T> {
      * @param promise The future promise, not null
      * @return self
      */
-    public synchronized FuturePromise<T> then(FuturePromise<T> promise) {
-        if (promise == null) throw new IllegalArgumentException();
-        // TODO - multiple lazy promises? ... maybe should be only one
-        if (state == COMPLETE_LAZY) {
-            try {
-                promise.doComplete(completeResult);
-                state = COMPLETE;
-                completeResult = null;
-            } catch (ClassCastException e) {
-
-            }
-        } else {
-            thenPromises.add(promise);
+    @Override
+    @SuppressWarnings("unchecked")
+    public synchronized <R> FuturePromise<R> then(Promise<R> promise) {
+        if (!(promise instanceof FuturePromise)) throw new IllegalArgumentException();
+        if (((FuturePromise) promise).thenConsumer.isSet() || ((FuturePromise) promise).failConsumer.isSet()) {
+            // Because calling promise.then will run execution and execution can't be pause then
+            throw new IllegalStateException("Chained promise couldn't have attached consumers");
         }
-        return this;
+        ((FuturePromise) promise).pauseExecution = true;
+        ((FuturePromise) promise).parentPromise = this;
+        thenPromise = (FuturePromise) promise;
+        return (FuturePromise<R>) promise;
     }
 
     /**
@@ -126,51 +109,75 @@ public class FuturePromise<T> implements Promise<T> {
     @Override
     @SuppressWarnings("unchecked")
     public synchronized Promise<T> after(Promise<?> promise) {
-        // TODO - what if, .after(xx).after(xx)
         if (!(promise instanceof FuturePromise)) {
             throw new IllegalArgumentException();
         }
+        if (afterTriggered) {
+            throw new IllegalStateException("May be only one 'after' for promise");
+        }
+        afterTriggered = true;
         ((FuturePromise) promise).then(this);
+        ((FuturePromise) promise).exec();
         return this;
     }
 
+    @Override
+    public Promise<T> exec() {
+        FuturePromise topParentPromise = getTopParentPromise();
+        if (topParentPromise != null) {
+            topParentPromise.exec();
+        }
+        if (execution != null && !pauseExecution) {
+            execution.run();
+        }
+        return this;
+    }
+
+    /**
+     * Resolves success of this promise
+     *
+     * @param result The promise result, may be null
+     */
     public synchronized void doComplete(T result) {
-        if (state != INIT) {
+        if (state != INIT && state != COMPLETE) {
             return;
         }
-        for (FuturePromise<T> promise : thenPromises) {
-            promise.doComplete(result);
+        state = COMPLETE;
+        lazyResult = result;
+        if (!thenConsumer.isSet() && thenPromise == null) {
+            return;
         }
-        if (thenConsumer != null) {
-            try {
-                thenConsumer.accept(result);
-                state = COMPLETE;
-            } catch (ClassCastException e) {
-
+        if (state == INIT && execution != null) {
+            throw new IllegalStateException("Promise 'when' has not been executed, please use 'exec', 'then(Consumer)' or fail(Consumer) method ");
+        }
+        if (thenConsumer.isSet()) {
+            thenConsumer.accept(result);
+        }
+        if (thenPromise != null) {
+            if (thenPromise.execution == null) {
+                throw new IllegalStateException("Chained promise should has 'when' execution");
             }
-        } else {
-            completeResult = result;
-            state = COMPLETE_LAZY;
-        }
-        if (alwaysRunnable != null) {
-            alwaysRunnable.run();
+            thenPromise.pauseExecution = false;
+            thenPromise.execution.run();
         }
     }
 
+    /**
+     * Resolves fail of  this promise
+     *
+     * @param reason    The fail reason, may be null
+     * @param throwable The fail exception, may be null
+     */
     public synchronized void doFail(String reason, Throwable throwable) {
-        if (state != INIT) {
+        if (state != INIT && state != FAIL) {
             return;
         }
-        if (failConsumer != null) {
+        state = FAIL;
+        if (failConsumer.isSet()) {
             failConsumer.accept(reason, throwable);
-            state = FAIL;
         } else {
             failReason = reason;
             failThrowable = throwable;
-            state = FAIL_LAZY;
-        }
-        if (alwaysRunnable != null) {
-            alwaysRunnable.run();
         }
     }
 
@@ -178,25 +185,49 @@ public class FuturePromise<T> implements Promise<T> {
         doFail(throwable != null ? throwable.getLocalizedMessage() : "", throwable);
     }
 
-    public boolean isComplete() {
-        return state == COMPLETE;
-    }
-
-    public boolean isFailed() {
-        return state == FAIL;
-    }
-
     public Consumer<T> getThenConsumer() {
         return thenConsumer;
     }
 
-    public static <R> FuturePromise<R> of(Consumer<FuturePromise<R>> consumer) {
-        FuturePromise<R> promise = new FuturePromise<>();
-        try {
-            consumer.accept(promise);
-        } catch (Exception e) {
-            promise.doFail(e);
-        }
+    private FuturePromise getTopParentPromise() {
+        if (parentPromise == null) return null;
+        FuturePromise promise;
+        FuturePromise tmp = parentPromise;
+        do {
+            promise = tmp;
+            tmp = promise.parentPromise;
+        } while (tmp != null);
         return promise;
+    }
+
+    protected FuturePromise getBottomThenPromise() {
+        if (thenPromise == null) return this;
+        FuturePromise promise;
+        FuturePromise tmp = this;
+        do {
+            promise = tmp;
+            tmp = promise.thenPromise;
+        } while (tmp != null);
+        return promise;
+    }
+
+    public static <R> FuturePromise<R> when(final Consumer<FuturePromise<R>> consumer) {
+        final FuturePromise<R> promise = new FuturePromise<>();
+        promise.execution = new Runnable() {
+            @Override
+            public void run() {
+                promise.execution = null;
+                try {
+                    consumer.accept(promise);
+                } catch (Exception e) {
+                    promise.getBottomThenPromise().doFail(e);
+                }
+            }
+        };
+        return promise;
+    }
+
+    public static <R> FuturePromise<R> empty() {
+        return new FuturePromise<>();
     }
 }

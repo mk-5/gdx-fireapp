@@ -32,7 +32,7 @@ public class User implements AuthUserDistribution {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
                 .updateEmail(newEmail)));
     }
 
@@ -41,7 +41,7 @@ public class User implements AuthUserDistribution {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
                 .sendEmailVerification()));
     }
 
@@ -50,7 +50,7 @@ public class User implements AuthUserDistribution {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
                 .updatePassword(new String(newPassword))));
     }
 
@@ -59,7 +59,7 @@ public class User implements AuthUserDistribution {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser().delete()));
+        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser().delete()));
     }
 
     @Override

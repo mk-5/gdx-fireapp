@@ -31,7 +31,7 @@ public class User implements AuthUserDistribution {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().updateEmailCompletion(newEmail, new FIRUser.Block_updateEmailCompletion() {
@@ -50,7 +50,7 @@ public class User implements AuthUserDistribution {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().sendEmailVerificationWithCompletion(new FIRUser.Block_sendEmailVerificationWithCompletion() {
@@ -69,7 +69,7 @@ public class User implements AuthUserDistribution {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().updatePasswordCompletion(new String(newPassword), new FIRUser.Block_updatePasswordCompletion() {
@@ -88,7 +88,7 @@ public class User implements AuthUserDistribution {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().deleteWithCompletion(new FIRUser.Block_deleteWithCompletion() {

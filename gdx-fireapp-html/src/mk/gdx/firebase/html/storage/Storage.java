@@ -46,7 +46,7 @@ public class Storage implements StorageDistribution {
     @Override
     public Promise<FileMetadata> upload(FileHandle file, String path) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
-        return new FuturePromise<>();
+        return FuturePromise.empty();
     }
 
     /**
@@ -54,7 +54,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<FileMetadata> upload(final byte[] data, final String path) {
-        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
             public void accept(final FuturePromise<FileMetadata> promise) {
                 ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
@@ -72,7 +72,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<byte[]> download(final String path, long bytesLimit) {
-        return FuturePromise.of(new Consumer<FuturePromise<byte[]>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<byte[]>>() {
             @Override
             public void accept(final FuturePromise<byte[]> futurePromise) {
                 ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {
@@ -94,7 +94,7 @@ public class Storage implements StorageDistribution {
     @Override
     public Promise<FileHandle> download(String path, FileHandle targetFile) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
-        return new FuturePromise<>();
+        return FuturePromise.empty();
     }
 
     /**
@@ -102,7 +102,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<Void> delete(final String path) {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> futurePromise) {
                 ScriptRunner.firebaseScript(new ScriptRunner.ScriptStorageAction(bucketUrl()) {

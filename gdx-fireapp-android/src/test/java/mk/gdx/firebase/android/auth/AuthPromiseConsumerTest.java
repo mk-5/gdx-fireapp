@@ -49,7 +49,7 @@ public class AuthPromiseConsumerTest extends AndroidContextTest {
         task = Mockito.mock(Task.class);
         Mockito.when(task.addOnCompleteListener(Mockito.any(OnCompleteListener.class))).thenAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((OnCompleteListener) invocation.getArgument(0)).onComplete(task);
                 return null;
             }
@@ -60,7 +60,7 @@ public class AuthPromiseConsumerTest extends AndroidContextTest {
     public void accept() {
         // Given
         Mockito.when(task.isSuccessful()).thenReturn(true);
-        FuturePromise promise = Mockito.spy(new FuturePromise());
+        FuturePromise promise = Mockito.spy(FuturePromise.empty());
         promise.then(Mockito.mock(Consumer.class));
         AuthPromiseConsumer authPromiseConsumer = new AuthPromiseConsumer(task);
 
@@ -76,7 +76,7 @@ public class AuthPromiseConsumerTest extends AndroidContextTest {
     public void accept_fail() {
         // Given
         Mockito.when(task.isSuccessful()).thenReturn(false);
-        FuturePromise promise = Mockito.spy(new FuturePromise());
+        FuturePromise promise = Mockito.spy(FuturePromise.empty());
         promise.then(Mockito.mock(Consumer.class));
         AuthPromiseConsumer authPromiseConsumer = new AuthPromiseConsumer(task);
 

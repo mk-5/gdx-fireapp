@@ -44,7 +44,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<FileMetadata> upload(final FileHandle file, final String path) {
-        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
             public void accept(FuturePromise<FileMetadata> promise) {
                 uploadProcessor.upload(firStorage(), path, file, promise);
@@ -57,7 +57,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<FileMetadata> upload(final byte[] data, final String path) {
-        return FuturePromise.of(new Consumer<FuturePromise<FileMetadata>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
             public void accept(FuturePromise<FileMetadata> promise) {
                 uploadProcessor.upload(firStorage(), path, data, promise);
@@ -70,7 +70,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<byte[]> download(final String path, final long bytesLimit) {
-        return FuturePromise.of(new Consumer<FuturePromise<byte[]>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<byte[]>>() {
             @Override
             public void accept(FuturePromise<byte[]> promise) {
                 downloadProcessor.processDownload(firStorage(), path, bytesLimit, promise);
@@ -83,7 +83,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<FileHandle> download(final String path, final FileHandle targetFile) {
-        return FuturePromise.of(new Consumer<FuturePromise<FileHandle>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<FileHandle>>() {
             @Override
             public void accept(FuturePromise<FileHandle> promise) {
                 downloadProcessor.processDownload(firStorage(), path, targetFile, promise);
@@ -96,7 +96,7 @@ public class Storage implements StorageDistribution {
      */
     @Override
     public Promise<Void> delete(final String path) {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> voidFuturePromise) {
                 firStorage().child(path).deleteWithCompletion(new FIRStorageReference.Block_deleteWithCompletion() {

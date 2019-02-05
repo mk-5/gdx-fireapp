@@ -35,7 +35,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signIn() {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(final FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
                 ScriptRunner.firebaseScript(new Runnable() {
@@ -53,7 +53,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public Promise<Void> signOut() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> voidFuturePromise) {
                 GdxFIRAuth.instance().signOut().then(new Consumer<Void>() {
@@ -64,7 +64,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
                 }).fail(new BiConsumer<String, Throwable>() {
                     @Override
                     public void accept(String s, Throwable throwable) {
-                        voidFuturePromise.doFail((Exception) throwable);
+                        voidFuturePromise.doFail(throwable);
                     }
                 });
             }
@@ -78,7 +78,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public Promise<Void> revokeAccess() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> voidFuturePromise) {
                 signOut().then(new Consumer<Void>() {

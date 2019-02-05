@@ -33,7 +33,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
 
     @Override
     public Promise<GdxFirebaseUser> signIn() {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
                 googleAuthProvider.initializeOnce();
@@ -45,7 +45,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
 
     @Override
     public Promise<Void> signOut() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 googleAuthProvider.initializeOnce();
@@ -61,7 +61,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
 
     @Override
     public Promise<Void> revokeAccess() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 googleAuthProvider.initializeOnce();

@@ -35,13 +35,28 @@ class TextureRegionDownloader {
     }
 
     FuturePromise<TextureRegion> download() {
-        return FuturePromise.of(new Consumer<FuturePromise<TextureRegion>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<TextureRegion>>() {
             @Override
             public void accept(final FuturePromise<TextureRegion> textureRegionFuturePromise) {
                 GdxFIRStorage.instance().download(path, Long.MAX_VALUE).then(new Consumer<byte[]>() {
                     @Override
                     public void accept(final byte[] bytes) {
-                        pack(bytes).then(textureRegionFuturePromise);
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (Gdx.app.getType() != Application.ApplicationType.WebGL) {
+                                    TextureRegion region = imageHelper.createTextureFromBytes(bytes);
+                                    textureRegionFuturePromise.doComplete(region);
+                                } else {
+                                    imageHelper.createTextureFromBytes(bytes, new Consumer<TextureRegion>() {
+                                        @Override
+                                        public void accept(TextureRegion textureRegion) {
+                                            textureRegionFuturePromise.doComplete(textureRegion);
+                                        }
+                                    });
+                                }
+                            }
+                        });
                     }
                 }).fail(new BiConsumer<String, Throwable>() {
                     @Override
@@ -53,27 +68,4 @@ class TextureRegionDownloader {
         });
     }
 
-    private FuturePromise<TextureRegion> pack(final byte[] bytes) {
-        return FuturePromise.of(new Consumer<FuturePromise<TextureRegion>>() {
-            @Override
-            public void accept(final FuturePromise<TextureRegion> textureRegionFuturePromise) {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (Gdx.app.getType() != Application.ApplicationType.WebGL) {
-                            TextureRegion region = imageHelper.createTextureFromBytes(bytes);
-                            textureRegionFuturePromise.doComplete(region);
-                        } else {
-                            imageHelper.createTextureFromBytes(bytes, new Consumer<TextureRegion>() {
-                                @Override
-                                public void accept(TextureRegion textureRegion) {
-                                    textureRegionFuturePromise.doComplete(textureRegion);
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
-    }
 }

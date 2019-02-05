@@ -31,7 +31,7 @@ public class User implements AuthUserDistribution {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 AuthJS.firebaseUser().updateEmail(newEmail, voidFuturePromise);
@@ -44,7 +44,7 @@ public class User implements AuthUserDistribution {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 AuthJS.firebaseUser().sendEmailVerification(voidFuturePromise);
@@ -57,7 +57,7 @@ public class User implements AuthUserDistribution {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 AuthJS.firebaseUser().updatePassword(new String(newPassword), voidFuturePromise);
@@ -70,7 +70,7 @@ public class User implements AuthUserDistribution {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 AuthJS.firebaseUser().delete(voidFuturePromise);

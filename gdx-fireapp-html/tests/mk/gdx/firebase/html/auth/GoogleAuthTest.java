@@ -50,7 +50,7 @@ public class GoogleAuthTest {
         PowerMockito.mockStatic(ScriptRunner.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
@@ -77,7 +77,7 @@ public class GoogleAuthTest {
         Auth auth = Mockito.mock(Auth.class);
         GdxFIRAuth gdxFIRAuth = Mockito.mock(GdxFIRAuth.class);
         Mockito.when(GdxFIRAuth.instance()).thenReturn(gdxFIRAuth);
-        Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy(new FuturePromise<Void>()));
+        Mockito.when(gdxFIRAuth.signOut()).thenReturn((FuturePromise) Mockito.spy(FuturePromise.empty()));
 
         // When
         googleAuth.signOut();
@@ -93,7 +93,7 @@ public class GoogleAuthTest {
         Auth auth = Mockito.mock(Auth.class);
         GdxFIRAuth gdxFIRAuth = Mockito.mock(GdxFIRAuth.class);
         Mockito.when(GdxFIRAuth.instance()).thenReturn(gdxFIRAuth);
-        Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy(new FuturePromise<Void>()));
+        Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy((FuturePromise) Mockito.spy(FuturePromise.empty())));
 
         // When
         googleAuth.revokeAccess();

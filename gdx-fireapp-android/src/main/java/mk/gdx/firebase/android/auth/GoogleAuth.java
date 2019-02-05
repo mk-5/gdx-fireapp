@@ -43,7 +43,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signIn() {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
                 GoogleSignInOptions gso = GoogleSignInOptionsFactory.factory();
@@ -59,7 +59,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public Promise<Void> signOut() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> voidFuturePromise) {
                 GoogleSignInClient client = GoogleSignIn.getClient((AndroidApplication) Gdx.app, GoogleSignInOptionsFactory.factory());
@@ -82,7 +82,7 @@ public class GoogleAuth implements GoogleAuthDistribution {
      */
     @Override
     public Promise<Void> revokeAccess() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(final FuturePromise<Void> voidFuturePromise) {
                 GoogleSignInClient client = GoogleSignIn.getClient((AndroidApplication) Gdx.app, GoogleSignInOptionsFactory.factory());

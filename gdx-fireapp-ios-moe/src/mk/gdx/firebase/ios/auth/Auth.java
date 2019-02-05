@@ -61,7 +61,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> createUserWithEmailAndPassword(String email, char[] password) {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(FuturePromise<GdxFirebaseUser> promise) {
                 FIRAuth.auth().createUserWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_createUserWithEmailPasswordCompletion() {
@@ -81,7 +81,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInWithEmailAndPassword(String email, char[] password) {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(FuturePromise<GdxFirebaseUser> promise) {
                 FIRAuth.auth().signInWithEmailPasswordCompletion(email, new String(password), new FIRAuth.Block_signInWithEmailPasswordCompletion() {
@@ -100,7 +100,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInWithToken(String token) {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(FuturePromise<GdxFirebaseUser> promise) {
                 FIRAuth.auth().signInWithCustomTokenCompletion(token, new FIRAuth.Block_signInWithCustomTokenCompletion() {
@@ -119,7 +119,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<GdxFirebaseUser> signInAnonymously() {
-        return FuturePromise.of(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
             public void accept(FuturePromise<GdxFirebaseUser> promise) {
                 FIRAuth.auth().signInAnonymouslyWithCompletion(new FIRAuth.Block_signInAnonymouslyWithCompletion() {
@@ -138,7 +138,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public Promise<Void> signOut() {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> promise) {
                 try {
@@ -161,7 +161,7 @@ public class Auth implements AuthDistribution {
      */
     @Override
     public FuturePromise<Void> sendPasswordResetEmail(String email) {
-        return FuturePromise.of(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> promise) {
                 FIRAuth.auth().sendPasswordResetWithEmailCompletion(email, new FIRAuth.Block_sendPasswordResetWithEmailCompletion() {

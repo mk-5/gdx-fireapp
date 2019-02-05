@@ -25,7 +25,7 @@ import mk.gdx.firebase.functional.Consumer;
  */
 public class FutureListenerPromise<T> extends FuturePromise<T> implements ListenerPromise<T> {
 
-    protected boolean canceled;
+    boolean canceled;
     private Runnable onCancel;
 
     @Override
@@ -43,14 +43,19 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
     }
 
     @SuppressWarnings("unchecked")
-    public static <R> FutureListenerPromise<R> of(Object consumer) {
-        if (!(consumer instanceof Consumer)) throw new IllegalArgumentException();
-        FutureListenerPromise<R> promise = new FutureListenerPromise<>();
-        try {
-            ((Consumer<FutureListenerPromise<R>>) consumer).accept(promise);
-        } catch (Exception e) {
-            promise.doFail(e);
-        }
+    public static <R> FutureListenerPromise<R> whenListener(final Consumer<FutureListenerPromise<R>> consumer) {
+        final FutureListenerPromise<R> promise = new FutureListenerPromise<>();
+        promise.execution = new Runnable() {
+            @Override
+            public void run() {
+                promise.execution = null;
+                try {
+                    consumer.accept(promise);
+                } catch (Exception e) {
+                    promise.getBottomThenPromise().doFail(e);
+                }
+            }
+        };
         return promise;
     }
 

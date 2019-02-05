@@ -64,13 +64,19 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T, R> ConverterPromise<T, R> ofPromise(Consumer<ConverterPromise<T, R>> consumer) {
-        ConverterPromise<T, R> promise = new ConverterPromise<>();
-        try {
-            consumer.accept(promise);
-        } catch (Exception e) {
-            promise.doFail(e);
-        }
+    public static <T, R> ConverterPromise<T, R> whenWithConvert(final Consumer<ConverterPromise<T, R>> consumer) {
+        final ConverterPromise<T, R> promise = new ConverterPromise<>();
+        promise.execution = new Runnable() {
+            @Override
+            public void run() {
+                promise.execution = null;
+                try {
+                    consumer.accept(promise);
+                } catch (Exception e) {
+                    promise.getBottomThenPromise().doFail(e);
+                }
+            }
+        };
         return promise;
     }
 }

@@ -39,6 +39,7 @@ import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
+import mk.gdx.firebase.functional.BiConsumer;
 import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.Promise;
 
@@ -291,7 +292,12 @@ public class DatabaseTest extends AndroidContextTest {
         Database database = new Database();
 
         // When
-        database.setValue("test");
+        database.setValue("test").fail(new BiConsumer<String, Throwable>() {
+            @Override
+            public void accept(String s, Throwable throwable) {
+                Assert.assertTrue(throwable instanceof DatabaseReferenceNotSetException);
+            }
+        });
 
         // Then
         Assert.fail();
