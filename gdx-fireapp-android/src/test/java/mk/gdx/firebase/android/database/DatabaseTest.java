@@ -39,7 +39,6 @@ import mk.gdx.firebase.database.OrderByClause;
 import mk.gdx.firebase.database.OrderByMode;
 import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
-import mk.gdx.firebase.functional.BiConsumer;
 import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.promises.Promise;
 
@@ -85,7 +84,7 @@ public class DatabaseTest extends AndroidContextTest {
         when(query.withArgs(Mockito.any())).thenReturn(query);
 
         // When
-        database.onConnect();
+        database.onConnect().exec();
 
         // Then
         PowerMockito.verifyNew(QueryConnectionStatus.class);
@@ -116,7 +115,7 @@ public class DatabaseTest extends AndroidContextTest {
         when(query.withArgs(Mockito.any())).thenReturn(query);
 
         // When
-        Promise promise = Mockito.spy(database.inReference("/test").setValue(""));
+        Promise promise = Mockito.spy(database.inReference("/test").setValue("").exec());
 
         // Then
         PowerMockito.verifyNew(QuerySetValue.class);
@@ -131,7 +130,7 @@ public class DatabaseTest extends AndroidContextTest {
         PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.inReference("/test").readValue(String.class);
+        database.inReference("/test").readValue(String.class).exec();
 
         // Then
 //        verify(mapConverter, VerificationModeFactory.times(1)).convert(any(Map.class), any(Class.class));
@@ -151,7 +150,7 @@ public class DatabaseTest extends AndroidContextTest {
         Database database = new Database();
 
         // When
-        database.inReference("/test").onDataChange(Map.class);
+        database.inReference("/test").onDataChange(Map.class).exec();
 
         // Then
 //        verify(mapConverter, VerificationModeFactory.times(1)).convert(any(Map.class), any(Class.class));
@@ -292,13 +291,7 @@ public class DatabaseTest extends AndroidContextTest {
         Database database = new Database();
 
         // When
-        database.setValue("test").fail(new BiConsumer<String, Throwable>() {
-            @Override
-            public void accept(String s, Throwable throwable) {
-                Assert.assertTrue(throwable instanceof DatabaseReferenceNotSetException);
-            }
-        });
-
+        database.setValue("test");
         // Then
         Assert.fail();
     }

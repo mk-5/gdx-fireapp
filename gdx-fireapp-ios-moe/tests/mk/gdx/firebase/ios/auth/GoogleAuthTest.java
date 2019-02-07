@@ -51,7 +51,7 @@ public class GoogleAuthTest extends GdxIOSAppTest {
         Whitebox.setInternalState(googleAuth, "googleAuthProvider", Mockito.mock(GoogleAuthProvider.class));
 
         // When
-        googleAuth.signIn();
+        googleAuth.signIn().exec();
 
         // Then
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).signIn();
@@ -65,7 +65,7 @@ public class GoogleAuthTest extends GdxIOSAppTest {
         Whitebox.setInternalState(googleAuth, "googleAuthProvider", Mockito.mock(GoogleAuthProvider.class));
 
         // When
-        googleAuth.signOut();
+        googleAuth.signOut().exec();
 
         // Then
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).signOut();
@@ -79,7 +79,7 @@ public class GoogleAuthTest extends GdxIOSAppTest {
         Whitebox.setInternalState(googleAuth, "googleAuthProvider", Mockito.mock(GoogleAuthProvider.class));
 
         // When
-        googleAuth.revokeAccess();
+        googleAuth.revokeAccess().exec();
 
         // Then
         Mockito.verify(gidSignIn, VerificationModeFactory.times(1)).disconnect();

@@ -50,7 +50,7 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
         if (modifier != null) {
             object = modifier.apply((T) object);
         }
-        if (thenConsumer != null) {
+        if (thenConsumer.isSet()) {
             MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer);
             if (mapConversionAnnotation != null) {
                 object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);

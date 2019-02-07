@@ -32,6 +32,11 @@ public interface Promise<T> {
     Promise<T> then(Consumer<T> consumer);
 
     /**
+     * Promise will throw exception on fail
+     */
+    Promise<T> throwFail();
+
+    /**
      * Sets fail bi-consumer.
      *
      * @param consumer "Fail" bi-consumer, will be call when promise had been failed.

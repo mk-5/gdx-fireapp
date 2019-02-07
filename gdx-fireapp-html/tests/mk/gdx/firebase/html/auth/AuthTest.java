@@ -52,7 +52,7 @@ public class AuthTest extends GdxHtmlAppTest {
         PowerMockito.mockStatic(ScriptRunner.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
@@ -108,21 +108,21 @@ public class AuthTest extends GdxHtmlAppTest {
         PowerMockito.mockStatic(Timer.class);
         Mockito.when(Timer.schedule(Mockito.any(Timer.Task.class), Mockito.anyFloat())).then(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Timer.Task) invocation.getArgument(0)).run();
                 return null;
             }
         });
         PowerMockito.doAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((FuturePromise) invocation.getArgument(2)).doComplete(Mockito.mock(GdxFirebaseUser.class));
                 return null;
             }
         }).when(AuthJS.class, "createUserWithEmailAndPassword", Mockito.anyString(), Mockito.anyString(), Mockito.any(FuturePromise.class));
         PowerMockito.doAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((FuturePromise) invocation.getArgument(2)).doComplete(Mockito.mock(GdxFirebaseUser.class));
                 return null;
             }
@@ -145,7 +145,7 @@ public class AuthTest extends GdxHtmlAppTest {
         char[] password = {'s', 'e', 'c', 'r', 'e', 't'};
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signInWithEmailAndPassword(email, password);
+        FuturePromise promise = (FuturePromise) auth.signInWithEmailAndPassword(email, password).exec();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -159,7 +159,7 @@ public class AuthTest extends GdxHtmlAppTest {
         String token = "token";
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signInWithToken(token);
+        FuturePromise promise = (FuturePromise) auth.signInWithToken(token).exec();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -172,7 +172,7 @@ public class AuthTest extends GdxHtmlAppTest {
         Auth auth = new Auth();
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signInAnonymously();
+        FuturePromise promise = (FuturePromise) auth.signInAnonymously().exec();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -185,7 +185,7 @@ public class AuthTest extends GdxHtmlAppTest {
         Auth auth = new Auth();
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signOut();
+        FuturePromise promise = (FuturePromise) auth.signOut().exec();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -199,7 +199,7 @@ public class AuthTest extends GdxHtmlAppTest {
         String arg1 = "email";
 
         // When
-        FuturePromise promise = (FuturePromise) auth.sendPasswordResetEmail(arg1);
+        FuturePromise promise = (FuturePromise) auth.sendPasswordResetEmail(arg1).exec();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);

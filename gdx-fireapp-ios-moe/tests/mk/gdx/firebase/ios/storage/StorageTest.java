@@ -114,7 +114,7 @@ public class StorageTest extends GdxIOSAppTest {
 
 
         // When
-        storage.upload(fileHandle, "test");
+        storage.upload(fileHandle, "test").exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).putDataMetadataCompletion(Mockito.nullable(NSData.class), Mockito.nullable(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));
@@ -130,7 +130,7 @@ public class StorageTest extends GdxIOSAppTest {
 
 
         // When
-        storage.upload(data, "test");
+        storage.upload(data, "test").exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).putDataMetadataCompletion(Mockito.nullable(NSData.class), Mockito.nullable(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));
@@ -146,7 +146,7 @@ public class StorageTest extends GdxIOSAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.download("/test", file);
+        storage.download("/test", file).exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).writeToFileCompletion(Mockito.nullable(NSURL.class), Mockito.any(FIRStorageReference.Block_writeToFileCompletion.class));
@@ -161,7 +161,7 @@ public class StorageTest extends GdxIOSAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.download("/test", file);
+        storage.download("/test", file).exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).writeToFileCompletion(Mockito.nullable(NSURL.class), Mockito.any(FIRStorageReference.Block_writeToFileCompletion.class));
@@ -177,7 +177,7 @@ public class StorageTest extends GdxIOSAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.download("/test", byteLimit);
+        storage.download("/test", byteLimit).exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).dataWithMaxSizeCompletion(Mockito.anyLong(), Mockito.any(FIRStorageReference.Block_dataWithMaxSizeCompletion.class));
@@ -191,7 +191,7 @@ public class StorageTest extends GdxIOSAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.delete("/test");
+        storage.delete("/test").exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRStorageReference.Block_deleteWithCompletion.class));
@@ -212,7 +212,7 @@ public class StorageTest extends GdxIOSAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.delete("/test");
+        storage.delete("/test").exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRStorageReference.Block_deleteWithCompletion.class));

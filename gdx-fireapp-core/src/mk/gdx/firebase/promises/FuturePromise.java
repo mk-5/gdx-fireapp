@@ -34,6 +34,7 @@ public class FuturePromise<T> implements Promise<T> {
     final ConsumerWrapper<T> thenConsumer;
     private boolean pauseExecution;
     private boolean afterTriggered;
+    private boolean throwFail;
     private T lazyResult;
     private FuturePromise thenPromise;
     protected Runnable execution;
@@ -61,6 +62,12 @@ public class FuturePromise<T> implements Promise<T> {
             doComplete(lazyResult);
         }
         exec();
+        return this;
+    }
+
+    @Override
+    public Promise<T> throwFail() {
+        throwFail = true;
         return this;
     }
 
@@ -173,6 +180,9 @@ public class FuturePromise<T> implements Promise<T> {
             return;
         }
         state = FAIL;
+        if (throwFail) {
+            throw new RuntimeException(reason, throwable);
+        }
         if (failConsumer.isSet()) {
             failConsumer.accept(reason, throwable);
         } else {

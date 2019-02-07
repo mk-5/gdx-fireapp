@@ -46,6 +46,7 @@ import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
+import mk.gdx.firebase.promises.ListenerPromise;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -105,7 +106,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.onConnect();
+        database.onConnect().exec();
 
         // Then
         // Can't verify new because of PowerMockitoRunner and JaCoCo coverage. Rule does not work here because of MOE
@@ -137,7 +138,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.inReference("/test").setValue("test_value");
+        database.inReference("/test").setValue("test_value").exec();
 
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
@@ -158,7 +159,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").readValue(dataType);
+        database.inReference("/test").readValue(dataType).exec();
 
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
@@ -184,7 +185,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").onDataChange(dataType);
+        database.inReference("/test").onDataChange(dataType).exec();
 
         // Then
 //      PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
@@ -215,7 +216,7 @@ public class DatabaseTest extends GdxIOSAppTest {
 
 
         // When
-        database.inReference("/test").onDataChange(String.class)
+        ((ListenerPromise) database.inReference("/test").onDataChange(String.class).exec())
                 .cancel();
 
         // Then
@@ -282,7 +283,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").removeValue();
+        database.inReference("/test").removeValue().exec();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any(FIRDatabaseReference.Block_removeValueWithCompletionBlock.class));
@@ -298,7 +299,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Map mapData = mock(Map.class);
 
         // When
-        database.inReference("/test").updateChildren(mapData);
+        database.inReference("/test").updateChildren(mapData).exec();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(
@@ -318,7 +319,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").transaction(dataType, transactionFunction);
+        database.inReference("/test").transaction(dataType, transactionFunction).exec();
 
         // Then
 //      PowerMockito.verifyNew(RunTransactionQuery.class).withArguments(Mockito.any());

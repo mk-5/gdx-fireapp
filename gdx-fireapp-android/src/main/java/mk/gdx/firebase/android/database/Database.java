@@ -92,6 +92,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> setValue(final Object value) {
+        checkDatabaseReference();
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
@@ -109,6 +110,7 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, E extends T> Promise<E> readValue(final Class<T> dataType) {
+        checkDatabaseReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, E>>() {
             @Override
@@ -129,6 +131,7 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
+        checkDatabaseReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, R>>() {
             @Override
@@ -178,6 +181,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> removeValue() {
+        checkDatabaseReference();
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
@@ -193,6 +197,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> updateChildren(final Map<String, Object> data) {
+        checkDatabaseReference();
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
@@ -210,6 +215,7 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transaction) {
+        checkDatabaseReference();
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
@@ -245,9 +251,7 @@ public class Database implements DatabaseDistribution {
      * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
      */
     DatabaseReference databaseReference() {
-        if (databaseReference == null)
-            throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
-
+        checkDatabaseReference();
         return databaseReference;
     }
 
@@ -279,5 +283,10 @@ public class Database implements DatabaseDistribution {
      */
     String getDatabasePath() {
         return databasePath;
+    }
+
+    private void checkDatabaseReference() {
+        if (databaseReference == null)
+            throw new DatabaseReferenceNotSetException(MISSING_REFERENCE);
     }
 }

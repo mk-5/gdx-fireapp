@@ -68,7 +68,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         GoogleAuth googleAuth = new GoogleAuth();
 
         // When
-        googleAuth.signIn();
+        googleAuth.signIn().exec();
 
         // Then
         Mockito.verify(((AndroidApplication) Gdx.app), VerificationModeFactory.times(1)).startActivityForResult(Mockito.nullable(Intent.class), Mockito.anyInt());
@@ -86,14 +86,14 @@ public class GoogleAuthTest extends AndroidContextTest {
         Mockito.when(googleSignInClient.signOut()).thenReturn(task);
         Mockito.when(task.addOnCompleteListener(Mockito.any(OnCompleteListener.class))).thenAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((OnCompleteListener) invocation.getArgument(0)).onComplete(task2);
                 return null;
             }
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.signOut());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.signOut().exec());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -112,14 +112,14 @@ public class GoogleAuthTest extends AndroidContextTest {
         Mockito.when(googleSignInClient.signOut()).thenReturn(task);
         Mockito.when(task.addOnCompleteListener(Mockito.any(OnCompleteListener.class))).thenAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((OnCompleteListener) invocation.getArgument(0)).onComplete(task2);
                 return null;
             }
         });
 
         // When
-        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut());
+        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut().exec());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -138,14 +138,14 @@ public class GoogleAuthTest extends AndroidContextTest {
         Mockito.when(googleSignInClient.revokeAccess()).thenReturn(task);
         Mockito.when(task.addOnCompleteListener(Mockito.any(OnCompleteListener.class))).thenAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((OnCompleteListener) invocation.getArgument(0)).onComplete(task2);
                 return null;
             }
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().exec());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -164,14 +164,14 @@ public class GoogleAuthTest extends AndroidContextTest {
         Mockito.when(googleSignInClient.revokeAccess()).thenReturn(task);
         Mockito.when(task.addOnCompleteListener(Mockito.any(OnCompleteListener.class))).thenAnswer(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((OnCompleteListener) invocation.getArgument(0)).onComplete(task2);
                 return null;
             }
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().exec());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));

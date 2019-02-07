@@ -63,7 +63,7 @@ public class DatabaseTest {
         PowerMockito.mockStatic(GwtDataPromisesManager.class);
         PowerMockito.when(ScriptRunner.class, "firebaseScript", Mockito.any(Runnable.class)).then(new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ((Runnable) invocation.getArgument(0)).run();
                 return null;
             }
@@ -81,7 +81,7 @@ public class DatabaseTest {
         PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(queryConnectionStatus);
 
         // When
-        database.onConnect();
+        database.onConnect().exec();
 
         // Then
 //        PowerMockito.verifyNew(ConnectionStatusQuery.class).withArguments(Mockito.any());
@@ -114,7 +114,7 @@ public class DatabaseTest {
 
         // When
         database.inReference(testReference)
-                .setValue(testValue);
+                .setValue(testValue).exec();
 
         // Then
         PowerMockito.verifyStatic(QuerySetValue.class);
@@ -134,7 +134,7 @@ public class DatabaseTest {
 
 
         // When
-        ((FuturePromise) database.inReference(testReference).readValue(dataType)).doComplete(testReference);
+        ((FuturePromise) database.inReference(testReference).readValue(dataType).exec()).doComplete(testReference);
 
         // Then
 //        PowerMockito.verifyNew(ReadValueQuery.class).withArguments(Mockito.any());
@@ -155,7 +155,7 @@ public class DatabaseTest {
         Class dataType = String.class;
 
         // When
-        ((FuturePromise) database.inReference(testReference).onDataChange(dataType)).doComplete(testReference);
+        ((FuturePromise) database.inReference(testReference).onDataChange(dataType).exec()).doComplete(testReference);
 
         // Then
 //        PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
@@ -176,7 +176,7 @@ public class DatabaseTest {
         Gdx.app = Mockito.mock(Application.class);
 
         // When
-        FutureListenerPromise promise = ((FutureListenerPromise) database.inReference(testReference).onDataChange(String.class));
+        FutureListenerPromise promise = ((FutureListenerPromise) database.inReference(testReference).onDataChange(String.class).exec());
         promise.doComplete(testReference);
         PowerMockito.doReturn(true).when(GwtDataPromisesManager.class, "hasPromise", testReference);
         promise.cancel();
@@ -215,7 +215,7 @@ public class DatabaseTest {
         String testReference = "test_reference";
 
         // When
-        database.inReference(testReference).removeValue();
+        database.inReference(testReference).removeValue().exec();
 
         // Then
         PowerMockito.verifyStatic(QueryRemoveValue.class);
@@ -233,7 +233,7 @@ public class DatabaseTest {
         Map data = Mockito.mock(Map.class);
 
         // When
-        database.inReference(testReference).updateChildren(data);
+        database.inReference(testReference).updateChildren(data).exec();
 
         // Then
         PowerMockito.verifyStatic(QueryUpdateChildren.class);
@@ -252,7 +252,7 @@ public class DatabaseTest {
         Class dataType = Long.class;
 
         // When
-        Promise promise = database.inReference(testReference).transaction(dataType, function);
+        Promise promise = database.inReference(testReference).transaction(dataType, function).exec();
 
         // Then
 //        PowerMockito.verifyNew(RunTransactionQuery.class).withArguments(Mockito.any());
@@ -306,7 +306,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.setValue("test");
+        database.setValue("test").exec();
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
@@ -314,7 +314,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.updateChildren(null);
+        database.updateChildren(null).exec();
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
@@ -322,7 +322,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.onDataChange(String.class);
+        database.onDataChange(String.class).exec();
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
@@ -330,7 +330,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.readValue(String.class);
+        database.readValue(String.class).exec();
     }
 
     @Test(expected = DatabaseReferenceNotSetException.class)
@@ -338,7 +338,7 @@ public class DatabaseTest {
         // Given
         Database database = new Database();
         // When
-        database.transaction(String.class, Mockito.mock(Function.class));
+        database.transaction(String.class, Mockito.mock(Function.class)).exec();
     }
 
     @Test
