@@ -9,7 +9,9 @@ import pl.mk5.gdxfireapp.e2e.runner.E2ETestRunner;
 import pl.mk5.gdxfireapp.e2e.runner.E2ETestRunnerFactory;
 import pl.mk5.gdxfireapp.e2e.tests.AuthAnonymousTest;
 import pl.mk5.gdxfireapp.e2e.tests.AuthCreateUserEmailPasswordTest;
+import pl.mk5.gdxfireapp.e2e.tests.AuthGoogleSignInTest;
 import pl.mk5.gdxfireapp.e2e.tests.AuthSignInUserEmailPasswordTest;
+import pl.mk5.gdxfireapp.e2e.tests.AuthSignOutTest;
 import pl.mk5.gdxfireapp.e2e.tests.BadlogicTest;
 import pl.mk5.gdxfireapp.e2e.tests.StorageDeleteTest;
 import pl.mk5.gdxfireapp.e2e.tests.StorageDownloadBytesTest;
@@ -28,6 +30,9 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(AuthAnonymousTest.class);
         e2ETestRunner.addNext(AuthCreateUserEmailPasswordTest.class);
         e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
+//        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
+        e2ETestRunner.addNext(AuthSignOutTest.class);
+
         e2ETestRunner.addNext(StorageUploadImageTest.class);
         e2ETestRunner.addNext(StorageUploadImageTest.class);
         e2ETestRunner.addNext(StorageDownloadImageTest.class, 30);
