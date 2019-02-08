@@ -11,11 +11,14 @@ import pl.mk5.gdxfireapp.e2e.tests.AuthAnonymousTest;
 import pl.mk5.gdxfireapp.e2e.tests.AuthCreateUserEmailPasswordTest;
 import pl.mk5.gdxfireapp.e2e.tests.AuthSignInUserEmailPasswordTest;
 import pl.mk5.gdxfireapp.e2e.tests.BadlogicTest;
+import pl.mk5.gdxfireapp.e2e.tests.StorageDeleteTest;
+import pl.mk5.gdxfireapp.e2e.tests.StorageDownloadBytesTest;
 import pl.mk5.gdxfireapp.e2e.tests.StorageDownloadImageTest;
+import pl.mk5.gdxfireapp.e2e.tests.StorageUploadBytesTest;
 import pl.mk5.gdxfireapp.e2e.tests.StorageUploadImageTest;
 
 public class GdxFireappE2ETests extends ApplicationAdapter {
-    SpriteBatch batch;
+    private SpriteBatch batch;
     private Texture img;
 
     private final E2ETestRunner e2ETestRunner = E2ETestRunnerFactory.factory();
@@ -26,7 +29,11 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(AuthCreateUserEmailPasswordTest.class);
         e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
         e2ETestRunner.addNext(StorageUploadImageTest.class);
+        e2ETestRunner.addNext(StorageUploadImageTest.class);
         e2ETestRunner.addNext(StorageDownloadImageTest.class, 30);
+        e2ETestRunner.addNext(StorageUploadBytesTest.class);
+        e2ETestRunner.addNext(StorageDownloadBytesTest.class, 30);
+        e2ETestRunner.addNext(StorageDeleteTest.class, 30);
         e2ETestRunner.onFinish(new Runnable() {
             @Override
             public void run() {

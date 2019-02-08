@@ -11,12 +11,13 @@ import mk.gdx.firebase.functional.Consumer;
 import pl.mk5.gdxfireapp.e2e.runner.E2ETest;
 
 public class StorageDownloadImageTest extends E2ETest {
+
     Texture img;
 
     @Override
     public void action() {
         GdxFIRStorage.instance()
-                .downloadImage("badlogic.jpg")
+                .downloadImage(StorageUploadImageTest.STORAGE_PATH)
                 .after(GdxFIRAuth.instance().signInAnonymously())
                 .then(new Consumer<TextureRegion>() {
                     @Override

@@ -10,10 +10,12 @@ import mk.gdx.firebase.storage.FileMetadata;
 import pl.mk5.gdxfireapp.e2e.runner.E2ETest;
 
 public class StorageUploadImageTest extends E2ETest {
+    final static String STORAGE_PATH = "badlogic" + (Math.floor(Math.random() * 100000)) + ".jpg";
+
     @Override
     public void action() {
         GdxFIRStorage.instance()
-                .upload(Gdx.files.internal("badlogic.jpg").readBytes(), "badlogic.jpg")
+                .upload(STORAGE_PATH, Gdx.files.internal("badlogic.jpg").readBytes())
                 .after(GdxFIRAuth.instance().signInAnonymously())
                 .then(new Consumer<FileMetadata>() {
                     @Override
