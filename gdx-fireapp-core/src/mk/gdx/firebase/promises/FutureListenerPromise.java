@@ -60,6 +60,12 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public ListenerPromise<T> thenListener(Consumer<T> listener) {
+        return (ListenerPromise<T>) then(listener);
+    }
+
+    @Override
     public ListenerPromise<T> cancel() {
         canceled = true;
         if (onCancel != null) {
@@ -67,6 +73,11 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
             onCancel = null;
         }
         return this;
+    }
+
+    @Override
+    public ListenerPromise<T> listen() {
+        return (ListenerPromise<T>) exec();
     }
 
     public void onCancel(Runnable onCancel) {

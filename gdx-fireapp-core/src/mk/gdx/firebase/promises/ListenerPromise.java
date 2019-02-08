@@ -16,13 +16,28 @@
 
 package mk.gdx.firebase.promises;
 
+import mk.gdx.firebase.functional.Consumer;
+
 /**
  * Listener promise
  */
 public interface ListenerPromise<T> extends Promise<T> {
 
     /**
+     * Attach listener to this promise
+     *
+     * @param listener The listener consumer, not null
+     * @see Promise#then(Consumer)
+     */
+    ListenerPromise<T> thenListener(Consumer<T> listener);
+
+    /**
      * Cancel this promise
      */
     ListenerPromise<T> cancel();
+
+    /**
+     * Start listening, do same logic as {@link Promise#exec()}
+     */
+    ListenerPromise<T> listen();
 }

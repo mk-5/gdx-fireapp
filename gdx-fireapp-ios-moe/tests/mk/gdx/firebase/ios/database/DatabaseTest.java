@@ -46,7 +46,6 @@ import mk.gdx.firebase.deserialization.MapConverter;
 import mk.gdx.firebase.exceptions.DatabaseReferenceNotSetException;
 import mk.gdx.firebase.functional.Function;
 import mk.gdx.firebase.ios.GdxIOSAppTest;
-import mk.gdx.firebase.promises.ListenerPromise;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -188,8 +187,6 @@ public class DatabaseTest extends GdxIOSAppTest {
         database.inReference("/test").onDataChange(dataType).exec();
 
         // Then
-//      PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(
                 Mockito.anyLong(),
                 Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
@@ -216,8 +213,7 @@ public class DatabaseTest extends GdxIOSAppTest {
 
 
         // When
-        ((ListenerPromise) database.inReference("/test").onDataChange(String.class).exec())
-                .cancel();
+        database.inReference("/test").onDataChange(String.class).listen().cancel();
 
         // Then
 //      PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
@@ -322,8 +318,6 @@ public class DatabaseTest extends GdxIOSAppTest {
         database.inReference("/test").transaction(dataType, transactionFunction).exec();
 
         // Then
-//      PowerMockito.verifyNew(RunTransactionQuery.class).withArguments(Mockito.any());
-//      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(
                 Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0.class),
                 Mockito.any(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1.class)
