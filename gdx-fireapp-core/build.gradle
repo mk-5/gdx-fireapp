@@ -20,16 +20,16 @@ task sourceJar(type: Jar) {
 }
 
 dependencies {
-    compile libs.libgdx.core
-    testCompile libs.junit
-    testCompile libs.powermock.junit
-    testCompile libs.powermock.junitRule
-    testCompile libs.powermock.api
-    testCompile libs.powermock.xstream
-    testCompile libs.systemrules
-    testCompile libs.spock.groovyAll
-    testCompile libs.spock.spockCore
-    testCompile libs.spock.byteBuddy
+    implementation libs.libgdx.core
+    testImplementation libs.junit
+    testImplementation libs.powermock.junit
+    testImplementation libs.powermock.junitRule
+    testImplementation libs.powermock.api
+    testImplementation libs.powermock.xstream
+    testImplementation libs.systemrules
+    testImplementation libs.spock.groovyAll
+    testImplementation libs.spock.spockCore
+    testImplementation libs.spock.byteBuddy
 }
 
 eclipse.project {

@@ -7,7 +7,7 @@ sonarqube {
     }
 }
 
-configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
+configure(subprojects.findAll { it.name.indexOf("android") < 0 }) {
     apply plugin: "java"
     apply plugin: "jacoco"
 
@@ -50,7 +50,7 @@ configure(subprojects.findAll { !it.name.equals('gdx-fireapp-android') }) {
                         '**/mk/gdx/firebase/html/database/resolvers/GwtQueryFilterResolver*',
                         '**/mk/gdx/firebase/html/database/resolvers/GwtQueryOrderByResolver*',
                         '**/mk/gdx/firebase/html/database/DatabaseReference*',
-                ];
+                ]
                 if( project.name.equals('gdx-fireapp-html') ) {
                     excludes.push('mk/gdx/firebase/helpers/ImageHelper*')
                 }
@@ -74,10 +74,10 @@ configure(subprojects.findAll { it.name.equals('gdx-fireapp-android') }) {
             property "sonar.tests", "$projectDir/src/test/java"
             property "sonar.java.test.binaries", "$projectDir/build/intermediates/classes/test/debug"
 
-            def unit = fileTree(dir: project.projectDir, includes: ['**/*.exec']).files;
-            def ui = fileTree(dir: project.projectDir, includes: ['**/*.ec']).files;
-            unit.addAll(ui);
-            def files = unit.join(", ");
+            def unit = fileTree(dir: project.projectDir, includes: ['**/*.exec']).files
+            def ui = fileTree(dir: project.projectDir, includes: ['**/*.ec']).files
+            unit.addAll(ui)
+            def files = unit.join(", ")
 
             property "sonar.jacoco.reportPaths", files
             property "sonar.java.coveragePlugin", "jacoco"
