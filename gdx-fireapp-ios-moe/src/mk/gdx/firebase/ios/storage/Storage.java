@@ -43,7 +43,7 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<FileMetadata> upload(final FileHandle file, final String path) {
+    public Promise<FileMetadata> upload(final String path, final FileHandle file) {
         return FuturePromise.when(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
             public void accept(FuturePromise<FileMetadata> promise) {
@@ -56,7 +56,7 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<FileMetadata> upload(final byte[] data, final String path) {
+    public Promise<FileMetadata> upload(final String path, final byte[] data) {
         return FuturePromise.when(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
             public void accept(FuturePromise<FileMetadata> promise) {

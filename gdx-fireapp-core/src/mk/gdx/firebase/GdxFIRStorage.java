@@ -63,16 +63,16 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * {@inheritDoc}
      */
     @Override
-    public Promise<FileMetadata> upload(FileHandle file, String path) {
-        return platformObject.upload(file, path);
+    public Promise<FileMetadata> upload(String path, FileHandle file) {
+        return platformObject.upload(path, file);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Promise<FileMetadata> upload(byte[] data, String path) {
-        return platformObject.upload(data, path);
+    public Promise<FileMetadata> upload(String path, byte[] data) {
+        return platformObject.upload(path, data);
     }
 
     /**

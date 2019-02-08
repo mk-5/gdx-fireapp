@@ -44,7 +44,7 @@ public class Storage implements StorageDistribution {
      * @param path Path
      */
     @Override
-    public Promise<FileMetadata> upload(FileHandle file, String path) {
+    public Promise<FileMetadata> upload(String path, FileHandle file) {
         Gdx.app.error("GdxFireapp", "This method is not supported in Firebase Web API");
         return FuturePromise.empty();
     }
@@ -53,7 +53,7 @@ public class Storage implements StorageDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<FileMetadata> upload(final byte[] data, final String path) {
+    public Promise<FileMetadata> upload(final String path, final byte[] data) {
         return FuturePromise.when(new Consumer<FuturePromise<FileMetadata>>() {
             @Override
             public void accept(final FuturePromise<FileMetadata> promise) {

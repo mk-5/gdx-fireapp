@@ -114,7 +114,7 @@ public class StorageTest extends GdxIOSAppTest {
 
 
         // When
-        storage.upload(fileHandle, "test").exec();
+        storage.upload("test", fileHandle).exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).putDataMetadataCompletion(Mockito.nullable(NSData.class), Mockito.nullable(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));
@@ -130,7 +130,7 @@ public class StorageTest extends GdxIOSAppTest {
 
 
         // When
-        storage.upload(data, "test").exec();
+        storage.upload("test", data).exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).putDataMetadataCompletion(Mockito.nullable(NSData.class), Mockito.nullable(FIRStorageMetadata.class), Mockito.any(FIRStorageReference.Block_putDataMetadataCompletion.class));

@@ -54,15 +54,15 @@ class GdxFIRStorageTest extends Specification {
 
         when:
         gdxFIRStorage.delete(arg1)
-        gdxFIRStorage.upload(arg3, arg1)
-        gdxFIRStorage.upload(arg2, arg1)
+        gdxFIRStorage.upload(arg1, arg3)
+        gdxFIRStorage.upload(arg1, arg2)
         gdxFIRStorage.download(arg1, arg4)
         gdxFIRStorage.download(arg1, arg2)
         gdxFIRStorage.inBucket(arg1)
 
         then:
-        1 * storageDistribution.upload(arg3, arg1)
-        1 * storageDistribution.upload(arg2, arg1)
+        1 * storageDistribution.upload(arg1, arg3)
+        1 * storageDistribution.upload(arg1, arg2)
         1 * storageDistribution.delete(arg1)
         1 * storageDistribution.download(arg1, arg4)
         1 * storageDistribution.download(arg1, arg2)

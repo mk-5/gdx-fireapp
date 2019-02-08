@@ -29,18 +29,18 @@ public interface StorageDistribution {
     /**
      * Uploads file data to storage.
      *
-     * @param file File you want to upload
      * @param path Target path at Firebase storage
+     * @param file File you want to upload
      */
-    Promise<FileMetadata> upload(FileHandle file, String path);
+    Promise<FileMetadata> upload(String path, FileHandle file);
 
     /**
      * Uploads byte array data to storage.
      *
-     * @param data Data to upload
      * @param path Target pat at Firebase storage
+     * @param data Data to upload
      */
-    Promise<FileMetadata> upload(byte[] data, String path);
+    Promise<FileMetadata> upload(String path, byte[] data);
 
     /**
      * Downloads data as byte array.

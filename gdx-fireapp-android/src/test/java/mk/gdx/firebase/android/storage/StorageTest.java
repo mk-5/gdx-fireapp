@@ -93,7 +93,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.upload(fileHandle, "test").exec();
+        storage.upload("test", fileHandle).exec();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).putFile(Mockito.any(Uri.class));
@@ -118,7 +118,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.upload(data, "test").exec();
+        storage.upload("test", data).exec();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).putBytes(Mockito.any(byte[].class));
