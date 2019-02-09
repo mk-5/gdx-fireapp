@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.GdxFIRDatabase;
-import mk.gdx.firebase.database.FilterType;
-import mk.gdx.firebase.database.OrderByMode;
-import mk.gdx.firebase.functional.Consumer;
+import pl.mk5.gdx.fireapp.GdxFIRAuth;
+import pl.mk5.gdx.fireapp.GdxFIRDatabase;
+import pl.mk5.gdx.fireapp.database.FilterType;
+import pl.mk5.gdx.fireapp.database.OrderByMode;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 
 public class DatabaseLimitEqualTest extends E2ETest {

@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
-import mk.gdx.firebase.GdxFIRApp;
-import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.functional.BiConsumer;
-import mk.gdx.firebase.functional.Consumer;
+import pl.mk5.gdx.fireapp.GdxFIRApp;
+import pl.mk5.gdx.fireapp.GdxFIRAuth;
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
+import pl.mk5.gdx.fireapp.functional.BiConsumer;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.result.TestLogger;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 

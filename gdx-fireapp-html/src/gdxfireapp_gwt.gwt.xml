@@ -5,18 +5,19 @@
     <source path="mk/gdx/firebase"/>
     <super-source path="fakes"/>
 
-    <extend-configuration-property name="gdx.reflect.include" value="mk.gdx.firebase.html"/>
+    <extend-configuration-property name="gdx.reflect.include" value="pl.mk5.gdx.fireapp.html"/>
 
-    <extend-configuration-property name="gdx.reflect.exclude" value="mk.gdx.firebase.html.database.DatabaseReference"/>
+    <extend-configuration-property name="gdx.reflect.exclude"
+                                   value="pl.mk5.gdx.fireapp.html.database.DatabaseReference"/>
 
     <extend-configuration-property name="gdx.reflect.include"
-                                   value="mk.gdx.firebase.promises.FuturePromise"/>
+                                   value="pl.mk5.gdx.fireapp.promises.FuturePromise"/>
     <extend-configuration-property name="gdx.reflect.include"
-                                   value="mk.gdx.firebase.promises.ConverterPromise"/>
+                                   value="pl.mk5.gdx.fireapp.promises.ConverterPromise"/>
     <extend-configuration-property name="gdx.reflect.include"
-                                   value="mk.gdx.firebase.annotations.MapConversion"/>
+                                   value="pl.mk5.gdx.fireapp.annotations.MapConversion"/>
     <extend-configuration-property name="gdx.reflect.include"
-                                   value="mk.gdx.firebase.functional.Consumer"/>
+                                   value="pl.mk5.gdx.fireapp.functional.Consumer"/>
     <extend-configuration-property name="gdx.reflect.include"
-                                   value="mk.gdx.firebase.functional.Function"/>
+                                   value="pl.mk5.gdx.fireapp.functional.Function"/>
 </module>

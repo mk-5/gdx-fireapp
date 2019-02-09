@@ -2,9 +2,9 @@ package pl.mk5.gdx.fireapp.e2e.tests;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.auth.GdxFirebaseUser;
-import mk.gdx.firebase.functional.Consumer;
+import pl.mk5.gdx.fireapp.GdxFIRAuth;
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 
 import static pl.mk5.gdx.fireapp.e2e.tests.AuthCreateUserEmailPasswordTest.PASSWORD;

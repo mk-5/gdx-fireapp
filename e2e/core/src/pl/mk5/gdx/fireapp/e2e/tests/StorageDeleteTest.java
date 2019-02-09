@@ -18,9 +18,9 @@ package pl.mk5.gdx.fireapp.e2e.tests;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import mk.gdx.firebase.GdxFIRAuth;
-import mk.gdx.firebase.GdxFIRStorage;
-import mk.gdx.firebase.functional.Consumer;
+import pl.mk5.gdx.fireapp.GdxFIRAuth;
+import pl.mk5.gdx.fireapp.GdxFIRStorage;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 
 public class StorageDeleteTest extends E2ETest {

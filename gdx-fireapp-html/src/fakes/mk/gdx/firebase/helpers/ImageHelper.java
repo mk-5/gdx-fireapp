@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mk.gdx.firebase.helpers;
+package pl.mk5.gdx.fireapp.helpers;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,8 +27,8 @@ import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import mk.gdx.firebase.GdxFIRLogger;
-import mk.gdx.firebase.functional.Consumer;
+import pl.mk5.gdx.fireapp.GdxFIRLogger;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 
 /**
  * Fake class implementation. For GWT only.
