@@ -186,6 +186,52 @@ class FuturePromiseGroovyTest extends Specification {
         1 * consumer.accept(_, _)
     }
 
+    def "should call fail of bottom chained promise2"() {
+        given:
+        def futurePromise = FuturePromise.when(new Consumer<FuturePromise>() {
+            @Override
+            void accept(FuturePromise rFuturePromise) {
+                Thread.sleep(300)
+                rFuturePromise.doFail("abc", new RuntimeException())
+            }
+        })
+        def promise1 = Spy(FuturePromise.when(new Consumer<FuturePromise>() {
+            @Override
+            void accept(FuturePromise rFuturePromise) {
+                rFuturePromise.doComplete()
+            }
+        }) as FuturePromise)
+        def promise2 = Spy(FuturePromise.when(new Consumer<FuturePromise>() {
+            @Override
+            void accept(FuturePromise rFuturePromise) {
+                rFuturePromise.doComplete()
+            }
+        }) as FuturePromise)
+        def promise3 = Spy(FuturePromise.when(new Consumer<FuturePromise>() {
+            @Override
+            void accept(FuturePromise rFuturePromise) {
+                rFuturePromise.doComplete()
+            }
+        }) as FuturePromise)
+        def consumer = Mock(BiConsumer)
+
+        when:
+        futurePromise
+                .then(promise1)
+                .then(promise2)
+                .then(promise3)
+                .fail(consumer)
+
+        then:
+        0 * promise1.doComplete()
+        0 * promise2.doComplete()
+        0 * promise3.doComplete()
+        0 * promise1.execution.run()
+        0 * promise2.execution.run()
+        0 * promise3.execution.run()
+        1 * consumer.accept(_, _)
+    }
+
     def "should call do 'after flow'"() {
         given:
         def result = []

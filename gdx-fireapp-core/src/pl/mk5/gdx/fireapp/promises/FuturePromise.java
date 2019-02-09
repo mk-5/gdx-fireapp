@@ -131,10 +131,9 @@ public class FuturePromise<T> implements Promise<T> {
     @Override
     public Promise<T> exec() {
         FuturePromise topParentPromise = getTopParentPromise();
-        if (topParentPromise != null) {
+        if (topParentPromise != null && topParentPromise.execution != null) {
             topParentPromise.exec();
-        }
-        if (execution != null && !pauseExecution) {
+        } else if (execution != null && !pauseExecution) {
             execution.run();
         }
         return this;
@@ -180,7 +179,7 @@ public class FuturePromise<T> implements Promise<T> {
             return;
         }
         state = FAIL;
-        if (throwFail) {
+        if (throwFail || getBottomThenPromise().throwFail) {
             throw new RuntimeException(reason, throwable);
         }
         if (failConsumer.isSet()) {
@@ -188,6 +187,9 @@ public class FuturePromise<T> implements Promise<T> {
         } else {
             failReason = reason;
             failThrowable = throwable;
+        }
+        if (getBottomThenPromise() != this) {
+            getBottomThenPromise().doFail(reason, throwable);
         }
     }
 
