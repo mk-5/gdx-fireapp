@@ -4,6 +4,7 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
@@ -14,6 +15,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.2.0'
         classpath 'org.multi-os-engine:moe-gradle:1.4.0'
         classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
@@ -43,6 +45,7 @@ allprojects {
 
 project(":android") {
     apply plugin: "android"
+    apply plugin: 'io.fabric'
 
     configurations { natives }
 
@@ -57,13 +60,16 @@ project(":android") {
 
         implementation "pl.mk5.gdx-fireapp:gdx-fireapp-android:$gdxFireappVersion"
 
-        compile 'com.google.firebase:firebase-core:16.0.0'
-        compile 'com.google.firebase:firebase-storage:16.0.1'
-        compile 'com.google.firebase:firebase-auth:16.0.1'
-        compile 'com.google.firebase:firebase-database:16.0.1'
+        api 'com.google.firebase:firebase-core:16.0.0'
+        api 'com.google.firebase:firebase-storage:16.0.1'
+        api 'com.google.firebase:firebase-auth:16.0.1'
+        api 'com.google.firebase:firebase-database:16.0.1'
 
         // Add this if you need google authorization
-        compile 'com.google.android.gms:play-services-auth:16.0.0'
+        api 'com.google.android.gms:play-services-auth:16.0.0'
+
+        // Crashlytics
+        api 'com.crashlytics.sdk.android:crashlytics:2.9.5'
     }
 }
 

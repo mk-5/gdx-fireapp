@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunner;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunnerFactory;
-import pl.mk5.gdx.fireapp.e2e.tests.AnalyticsTest;
 import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
+import pl.mk5.gdx.fireapp.e2e.tests.CrashTest;
 
 public class GdxFireappE2ETests extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -31,7 +31,8 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 //        e2ETestRunner.addNext(StorageDownloadBytesTest.class, 30);
 //        e2ETestRunner.addNext(StorageDeleteTest.class, 30);
 
-        e2ETestRunner.addNext(AnalyticsTest.class);
+//        e2ETestRunner.addNext(AnalyticsTest.class);
+        e2ETestRunner.addNext(CrashTest.class);
 
 //        e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
 
