@@ -21,7 +21,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MOE.Main.Class</key>
-	<string>pl.mk5.gdxfireapp.e2e.IOSMoeLauncher</string>
+	<string>gdx.fireapp.e2e.IOSMoeLauncher</string>
 	<key>UIApplicationExitsOnSuspend</key>
 	<false/>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "pl.mk5.gdxfireapp.e2e"
+        applicationId "pl.mk5.gdx.fireapp.e2e"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
@@ -86,7 +86,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'pl.mk5.gdxfireapp.e2e/pl.mk5.gdxfireapp.e2e.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'pl.mk5.gdx.fireapp.e2e/pl.mk5.gdx.fireapp.e2e.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

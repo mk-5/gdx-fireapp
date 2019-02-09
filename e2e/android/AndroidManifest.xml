@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="pl.mk5.gdxfireapp.e2e">
+          package="pl.mk5.gdx.fireapp.e2e">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/GdxTheme">
         <activity
-            android:name="pl.mk5.gdxfireapp.e2e.AndroidLauncher"
+            android:name="pl.mk5.gdx.fireapp.e2e.AndroidLauncher"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout">

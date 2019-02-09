@@ -23,7 +23,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "gdxfireapp-end-to-end-tests"
+        appName = "gdx.fireapp-end-to-end-tests"
         gdxVersion = '1.9.9'
         roboVMVersion = '2.3.5'
         box2DLightsVersion = '1.4'

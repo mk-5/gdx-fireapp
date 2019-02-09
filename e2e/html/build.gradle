@@ -4,8 +4,8 @@ gwt {
     minHeapSize="1G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
-    modules 'pl.mk5.gdxfireapp.e2e.GdxDefinition'
-    devModules 'pl.mk5.gdxfireapp.e2e.GdxDefinitionSuperdev'
+    modules 'pl.mk5.gdx.fireapp.e2e.GdxDefinition'
+    devModules 'pl.mk5.gdx.fireapp.e2e.GdxDefinitionSuperdev'
     project.webAppDirName = 'webapp'
 
     compiler {
