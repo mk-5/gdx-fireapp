@@ -7,17 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pl.mk5.gdxfireapp.e2e.runner.E2ETestRunner;
 import pl.mk5.gdxfireapp.e2e.runner.E2ETestRunnerFactory;
-import pl.mk5.gdxfireapp.e2e.tests.AuthAnonymousTest;
-import pl.mk5.gdxfireapp.e2e.tests.AuthCreateUserEmailPasswordTest;
-import pl.mk5.gdxfireapp.e2e.tests.AuthGoogleSignInTest;
-import pl.mk5.gdxfireapp.e2e.tests.AuthSignInUserEmailPasswordTest;
-import pl.mk5.gdxfireapp.e2e.tests.AuthSignOutTest;
 import pl.mk5.gdxfireapp.e2e.tests.BadlogicTest;
-import pl.mk5.gdxfireapp.e2e.tests.StorageDeleteTest;
-import pl.mk5.gdxfireapp.e2e.tests.StorageDownloadBytesTest;
-import pl.mk5.gdxfireapp.e2e.tests.StorageDownloadImageTest;
-import pl.mk5.gdxfireapp.e2e.tests.StorageUploadBytesTest;
-import pl.mk5.gdxfireapp.e2e.tests.StorageUploadImageTest;
+import pl.mk5.gdxfireapp.e2e.tests.DatabaseLimitEqualTest;
 
 public class GdxFireappE2ETests extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -27,18 +18,21 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 
     public GdxFireappE2ETests() throws Exception {
         e2ETestRunner.addNext(BadlogicTest.class);
-        e2ETestRunner.addNext(AuthAnonymousTest.class);
-        e2ETestRunner.addNext(AuthCreateUserEmailPasswordTest.class);
-        e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
+//        e2ETestRunner.addNext(AuthAnonymousTest.class);
+//        e2ETestRunner.addNext(AuthCreateUserEmailPasswordTest.class);
+//        e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
 //        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
-        e2ETestRunner.addNext(AuthSignOutTest.class);
+//        e2ETestRunner.addNext(AuthSignOutTest.class);
 
-        e2ETestRunner.addNext(StorageUploadImageTest.class);
-        e2ETestRunner.addNext(StorageUploadImageTest.class);
-        e2ETestRunner.addNext(StorageDownloadImageTest.class, 30);
-        e2ETestRunner.addNext(StorageUploadBytesTest.class);
-        e2ETestRunner.addNext(StorageDownloadBytesTest.class, 30);
-        e2ETestRunner.addNext(StorageDeleteTest.class, 30);
+//        e2ETestRunner.addNext(StorageUploadImageTest.class);
+//        e2ETestRunner.addNext(StorageUploadImageTest.class);
+//        e2ETestRunner.addNext(StorageDownloadImageTest.class, 30);
+//        e2ETestRunner.addNext(StorageUploadBytesTest.class);
+//        e2ETestRunner.addNext(StorageDownloadBytesTest.class, 30);
+//        e2ETestRunner.addNext(StorageDeleteTest.class, 30);
+
+        e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
+
         e2ETestRunner.onFinish(new Runnable() {
             @Override
             public void run() {
