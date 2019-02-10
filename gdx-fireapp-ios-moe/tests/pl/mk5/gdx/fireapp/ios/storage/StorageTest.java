@@ -212,7 +212,7 @@ public class StorageTest extends GdxIOSAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.delete("/test").exec();
+        storage.delete("/test").silentFail().exec();
 
         // Then
         Mockito.verify(firStorageReference, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRStorageReference.Block_deleteWithCompletion.class));

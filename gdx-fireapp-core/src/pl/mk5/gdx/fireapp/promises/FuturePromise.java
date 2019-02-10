@@ -44,6 +44,7 @@ public class FuturePromise<T> implements Promise<T> {
     private FuturePromise parentPromise;
 
     protected FuturePromise() {
+        throwFail = true;
         thenConsumer = new ConsumerWrapper<>();
         failConsumer = new BiConsumerWrapper();
     }
@@ -66,8 +67,8 @@ public class FuturePromise<T> implements Promise<T> {
     }
 
     @Override
-    public Promise<T> throwFail() {
-        throwFail = true;
+    public Promise<T> silentFail() {
+        throwFail = false;
         return this;
     }
 
@@ -79,6 +80,7 @@ public class FuturePromise<T> implements Promise<T> {
     @Override
     public synchronized FuturePromise<T> fail(BiConsumer<String, ? super Throwable> consumer) {
         if (consumer == null) throw new IllegalArgumentException();
+        throwFail = false;
         failConsumer.addConsumer(consumer);
         if (state == FAIL) {
             doFail(failReason, failThrowable);
@@ -179,17 +181,18 @@ public class FuturePromise<T> implements Promise<T> {
             return;
         }
         state = FAIL;
-        if (throwFail || getBottomThenPromise().throwFail) {
-            throw new RuntimeException(reason, throwable);
-        }
-        if (failConsumer.isSet()) {
-            failConsumer.accept(reason, throwable);
-        } else {
-            failReason = reason;
-            failThrowable = throwable;
-        }
         if (getBottomThenPromise() != this) {
             getBottomThenPromise().doFail(reason, throwable);
+        } else {
+            if (throwFail || getBottomThenPromise().throwFail) {
+                throw new RuntimeException(reason, throwable);
+            }
+            if (failConsumer.isSet()) {
+                failConsumer.accept(reason, throwable);
+            } else {
+                failReason = reason;
+                failThrowable = throwable;
+            }
         }
     }
 

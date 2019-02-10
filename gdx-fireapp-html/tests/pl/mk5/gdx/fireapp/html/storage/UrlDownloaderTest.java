@@ -88,6 +88,7 @@ public class UrlDownloaderTest {
         // Given
         String downloadUrl = "http://url.with.token.com?token=abc";
         FuturePromise futurePromise = Mockito.spy(FuturePromise.class);
+        futurePromise.silentFail();
         UrlDownloader urlDownloader = new UrlDownloader(futurePromise);
         Mockito.when(xmlHttpRequest.getReadyState()).thenReturn(XMLHttpRequest.DONE);
         Mockito.when(xmlHttpRequest.getStatus()).thenReturn(501);
@@ -117,6 +118,7 @@ public class UrlDownloaderTest {
     public void onFail() {
         // Given
         FuturePromise futurePromise = Mockito.spy(FuturePromise.class);
+        futurePromise.silentFail();
         UrlDownloader urlDownloader = new UrlDownloader(futurePromise);
         Exception exception = Mockito.mock(Exception.class);
 

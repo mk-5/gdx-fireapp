@@ -49,6 +49,7 @@ public class QueryCompletionListenerTest extends AndroidContextTest {
         DatabaseError databaseError = Mockito.mock(DatabaseError.class);
         DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
         FuturePromise promise = Mockito.spy(FuturePromise.class);
+        promise.silentFail();
         QueryCompletionListener listener = new QueryCompletionListener(promise);
 
         // When

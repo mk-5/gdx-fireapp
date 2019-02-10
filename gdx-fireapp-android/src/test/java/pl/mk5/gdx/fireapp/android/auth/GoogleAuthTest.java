@@ -119,7 +119,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut().exec());
+        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut().silentFail().exec());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -171,7 +171,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().exec());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().silentFail().exec());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));

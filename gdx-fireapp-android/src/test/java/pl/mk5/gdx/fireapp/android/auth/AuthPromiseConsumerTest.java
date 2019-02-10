@@ -77,7 +77,7 @@ public class AuthPromiseConsumerTest extends AndroidContextTest {
         // Given
         Mockito.when(task.isSuccessful()).thenReturn(false);
         FuturePromise promise = Mockito.spy(FuturePromise.empty());
-        promise.then(Mockito.mock(Consumer.class));
+        promise.then(Mockito.mock(Consumer.class)).silentFail();
         AuthPromiseConsumer authPromiseConsumer = new AuthPromiseConsumer(task);
 
         // When

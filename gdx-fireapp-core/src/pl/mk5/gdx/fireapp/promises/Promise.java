@@ -32,9 +32,9 @@ public interface Promise<T> {
     Promise<T> then(Consumer<T> consumer);
 
     /**
-     * Promise will throw exception on fail
+     * Promise will not throw exception on fail without {@link Promise#fail(BiConsumer)} earlier.
      */
-    Promise<T> throwFail();
+    Promise<T> silentFail();
 
     /**
      * Sets fail bi-consumer.
