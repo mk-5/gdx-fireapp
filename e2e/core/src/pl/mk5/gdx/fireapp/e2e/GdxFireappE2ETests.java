@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunner;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunnerFactory;
 import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
-import pl.mk5.gdx.fireapp.e2e.tests.CrashTest;
+import pl.mk5.gdx.fireapp.e2e.tests.GdxFirebaseUserTest;
 
 public class GdxFireappE2ETests extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -23,6 +23,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 //        e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
 //        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
 //        e2ETestRunner.addNext(AuthSignOutTest.class);
+        e2ETestRunner.addNext(GdxFirebaseUserTest.class, 10);
 
 //        e2ETestRunner.addNext(StorageUploadImageTest.class);
 //        e2ETestRunner.addNext(StorageUploadImageTest.class);
@@ -32,7 +33,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 //        e2ETestRunner.addNext(StorageDeleteTest.class, 30);
 
 //        e2ETestRunner.addNext(AnalyticsTest.class);
-        e2ETestRunner.addNext(CrashTest.class);
+//        e2ETestRunner.addNext(CrashTest.class);
 
 //        e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
 

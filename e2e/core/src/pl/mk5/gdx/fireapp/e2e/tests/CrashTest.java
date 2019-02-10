@@ -17,14 +17,11 @@
 package pl.mk5.gdx.fireapp.e2e.tests;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import pl.mk5.gdx.fireapp.GdxFIRCrash;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 
 public class CrashTest extends E2ETest {
-
-    private BitmapFont font;
 
     @Override
     public void action() {
