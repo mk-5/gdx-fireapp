@@ -18,6 +18,8 @@ package pl.mk5.gdx.fireapp;
 
 import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.distributions.AuthDistribution;
+import pl.mk5.gdx.fireapp.functional.Consumer;
+import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.promises.Promise;
 
 /**
@@ -26,6 +28,7 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  */
 public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements AuthDistribution {
 
+    private static final String USER_NOT_LOGGED_IN = "User is not logged in.";
     private static volatile GdxFIRAuth instance;
     private GdxFIRGoogleAuth gdxFIRGoogleAuth;
 
@@ -69,6 +72,20 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
     @Override
     public GdxFirebaseUser getCurrentUser() {
         return platformObject.getCurrentUser();
+    }
+
+    public Promise<GdxFirebaseUser> getCurrentUserPromise() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
+            @Override
+            public void accept(FuturePromise<GdxFirebaseUser> promise) {
+                GdxFirebaseUser user = getCurrentUser();
+                if (user != null) {
+                    promise.doComplete(user);
+                } else {
+                    promise.doFail(USER_NOT_LOGGED_IN, null);
+                }
+            }
+        });
     }
 
     /**
