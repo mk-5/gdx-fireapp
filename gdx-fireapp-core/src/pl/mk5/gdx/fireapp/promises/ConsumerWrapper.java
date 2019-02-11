@@ -39,4 +39,8 @@ class ConsumerWrapper<T> implements Consumer<T> {
     boolean isSet() {
         return consumers.size > 0;
     }
+
+    Consumer<T> first() {
+        return consumers.first();
+    }
 }

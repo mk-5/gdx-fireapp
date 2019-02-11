@@ -115,7 +115,7 @@ public class Database implements DatabaseDistribution {
         return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, E>>() {
             @Override
             public void accept(ConverterPromise<T, E> teConverterPromise) {
-                teConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
+                teConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryReadValue(Database.this).with(filters)
                         .with(orderByClause)
                         .withArgs(dataType)
@@ -136,7 +136,7 @@ public class Database implements DatabaseDistribution {
         return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, R>>() {
             @Override
             public void accept(ConverterPromise<T, R> trConverterPromise) {
-                trConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
+                trConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryOnDataChange(Database.this)
                         .with(filters)
                         .with(orderByClause)

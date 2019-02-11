@@ -105,7 +105,7 @@ public class Database implements DatabaseDistribution {
             @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 // TODO - check
-                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
+                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryReadValue(Database.this)
                         .with(filters)
                         .with(orderByClause)
@@ -126,7 +126,7 @@ public class Database implements DatabaseDistribution {
         return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, R>>() {
             @Override
             public void accept(ConverterPromise<T, R> rConverterPromise) {
-                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter());
+                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryOnDataChange(Database.this)
                         .with(filters)
                         .with(orderByClause)

@@ -16,6 +16,11 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+
+import java.util.Collections;
+import java.util.List;
+
 import pl.mk5.gdx.fireapp.annotations.MapConversion;
 import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.deserialization.MapMitmConverter;
@@ -30,14 +35,16 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
 
     private MapMitmConverter mapConverter;
     private Function<T, R> modifier;
+    private Class<T> wantedDataType;
 
     public ConverterPromise<T, R> with(Function<T, R> modifier) {
         this.modifier = modifier;
         return this;
     }
 
-    public ConverterPromise<T, R> with(FirebaseMapConverter converter) {
+    public ConverterPromise<T, R> with(FirebaseMapConverter converter, Class<T> wantedDataType) {
         this.mapConverter = new MapMitmConverter(converter);
+        this.wantedDataType = wantedDataType;
         return this;
     }
 
@@ -50,14 +57,19 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
         if (modifier != null) {
             object = modifier.apply((T) object);
         }
-        if (thenConsumer.isSet()) {
-            MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer);
-            if (mapConversionAnnotation != null) {
-                object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
-                // TODO - need it?
-//            if (ClassReflection.isAssignableFrom(List.class, dataType) && data.getClass() == mapConversionAnnotation.value()) {
-//                data = Collections.singletonList(data);
-//            }
+        if (!ClassReflection.isAssignableFrom(List.class, wantedDataType)) {
+            if (mapConverter.isPojo(wantedDataType)) {
+                object = mapConverter.doMitmConversion(wantedDataType, object);
+            }
+        } else {
+            if (thenConsumer.isSet()) {
+                MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer.first());
+                if (mapConversionAnnotation != null) {
+                    object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
+                    if (object.getClass() == mapConversionAnnotation.value()) {
+                        object = Collections.singletonList(object);
+                    }
+                }
             }
         }
         super.doComplete((R) object);

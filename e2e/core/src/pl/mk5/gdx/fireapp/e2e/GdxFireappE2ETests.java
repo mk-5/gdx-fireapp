@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunner;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunnerFactory;
 import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValue2Test;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.GdxFirebaseUserTest;
 
 public class GdxFireappE2ETests extends ApplicationAdapter {
@@ -23,7 +27,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 //        e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
 //        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
 //        e2ETestRunner.addNext(AuthSignOutTest.class);
-        e2ETestRunner.addNext(GdxFirebaseUserTest.class, 10);
+//        e2ETestRunner.addNext(GdxFirebaseUserTest.class, 10);
 
 //        e2ETestRunner.addNext(StorageUploadImageTest.class);
 //        e2ETestRunner.addNext(StorageUploadImageTest.class);
@@ -34,6 +38,11 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 
 //        e2ETestRunner.addNext(AnalyticsTest.class);
 //        e2ETestRunner.addNext(CrashTest.class);
+
+        e2ETestRunner.addNext(DatabaseReadValueTest.class);
+        e2ETestRunner.addNext(DatabaseReadValue2Test.class);
+        e2ETestRunner.addNext(DatabaseReadPojoTest.class);
+        e2ETestRunner.addNext(DatabaseListenerValueTest.class, 10);
 
 //        e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
 
