@@ -23,13 +23,19 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
 class ConsumerWrapper<T> implements Consumer<T> {
 
     private final Array<Consumer<T>> consumers = new Array<>();
+    private boolean cleanAfterAccept;
+
+    ConsumerWrapper() {
+        this.cleanAfterAccept = true;
+    }
 
     @Override
     public void accept(T t) {
         for (Consumer<T> consumer : consumers) {
             consumer.accept(t);
         }
-        consumers.clear();
+        if (cleanAfterAccept)
+            consumers.clear();
     }
 
     void addConsumer(Consumer<T> consumer) {
@@ -42,5 +48,9 @@ class ConsumerWrapper<T> implements Consumer<T> {
 
     Consumer<T> first() {
         return consumers.first();
+    }
+
+    public void setCleanAfterAccept(boolean cleanAfterAccept) {
+        this.cleanAfterAccept = cleanAfterAccept;
     }
 }

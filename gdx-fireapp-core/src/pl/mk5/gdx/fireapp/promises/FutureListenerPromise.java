@@ -28,6 +28,10 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
     boolean canceled;
     private Runnable onCancel;
 
+    FutureListenerPromise() {
+        thenConsumer.setCleanAfterAccept(false);
+    }
+
     @Override
     public synchronized void doComplete(T result) {
         if (canceled) return;

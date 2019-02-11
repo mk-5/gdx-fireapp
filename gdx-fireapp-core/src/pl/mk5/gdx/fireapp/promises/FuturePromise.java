@@ -16,6 +16,8 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import com.badlogic.gdx.utils.reflect.ArrayReflection;
+
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
@@ -25,6 +27,8 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
  * @param <T> The promise subject type
  */
 public class FuturePromise<T> implements Promise<T> {
+
+    private static final String EXEC_ARGS_NOT_SET = "Execution arguments has not been set.";
 
     private static final int COMPLETE = 3;
     private static final int FAIL = 1;
@@ -42,6 +46,7 @@ public class FuturePromise<T> implements Promise<T> {
     private String failReason;
     private Throwable failThrowable;
     private FuturePromise parentPromise;
+    private Object[] args;
 
     protected FuturePromise() {
         throwFail = true;
@@ -67,9 +72,24 @@ public class FuturePromise<T> implements Promise<T> {
     }
 
     @Override
-    public Promise<T> silentFail() {
+    public synchronized Promise<T> silentFail() {
         throwFail = false;
         return this;
+    }
+
+    public synchronized Promise<T> args(Object... args) {
+        this.args = (Object[]) ArrayReflection.newInstance(Object.class, args.length);
+        System.arraycopy(args, 0, this.args, 0, args.length);
+        return this;
+    }
+
+    public synchronized Object args(int index) {
+        if (args == null) {
+            throw new IllegalStateException(EXEC_ARGS_NOT_SET);
+        } else if (index > args.length - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        return args[index];
     }
 
     /**
