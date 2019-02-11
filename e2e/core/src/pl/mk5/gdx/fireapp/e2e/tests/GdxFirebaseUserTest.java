@@ -37,9 +37,11 @@ public class GdxFirebaseUserTest extends E2ETest {
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser user) {
+                        // TODO - re-authenticate
                         user.updateEmail("git@mk5.pl")
-                                .then(user.sendEmailVerification())
                                 .then(GdxFIRAuth.instance().signInWithEmailAndPassword("git@mk5.pl", "abcd1234".toCharArray()))
+                                .then(user.sendEmailVerification())
+                                .then(GdxFIRAuth.instance().getCurrentUserPromise())
                                 .then(new Consumer<GdxFirebaseUser>() {
                                     @Override
                                     public void accept(GdxFirebaseUser user) {

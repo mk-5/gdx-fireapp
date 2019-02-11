@@ -3,6 +3,7 @@ package pl.mk5.gdx.fireapp.e2e.runner;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -42,7 +43,7 @@ class E2ETestRunnerImpl implements E2ETestRunner {
     @Override
     public void render(Batch batch) {
         if (tests.size == 0) return;
-        tests.peek().update(Gdx.graphics.getDeltaTime());
+        tests.peek().update(MathUtils.clamp(0, 0.2f, Gdx.graphics.getDeltaTime()));
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         tests.peek().draw(batch);
