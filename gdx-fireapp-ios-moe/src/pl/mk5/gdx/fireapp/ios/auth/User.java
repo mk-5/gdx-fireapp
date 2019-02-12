@@ -27,13 +27,13 @@ import pl.mk5.gdx.fireapp.promises.Promise;
 public class User implements AuthUserDistribution {
 
     @Override
-    public Promise<Void> updateEmail(String newEmail) {
+    public Promise<Void> updateEmail(final String newEmail) {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().updateEmailCompletion(newEmail, new FIRUser.Block_updateEmailCompletion() {
                     @Override
                     public void call_updateEmailCompletion(NSError arg0) {
@@ -52,7 +52,7 @@ public class User implements AuthUserDistribution {
         }
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().sendEmailVerificationWithCompletion(new FIRUser.Block_sendEmailVerificationWithCompletion() {
                     @Override
                     public void call_sendEmailVerificationWithCompletion(NSError arg0) {
@@ -65,13 +65,13 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> updatePassword(char[] newPassword) {
+    public Promise<Void> updatePassword(final char[] newPassword) {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().updatePasswordCompletion(new String(newPassword), new FIRUser.Block_updatePasswordCompletion() {
                     @Override
                     public void call_updatePasswordCompletion(NSError arg0) {
@@ -90,10 +90,29 @@ public class User implements AuthUserDistribution {
         }
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
                 FIRAuth.auth().currentUser().deleteWithCompletion(new FIRUser.Block_deleteWithCompletion() {
                     @Override
                     public void call_deleteWithCompletion(NSError arg0) {
+                        if (handleError(arg0, voidFuturePromise)) return;
+                        voidFuturePromise.doComplete(null);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public Promise<Void> reload() {
+        if (FIRAuth.auth().currentUser() == null) {
+            throw new IllegalStateException();
+        }
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(final FuturePromise<Void> voidFuturePromise) {
+                FIRAuth.auth().currentUser().reloadWithCompletion(new FIRUser.Block_reloadWithCompletion() {
+                    @Override
+                    public void call_reloadWithCompletion(NSError arg0) {
                         if (handleError(arg0, voidFuturePromise)) return;
                         voidFuturePromise.doComplete(null);
                     }

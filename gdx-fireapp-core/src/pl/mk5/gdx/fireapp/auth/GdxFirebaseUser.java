@@ -84,7 +84,7 @@ public class GdxFirebaseUser implements AuthUserDistribution {
     }
 
     @Override
-    public void reload(CompleteCallback callback) {
-        userDistribution.reload(callback);
+    public Promise<Void> reload() {
+        return userDistribution.reload();
     }
 }

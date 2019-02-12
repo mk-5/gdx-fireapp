@@ -47,8 +47,8 @@ class GdxFIRUser extends PlatformDistributor<AuthUserDistribution> implements Au
     }
 
     @Override
-    public void reload(CompleteCallback callback) {
-        platformObject.reload(callback);
+    public Promise<Void> reload() {
+        return platformObject.reload();
     }
 
     @Override

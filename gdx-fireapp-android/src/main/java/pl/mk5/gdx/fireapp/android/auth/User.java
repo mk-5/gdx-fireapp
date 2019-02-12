@@ -63,23 +63,10 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public void reload(final CompleteCallback callback) {
+    public Promise<Void> reload() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        FirebaseAuth.getInstance().getCurrentUser()
-                .reload()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (callback != null) {
-                            if (task.isSuccessful()) {
-                                callback.onSuccess();
-                            } else {
-                                callback.onError(task.getException());
-                            }
-                        }
-                    }
-                });
+        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser().reload()));
     }
 }

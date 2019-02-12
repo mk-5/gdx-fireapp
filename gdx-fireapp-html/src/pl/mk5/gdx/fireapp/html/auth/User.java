@@ -25,7 +25,6 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  * @see AuthUserDistribution
  */
 public class User implements AuthUserDistribution {
-
     @Override
     public Promise<Void> updateEmail(final String newEmail) {
         if (AuthJS.firebaseUser().isNULL()) {
@@ -79,10 +78,15 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public void reload(CompleteCallback callback) {
+    public Promise<Void> reload() {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        AuthJS.firebaseUser().reload(callback);
+        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+            @Override
+            public void accept(FuturePromise<Void> voidFuturePromise) {
+                AuthJS.firebaseUser().reload(voidFuturePromise);
+            }
+        });
     }
 }

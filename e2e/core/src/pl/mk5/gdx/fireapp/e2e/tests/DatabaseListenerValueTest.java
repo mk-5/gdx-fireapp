@@ -54,7 +54,7 @@ public class DatabaseListenerValueTest extends E2ETest {
                         .inReference("/test-listen-value")
                         .setValue("abc" + Math.random())
                         .after(GdxFIRAuth.instance().signInAnonymously())
-                        .exec();
+                        .subscribe();
 
                 if (counter.incrementAndGet() == 4) {
                     if (listenCounter.get() == 4 || listenCounter.get() == 3) {

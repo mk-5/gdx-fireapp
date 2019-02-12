@@ -29,24 +29,28 @@ public class GdxFirebaseUserTest extends E2ETest {
 
     @Override
     public void action() {
+        // TODO - remove user if exists
         GdxFIRAuth.instance()
                 .createUserWithEmailAndPassword("someemail@gmail.com", "abcd1234".toCharArray())
                 .then(GdxFIRAuth.instance().signInWithEmailAndPassword("someemail@gmail.com", "abcd1234".toCharArray()))
-//                .then(GdxFIRAuth.instance().getCurrentUser().updateEmail("git@mk5.pl"))
-//                .then(GdxFIRAuth.instance().getCurrentUser().sendEmailVerification())
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser user) {
-                        // TODO - re-authenticate
                         user.updateEmail("git@mk5.pl")
-                                .then(GdxFIRAuth.instance().signInWithEmailAndPassword("git@mk5.pl", "abcd1234".toCharArray()))
-                                .then(user.sendEmailVerification())
-                                .then(GdxFIRAuth.instance().getCurrentUserPromise())
-                                .then(new Consumer<GdxFirebaseUser>() {
+                                .then(new Consumer<Void>() {
                                     @Override
-                                    public void accept(GdxFirebaseUser user) {
-                                        user.delete();
-                                        success();
+                                    public void accept(Void aVoid) {
+                                        GdxFIRAuth.instance()
+                                                .getCurrentUser().reload()
+                                                .then(GdxFIRAuth.instance().getCurrentUser().sendEmailVerification())
+                                                .then(GdxFIRAuth.instance().getCurrentUserPromise())
+                                                .then(new Consumer<GdxFirebaseUser>() {
+                                                    @Override
+                                                    public void accept(GdxFirebaseUser user) {
+                                                        user.delete();
+                                                        success();
+                                                    }
+                                                });
                                     }
                                 });
                     }

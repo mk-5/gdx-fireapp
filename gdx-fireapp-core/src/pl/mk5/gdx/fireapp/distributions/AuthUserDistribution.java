@@ -59,4 +59,11 @@ public interface AuthUserDistribution {
      * @throws IllegalStateException When current user is not present
      */
     Promise<Void> delete();
+
+    /**
+     * Reload current user
+     *
+     * @throws IllegalStateException When current user is not present
+     */
+    Promise<Void> reload();
 }

@@ -78,11 +78,11 @@ class FirebaseUserJS extends JavaScriptObject {
         });
     }-*/;
 
-    public final native void reload(CompleteCallback callback) /*-{
+    public final native void reload(FuturePromise promise) /*-{
         this["reload"]().then(function(){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onSuccess()();
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
         })["catch"](function(error){
-            callback.@mk.gdx.firebase.callbacks.CompleteCallback::onError(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }
