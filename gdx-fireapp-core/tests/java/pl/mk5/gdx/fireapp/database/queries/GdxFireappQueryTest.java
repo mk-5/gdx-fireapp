@@ -34,7 +34,7 @@ public class GdxFireappQueryTest {
     @Test
     public void withArgs() {
         // Given
-        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class)) {
+        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class), "/test") {
             @Override
             protected ArgumentsValidator createArgumentsValidator() {
                 return null;
@@ -66,7 +66,7 @@ public class GdxFireappQueryTest {
     @Test
     public void with() {
         // Given
-        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class)) {
+        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class), "/test") {
             @Override
             protected ArgumentsValidator createArgumentsValidator() {
                 return null;
@@ -101,7 +101,7 @@ public class GdxFireappQueryTest {
     @Test
     public void with1() {
         // Given
-        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class)) {
+        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class), "/test") {
             @Override
             protected ArgumentsValidator createArgumentsValidator() {
                 return null;
@@ -137,7 +137,7 @@ public class GdxFireappQueryTest {
         final ArgumentsValidator validator = Mockito.mock(ArgumentsValidator.class);
         final int[] counter = {0};
         final String result = "test";
-        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class)) {
+        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class), "/test") {
             @Override
             protected ArgumentsValidator createArgumentsValidator() {
                 System.out.println("ARGUMENTS VALIDATOR");
@@ -176,7 +176,7 @@ public class GdxFireappQueryTest {
     public void createArgumentsValidator() {
         // Given
         final ArgumentsValidator validator = Mockito.mock(ArgumentsValidator.class);
-        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class)) {
+        GdxFireappQuery query = new GdxFireappQuery(Mockito.mock(DatabaseDistribution.class), "/test") {
             @Override
             protected ArgumentsValidator createArgumentsValidator() {
                 return validator;

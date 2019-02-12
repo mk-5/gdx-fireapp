@@ -35,8 +35,8 @@ class QueryRunTransaction<R> extends IosDatabaseQuery<R> {
     private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
 
-    QueryRunTransaction(Database databaseDistribution) {
-        super(databaseDistribution);
+    QueryRunTransaction(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

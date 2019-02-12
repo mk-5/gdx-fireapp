@@ -79,12 +79,12 @@ public class DatabaseTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(QueryConnectionStatus.class);
         Database database = new Database();
-        QueryConnectionStatus query = Mockito.spy(new QueryConnectionStatus(database));
+        QueryConnectionStatus query = Mockito.spy(new QueryConnectionStatus(database, "/test"));
         PowerMockito.whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(query);
         when(query.withArgs(Mockito.any())).thenReturn(query);
 
         // When
-        database.onConnect().exec();
+        database.onConnect().subscribe();
 
         // Then
         PowerMockito.verifyNew(QueryConnectionStatus.class);
@@ -110,12 +110,12 @@ public class DatabaseTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(QuerySetValue.class);
         Database database = new Database();
-        QuerySetValue query = PowerMockito.spy(new QuerySetValue(database));
+        QuerySetValue query = PowerMockito.spy(new QuerySetValue(database, "/test"));
         PowerMockito.whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
         when(query.withArgs(Mockito.any())).thenReturn(query);
 
         // When
-        Promise promise = Mockito.spy(database.inReference("/test").setValue("").exec());
+        Promise promise = Mockito.spy(database.inReference("/test").setValue("").subscribe());
 
         // Then
         PowerMockito.verifyNew(QuerySetValue.class);
@@ -126,11 +126,11 @@ public class DatabaseTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(QueryReadValue.class);
         Database database = new Database();
-        QueryReadValue query = Mockito.spy(new QueryReadValue(database));
+        QueryReadValue query = Mockito.spy(new QueryReadValue(database, "/test"));
         PowerMockito.whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.inReference("/test").readValue(String.class).exec();
+        database.inReference("/test").readValue(String.class).subscribe();
 
         // Then
 //        verify(mapConverter, VerificationModeFactory.times(1)).convert(any(Map.class), any(Class.class));
@@ -150,7 +150,7 @@ public class DatabaseTest extends AndroidContextTest {
         Database database = new Database();
 
         // When
-        database.inReference("/test").onDataChange(Map.class).exec();
+        database.inReference("/test").onDataChange(Map.class).subscribe();
 
         // Then
 //        verify(mapConverter, VerificationModeFactory.times(1)).convert(any(Map.class), any(Class.class));
@@ -219,7 +219,7 @@ public class DatabaseTest extends AndroidContextTest {
         // Given
         PowerMockito.mockStatic(QueryUpdateChildren.class);
         Database database = new Database();
-        QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database));
+        QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database, "/test"));
         PowerMockito.whenNew(QueryUpdateChildren.class).withAnyArguments().thenReturn(query);
         when(query.withArgs(Mockito.any())).thenReturn(query);
         Map data = Mockito.mock(Map.class);

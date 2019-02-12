@@ -33,8 +33,8 @@ import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
  */
 class QueryOnDataChange<R> extends AndroidDatabaseQuery<R> {
 
-    QueryOnDataChange(Database databaseDistribution) {
-        super(databaseDistribution);
+    QueryOnDataChange(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

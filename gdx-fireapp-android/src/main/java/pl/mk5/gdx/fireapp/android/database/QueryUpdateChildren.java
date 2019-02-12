@@ -28,8 +28,9 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides {@link DatabaseReference#updateChildren(Map)} execution with firebase database reference.
  */
 class QueryUpdateChildren extends AndroidDatabaseQuery<Void> {
-    QueryUpdateChildren(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryUpdateChildren(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

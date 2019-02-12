@@ -145,7 +145,7 @@ public class AuthTest extends GdxHtmlAppTest {
         char[] password = {'s', 'e', 'c', 'r', 'e', 't'};
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signInWithEmailAndPassword(email, password).exec();
+        FuturePromise promise = (FuturePromise) auth.signInWithEmailAndPassword(email, password).subscribe();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -159,7 +159,7 @@ public class AuthTest extends GdxHtmlAppTest {
         String token = "token";
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signInWithToken(token).exec();
+        FuturePromise promise = (FuturePromise) auth.signInWithToken(token).subscribe();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -172,7 +172,7 @@ public class AuthTest extends GdxHtmlAppTest {
         Auth auth = new Auth();
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signInAnonymously().exec();
+        FuturePromise promise = (FuturePromise) auth.signInAnonymously().subscribe();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -185,7 +185,7 @@ public class AuthTest extends GdxHtmlAppTest {
         Auth auth = new Auth();
 
         // When
-        FuturePromise promise = (FuturePromise) auth.signOut().exec();
+        FuturePromise promise = (FuturePromise) auth.signOut().subscribe();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);
@@ -199,7 +199,7 @@ public class AuthTest extends GdxHtmlAppTest {
         String arg1 = "email";
 
         // When
-        FuturePromise promise = (FuturePromise) auth.sendPasswordResetEmail(arg1).exec();
+        FuturePromise promise = (FuturePromise) auth.sendPasswordResetEmail(arg1).subscribe();
 
         // Then
         PowerMockito.verifyStatic(AuthJS.class);

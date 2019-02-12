@@ -37,8 +37,8 @@ class QueryConnectionStatus extends AndroidDatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
 
-    QueryConnectionStatus(Database databaseDistribution) {
-        super(databaseDistribution);
+    QueryConnectionStatus(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

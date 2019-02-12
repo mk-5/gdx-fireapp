@@ -26,17 +26,18 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides update javascript execution.
  */
 class QueryUpdateChildren extends GwtDatabaseQuery {
-    QueryUpdateChildren(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryUpdateChildren(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
         if (promise == null) {
-            update(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)));
+            update(databasePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)));
         } else {
-            updateWithPromise(databaseReferencePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)), (FuturePromise) promise);
+            updateWithPromise(databasePath, MapTransformer.mapToJSON((Map<String, Object>) arguments.get(0)), (FuturePromise) promise);
         }
     }
 

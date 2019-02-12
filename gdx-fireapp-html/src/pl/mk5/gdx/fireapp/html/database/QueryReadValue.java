@@ -25,8 +25,8 @@ import pl.mk5.gdx.fireapp.promises.ConverterPromise;
  */
 class QueryReadValue<R> extends GwtDatabaseQuery<R> {
 
-    QueryReadValue(Database databaseDistribution) {
-        super(databaseDistribution);
+    QueryReadValue(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

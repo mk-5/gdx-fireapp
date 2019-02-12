@@ -27,8 +27,9 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides setValue execution with firebase database reference.
  */
 class QueryRunTransaction<R> extends AndroidDatabaseQuery<R> {
-    QueryRunTransaction(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryRunTransaction(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

@@ -29,30 +29,28 @@ import pl.mk5.gdx.fireapp.html.firebase.ScriptRunner;
  */
 abstract class GwtDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
 
-    protected String databaseReferencePath;
     protected ProviderJsFiltering providerJsFiltering;
 
     protected DatabaseReference databaseReference;
     private Array<Filter> filtersToApply;
     private OrderByClause orderByToApply;
 
-    GwtDatabaseQuery(Database databaseDistribution) {
-        super(databaseDistribution);
+    GwtDatabaseQuery(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
         providerJsFiltering = new ProviderJsFiltering();
     }
 
     @Override
     protected void prepare() {
-        databaseReferencePath = databaseDistribution.databaseReference();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected R run() {
-        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databaseReferencePath) {
+        ScriptRunner.firebaseScript(new ScriptRunner.ScriptDBAction(databasePath) {
             @Override
             public void run() {
-                databaseReference = DatabaseReference.of(databaseReferencePath);
+                databaseReference = DatabaseReference.of(databasePath);
                 if (filtersToApply != null || orderByToApply != null) {
                     GdxFIRLogger.log("Applies filters and sorting to database reference...");
                     providerJsFiltering
@@ -88,7 +86,6 @@ abstract class GwtDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     @Override
     protected void terminate() {
         databaseDistribution.terminateOperation();
-        databaseReferencePath = null;
         databaseReference = null;
         filtersToApply = null;
         orderByToApply = null;

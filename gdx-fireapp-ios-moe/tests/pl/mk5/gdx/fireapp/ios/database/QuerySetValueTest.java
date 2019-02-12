@@ -57,7 +57,7 @@ public class QuerySetValueTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QuerySetValue query = new QuerySetValue(Mockito.mock(Database.class));
+        QuerySetValue query = new QuerySetValue(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
@@ -73,7 +73,7 @@ public class QuerySetValueTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QuerySetValue query = new QuerySetValue(database);
+        QuerySetValue query = new QuerySetValue(database, "/test");
         String value = "test";
 
         // When

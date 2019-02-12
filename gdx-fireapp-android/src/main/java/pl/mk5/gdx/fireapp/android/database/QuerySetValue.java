@@ -26,8 +26,9 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides setValue execution with firebase database reference.
  */
 class QuerySetValue extends AndroidDatabaseQuery<Void> {
-    QuerySetValue(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QuerySetValue(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

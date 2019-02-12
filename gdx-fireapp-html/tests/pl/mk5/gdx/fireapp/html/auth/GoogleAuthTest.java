@@ -63,7 +63,7 @@ public class GoogleAuthTest {
         GoogleAuth googleAuth = new GoogleAuth();
 
         // When
-        Promise promise = googleAuth.signIn().exec();
+        Promise promise = googleAuth.signIn().subscribe();
 
         // Then
         PowerMockito.verifyStatic(GoogleAuthJS.class);
@@ -80,7 +80,7 @@ public class GoogleAuthTest {
         Mockito.when(gdxFIRAuth.signOut()).thenReturn((FuturePromise) Mockito.spy(FuturePromise.empty()));
 
         // When
-        googleAuth.signOut().exec();
+        googleAuth.signOut().subscribe();
 
         // Then
         Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut();
@@ -96,7 +96,7 @@ public class GoogleAuthTest {
         Mockito.when(gdxFIRAuth.signOut()).thenReturn(Mockito.spy((FuturePromise) Mockito.spy(FuturePromise.empty())));
 
         // When
-        googleAuth.revokeAccess().exec();
+        googleAuth.revokeAccess().subscribe();
 
         // Then
         Mockito.verify(gdxFIRAuth, VerificationModeFactory.times(1)).signOut();

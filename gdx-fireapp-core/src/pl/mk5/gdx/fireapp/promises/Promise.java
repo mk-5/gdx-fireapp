@@ -64,5 +64,5 @@ public interface Promise<T> {
      * <p>
      * If you call {@link #then(Consumer)} or {@link #fail(BiConsumer)} it is not mandatory
      */
-    Promise<T> exec();
+    Promise<T> subscribe();
 }

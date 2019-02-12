@@ -25,17 +25,18 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides setValue execution.
  */
 class QueryOnDataChange extends GwtDatabaseQuery {
-    QueryOnDataChange(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryOnDataChange(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        if (!GwtDataPromisesManager.hasPromise(databaseReferencePath)) {
-            GwtDataPromisesManager.addDataPromise(databaseReferencePath, new JsonDataPromise((Class) arguments.get(0), (FuturePromise) promise));
-            onValue(databaseReferencePath, databaseReference);
-            ((FutureListenerPromise) promise).onCancel(new CancelListenerAction(databaseReferencePath));
+        if (!GwtDataPromisesManager.hasPromise(databasePath)) {
+            GwtDataPromisesManager.addDataPromise(databasePath, new JsonDataPromise((Class) arguments.get(0), (FuturePromise) promise));
+            onValue(databasePath, databaseReference);
+            ((FutureListenerPromise) promise).onCancel(new CancelListenerAction(databasePath));
         }
     }
 

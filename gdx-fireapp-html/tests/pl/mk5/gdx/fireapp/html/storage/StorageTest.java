@@ -65,7 +65,7 @@ public class StorageTest extends GdxHtmlAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.upload("test", Mockito.mock(FileHandle.class)).exec();
+        storage.upload("test", Mockito.mock(FileHandle.class)).subscribe();
 
         // Then
         Mockito.verify(Gdx.app, VerificationModeFactory.times(1)).error(Mockito.anyString(), Mockito.anyString());
@@ -82,7 +82,7 @@ public class StorageTest extends GdxHtmlAppTest {
 
 
         // When
-        storage.upload(path, data).exec();
+        storage.upload(path, data).subscribe();
 
         // Then
         PowerMockito.verifyStatic(StorageJS.class, VerificationModeFactory.times(1));
@@ -95,7 +95,7 @@ public class StorageTest extends GdxHtmlAppTest {
         Storage storage = new Storage();
 
         // When
-        storage.download("test", Mockito.mock(FileHandle.class)).exec();
+        storage.download("test", Mockito.mock(FileHandle.class)).subscribe();
 
         // Then
         Mockito.verify(Gdx.app, VerificationModeFactory.times(1)).error(Mockito.anyString(), Mockito.anyString());
@@ -110,7 +110,7 @@ public class StorageTest extends GdxHtmlAppTest {
 
 
         // When
-        storage.download(path, bytesLimit).exec();
+        storage.download(path, bytesLimit).subscribe();
 
         // Then
         PowerMockito.verifyStatic(StorageJS.class, VerificationModeFactory.times(1));
@@ -125,7 +125,7 @@ public class StorageTest extends GdxHtmlAppTest {
 
 
         // When
-        storage.delete(path).exec();
+        storage.delete(path).subscribe();
 
         // Then
         PowerMockito.verifyStatic(StorageJS.class, VerificationModeFactory.times(1));

@@ -22,14 +22,15 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
  * Provides push javascript execution.
  */
 class QueryPush extends GwtDatabaseQuery {
-    QueryPush(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryPush(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override
     protected void runJS() {
         // TODO - update db distribution databaseReferencePath
-        push(databaseReferencePath);
+        push(databasePath);
     }
 
     @Override

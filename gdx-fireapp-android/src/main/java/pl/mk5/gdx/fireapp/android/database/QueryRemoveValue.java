@@ -25,8 +25,9 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
  */
 class QueryRemoveValue extends AndroidDatabaseQuery<Void> {
-    QueryRemoveValue(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryRemoveValue(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

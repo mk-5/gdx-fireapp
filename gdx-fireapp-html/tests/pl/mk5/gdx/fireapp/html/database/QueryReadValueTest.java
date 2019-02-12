@@ -59,7 +59,7 @@ public class QueryReadValueTest {
         // Given
         Database database = spy(Database.class);
         database.inReference("/test");
-        QueryReadValue query = new QueryReadValue(database);
+        QueryReadValue query = new QueryReadValue(database, "/test");
         ConverterPromise promise = mock(ConverterPromise.class);
 
         // When
@@ -72,7 +72,7 @@ public class QueryReadValueTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryReadValue query = new QueryReadValue(mock(Database.class));
+        QueryReadValue query = new QueryReadValue(mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

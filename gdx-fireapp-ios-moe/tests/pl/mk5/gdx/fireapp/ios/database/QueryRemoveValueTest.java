@@ -50,7 +50,7 @@ public class QueryRemoveValueTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryRemoveValue query = new QueryRemoveValue(Mockito.mock(Database.class));
+        QueryRemoveValue query = new QueryRemoveValue(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
@@ -66,7 +66,7 @@ public class QueryRemoveValueTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryRemoveValue query = new QueryRemoveValue(database);
+        QueryRemoveValue query = new QueryRemoveValue(database, "/test");
 
         // When
         query.execute();

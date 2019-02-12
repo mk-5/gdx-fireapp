@@ -38,15 +38,17 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  */
 public abstract class GdxFireappQuery<D extends DatabaseDistribution, R> {
 
-    protected D databaseDistribution;
-    protected Array<Filter> filters;
-    protected OrderByClause orderByClause;
-    protected Array<Object> arguments;
-    protected ArgumentsValidator argumentsValidator;
+    protected final D databaseDistribution;
+    protected final Array<Filter> filters;
+    protected final Array<Object> arguments;
+    protected final ArgumentsValidator argumentsValidator;
+    protected final String databasePath;
     protected Promise<R> promise;
+    protected OrderByClause orderByClause;
 
-    public GdxFireappQuery(D databaseDistribution) {
+    public GdxFireappQuery(D databaseDistribution, String databasePath) {
         this.databaseDistribution = databaseDistribution;
+        this.databasePath = databasePath;
         filters = new Array<>();
         arguments = new Array<>();
         argumentsValidator = createArgumentsValidator();

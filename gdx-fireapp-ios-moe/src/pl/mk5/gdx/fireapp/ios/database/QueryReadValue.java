@@ -30,8 +30,9 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
  */
 class QueryReadValue<R> extends IosDatabaseQuery<R> {
-    QueryReadValue(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryReadValue(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override

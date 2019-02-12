@@ -93,7 +93,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.upload("test", fileHandle).exec();
+        storage.upload("test", fileHandle).subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).putFile(Mockito.any(Uri.class));
@@ -118,7 +118,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.upload("test", data).exec();
+        storage.upload("test", data).subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).putBytes(Mockito.any(byte[].class));
@@ -144,7 +144,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.download("test", file).silentFail().exec();
+        storage.download("test", file).silentFail().subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getFile(Mockito.any(File.class));
@@ -169,7 +169,7 @@ public class StorageTest extends AndroidContextTest {
         });
 
         // When
-        storage.download("test", file).silentFail().exec();
+        storage.download("test", file).silentFail().subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getFile(Mockito.any(File.class));
@@ -188,7 +188,7 @@ public class StorageTest extends AndroidContextTest {
         when(task.addOnFailureListener(Mockito.any(OnFailureListener.class))).thenReturn(task);
 
         // When
-        storage.download("test", file).exec();
+        storage.download("test", file).subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getFile(Mockito.any(File.class));
@@ -213,7 +213,7 @@ public class StorageTest extends AndroidContextTest {
         long byteLimit = 1000;
 
         // When
-        storage.download("test", byteLimit).exec();
+        storage.download("test", byteLimit).subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getBytes(Mockito.anyLong());
@@ -237,7 +237,7 @@ public class StorageTest extends AndroidContextTest {
         long byteLimit = 1000;
 
         // When
-        storage.download("test", byteLimit).silentFail().exec();
+        storage.download("test", byteLimit).silentFail().subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).getBytes(Mockito.anyLong());
@@ -262,7 +262,7 @@ public class StorageTest extends AndroidContextTest {
         long byteLimit = 1000;
 
         // When
-        storage.delete("test").exec();
+        storage.delete("test").subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).delete();
@@ -286,7 +286,7 @@ public class StorageTest extends AndroidContextTest {
         long byteLimit = 1000;
 
         // When
-        storage.delete("test").silentFail().exec();
+        storage.delete("test").silentFail().subscribe();
 
         // Then
         Mockito.verify(storageReference, VerificationModeFactory.times(1)).delete();

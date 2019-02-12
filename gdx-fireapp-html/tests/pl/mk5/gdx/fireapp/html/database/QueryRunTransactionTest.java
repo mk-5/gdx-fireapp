@@ -57,7 +57,7 @@ public class QueryRunTransactionTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QueryRunTransaction query = new QueryRunTransaction(database);
+        QueryRunTransaction query = new QueryRunTransaction(database, "/test");
         FuturePromise promise = Mockito.mock(FuturePromise.class);
         Function function = Mockito.mock(Function.class);
 
@@ -71,7 +71,7 @@ public class QueryRunTransactionTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryRunTransaction query = new QueryRunTransaction(Mockito.mock(Database.class));
+        QueryRunTransaction query = new QueryRunTransaction(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

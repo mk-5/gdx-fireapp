@@ -70,7 +70,7 @@ public class GwtDatabaseQueryTest {
         Mockito.when(providerJsFiltering.setFilters(Mockito.any(Array.class))).thenReturn(providerJsFiltering);
         Mockito.when(providerJsFiltering.setOrderByClause(Mockito.any(OrderByClause.class))).thenReturn(providerJsFiltering);
         Mockito.when(providerJsFiltering.setQuery(Mockito.any(DatabaseReference.class))).thenReturn(providerJsFiltering);
-        GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(Mockito.mock(Database.class));
+        GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(Mockito.mock(Database.class), "/test");
         gwtDatabaseQuery.providerJsFiltering = providerJsFiltering;
         Array<Filter> filters = new Array<>();
         OrderByClause orderByClause = new OrderByClause(OrderByMode.ORDER_BY_KEY, null);
@@ -92,7 +92,7 @@ public class GwtDatabaseQueryTest {
     @Test
     public void applyFilters() {
         // Given
-        GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(Mockito.mock(Database.class));
+        GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(Mockito.mock(Database.class), "/test");
         Array<Filter> filters = new Array<>();
         OrderByClause orderByClause = new OrderByClause(OrderByMode.ORDER_BY_KEY, null);
         filters.add(new Filter(FilterType.LIMIT_FIRST, 2));
@@ -111,7 +111,7 @@ public class GwtDatabaseQueryTest {
     public void terminate() {
         // Given
         Database database = Mockito.mock(Database.class);
-        GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(database);
+        GwtDatabaseQuery gwtDatabaseQuery = new TestQuery(database, "/test");
         Array<Filter> filters = new Array<>();
         OrderByClause orderByClause = new OrderByClause(OrderByMode.ORDER_BY_KEY, null);
         filters.add(new Filter(FilterType.LIMIT_FIRST, 2));
@@ -127,14 +127,13 @@ public class GwtDatabaseQueryTest {
         Mockito.verify(database, VerificationModeFactory.times(1)).terminateOperation();
         Assert.assertNull(Whitebox.getInternalState(gwtDatabaseQuery, "filtersToApply"));
         Assert.assertNull(Whitebox.getInternalState(gwtDatabaseQuery, "orderByToApply"));
-        Assert.assertNull(Whitebox.getInternalState(gwtDatabaseQuery, "databaseReferencePath"));
         Assert.assertNull(Whitebox.getInternalState(gwtDatabaseQuery, "databaseReference"));
     }
 
     private class TestQuery extends GwtDatabaseQuery {
 
-        public TestQuery(Database databaseDistribution) {
-            super(databaseDistribution);
+        TestQuery(Database databaseDistribution, String databasePath) {
+            super(databaseDistribution, databasePath);
         }
 
         @Override

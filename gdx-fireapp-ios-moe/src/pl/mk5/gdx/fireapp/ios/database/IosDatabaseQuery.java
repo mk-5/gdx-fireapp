@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
+import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import pl.mk5.gdx.fireapp.database.queries.GdxFireappQuery;
 
@@ -37,17 +38,15 @@ abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
 
     protected FIRDatabaseQuery query;
     protected ProviderFIRDatabaseQueryFiltering filtersProvider;
-    protected String databasePath;
 
-    IosDatabaseQuery(Database databaseDistribution) {
-        super(databaseDistribution);
+    IosDatabaseQuery(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
         filtersProvider = new ProviderFIRDatabaseQueryFiltering();
     }
 
     @Override
     protected void prepare() {
-        query = databaseDistribution.dbReference();
-        databasePath = databaseDistribution.databasePath;
+        query = FIRDatabase.database().referenceWithPath(databasePath);
     }
 
     @Override

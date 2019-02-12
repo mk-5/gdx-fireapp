@@ -14,30 +14,23 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.promises;
+package pl.mk5.gdx.fireapp.database;
 
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
 /**
- * Listener promise
+ * Consumer to use with async database calls
+ *
+ * @param <T> Consumer type
  */
-public interface ListenerPromise<T> extends Promise<T> {
+public abstract class DatabaseConsumer<T> implements Consumer<T> {
+    private final String databasePath;
 
-    /**
-     * Attach listener to this promise
-     *
-     * @param listener The listener consumer, not null
-     * @see Promise#then(Consumer)
-     */
-    ListenerPromise<T> thenListener(Consumer<T> listener);
+    public DatabaseConsumer(String databasePath) {
+        this.databasePath = databasePath;
+    }
 
-    /**
-     * Cancel this promise
-     */
-    ListenerPromise<T> cancel();
-
-    /**
-     * Start listening, do same logic as {@link Promise#subscribe()}
-     */
-    ListenerPromise<T> listen();
+    public String getDatabasePath() {
+        return databasePath;
+    }
 }

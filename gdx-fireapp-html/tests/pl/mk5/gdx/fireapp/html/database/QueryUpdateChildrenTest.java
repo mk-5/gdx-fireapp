@@ -58,7 +58,7 @@ public class QueryUpdateChildrenTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QueryUpdateChildren query = new QueryUpdateChildren(database);
+        QueryUpdateChildren query = new QueryUpdateChildren(database, "/test");
 
         // When
         query.withArgs(Mockito.mock(Map.class)).execute();
@@ -73,7 +73,7 @@ public class QueryUpdateChildrenTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QueryUpdateChildren query = new QueryUpdateChildren(database);
+        QueryUpdateChildren query = new QueryUpdateChildren(database, "/test");
 
         // When
         query.withArgs(Mockito.mock(Map.class)).with(Mockito.mock(FuturePromise.class)).execute();
@@ -85,7 +85,7 @@ public class QueryUpdateChildrenTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryUpdateChildren query = new QueryUpdateChildren(Mockito.mock(Database.class));
+        QueryUpdateChildren query = new QueryUpdateChildren(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

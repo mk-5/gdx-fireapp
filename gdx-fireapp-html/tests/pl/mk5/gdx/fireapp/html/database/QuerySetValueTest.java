@@ -56,7 +56,7 @@ public class QuerySetValueTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QuerySetValue query = new QuerySetValue(database);
+        QuerySetValue query = new QuerySetValue(database, "/test");
 
         // When
         query.withArgs("test").execute();
@@ -71,7 +71,7 @@ public class QuerySetValueTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QuerySetValue query = new QuerySetValue(database);
+        QuerySetValue query = new QuerySetValue(database, "/test");
 
         // When
         query.withArgs("test").with(Mockito.mock(FuturePromise.class)).execute();
@@ -83,7 +83,7 @@ public class QuerySetValueTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QuerySetValue query = new QuerySetValue(Mockito.mock(Database.class));
+        QuerySetValue query = new QuerySetValue(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

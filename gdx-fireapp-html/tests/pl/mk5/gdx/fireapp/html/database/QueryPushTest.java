@@ -41,7 +41,7 @@ public class QueryPushTest {
     @Test(expected = UnsatisfiedLinkError.class)
     public void runJS() {
         // Given
-        QueryPush query = new QueryPush(Mockito.mock(Database.class));
+        QueryPush query = new QueryPush(Mockito.mock(Database.class), "/test");
 
         // When
         query.runJS();
@@ -53,7 +53,7 @@ public class QueryPushTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryPush query = new QueryPush(Mockito.mock(Database.class));
+        QueryPush query = new QueryPush(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

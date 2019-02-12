@@ -61,7 +61,7 @@ public class QueryUpdateChildrenTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryUpdateChildren query = new QueryUpdateChildren(Mockito.mock(Database.class));
+        QueryUpdateChildren query = new QueryUpdateChildren(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
@@ -77,14 +77,14 @@ public class QueryUpdateChildrenTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryUpdateChildren query = new QueryUpdateChildren(database);
+        QueryUpdateChildren query = new QueryUpdateChildren(database, "/test");
         Map data = Mockito.mock(Map.class);
 
         // When
         query.withArgs(data).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(Mockito.any(), Mockito.any(FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock.class));
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(Mockito.nullable(NSDictionary.class), Mockito.any(FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -94,7 +94,7 @@ public class QueryUpdateChildrenTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryUpdateChildren query = new QueryUpdateChildren(database);
+        QueryUpdateChildren query = new QueryUpdateChildren(database, "/test");
         Map data = Mockito.mock(Map.class);
 
         // When

@@ -16,8 +16,6 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
-import com.badlogic.gdx.utils.reflect.ArrayReflection;
-
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
@@ -67,19 +65,13 @@ public class FuturePromise<T> implements Promise<T> {
         if (state == COMPLETE) {
             doComplete(lazyResult);
         }
-        exec();
+        subscribe();
         return this;
     }
 
     @Override
     public synchronized Promise<T> silentFail() {
         throwFail = false;
-        return this;
-    }
-
-    public synchronized Promise<T> args(Object... args) {
-        this.args = (Object[]) ArrayReflection.newInstance(Object.class, args.length);
-        System.arraycopy(args, 0, this.args, 0, args.length);
         return this;
     }
 
@@ -105,7 +97,7 @@ public class FuturePromise<T> implements Promise<T> {
         if (state == FAIL) {
             doFail(failReason, failThrowable);
         }
-        exec();
+        subscribe();
         return this;
     }
 
@@ -146,15 +138,15 @@ public class FuturePromise<T> implements Promise<T> {
         }
         afterTriggered = true;
         ((FuturePromise) promise).then(this);
-        ((FuturePromise) promise).exec();
+        ((FuturePromise) promise).subscribe();
         return this;
     }
 
     @Override
-    public Promise<T> exec() {
+    public Promise<T> subscribe() {
         FuturePromise topParentPromise = getTopParentPromise();
         if (topParentPromise != null && topParentPromise.execution != null) {
-            topParentPromise.exec();
+            topParentPromise.subscribe();
         } else if (execution != null && !pauseExecution) {
             execution.run();
         }

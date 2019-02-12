@@ -35,7 +35,7 @@ class QueryConnectionStatus extends IosDatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
 
     QueryConnectionStatus(Database databaseDistribution) {
-        super(databaseDistribution);
+        super(databaseDistribution, null);
     }
 
     @Override

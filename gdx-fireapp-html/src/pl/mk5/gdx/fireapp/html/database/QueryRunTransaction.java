@@ -25,14 +25,15 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides transaction javascript execution.
  */
 class QueryRunTransaction<R> extends GwtDatabaseQuery<R> {
-    QueryRunTransaction(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryRunTransaction(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        transaction(databaseReferencePath, new JsonDataModifier((Class) arguments.get(0), (Function) arguments.get(1)), (FuturePromise) promise);
+        transaction(databasePath, new JsonDataModifier((Class) arguments.get(0), (Function) arguments.get(1)), (FuturePromise) promise);
     }
 
     @Override

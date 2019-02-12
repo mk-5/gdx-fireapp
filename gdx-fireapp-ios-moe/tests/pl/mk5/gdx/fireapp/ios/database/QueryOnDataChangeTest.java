@@ -59,7 +59,7 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryOnDataChange query = new QueryOnDataChange(mock(Database.class));
+        QueryOnDataChange query = new QueryOnDataChange(mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
@@ -77,7 +77,7 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "dbReference", firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryOnDataChange query = new QueryOnDataChange(database);
+        QueryOnDataChange query = new QueryOnDataChange(database, "/test");
         Class dataType = String.class;
 
 
@@ -85,7 +85,7 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
         query.with(mock(ConverterPromise.class)).withArgs(dataType).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(Mockito.anyLong(), Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class), Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class QueryOnDataChangeTest extends GdxIOSAppTest {
                 eq(FIRDataEventType.Value),
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class))).thenReturn(handleValue);
-        QueryOnDataChange query = new QueryOnDataChange(database);
+        QueryOnDataChange query = new QueryOnDataChange(database, "/test");
         ConverterPromise promise = spy(ConverterPromise.class);
         Class dataType = String.class;
 

@@ -81,7 +81,7 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
 
     @Override
     public ListenerPromise<T> listen() {
-        return (ListenerPromise<T>) exec();
+        return (ListenerPromise<T>) subscribe();
     }
 
     public void onCancel(Runnable onCancel) {

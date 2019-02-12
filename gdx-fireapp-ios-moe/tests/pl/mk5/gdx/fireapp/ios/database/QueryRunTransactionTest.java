@@ -52,7 +52,7 @@ public class QueryRunTransactionTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryRunTransaction query = new QueryRunTransaction(Mockito.mock(Database.class));
+        QueryRunTransaction query = new QueryRunTransaction(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();
@@ -68,7 +68,7 @@ public class QueryRunTransactionTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryRunTransaction query = new QueryRunTransaction(database);
+        QueryRunTransaction query = new QueryRunTransaction(database, "/test");
         Class dataType = String.class;
 
         // When
@@ -88,7 +88,7 @@ public class QueryRunTransactionTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryRunTransaction query = new QueryRunTransaction(database);
+        QueryRunTransaction query = new QueryRunTransaction(database, "/test");
         Class dataType = String.class;
 
         // When

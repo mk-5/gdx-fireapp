@@ -24,16 +24,17 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides setValue execution.
  */
 class QuerySetValue extends GwtDatabaseQuery {
-    QuerySetValue(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QuerySetValue(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override
     protected void runJS() {
         if (promise == null) {
-            set(databaseReferencePath, StringGenerator.dataToString(arguments.get(0)));
+            set(databasePath, StringGenerator.dataToString(arguments.get(0)));
         } else {
-            setWithPromise(databaseReferencePath, StringGenerator.dataToString(arguments.get(0)), (FuturePromise) promise);
+            setWithPromise(databasePath, StringGenerator.dataToString(arguments.get(0)), (FuturePromise) promise);
         }
     }
 

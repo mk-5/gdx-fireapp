@@ -54,7 +54,7 @@ public class QueryReadValueTest extends GdxIOSAppTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryReadValue queryReadValue = new QueryReadValue(mock(Database.class));
+        QueryReadValue queryReadValue = new QueryReadValue(mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = queryReadValue.createArgumentsValidator();
@@ -70,13 +70,13 @@ public class QueryReadValueTest extends GdxIOSAppTest {
         Database database = PowerMockito.mock(Database.class);
         PowerMockito.when(database, "dbReference").thenReturn(firDatabaseReference);
         Whitebox.setInternalState(database, "databasePath", "/test");
-        QueryReadValue query = new QueryReadValue(database);
+        QueryReadValue query = new QueryReadValue(database, "/test");
         Class dataType = String.class;
 
         // When
         query.with(mock(ConverterPromise.class)).withArgs(dataType).execute();
 
         // Then
-        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(Mockito.anyLong(), (FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1) Mockito.any(), Mockito.any());
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(Mockito.anyLong(), Mockito.any(FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1.class), Mockito.any(FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2.class));
     }
 }

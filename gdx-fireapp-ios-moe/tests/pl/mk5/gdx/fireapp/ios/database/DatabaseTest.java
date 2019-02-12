@@ -105,7 +105,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         whenNew(QueryConnectionStatus.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.onConnect().exec();
+        database.onConnect().subscribe();
 
         // Then
         // Can't verify new because of PowerMockitoRunner and JaCoCo coverage. Rule does not work here because of MOE
@@ -133,11 +133,11 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         mockStatic(QuerySetValue.class);
-        QuerySetValue query = PowerMockito.spy(new QuerySetValue(database));
+        QuerySetValue query = PowerMockito.spy(new QuerySetValue(database, "/test"));
         whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
 
         // When
-        database.inReference("/test").setValue("test_value").exec();
+        database.inReference("/test").setValue("test_value").subscribe();
 
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
@@ -153,12 +153,12 @@ public class DatabaseTest extends GdxIOSAppTest {
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
         when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
         mockStatic(QueryReadValue.class);
-        QueryReadValue query = PowerMockito.spy(new QueryReadValue(database));
+        QueryReadValue query = PowerMockito.spy(new QueryReadValue(database, "/test"));
         whenNew(QueryReadValue.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").readValue(dataType).exec();
+        database.inReference("/test").readValue(dataType).subscribe();
 
         // Then
 //      PowerMockito.verifyNew(SetValueQuery.class).withArguments(Mockito.any());
@@ -176,7 +176,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         mockStatic(QueryOnDataChange.class);
-        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
+        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database, "/test"));
         GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
         when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
@@ -184,7 +184,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").onDataChange(dataType).exec();
+        database.inReference("/test").onDataChange(dataType).subscribe();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(
@@ -207,7 +207,7 @@ public class DatabaseTest extends GdxIOSAppTest {
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class))).thenReturn(handleValue);
         mockStatic(QueryOnDataChange.class);
-        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database));
+        QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database, "/test"));
         whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         String databasePath = "/test";
 
@@ -274,12 +274,12 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         mockStatic(QueryRemoveValue.class);
-        QueryRemoveValue query = PowerMockito.spy(new QueryRemoveValue(database));
+        QueryRemoveValue query = PowerMockito.spy(new QueryRemoveValue(database, "/test"));
         whenNew(QueryRemoveValue.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").removeValue().exec();
+        database.inReference("/test").removeValue().subscribe();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeValueWithCompletionBlock(Mockito.any(FIRDatabaseReference.Block_removeValueWithCompletionBlock.class));
@@ -290,12 +290,12 @@ public class DatabaseTest extends GdxIOSAppTest {
         // Given
         Database database = new Database();
         mockStatic(QueryUpdateChildren.class);
-        QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database));
+        QueryUpdateChildren query = PowerMockito.spy(new QueryUpdateChildren(database, "/test"));
         whenNew(QueryUpdateChildren.class).withAnyArguments().thenReturn(query);
         Map mapData = mock(Map.class);
 
         // When
-        database.inReference("/test").updateChildren(mapData).exec();
+        database.inReference("/test").updateChildren(mapData).subscribe();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).updateChildValuesWithCompletionBlock(
@@ -310,12 +310,12 @@ public class DatabaseTest extends GdxIOSAppTest {
         Database database = new Database();
         Function transactionFunction = mock(Function.class);
         mockStatic(QueryRunTransaction.class);
-        QueryRunTransaction query = PowerMockito.spy(new QueryRunTransaction(database));
+        QueryRunTransaction query = PowerMockito.spy(new QueryRunTransaction(database, "/test"));
         whenNew(QueryRunTransaction.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
         // When
-        database.inReference("/test").transaction(dataType, transactionFunction).exec();
+        database.inReference("/test").transaction(dataType, transactionFunction).subscribe();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).runTransactionBlockAndCompletionBlock(

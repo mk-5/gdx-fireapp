@@ -23,16 +23,17 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides removeValue javascript execution.
  */
 class QueryRemoveValue extends GwtDatabaseQuery {
-    QueryRemoveValue(Database databaseDistribution) {
-        super(databaseDistribution);
+
+    QueryRemoveValue(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
     }
 
     @Override
     protected void runJS() {
         if (promise == null) {
-            remove(databaseReferencePath);
+            remove(databasePath);
         } else {
-            removeWithPromise(databaseReferencePath, (FuturePromise) promise);
+            removeWithPromise(databasePath, (FuturePromise) promise);
         }
     }
 

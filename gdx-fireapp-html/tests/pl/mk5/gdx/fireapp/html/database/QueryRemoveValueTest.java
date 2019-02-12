@@ -55,7 +55,7 @@ public class QueryRemoveValueTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QueryRemoveValue query = new QueryRemoveValue(database);
+        QueryRemoveValue query = new QueryRemoveValue(database, "/test");
 
         // When
         query.with(Mockito.mock(FuturePromise.class))
@@ -70,7 +70,7 @@ public class QueryRemoveValueTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QueryRemoveValue query = new QueryRemoveValue(database);
+        QueryRemoveValue query = new QueryRemoveValue(database, "/test");
 
         // When
         query.execute();
@@ -82,7 +82,7 @@ public class QueryRemoveValueTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryRemoveValue query = new QueryRemoveValue(Mockito.mock(Database.class));
+        QueryRemoveValue query = new QueryRemoveValue(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

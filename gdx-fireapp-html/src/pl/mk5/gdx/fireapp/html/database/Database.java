@@ -23,6 +23,7 @@ import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
+import pl.mk5.gdx.fireapp.database.DatabaseConsumer;
 import pl.mk5.gdx.fireapp.database.Filter;
 import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
@@ -82,11 +83,10 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> setValue(final Object value) {
-        checkDatabaseReference();
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new QuerySetValue(Database.this)
+                new QuerySetValue(Database.this, getDatabasePath())
                         .withArgs(value)
                         .with(voidFuturePromise)
                         .execute();
@@ -99,14 +99,13 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
-        checkDatabaseReference();
-        return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, R>>() {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference()) {
             @Override
             @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 // TODO - check
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
-                new QueryReadValue(Database.this)
+                new QueryReadValue(Database.this, getDatabasePath())
                         .with(filters)
                         .with(orderByClause)
                         .with(rConverterPromise)
@@ -122,12 +121,11 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
-        checkDatabaseReference();
-        return ConverterPromise.whenWithConvert(new Consumer<ConverterPromise<T, R>>() {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference()) {
             @Override
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
-                new QueryOnDataChange(Database.this)
+                new QueryOnDataChange(Database.this, getDatabasePath())
                         .with(filters)
                         .with(orderByClause)
                         .with(rConverterPromise)
@@ -161,7 +159,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public DatabaseDistribution push() {
-        new QueryPush(this).execute();
+        new QueryPush(this, databaseReference()).execute();
         return this;
     }
 
@@ -170,11 +168,10 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> removeValue() {
-        checkDatabaseReference();
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new QueryRemoveValue(Database.this)
+                new QueryRemoveValue(Database.this, getDatabasePath())
                         .with(voidFuturePromise)
                         .execute();
             }
@@ -186,11 +183,10 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> updateChildren(final Map<String, Object> data) {
-        checkDatabaseReference();
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new QueryUpdateChildren(Database.this)
+                new QueryUpdateChildren(Database.this, getDatabasePath())
                         .withArgs(data)
                         .with(voidFuturePromise)
                         .execute();
@@ -204,11 +200,10 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transactionFunction) {
-        checkDatabaseReference();
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                new QueryRunTransaction(Database.this)
+                new QueryRunTransaction(Database.this, getDatabasePath())
                         .withArgs(dataType, transactionFunction)
                         .with(voidFuturePromise)
                         .execute();

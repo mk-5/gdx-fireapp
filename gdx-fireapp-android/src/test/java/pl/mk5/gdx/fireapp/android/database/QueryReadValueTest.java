@@ -35,6 +35,8 @@ import pl.mk5.gdx.fireapp.android.AndroidContextTest;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
+import static org.mockito.Mockito.spy;
+
 @PrepareForTest({GdxNativesLoader.class, ResolverFuturePromiseOnData.class, FirebaseDatabase.class})
 public class QueryReadValueTest extends AndroidContextTest {
 
@@ -55,7 +57,7 @@ public class QueryReadValueTest extends AndroidContextTest {
     @Test
     public void run_ok() {
         // Given
-        Database database = Mockito.spy(Database.class);
+        Database database = spy(Database.class);
         final DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.doAnswer(new Answer() {
             @Override
@@ -65,10 +67,11 @@ public class QueryReadValueTest extends AndroidContextTest {
             }
         }).when(databaseReference).addListenerForSingleValueEvent(Mockito.any(ValueEventListener.class));
         database.inReference("test");
-        QueryReadValue query = new QueryReadValue(database);
+        QueryReadValue query = new QueryReadValue(database, "/test");
+        ConverterPromise promise = spy(ConverterPromise.class);
 
         // When
-        query.withArgs(String.class).execute();
+        query.with(promise).withArgs(String.class).execute();
 
         // Then
         PowerMockito.verifyStatic(ResolverFuturePromiseOnData.class);
@@ -78,7 +81,7 @@ public class QueryReadValueTest extends AndroidContextTest {
     @Test
     public void run_fail() {
         // Given
-        Database database = Mockito.spy(Database.class);
+        Database database = spy(Database.class);
         final DatabaseError databaseError = Mockito.mock(DatabaseError.class);
         Mockito.doAnswer(new Answer() {
             @Override
@@ -88,8 +91,9 @@ public class QueryReadValueTest extends AndroidContextTest {
             }
         }).when(databaseReference).addListenerForSingleValueEvent(Mockito.any(ValueEventListener.class));
         database.inReference("test");
-        QueryReadValue query = new QueryReadValue(database);
-        ConverterPromise promise = Mockito.mock(ConverterPromise.class);
+        QueryReadValue query = new QueryReadValue(database, "/test");
+        ConverterPromise promise = spy(ConverterPromise.class);
+        promise.silentFail();
 
         // When
         query.with(promise).withArgs(String.class).execute();

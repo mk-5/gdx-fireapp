@@ -56,7 +56,7 @@ public class QueryOnDataChangeTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test123");
-        QueryOnDataChange query = new QueryOnDataChange(database);
+        QueryOnDataChange query = new QueryOnDataChange(database, "/test123");
         ConverterPromise promise = Mockito.mock(ConverterPromise.class);
 
         // When
@@ -71,7 +71,7 @@ public class QueryOnDataChangeTest {
         // Given
         Database database = Mockito.spy(Database.class);
         database.inReference("/test");
-        QueryOnDataChange query = new QueryOnDataChange(database);
+        QueryOnDataChange query = new QueryOnDataChange(database, "/test");
         ConverterPromise promise = Mockito.spy(ConverterPromise.class);
 
         // When
@@ -85,7 +85,7 @@ public class QueryOnDataChangeTest {
     @Test
     public void createArgumentsValidator() {
         // Given
-        QueryOnDataChange query = new QueryOnDataChange(Mockito.mock(Database.class));
+        QueryOnDataChange query = new QueryOnDataChange(Mockito.mock(Database.class), "/test");
 
         // When
         ArgumentsValidator argumentsValidator = query.createArgumentsValidator();

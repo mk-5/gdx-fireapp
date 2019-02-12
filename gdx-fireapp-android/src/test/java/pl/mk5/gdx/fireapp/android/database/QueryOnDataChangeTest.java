@@ -57,7 +57,7 @@ public class QueryOnDataChangeTest extends AndroidContextTest {
     public void createArgumentsValidator() {
         // Given
         Database databaseDistribution = Mockito.mock(Database.class);
-        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
+        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution, "/test");
 
         // When
         ArgumentsValidator argumentsValidator = queryOnDataChange.createArgumentsValidator();
@@ -74,8 +74,8 @@ public class QueryOnDataChangeTest extends AndroidContextTest {
         final DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
-        final QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
-        final ConverterPromise promise = Mockito.mock(ConverterPromise.class);
+        final QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution, "/test");
+        final ConverterPromise promise = Mockito.spy(ConverterPromise.class);
 
         // When
         databaseDistribution.inReference("/test");
@@ -92,7 +92,7 @@ public class QueryOnDataChangeTest extends AndroidContextTest {
         final DatabaseReference databaseReference = Mockito.mock(DatabaseReference.class);
         Mockito.when(firebaseDatabase.getReference(Mockito.anyString())).thenReturn(databaseReference);
         Mockito.when(databaseDistribution.inReference(Mockito.anyString())).thenCallRealMethod();
-        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution);
+        QueryOnDataChange queryOnDataChange = new QueryOnDataChange(databaseDistribution, "/test");
         final ConverterPromise promise = Mockito.spy(ConverterPromise.class);
 
         // When

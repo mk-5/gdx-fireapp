@@ -25,8 +25,9 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides connection-status ask javascript execution.
  */
 class QueryConnectionStatus extends GwtDatabaseQuery {
+
     QueryConnectionStatus(Database databaseDistribution) {
-        super(databaseDistribution);
+        super(databaseDistribution, null);
     }
 
     @Override

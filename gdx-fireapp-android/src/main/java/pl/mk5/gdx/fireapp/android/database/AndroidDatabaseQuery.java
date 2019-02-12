@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import pl.mk5.gdx.fireapp.database.queries.GdxFireappQuery;
@@ -35,19 +36,17 @@ import pl.mk5.gdx.fireapp.database.queries.GdxFireappQuery;
 abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with DatabaseReference instance.";
 
-    String databasePath;
     protected Query query;
     ProviderQueryFiltering filtersProvider;
 
-    AndroidDatabaseQuery(Database databaseDistribution) {
-        super(databaseDistribution);
+    AndroidDatabaseQuery(Database databaseDistribution, String databasePath) {
+        super(databaseDistribution, databasePath);
         filtersProvider = new ProviderQueryFiltering();
     }
 
     @Override
     protected void prepare() {
-        query = databaseDistribution.databaseReference();
-        databasePath = databaseDistribution.getDatabasePath();
+        query = FirebaseDatabase.getInstance().getReference(databasePath);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         GoogleAuth googleAuth = new GoogleAuth();
 
         // When
-        googleAuth.signIn().exec();
+        googleAuth.signIn().subscribe();
 
         // Then
         Mockito.verify(((AndroidApplication) Gdx.app), VerificationModeFactory.times(1)).startActivityForResult(Mockito.nullable(Intent.class), Mockito.anyInt());
@@ -93,7 +93,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.signOut().exec());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.signOut().subscribe());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -119,7 +119,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut().silentFail().exec());
+        FuturePromise promise = (FuturePromise) PowerMockito.spy(googleAuth.signOut().silentFail().subscribe());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -145,7 +145,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().exec());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().subscribe());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
@@ -171,7 +171,7 @@ public class GoogleAuthTest extends AndroidContextTest {
         });
 
         // When
-        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().silentFail().exec());
+        FuturePromise promise = (FuturePromise) spy(googleAuth.revokeAccess().silentFail().subscribe());
 
         // Then
         PowerMockito.verifyStatic(GoogleSignIn.class, VerificationModeFactory.times(1));
