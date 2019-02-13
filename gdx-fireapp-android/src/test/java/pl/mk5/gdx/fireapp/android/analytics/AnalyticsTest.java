@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -28,6 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
@@ -89,6 +92,14 @@ public class AnalyticsTest extends AndroidContextTest {
     public void setScreen() {
         // Given
         Analytics analytics = new Analytics();
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                ((Runnable) invocation.getArgument(0)).run();
+                return null;
+            }
+        }).when(((AndroidApplication) Gdx.app)).runOnUiThread(Mockito.any(Runnable.class));
+
 
         // When
         analytics.setScreen("test", AnalyticsTest.class);

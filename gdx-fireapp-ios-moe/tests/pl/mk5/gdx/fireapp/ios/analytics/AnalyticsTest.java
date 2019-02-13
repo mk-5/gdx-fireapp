@@ -27,15 +27,14 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.Collections;
 
-import apple.NSObject;
-import apple.c.Globals;
 import apple.foundation.NSDictionary;
 import apple.foundation.NSMutableDictionary;
+import apple.foundation.NSOperationQueue;
 import apple.foundation.NSString;
 import bindings.google.firebaseanalytics.FIRAnalytics;
 import pl.mk5.gdx.fireapp.ios.GdxIOSAppTest;
 
-@PrepareForTest({FIRAnalytics.class, NatJ.class, NSDictionary.class, NSMutableDictionary.class, NSString.class, Globals.class})
+@PrepareForTest({FIRAnalytics.class, NatJ.class, NSDictionary.class, NSMutableDictionary.class, NSString.class, NSOperationQueue.class})
 public class AnalyticsTest extends GdxIOSAppTest {
 
     @Override
@@ -68,15 +67,17 @@ public class AnalyticsTest extends GdxIOSAppTest {
     @Test
     public void setScreen() throws Exception {
         // Given
-        PowerMockito.mockStatic(Globals.class);
-        PowerMockito.when(Globals.class, "dispatch_async", Mockito.nullable(NSObject.class), Mockito.any(Globals.Block_dispatch_async.class))
-                .then(new Answer() {
-                    @Override
-                    public Object answer(InvocationOnMock invocation) throws Throwable {
-                        ((Globals.Block_dispatch_async) invocation.getArgument(1)).call_dispatch_async();
-                        return null;
-                    }
-                });
+        PowerMockito.mockStatic(NSOperationQueue.class);
+        NSOperationQueue nsOperationQueue = PowerMockito.mock(NSOperationQueue.class);
+        PowerMockito.when(NSOperationQueue.class, "mainQueue").thenReturn(nsOperationQueue);
+        Mockito.doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                ((NSOperationQueue.Block_addOperationWithBlock) invocation.getArgument(0)).call_addOperationWithBlock();
+                return null;
+            }
+        }).when(nsOperationQueue).addOperationWithBlock(Mockito.any(NSOperationQueue.Block_addOperationWithBlock.class));
+
         Analytics analytics = new Analytics();
 
         // When

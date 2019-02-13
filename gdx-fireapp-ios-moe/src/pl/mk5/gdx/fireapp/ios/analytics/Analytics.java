@@ -18,9 +18,9 @@ package pl.mk5.gdx.fireapp.ios.analytics;
 
 import java.util.Map;
 
-import apple.c.Globals;
 import apple.foundation.NSDictionary;
 import apple.foundation.NSMutableDictionary;
+import apple.foundation.NSOperationQueue;
 import apple.foundation.NSString;
 import bindings.google.firebaseanalytics.FIRAnalytics;
 import pl.mk5.gdx.fireapp.distributions.AnalyticsDistribution;
@@ -57,9 +57,9 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setScreen(final String name, final Class<?> screenClass) {
-        Globals.dispatch_async(Globals.dispatch_get_main_queue(), new Globals.Block_dispatch_async() {
+        NSOperationQueue.mainQueue().addOperationWithBlock(new NSOperationQueue.Block_addOperationWithBlock() {
             @Override
-            public void call_dispatch_async() {
+            public void call_addOperationWithBlock() {
                 FIRAnalytics.setScreenNameScreenClass(name, screenClass.getSimpleName());
             }
         });
