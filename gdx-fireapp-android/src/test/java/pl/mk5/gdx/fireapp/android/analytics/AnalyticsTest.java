@@ -32,8 +32,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import pl.mk5.gdx.fireapp.GdxFIRAnalytics;
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
 
 @PrepareForTest({FirebaseAnalytics.class, GdxNativesLoader.class})
@@ -53,7 +53,7 @@ public class AnalyticsTest extends AndroidContextTest {
     @Test
     public void logEvent() {
         // Given
-        GdxFIRAnalytics analytics = GdxFIRAnalytics.instance();
+        Analytics analytics = new Analytics();
 
         // When
         analytics.logEvent("test", new HashMap<String, String>());
@@ -66,9 +66,29 @@ public class AnalyticsTest extends AndroidContextTest {
     }
 
     @Test
+    public void logEvent_withParams() {
+        // Given
+        Analytics analytics = new Analytics();
+        Map<String, String> params = new HashMap<>();
+        params.put("param_string", "lorem ipsum");
+        params.put("param_string_starting_with_number", "12:00 hour");
+        params.put("param_number_int", "15");
+        params.put("param_number_float", "15.54");
+
+        // When
+        analytics.logEvent("test", params);
+
+        // Then
+        PowerMockito.verifyStatic(FirebaseAnalytics.class, VerificationModeFactory.times(1));
+        FirebaseAnalytics.getInstance((Context) Gdx.app);
+        Mockito.verify(firebaseAnalytics, VerificationModeFactory.times(1)).logEvent(Mockito.eq("test"), Mockito.any(Bundle.class));
+        Mockito.verifyNoMoreInteractions(firebaseAnalytics);
+    }
+
+    @Test
     public void setScreen() {
         // Given
-        GdxFIRAnalytics analytics = GdxFIRAnalytics.instance();
+        Analytics analytics = new Analytics();
 
         // When
         analytics.setScreen("test", AnalyticsTest.class);
@@ -84,7 +104,7 @@ public class AnalyticsTest extends AndroidContextTest {
     @Test
     public void setUserProperty() {
         // Given
-        GdxFIRAnalytics analytics = GdxFIRAnalytics.instance();
+        Analytics analytics = new Analytics();
 
         // When
         analytics.setUserProperty("test_name", "test_value");
@@ -100,7 +120,7 @@ public class AnalyticsTest extends AndroidContextTest {
     @Test
     public void setUserId() {
         // Given
-        GdxFIRAnalytics analytics = GdxFIRAnalytics.instance();
+        Analytics analytics = new Analytics();
 
         // When
         analytics.setUserId("test");
