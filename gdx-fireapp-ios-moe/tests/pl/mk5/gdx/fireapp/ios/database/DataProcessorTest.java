@@ -56,11 +56,11 @@ public class DataProcessorTest extends GdxIOSAppTest {
         PowerMockito.mockStatic(NSDictionaryHelper.class);
         PowerMockito.mockStatic(NSNumberHelper.class);
         PowerMockito.mockStatic(NSArrayHelper.class);
-        Mockito.when(NSDictionaryHelper.toMap(Mockito.any())).thenReturn(Mockito.mock(Map.class));
+        Mockito.when(NSDictionaryHelper.toMap(Mockito.any(NSDictionary.class))).thenReturn(Mockito.mock(Map.class));
         Mockito.when(NSDictionaryHelper.toNSDictionary(Mockito.any(Object.class))).thenReturn(Mockito.mock(NSDictionary.class));
-        Mockito.when(NSNumberHelper.getNSNumberPrimitive(Mockito.any())).thenReturn(Mockito.mock(Number.class));
-        Mockito.when(NSArrayHelper.toList(Mockito.any())).thenReturn(Mockito.mock(List.class));
-        Mockito.when(NSArrayHelper.toArray(Mockito.any())).thenReturn(Mockito.mock(NSMutableArray.class));
+        Mockito.when(NSNumberHelper.getNSNumberPrimitive(Mockito.any(NSNumber.class))).thenReturn(Mockito.mock(Number.class));
+        Mockito.when(NSArrayHelper.toList(Mockito.any(NSArray.class))).thenReturn(Mockito.mock(List.class));
+        Mockito.when(NSArrayHelper.toArray(Mockito.any(List.class))).thenReturn(Mockito.mock(NSMutableArray.class));
     }
 
     @Test
