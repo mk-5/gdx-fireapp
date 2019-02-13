@@ -11,8 +11,8 @@ import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
 import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
-import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 
 public class DatabaseLimitEqualTest extends E2ETest {
 
@@ -33,10 +33,6 @@ public class DatabaseLimitEqualTest extends E2ETest {
                         .inReference("/employee")
                         .push()
                         .setValue(employee))
-//                .then(GdxFIRDatabase.instance()
-//                        .inReference("/employee")
-//                        .push()
-//                        .setValue(employee2))
                 .then(new Consumer<Void>() {
                     @Override
                     public void accept(Void aVoid) {
