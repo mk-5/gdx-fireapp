@@ -27,17 +27,17 @@ import pl.mk5.gdx.fireapp.promises.Promise;
 class GdxFIRUser extends PlatformDistributor<AuthUserDistribution> implements AuthUserDistribution {
 
     @Override
-    public Promise<Void> updateEmail(String newEmail) {
+    public Promise<GdxFirebaseUser> updateEmail(String newEmail) {
         return platformObject.updateEmail(newEmail);
     }
 
     @Override
-    public Promise<Void> sendEmailVerification() {
+    public Promise<GdxFirebaseUser> sendEmailVerification() {
         return platformObject.sendEmailVerification();
     }
 
     @Override
-    public Promise<Void> updatePassword(char[] newPassword) {
+    public Promise<GdxFirebaseUser> updatePassword(char[] newPassword) {
         return platformObject.updatePassword(newPassword);
     }
 
@@ -47,7 +47,7 @@ class GdxFIRUser extends PlatformDistributor<AuthUserDistribution> implements Au
     }
 
     @Override
-    public Promise<Void> reload() {
+    public Promise<GdxFirebaseUser> reload() {
         return platformObject.reload();
     }
 

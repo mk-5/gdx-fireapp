@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.distributions;
 
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.promises.Promise;
 
 /**
@@ -36,14 +37,14 @@ public interface AuthUserDistribution {
      * @param newEmail The new email, not null
      * @throws IllegalStateException When current user is not present
      */
-    Promise<Void> updateEmail(String newEmail);
+    Promise<GdxFirebaseUser> updateEmail(String newEmail);
 
     /**
      * Sends email with verification link
      *
      * @throws IllegalStateException When current user is not present
      */
-    Promise<Void> sendEmailVerification();
+    Promise<GdxFirebaseUser> sendEmailVerification();
 
     /**
      * Updates user password
@@ -51,7 +52,7 @@ public interface AuthUserDistribution {
      * @param newPassword The new password, not null
      * @throws IllegalStateException When current user is not present
      */
-    Promise<Void> updatePassword(char[] newPassword);
+    Promise<GdxFirebaseUser> updatePassword(char[] newPassword);
 
     /**
      * Deletes current user
@@ -65,5 +66,5 @@ public interface AuthUserDistribution {
      *
      * @throws IllegalStateException When current user is not present
      */
-    Promise<Void> reload();
+    Promise<GdxFirebaseUser> reload();
 }

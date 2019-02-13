@@ -18,6 +18,7 @@ package pl.mk5.gdx.fireapp.android.auth;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.distributions.AuthUserDistribution;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.promises.Promise;
@@ -28,29 +29,29 @@ import pl.mk5.gdx.fireapp.promises.Promise;
 public class User implements AuthUserDistribution {
 
     @Override
-    public Promise<Void> updateEmail(String newEmail) {
+    public Promise<GdxFirebaseUser> updateEmail(String newEmail) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
                 .updateEmail(newEmail)));
     }
 
     @Override
-    public Promise<Void> sendEmailVerification() {
+    public Promise<GdxFirebaseUser> sendEmailVerification() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
                 .sendEmailVerification()));
     }
 
     @Override
-    public Promise<Void> updatePassword(char[] newPassword) {
+    public Promise<GdxFirebaseUser> updatePassword(char[] newPassword) {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser()
                 .updatePassword(new String(newPassword))));
     }
 
@@ -63,10 +64,10 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> reload() {
+    public Promise<GdxFirebaseUser> reload() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new VoidPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser().reload()));
+        return FuturePromise.when(new AuthPromiseConsumer<>(FirebaseAuth.getInstance().getCurrentUser().reload()));
     }
 }

@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.html.auth;
 
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.distributions.AuthUserDistribution;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
@@ -26,39 +27,39 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  */
 public class User implements AuthUserDistribution {
     @Override
-    public Promise<Void> updateEmail(final String newEmail) {
+    public Promise<GdxFirebaseUser> updateEmail(final String newEmail) {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 AuthJS.firebaseUser().updateEmail(newEmail, voidFuturePromise);
             }
         });
     }
 
     @Override
-    public Promise<Void> sendEmailVerification() {
+    public Promise<GdxFirebaseUser> sendEmailVerification() {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 AuthJS.firebaseUser().sendEmailVerification(voidFuturePromise);
             }
         });
     }
 
     @Override
-    public Promise<Void> updatePassword(final char[] newPassword) {
+    public Promise<GdxFirebaseUser> updatePassword(final char[] newPassword) {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 AuthJS.firebaseUser().updatePassword(new String(newPassword), voidFuturePromise);
             }
         });
@@ -78,13 +79,13 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> reload() {
+    public Promise<GdxFirebaseUser> reload() {
         if (AuthJS.firebaseUser().isNULL()) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
+            public void accept(FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 AuthJS.firebaseUser().reload(voidFuturePromise);
             }
         });

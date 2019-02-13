@@ -55,7 +55,7 @@ public class GdxFirebaseUser implements AuthUserDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<Void> updateEmail(String newEmail) {
+    public Promise<GdxFirebaseUser> updateEmail(String newEmail) {
         return userDistribution.updateEmail(newEmail);
     }
 
@@ -63,7 +63,7 @@ public class GdxFirebaseUser implements AuthUserDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<Void> sendEmailVerification() {
+    public Promise<GdxFirebaseUser> sendEmailVerification() {
         return userDistribution.sendEmailVerification();
     }
 
@@ -71,7 +71,7 @@ public class GdxFirebaseUser implements AuthUserDistribution {
      * {@inheritDoc}
      */
     @Override
-    public Promise<Void> updatePassword(char[] newPassword) {
+    public Promise<GdxFirebaseUser> updatePassword(char[] newPassword) {
         return userDistribution.updatePassword(newPassword);
     }
 
@@ -84,7 +84,7 @@ public class GdxFirebaseUser implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> reload() {
+    public Promise<GdxFirebaseUser> reload() {
         return userDistribution.reload();
     }
 }

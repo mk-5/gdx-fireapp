@@ -48,7 +48,9 @@ class FirebaseUserJS extends JavaScriptObject {
 
     public final native void updateEmail(String newEmail, FuturePromise promise) /*-{
         this.updateEmail(newEmail).then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+                );
         })["catch"](function(error){
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
@@ -56,7 +58,9 @@ class FirebaseUserJS extends JavaScriptObject {
 
     public final native void sendEmailVerification(FuturePromise promise) /*-{
         this.sendEmailVerification().then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+                );
         })["catch"](function(error){
              promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
@@ -64,7 +68,9 @@ class FirebaseUserJS extends JavaScriptObject {
 
     public final native void updatePassword(String newPassword, FuturePromise promise) /*-{
         this.updatePassword(newPassword).then(function(){
-           promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+           promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+                );
         })["catch"](function(error){
            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
@@ -80,7 +86,9 @@ class FirebaseUserJS extends JavaScriptObject {
 
     public final native void reload(FuturePromise promise) /*-{
         this["reload"]().then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+                );
         })["catch"](function(error){
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });

@@ -19,6 +19,8 @@ package pl.mk5.gdx.fireapp.ios.auth;
 import apple.foundation.NSError;
 import bindings.google.firebaseauth.FIRAuth;
 import bindings.google.firebaseauth.FIRUser;
+import pl.mk5.gdx.fireapp.GdxFIRAuth;
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.distributions.AuthUserDistribution;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
@@ -27,18 +29,18 @@ import pl.mk5.gdx.fireapp.promises.Promise;
 public class User implements AuthUserDistribution {
 
     @Override
-    public Promise<Void> updateEmail(final String newEmail) {
+    public Promise<GdxFirebaseUser> updateEmail(final String newEmail) {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(final FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 FIRAuth.auth().currentUser().updateEmailCompletion(newEmail, new FIRUser.Block_updateEmailCompletion() {
                     @Override
                     public void call_updateEmailCompletion(NSError arg0) {
                         if (handleError(arg0, voidFuturePromise)) return;
-                        voidFuturePromise.doComplete(null);
+                        voidFuturePromise.doComplete(GdxFIRAuth.instance().getCurrentUser());
                     }
                 });
             }
@@ -46,18 +48,18 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> sendEmailVerification() {
+    public Promise<GdxFirebaseUser> sendEmailVerification() {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(final FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 FIRAuth.auth().currentUser().sendEmailVerificationWithCompletion(new FIRUser.Block_sendEmailVerificationWithCompletion() {
                     @Override
                     public void call_sendEmailVerificationWithCompletion(NSError arg0) {
                         if (handleError(arg0, voidFuturePromise)) return;
-                        voidFuturePromise.doComplete(null);
+                        voidFuturePromise.doComplete(GdxFIRAuth.instance().getCurrentUser());
                     }
                 });
             }
@@ -65,18 +67,18 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> updatePassword(final char[] newPassword) {
+    public Promise<GdxFirebaseUser> updatePassword(final char[] newPassword) {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(final FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 FIRAuth.auth().currentUser().updatePasswordCompletion(new String(newPassword), new FIRUser.Block_updatePasswordCompletion() {
                     @Override
                     public void call_updatePasswordCompletion(NSError arg0) {
                         if (handleError(arg0, voidFuturePromise)) return;
-                        voidFuturePromise.doComplete(null);
+                        voidFuturePromise.doComplete(GdxFIRAuth.instance().getCurrentUser());
                     }
                 });
             }
@@ -103,18 +105,18 @@ public class User implements AuthUserDistribution {
     }
 
     @Override
-    public Promise<Void> reload() {
+    public Promise<GdxFirebaseUser> reload() {
         if (FIRAuth.auth().currentUser() == null) {
             throw new IllegalStateException();
         }
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
+        return FuturePromise.when(new Consumer<FuturePromise<GdxFirebaseUser>>() {
             @Override
-            public void accept(final FuturePromise<Void> voidFuturePromise) {
+            public void accept(final FuturePromise<GdxFirebaseUser> voidFuturePromise) {
                 FIRAuth.auth().currentUser().reloadWithCompletion(new FIRUser.Block_reloadWithCompletion() {
                     @Override
                     public void call_reloadWithCompletion(NSError arg0) {
                         if (handleError(arg0, voidFuturePromise)) return;
-                        voidFuturePromise.doComplete(null);
+                        voidFuturePromise.doComplete(GdxFIRAuth.instance().getCurrentUser());
                     }
                 });
             }

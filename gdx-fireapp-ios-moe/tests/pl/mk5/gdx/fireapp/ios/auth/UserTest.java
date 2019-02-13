@@ -32,6 +32,7 @@ import apple.foundation.NSError;
 import apple.foundation.NSURL;
 import bindings.google.firebaseauth.FIRAuth;
 import bindings.google.firebaseauth.FIRUser;
+import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.ios.GdxIOSAppTest;
@@ -122,8 +123,8 @@ public class UserTest extends GdxIOSAppTest {
         user.updateEmail(arg1).then(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).updateEmailCompletion(Mockito.eq(arg1), Mockito.any());
-        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.isNull());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).updateEmailCompletion(Mockito.eq(arg1), Mockito.any(FIRUser.Block_updateEmailCompletion.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
@@ -145,7 +146,7 @@ public class UserTest extends GdxIOSAppTest {
         user.updateEmail(arg1).fail(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).updateEmailCompletion(Mockito.eq(arg1), Mockito.any());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).updateEmailCompletion(Mockito.eq(arg1), Mockito.any(FIRUser.Block_updateEmailCompletion.class));
         Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
@@ -167,8 +168,8 @@ public class UserTest extends GdxIOSAppTest {
         user.sendEmailVerification().then(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).sendEmailVerificationWithCompletion(Mockito.any());
-        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.isNull());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).sendEmailVerificationWithCompletion(Mockito.any(FIRUser.Block_sendEmailVerificationWithCompletion.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any(GdxFirebaseUser.class));
     }
 
     @Test
@@ -190,7 +191,7 @@ public class UserTest extends GdxIOSAppTest {
         user.sendEmailVerification().fail(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).sendEmailVerificationWithCompletion(Mockito.any());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).sendEmailVerificationWithCompletion(Mockito.any(FIRUser.Block_sendEmailVerificationWithCompletion.class));
         Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
@@ -213,8 +214,8 @@ public class UserTest extends GdxIOSAppTest {
         user.updatePassword(arg1).then(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).updatePasswordCompletion(Mockito.eq(new String(arg1)), Mockito.any());
-        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.isNull());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).updatePasswordCompletion(Mockito.eq(new String(arg1)), Mockito.any(FIRUser.Block_updatePasswordCompletion.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.any(GdxFirebaseUser.class));
     }
 
     @Test
@@ -237,7 +238,7 @@ public class UserTest extends GdxIOSAppTest {
         user.updatePassword(arg1).fail(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).updatePasswordCompletion(Mockito.eq(new String(arg1)), Mockito.any());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).updatePasswordCompletion(Mockito.eq(new String(arg1)), Mockito.any(FIRUser.Block_updatePasswordCompletion.class));
         Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 
@@ -259,8 +260,8 @@ public class UserTest extends GdxIOSAppTest {
         user.delete().then(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any());
-        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.isNull());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRUser.Block_deleteWithCompletion.class));
+        Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(GdxFirebaseUser.class));
     }
 
     @Test
@@ -282,7 +283,7 @@ public class UserTest extends GdxIOSAppTest {
         user.delete().fail(consumer);
 
         // Then
-        Mockito.verify(firUser, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any());
+        Mockito.verify(firUser, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRUser.Block_deleteWithCompletion.class));
         Mockito.verify(consumer, VerificationModeFactory.times(1)).accept(Mockito.nullable(String.class), Mockito.any(Exception.class));
     }
 }
