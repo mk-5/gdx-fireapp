@@ -40,23 +40,21 @@ public class GdxFIRStorage extends PlatformDistributor<StorageDistribution> impl
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRStorage() {
+    GdxFIRStorage() {
     }
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
     public static GdxFIRStorage instance() {
-        GdxFIRStorage result = instance;
-        if (result == null) {
-            synchronized (GdxFIRStorage.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new GdxFIRStorage();
-                }
-            }
-        }
-        return result;
+       return (GdxFIRStorage) Api.instance(StorageDistribution.class);
+    }
+
+    /**
+     * Alias of {@link #instance()}
+     */
+    public static GdxFIRStorage inst() {
+        return instance();
     }
 
     /**

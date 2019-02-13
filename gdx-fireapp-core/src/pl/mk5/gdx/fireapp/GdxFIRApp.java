@@ -26,8 +26,6 @@ import pl.mk5.gdx.fireapp.distributions.AppDistribution;
  */
 public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution {
 
-    private volatile static GdxFIRApp instance;
-
     /**
      * GdxFIRApp protected constructor.
      * <p>
@@ -35,7 +33,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRApp() {
+    GdxFIRApp() {
     }
 
 
@@ -43,16 +41,14 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * @return Thread-safe singleton instance of this class.
      */
     public static GdxFIRApp instance() {
-        GdxFIRApp result = instance;
-        if (result == null) {
-            synchronized (GdxFIRApp.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new GdxFIRApp();
-                }
-            }
-        }
-        return result;
+        return (GdxFIRApp) Api.instance(AppDistribution.class);
+    }
+
+    /**
+     * Alias of {@link #instance()}
+     */
+    public static GdxFIRApp inst() {
+        return instance();
     }
 
     /**

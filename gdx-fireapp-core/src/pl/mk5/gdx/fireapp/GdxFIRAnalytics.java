@@ -36,7 +36,7 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRAnalytics(){
+    GdxFIRAnalytics(){
     }
 
 
@@ -44,16 +44,14 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
      * @return Thread-safe singleton instance of this class.
      */
     public static GdxFIRAnalytics instance() {
-        GdxFIRAnalytics result = instance;
-        if (result == null) {
-            synchronized (GdxFIRAnalytics.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new GdxFIRAnalytics();
-                }
-            }
-        }
-        return result;
+        return (GdxFIRAnalytics) Api.instance(AnalyticsDistribution.class);
+    }
+
+    /**
+     * Alias of {@link #instance()}
+     */
+    public static GdxFIRAnalytics inst() {
+        return instance();
     }
 
     /**

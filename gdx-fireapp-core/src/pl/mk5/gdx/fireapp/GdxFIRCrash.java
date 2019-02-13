@@ -35,23 +35,21 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRCrash() {
+    GdxFIRCrash() {
     }
 
     /**
      * @return Thread-safe singleton instance of this class.
      */
     public static GdxFIRCrash instance() {
-        GdxFIRCrash result = instance;
-        if (result == null) {
-            synchronized (GdxFIRCrash.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new GdxFIRCrash();
-                }
-            }
-        }
-        return result;
+        return (GdxFIRCrash) Api.instance(CrashDistribution.class);
+    }
+
+    /**
+     * Alias of {@link #instance()}
+     */
+    public static GdxFIRCrash inst() {
+        return instance();
     }
 
     /**

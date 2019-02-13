@@ -46,7 +46,7 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
-    private GdxFIRDatabase() {
+    GdxFIRDatabase() {
         mapConverter = new MapConverter();
     }
 
@@ -54,16 +54,14 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * @return Thread-safe singleton instance of this class.
      */
     public static GdxFIRDatabase instance() {
-        GdxFIRDatabase result = instance;
-        if (result == null) {
-            synchronized (GdxFIRDatabase.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new GdxFIRDatabase();
-                }
-            }
-        }
-        return result;
+        return (GdxFIRDatabase) Api.instance(DatabaseDistribution.class);
+    }
+
+    /**
+     * Alias of {@link #instance()}
+     */
+    public static GdxFIRDatabase inst() {
+        return instance();
     }
 
     /**
