@@ -29,7 +29,6 @@ public class GdxFirebaseUserTest extends E2ETest {
 
     @Override
     public void action() {
-        // TODO - remove user if exists
         GdxFIRAuth.instance()
                 .createUserWithEmailAndPassword("someemail@gmail.com", "abcd1234".toCharArray())
                 .then(GdxFIRAuth.instance().signInWithEmailAndPassword("someemail@gmail.com", "abcd1234".toCharArray()))
@@ -37,30 +36,24 @@ public class GdxFirebaseUserTest extends E2ETest {
                     @Override
                     public void accept(GdxFirebaseUser user) {
                         user.updateEmail("git@mk5.pl")
-                                .then(new Consumer<Void>() {
+                                .then(new Consumer<GdxFirebaseUser>() {
                                     @Override
-                                    public void accept(Void aVoid) {
-                                        GdxFIRAuth.instance()
-                                                .getCurrentUser().reload()
-                                                .then(GdxFIRAuth.instance().getCurrentUser().sendEmailVerification())
-                                                .then(GdxFIRAuth.instance().getCurrentUserPromise())
+                                    public void accept(GdxFirebaseUser user) {
+                                        user.reload()
+                                                .then(user.sendEmailVerification())
                                                 .then(new Consumer<GdxFirebaseUser>() {
                                                     @Override
-                                                    public void accept(GdxFirebaseUser user) {
-                                                        user.delete();
+                                                    public void accept(GdxFirebaseUser gdxFirebaseUser) {
+                                                        gdxFirebaseUser.delete();
                                                         success();
                                                     }
                                                 });
                                     }
-                                });
+                                })
+                                .fail(new DeleteUserBiConsumer());
                     }
                 })
-                .fail(new BiConsumer<String, Throwable>() {
-                    @Override
-                    public void accept(String s, Throwable throwable) {
-                        Gdx.app.log("App", s, throwable);
-                    }
-                });
+                .fail(new DeleteUserBiConsumer());
     }
 
     @Override
@@ -73,5 +66,16 @@ public class GdxFirebaseUserTest extends E2ETest {
 
     @Override
     public void dispose() {
+    }
+
+    private static class DeleteUserBiConsumer implements BiConsumer<String, Throwable> {
+
+        @Override
+        public void accept(String s, Throwable throwable) {
+            Gdx.app.log("App", s, throwable);
+            if (GdxFIRAuth.instance().getCurrentUser() != null) {
+                GdxFIRAuth.instance().getCurrentUser().delete();
+            }
+        }
     }
 }
