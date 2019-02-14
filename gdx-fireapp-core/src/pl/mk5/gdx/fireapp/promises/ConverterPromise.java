@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import pl.mk5.gdx.fireapp.annotations.MapConversion;
 import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
@@ -69,6 +70,8 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
                     if (object.getClass() == mapConversionAnnotation.value()) {
                         object = Collections.singletonList(object);
                     }
+                } else if (ClassReflection.isAssignableFrom(Map.class, object.getClass())) {
+                    object = Collections.singletonList(object);
                 }
             }
         }
