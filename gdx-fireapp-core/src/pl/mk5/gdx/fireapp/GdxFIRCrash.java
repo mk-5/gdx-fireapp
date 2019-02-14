@@ -38,9 +38,6 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
     GdxFIRCrash() {
     }
 
-    /**
-     * @return Thread-safe singleton instance of this class.
-     */
     public static GdxFIRCrash instance() {
         return (GdxFIRCrash) Api.instance(CrashDistribution.class);
     }

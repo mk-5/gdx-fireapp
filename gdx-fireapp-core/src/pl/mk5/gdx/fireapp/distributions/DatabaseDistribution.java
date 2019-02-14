@@ -68,11 +68,12 @@ public interface DatabaseDistribution {
     /**
      * Reads value from path given by {@code inReference(String)}.
      * <p>
-     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link pl.mk5.gdx.fireapp.deserialization.MapConverter}
+     * POJO objects received from each platform should be represented as Map.
+     * Conversion will be guarantee later by {@link pl.mk5.gdx.fireapp.deserialization.MapConverter}
      *
      * @param dataType Class you want to retrieve
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
-     * @param <R>      More specific type of data you want to retrieve associated with {@code callback} - should be not-abstract type.
+     * @param <R>      More specific type of data you want - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call after.
      */
     <T, R extends T> Promise<R> readValue(Class<T> dataType);
@@ -87,7 +88,7 @@ public interface DatabaseDistribution {
      *
      * @param dataType Class you want to retrieve
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
-     * @param <R>      More specific type of data you want to retrieve associated with {@code listener} - should be not-abstract type.
+     * @param <R>      More specific type of data you want to retrieve - should be not-abstract type.
      * @throws RuntimeException if {@link #inReference(String)} was not call after.
      */
     <T, R extends T> ListenerPromise<R> onDataChange(Class<T> dataType);

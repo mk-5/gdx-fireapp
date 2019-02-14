@@ -36,10 +36,6 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
     GdxFIRApp() {
     }
 
-
-    /**
-     * @return Thread-safe singleton instance of this class.
-     */
     public static GdxFIRApp instance() {
         return (GdxFIRApp) Api.instance(AppDistribution.class);
     }

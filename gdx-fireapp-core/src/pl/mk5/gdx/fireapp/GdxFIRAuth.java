@@ -43,9 +43,6 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
         gdxFIRGoogleAuth = new GdxFIRGoogleAuth();
     }
 
-    /**
-     * @return Thread-safe singleton instance of this class.
-     */
     public static GdxFIRAuth instance() {
         return (GdxFIRAuth) Api.instance(AuthDistribution.class);
     }

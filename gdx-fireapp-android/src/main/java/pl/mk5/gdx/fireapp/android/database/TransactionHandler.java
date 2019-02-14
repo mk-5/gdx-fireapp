@@ -72,11 +72,11 @@ class TransactionHandler<R> implements Transaction.Handler {
     }
 
     @Override
-    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+    public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
         if (databaseError != null) {
             promise.doFail(databaseError.toException());
         } else {
-            if (b) {
+            if (committed) {
                 promise.doComplete(null);
             } else {
                 promise.doFail(TRANSACTION_NOT_ABLE_TO_COMMIT, null);

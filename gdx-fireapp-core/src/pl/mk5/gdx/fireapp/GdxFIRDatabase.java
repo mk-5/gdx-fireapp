@@ -50,9 +50,6 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
         mapConverter = new MapConverter();
     }
 
-    /**
-     * @return Thread-safe singleton instance of this class.
-     */
     public static GdxFIRDatabase instance() {
         return (GdxFIRDatabase) Api.instance(DatabaseDistribution.class);
     }

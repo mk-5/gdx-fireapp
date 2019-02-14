@@ -39,10 +39,6 @@ public class GdxFIRAnalytics extends PlatformDistributor<AnalyticsDistribution> 
     GdxFIRAnalytics(){
     }
 
-
-    /**
-     * @return Thread-safe singleton instance of this class.
-     */
     public static GdxFIRAnalytics instance() {
         return (GdxFIRAnalytics) Api.instance(AnalyticsDistribution.class);
     }
