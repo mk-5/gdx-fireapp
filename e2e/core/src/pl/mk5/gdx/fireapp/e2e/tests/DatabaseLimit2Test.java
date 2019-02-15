@@ -26,10 +26,11 @@ import java.util.Map;
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
 import pl.mk5.gdx.fireapp.database.FilterType;
+import pl.mk5.gdx.fireapp.database.OrderByMode;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
-public class DatabaseLimitTest extends E2ETest {
+public class DatabaseLimit2Test extends E2ETest {
 
     private BitmapFont font;
 
@@ -54,7 +55,8 @@ public class DatabaseLimitTest extends E2ETest {
                         .setValue(employee2))
                 .then(GdxFIRDatabase.instance()
                         .inReference("/employee")
-                        .filter(FilterType.LIMIT_LAST, 1)
+                        .orderBy(OrderByMode.ORDER_BY_KEY, null)
+                        .filter(FilterType.LIMIT_FIRST, 1)
                         .readValue(List.class))
                 .then(new Consumer<List>() {
                     @Override
