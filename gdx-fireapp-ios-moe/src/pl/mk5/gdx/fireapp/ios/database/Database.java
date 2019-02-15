@@ -164,6 +164,11 @@ public class Database implements DatabaseDistribution {
         return this;
     }
 
+    @Override
+    public DatabaseDistribution orderBy(OrderByMode orderByMode) {
+        return orderBy(orderByMode, null);
+    }
+
     /**
      * {@inheritDoc}
      */

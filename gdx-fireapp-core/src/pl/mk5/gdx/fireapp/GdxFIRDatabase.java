@@ -117,6 +117,11 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
         return this;
     }
 
+    @Override
+    public DatabaseDistribution orderBy(OrderByMode orderByMode) {
+        return platformObject.orderBy(orderByMode, null);
+    }
+
     /**
      * {@inheritDoc}
      */

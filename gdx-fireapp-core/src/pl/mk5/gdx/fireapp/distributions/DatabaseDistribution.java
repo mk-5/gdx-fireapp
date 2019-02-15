@@ -120,6 +120,13 @@ public interface DatabaseDistribution {
     DatabaseDistribution orderBy(OrderByMode orderByMode, String argument);
 
     /**
+     * Same as {@link #orderBy(OrderByMode, String)} but with null argument.
+     *
+     * @see #orderBy(OrderByMode, String)
+     */
+    DatabaseDistribution orderBy(OrderByMode orderByMode);
+
+    /**
      * Creates new object inside database and return {@code this instance} with reference to it set by {@code DatabaseDistribution#inReference()}
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
