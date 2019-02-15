@@ -83,7 +83,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> setValue(final Object value) {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QuerySetValue(Database.this, getDatabasePath())
@@ -99,15 +99,15 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference()) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference(), orderByClause, filters) {
             @Override
             @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 // TODO - check
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryReadValue(Database.this, getDatabasePath())
-                        .with(filters)
-                        .with(orderByClause)
+                        .with(getFilters())
+                        .with(getOrderByClause())
                         .with(rConverterPromise)
                         .withArgs(dataType)
                         .execute();
@@ -121,13 +121,13 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference()) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference(), orderByClause, filters) {
             @Override
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryOnDataChange(Database.this, getDatabasePath())
-                        .with(filters)
-                        .with(orderByClause)
+                        .with(getFilters())
+                        .with(getOrderByClause())
                         .with(rConverterPromise)
                         .withArgs(dataType)
                         .execute();
@@ -173,7 +173,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> removeValue() {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRemoveValue(Database.this, getDatabasePath())
@@ -188,7 +188,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> updateChildren(final Map<String, Object> data) {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryUpdateChildren(Database.this, getDatabasePath())
@@ -205,7 +205,7 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transactionFunction) {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference()) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRunTransaction(Database.this, getDatabasePath())

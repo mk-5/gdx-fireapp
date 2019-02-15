@@ -16,6 +16,8 @@
 
 package pl.mk5.gdx.fireapp.database;
 
+import com.badlogic.gdx.utils.Array;
+
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
 /**
@@ -25,12 +27,27 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
  */
 public abstract class DatabaseConsumer<T> implements Consumer<T> {
     private final String databasePath;
+    private final OrderByClause orderByClause;
+    private final Array<Filter> filters;
 
-    public DatabaseConsumer(String databasePath) {
+    public DatabaseConsumer(String databasePath, OrderByClause orderByClause, Array<Filter> filtersArr) {
         this.databasePath = databasePath;
+        this.orderByClause = orderByClause != null ? new OrderByClause(orderByClause.getOrderByMode(), orderByClause.getArgument()) : null;
+        this.filters = new Array<>();
+        for (Filter filter : filtersArr) {
+            filters.add(new Filter(filter.getFilterType(), filter.getFilterArguments()));
+        }
     }
 
     public String getDatabasePath() {
         return databasePath;
+    }
+
+    public OrderByClause getOrderByClause() {
+        return orderByClause;
+    }
+
+    public Array<Filter> getFilters() {
+        return filters;
     }
 }

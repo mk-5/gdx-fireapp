@@ -40,7 +40,7 @@ class ResolverDataSnapshotOrderBy {
      * @return New instance of List with ordering preserved from DataSnapshot
      */
     @SuppressWarnings("unchecked")
-    public static List resolve(DataSnapshot dataSnapshot) {
+    static List resolve(DataSnapshot dataSnapshot) {
         List result = new ArrayList<>();
         for (DataSnapshot o : dataSnapshot.getChildren()) {
             result.add(o.getValue());
@@ -56,7 +56,7 @@ class ResolverDataSnapshotOrderBy {
      * @param dataSnapshot  DataSnapshot to check, not null
      * @return True if ordering should be preserved
      */
-    public static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, DataSnapshot dataSnapshot) {
+    static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, DataSnapshot dataSnapshot) {
         return orderByClause != null && ClassReflection.isAssignableFrom(List.class, dataType)
                 && dataSnapshot.getChildrenCount() > 0;
     }
