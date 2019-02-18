@@ -38,14 +38,14 @@ class AuthJS {
     static native void signInAnonymously(final FuturePromise promise) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
                     @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
                 );
             }
             removeAuthListener();
         });
         $wnd.firebase.auth().signInAnonymously()['catch'](function(error) {
-           promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(
+           promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
             @java.lang.Exception::new(Ljava/lang/String;)(error.message)
           );
         });
@@ -54,7 +54,7 @@ class AuthJS {
     static native void signInWithEmailAndPassword(final String email, final String password, final FuturePromise promise) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
                     @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
                 );
             }
@@ -69,7 +69,7 @@ class AuthJS {
 
     static native void createUserWithEmailAndPassword(final String email, final String password, final FuturePromise promise) /*-{
         $wnd.firebase.auth().createUserWithEmailAndPassword(email, password).then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
                 @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
             );
         })['catch'](function(error) {
@@ -82,7 +82,7 @@ class AuthJS {
     static native void signInWithToken(final String token, final FuturePromise promise) /*-{
         var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
             if( user ){
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
                     @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
                 );
             }
@@ -97,11 +97,11 @@ class AuthJS {
 
     static native void signOut(final FuturePromise promise) /*-{
         if( $wnd.firebase.auth().currentUser == null ){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
             return;
         }
         $wnd.firebase.auth().signOut().then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
         })['catch'](function(error) {
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
@@ -111,7 +111,7 @@ class AuthJS {
 
     static native void sendPasswordResetEmail(String email, final FuturePromise promise) /*-{
         $wnd.firebase.auth().sendPasswordResetEmail(email).then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
         })["catch"](function(error){
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });

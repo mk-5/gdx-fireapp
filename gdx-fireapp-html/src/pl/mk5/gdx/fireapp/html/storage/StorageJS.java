@@ -54,7 +54,7 @@ class StorageJS {
     static native void remove(String bucketUrl, String refPath, FuturePromise<Void> futurePromise) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath)['delete']().then(function(){
-             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
         })['catch'](function(error){
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
@@ -73,7 +73,7 @@ class StorageJS {
     static native void upload(String bucketUrl, String refPath, String base64DataString, FuturePromise<FileMetadata> promise) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).putString(base64DataString,'base64').then(function(snapshot){
-            @pl.mk5.gdx.fireapp.html.storage.StorageJS::callUploadPromise(Lmk/gdx/firebase/html/storage/UploadTaskSnapshot;Lmk/gdx/firebase/promises/FuturePromise;)(snapshot, promise);
+            @pl.mk5.gdx.fireapp.html.storage.StorageJS::callUploadPromise(Lpl/mk5/gdx/fireapp/html/storage/UploadTaskSnapshot;Lpl/mk5/gdx/fireapp/promises/FuturePromise;)(snapshot, promise);
         })['catch'](function(error){
              promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)

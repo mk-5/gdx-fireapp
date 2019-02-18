@@ -4,7 +4,9 @@
 <module rename-to="html">
     <inherits name='com.badlogic.gdx.backends.gdx_backends_gwt'/>
 
+    <inherits name='gdxfireapp_gwt'/>
     <inherits name='GdxFireappE2ETests'/>
+
     <entry-point class='pl.mk5.gdx.fireapp.e2e.client.HtmlLauncher'/>
     <set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
     <set-configuration-property name="gdx.assetpath" value="../android/assets"/>

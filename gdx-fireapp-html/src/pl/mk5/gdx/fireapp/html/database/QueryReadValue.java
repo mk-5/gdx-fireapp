@@ -60,9 +60,9 @@ class QueryReadValue<R> extends GwtDatabaseQuery<R> {
                 });
                 val = JSON.stringify(tmp);
             }
-            promise.@pl.mk5.gdx.fireapp.promises.ConverterPromise::doComplete(Ljava/lang/String;)(val);
+            promise.@pl.mk5.gdx.fireapp.promises.ConverterPromise::doComplete(Ljava/lang/Object;)(val);
         })['catch'](function(error){
-         promise.@pl.mk5.gdx.fireapp.promises.ConverterPromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+         promise.@pl.mk5.gdx.fireapp.promises.ConverterPromise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }

@@ -63,9 +63,9 @@ class QueryConnectionStatus extends GwtDatabaseQuery {
     public static native void onConnect(FuturePromise promise) /*-{
         $wnd.firebase.database().ref(".info/connected").on("value", function(snap){
             if (snap.val() === true) {
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/database/ConnectionStatus)(ConnectionStatus.CONNECTED);
+                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(ConnectionStatus.CONNECTED);
             } else {
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/database/ConnectionStatus)(ConnectionStatus.DISCONNECTED);
+                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(ConnectionStatus.DISCONNECTED);
             }
         });
     }-*/;

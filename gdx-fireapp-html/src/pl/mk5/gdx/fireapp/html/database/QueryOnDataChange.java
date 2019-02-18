@@ -67,7 +67,7 @@ class QueryOnDataChange extends GwtDatabaseQuery {
              });
              val = JSON.stringify(tmp);
           }
-          @pl.mk5.gdx.fireapp.html.database.GwtDataListenersManager::callPromise(Ljava/lang/String;Ljava/lang/String;)(ref,val);
+          @pl.mk5.gdx.fireapp.html.database.GwtDataPromisesManager::callPromise(Ljava/lang/String;Ljava/lang/String;)(ref,val);
         });
     }-*/;
 
@@ -84,7 +84,7 @@ class QueryOnDataChange extends GwtDatabaseQuery {
         $wnd.valueListenersOrderByCalled[reference] = false;
         var listener = $wnd.valueListeners[reference] || null;
         $wnd.firebase.database().ref(reference).off('value', listener);
-        @pl.mk5.gdx.fireapp.html.database.GwtDataListenersManager::removeDataPromise(Ljava/lang/String;)(reference);
+        @pl.mk5.gdx.fireapp.html.database.GwtDataPromisesManager::removeDataPromise(Ljava/lang/String;)(reference);
     }-*/;
 
     private static class CancelListenerAction implements Runnable {

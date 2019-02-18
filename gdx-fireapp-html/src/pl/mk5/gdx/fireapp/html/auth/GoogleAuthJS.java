@@ -28,7 +28,7 @@ class GoogleAuthJS {
 
     static native void signIn(final FuturePromise promise) /*-{
         if( $wnd.firebase.auth().currentUser != null ){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
                 @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
             );
             return;
@@ -44,11 +44,11 @@ class GoogleAuthJS {
             method = "signInWithRedirect";
         }
         $wnd.firebase.auth()[method](provider).then(function(response){
-             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Lmk/gdx/firebase/auth/GdxFirebaseUser;)(
+             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
                 @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
             );
         })['catch'](function(error) {
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
               @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
         });

@@ -16,6 +16,7 @@ hs_err_pid*
 gwt-unitCache/
 www-test/
 .gwt-tmp/
+/android/assets/firebase-config.html
 
 ## Android Studio and Intellij and Android in general
 /android/libs/armeabi/

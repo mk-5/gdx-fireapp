@@ -2,14 +2,12 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN"
     "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
 <module>
-    <source path="mk/gdx/firebase"/>
+    <source path="pl/mk5/gdx/fireapp"/>
     <super-source path="fakes"/>
 
     <extend-configuration-property name="gdx.reflect.include" value="pl.mk5.gdx.fireapp.html"/>
-
     <extend-configuration-property name="gdx.reflect.exclude"
                                    value="pl.mk5.gdx.fireapp.html.database.DatabaseReference"/>
-
     <extend-configuration-property name="gdx.reflect.include"
                                    value="pl.mk5.gdx.fireapp.promises.FuturePromise"/>
     <extend-configuration-property name="gdx.reflect.include"

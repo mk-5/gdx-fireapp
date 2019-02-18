@@ -83,9 +83,9 @@ class QueryUpdateChildren extends GwtDatabaseQuery {
             val = stringValue;
         }
         $wnd.firebase.database().ref(reference).update(val).then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Void;)(null);
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
         })['catch'](function(error){
-             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Exception;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });
     }-*/;
 }
