@@ -58,20 +58,22 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
         if (modifier != null) {
             object = modifier.apply((T) object);
         }
-        if (!ClassReflection.isAssignableFrom(List.class, wantedDataType)) {
-            if (mapConverter.isPojo(wantedDataType)) {
-                object = mapConverter.doMitmConversion(wantedDataType, object);
-            }
-        } else {
-            if (thenConsumer.isSet()) {
-                MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer.first());
-                if (mapConversionAnnotation != null) {
-                    object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
-                    if (object.getClass() == mapConversionAnnotation.value()) {
+        if( object != null ) {
+            if (!ClassReflection.isAssignableFrom(List.class, wantedDataType)) {
+                if (mapConverter.isPojo(wantedDataType)) {
+                    object = mapConverter.doMitmConversion(wantedDataType, object);
+                }
+            } else {
+                if (thenConsumer.isSet()) {
+                    MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer.first());
+                    if (mapConversionAnnotation != null) {
+                        object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
+                        if (object.getClass() == mapConversionAnnotation.value()) {
+                            object = Collections.singletonList(object);
+                        }
+                    } else if (ClassReflection.isAssignableFrom(Map.class, object.getClass())) {
                         object = Collections.singletonList(object);
                     }
-                } else if (ClassReflection.isAssignableFrom(Map.class, object.getClass())) {
-                    object = Collections.singletonList(object);
                 }
             }
         }
