@@ -41,10 +41,9 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(GdxFirebaseUserTest.class, 10);
         e2ETestRunner.addNext(AuthSignOutTest.class);
 
-        e2ETestRunner.addNext(StorageUploadImageTest.class);
-        e2ETestRunner.addNext(StorageUploadImageTest.class);
+        e2ETestRunner.addNext(StorageUploadImageTest.class, 60);
         e2ETestRunner.addNext(StorageDownloadImageTest.class, 30);
-        e2ETestRunner.addNext(StorageUploadBytesTest.class);
+        e2ETestRunner.addNext(StorageUploadBytesTest.class, 60);
         e2ETestRunner.addNext(StorageDownloadBytesTest.class, 30);
         e2ETestRunner.addNext(StorageDeleteTest.class, 30);
 

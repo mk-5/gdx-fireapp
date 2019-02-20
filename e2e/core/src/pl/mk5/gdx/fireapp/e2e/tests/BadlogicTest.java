@@ -22,6 +22,7 @@ public class BadlogicTest extends E2ETest {
 
     @Override
     public void draw(Batch batch) {
+        if( img == null ) return;
         batch.begin();
         batch.draw(img, 0, 0);
         batch.end();

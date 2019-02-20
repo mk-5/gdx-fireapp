@@ -16,8 +16,9 @@
 
 package pl.mk5.gdx.fireapp.e2e.tests;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
+import java.util.UUID;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
@@ -29,13 +30,15 @@ public class GdxFirebaseUserTest extends E2ETest {
 
     @Override
     public void action() {
+        final String email = UUID.randomUUID().toString() + "@gmail.com";
+        final String email2 = UUID.randomUUID().toString() + "@gmail.com";
         GdxFIRAuth.instance()
-                .createUserWithEmailAndPassword("someemail@gmail.com", "abcd1234".toCharArray())
-                .then(GdxFIRAuth.instance().signInWithEmailAndPassword("someemail@gmail.com", "abcd1234".toCharArray()))
+                .createUserWithEmailAndPassword(email, "abcd1234".toCharArray())
+                .then(GdxFIRAuth.instance().signInWithEmailAndPassword(email, "abcd1234".toCharArray()))
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser user) {
-                        user.updateEmail("git@mk5.pl")
+                        user.updateEmail(email2)
                                 .then(new Consumer<GdxFirebaseUser>() {
                                     @Override
                                     public void accept(GdxFirebaseUser user) {
@@ -72,7 +75,6 @@ public class GdxFirebaseUserTest extends E2ETest {
 
         @Override
         public void accept(String s, Throwable throwable) {
-            Gdx.app.log("App", s, throwable);
             if (GdxFIRAuth.instance().getCurrentUser() != null) {
                 GdxFIRAuth.instance().getCurrentUser().delete();
             }

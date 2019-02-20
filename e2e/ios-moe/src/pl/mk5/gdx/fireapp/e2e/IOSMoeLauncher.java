@@ -17,7 +17,12 @@ public class IOSMoeLauncher extends IOSApplication.Delegate {
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.useAccelerometer = false;
-        return new IOSApplication(new GdxFireappE2ETests(), config);
+        try {
+            return new IOSApplication(new GdxFireappE2ETests(), config);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void main(String[] argv) {

@@ -21,8 +21,10 @@ task copyNatives {
                 }
             }
         }
-        def outFlags = file("xcode/ios-moe/custom.xcconfig")
-        outFlags.write LD_FLAGS
+        def outFlags = file("xcode/ios-moe/custom.xcconfig");
+        def FIREBASE_PODS = "#include \"Pods/Target Support Files/Pods-ios-moe/Pods-ios-moe.release.xcconfig\"\n"
+        outFlags.write FIREBASE_PODS + LD_FLAGS
+
 
         def proguard = file("proguard.append.cfg")
         if (!proguard.exists()) {
@@ -39,6 +41,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 moe {
     xcode {
         project 'xcode/ios-moe.xcodeproj'
+        workspace 'xcode/ios-moe.xcworkspace'   // Workspace is needed when Pods was included in project
+        mainScheme 'ios-moe'
         mainTarget 'ios-moe'
         testTarget 'ios-moe-Test'
     }
