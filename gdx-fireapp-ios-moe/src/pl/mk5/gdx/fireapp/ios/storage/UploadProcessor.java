@@ -52,7 +52,6 @@ class UploadProcessor {
                 if (ErrorHandler.handleError(arg1, promise)) return;
                 FileMetadata fileMetadata = new FileMetadataBuilder(arg0).build(firStorageReference);
                 promise.doComplete(fileMetadata);
-                bytePtr.free();
             }
         });
     }

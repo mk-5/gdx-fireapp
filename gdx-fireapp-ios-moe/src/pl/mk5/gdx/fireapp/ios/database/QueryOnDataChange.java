@@ -69,12 +69,13 @@ class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
         @Override
         public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0) {
             if (arg0.value() == null) {
-                promise.doComplete(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
+                // TODO - consider about this fail
+                promise.doFail(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
             } else {
-                Object data = null;
+                Object data = arg0.value();
                 try {
                     if (!ResolverFIRDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, type, arg0)) {
-                        data = DataProcessor.iosDataToJava(arg0.value(), type);
+                        data = DataProcessor.iosDataToJava(data, type);
                     } else {
                         data = ResolverFIRDataSnapshotOrderBy.resolve(arg0);
                     }
