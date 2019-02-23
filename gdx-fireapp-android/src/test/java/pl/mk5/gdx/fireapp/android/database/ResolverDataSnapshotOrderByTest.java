@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
-import pl.mk5.gdx.fireapp.database.OrderByClause;
 
 @PrepareForTest({GdxNativesLoader.class, DataSnapshot.class})
 public class ResolverDataSnapshotOrderByTest extends AndroidContextTest {
@@ -57,13 +56,12 @@ public class ResolverDataSnapshotOrderByTest extends AndroidContextTest {
     @Test
     public void shouldResolveOrderBy() {
         // Given
-        OrderByClause orderByClause = new OrderByClause();
         Class dataType = List.class;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getChildrenCount()).thenReturn(1L);
 
         // When
-        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot);
+        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(dataType, dataSnapshot);
 
         // Then
         Assert.assertTrue(should);
@@ -72,13 +70,12 @@ public class ResolverDataSnapshotOrderByTest extends AndroidContextTest {
     @Test
     public void shouldResolveOrderBy2() {
         // Given
-        OrderByClause orderByClause = null;
         Class dataType = List.class;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getChildrenCount()).thenReturn(1L);
 
         // When
-        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot);
+        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(dataType, dataSnapshot);
 
         // Then
         Assert.assertFalse(should);
@@ -87,13 +84,12 @@ public class ResolverDataSnapshotOrderByTest extends AndroidContextTest {
     @Test
     public void shouldResolveOrderBy3() {
         // Given
-        OrderByClause orderByClause = new OrderByClause();
         Class dataType = String.class;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getChildrenCount()).thenReturn(1L);
 
         // When
-        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot);
+        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(dataType, dataSnapshot);
 
         // Then
         Assert.assertFalse(should);
@@ -102,13 +98,12 @@ public class ResolverDataSnapshotOrderByTest extends AndroidContextTest {
     @Test
     public void shouldResolveOrderBy4() {
         // Given
-        OrderByClause orderByClause = new OrderByClause();
         Class dataType = String.class;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(dataSnapshot.getChildrenCount()).thenReturn(0L);
 
         // When
-        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, dataSnapshot);
+        boolean should = ResolverDataSnapshotOrderBy.shouldResolveOrderBy(dataType, dataSnapshot);
 
         // Then
         Assert.assertFalse(should);

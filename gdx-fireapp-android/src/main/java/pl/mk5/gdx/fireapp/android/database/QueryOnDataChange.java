@@ -16,13 +16,9 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.OnDataValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
@@ -45,41 +41,10 @@ class QueryOnDataChange<R> extends AndroidDatabaseQuery<R> {
     @Override
     @SuppressWarnings("unchecked")
     protected R run() {
-        DataChangeValueListener dataChangeListener = new DataChangeValueListener<>((Class) arguments.get(0), (ConverterPromise) promise, orderByClause);
+        SnapshotValueListener dataChangeListener = new SnapshotValueListener((Class) arguments.get(0), (ConverterPromise) promise);
         filtersProvider.applyFiltering().addValueEventListener(dataChangeListener);
         ((FutureListenerPromise) promise).onCancel(new CancelListenerAction(dataChangeListener, query));
         return null;
-    }
-
-    /**
-     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
-     *
-     * @param <T> Class of object that we want to listen for change. For ex. List
-     * @param <R> Return type of object that we want to listen for change. For ex. List<MyClass>
-     */
-    private static class DataChangeValueListener<T, R extends T> implements ValueEventListener {
-
-        private Class<T> dataType;
-        private ConverterPromise<T, R> promise;
-        private OrderByClause orderByClause;
-
-        DataChangeValueListener(Class<T> dataType, ConverterPromise<T, R> promise, OrderByClause orderByClause) {
-            this.promise = promise;
-            this.dataType = dataType;
-            this.orderByClause = orderByClause;
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            ResolverDataListenerOnDataChange.resolve(dataType, orderByClause, dataSnapshot, promise);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            promise.doFail(databaseError.toException());
-        }
     }
 
     private static class CancelListenerAction implements Runnable {

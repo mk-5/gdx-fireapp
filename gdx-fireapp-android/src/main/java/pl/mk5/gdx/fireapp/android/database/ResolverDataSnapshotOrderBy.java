@@ -21,8 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pl.mk5.gdx.fireapp.database.OrderByClause;
+import java.util.Map;
 
 /**
  * Gets data from DatabaseSnapshot with ordering preserved.
@@ -41,9 +40,22 @@ class ResolverDataSnapshotOrderBy {
      */
     @SuppressWarnings("unchecked")
     static List resolve(DataSnapshot dataSnapshot) {
+        if (dataSnapshot.getValue() == null) {
+            throw new IllegalStateException();
+        }
         List result = new ArrayList<>();
-        for (DataSnapshot o : dataSnapshot.getChildren()) {
-            result.add(o.getValue());
+        Iterable<DataSnapshot> dataSnapshots;
+        if (ClassReflection.isAssignableFrom(Map.class, dataSnapshot.getValue().getClass())) {
+            dataSnapshots = ((Map) dataSnapshot.getValue()).values();
+        } else {
+            dataSnapshots = dataSnapshot.getChildren();
+        }
+        for (Object o : dataSnapshots) {
+            if (o instanceof DataSnapshot) {
+                result.add(((DataSnapshot) o).getValue());
+            } else {
+                result.add(o);
+            }
         }
         return result;
     }
@@ -51,13 +63,12 @@ class ResolverDataSnapshotOrderBy {
     /**
      * Decides if DataSnapshot value should be converted to ordered list.
      *
-     * @param orderByClause OrderByClause that was applied, may be null
-     * @param dataType      Predicted data type of given snapshot value, not null
-     * @param dataSnapshot  DataSnapshot to check, not null
+     * @param dataType     Predicted data type of given snapshot value, not null
+     * @param dataSnapshot DataSnapshot to check, not null
      * @return True if ordering should be preserved
      */
-    static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, DataSnapshot dataSnapshot) {
-        return orderByClause != null && ClassReflection.isAssignableFrom(List.class, dataType)
+    static boolean shouldResolveOrderBy(Class<?> dataType, DataSnapshot dataSnapshot) {
+        return (ClassReflection.isAssignableFrom(List.class, dataType) || ClassReflection.isAssignableFrom(Map.class, dataType))
                 && dataSnapshot.getChildrenCount() > 0;
     }
 }

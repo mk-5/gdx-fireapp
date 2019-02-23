@@ -32,12 +32,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
-import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
 import static org.mockito.Mockito.spy;
 
-@PrepareForTest({GdxNativesLoader.class, ResolverFuturePromiseOnData.class, FirebaseDatabase.class})
+@PrepareForTest({GdxNativesLoader.class, FirebaseDatabase.class})
 public class QueryReadValueTest extends AndroidContextTest {
 
     private FirebaseDatabase firebaseDatabase;
@@ -46,7 +45,6 @@ public class QueryReadValueTest extends AndroidContextTest {
     @Override
     public void setup() throws Exception {
         super.setup();
-        PowerMockito.mockStatic(ResolverFuturePromiseOnData.class);
         PowerMockito.mockStatic(FirebaseDatabase.class);
         firebaseDatabase = PowerMockito.mock(FirebaseDatabase.class);
         Mockito.when(FirebaseDatabase.getInstance()).thenReturn(firebaseDatabase);
@@ -74,8 +72,6 @@ public class QueryReadValueTest extends AndroidContextTest {
         query.with(promise).withArgs(String.class).execute();
 
         // Then
-        PowerMockito.verifyStatic(ResolverFuturePromiseOnData.class);
-        ResolverFuturePromiseOnData.resolve(Mockito.any(Class.class), Mockito.nullable(OrderByClause.class), Mockito.nullable(DataSnapshot.class), Mockito.nullable(ConverterPromise.class));
     }
 
     @Test
