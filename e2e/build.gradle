@@ -107,6 +107,7 @@ project(":html") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         implementation "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
+        implementation "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion:sources"
     }
 }
 

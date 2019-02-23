@@ -58,7 +58,7 @@ class E2ETestRunnerImpl implements E2ETestRunner {
 
     private void startTest(E2ETest test) {
         Gdx.app.postRunnable(new TestAction(test));
-        Gdx.app.log(E2ETestRunner.class.toString(), "Start new test " + test.getClass().getSimpleName());
+        Gdx.app.log(E2ETestRunner.class.getSimpleName(), "Start new test " + test.getClass().getSimpleName());
         state = 0;
     }
 
@@ -72,7 +72,7 @@ class E2ETestRunnerImpl implements E2ETestRunner {
             if (tests.size > 0) {
                 startTest(tests.peek());
             } else {
-                Gdx.app.log(E2ETestRunner.class.toString(), "No more tests to run");
+                Gdx.app.log(E2ETestRunner.class.getSimpleName(), "No more tests to run");
                 if (this.onFinish != null) {
                     this.onFinish.run();
                 }

@@ -10,14 +10,14 @@ public class TestLogger {
     private static final String SUCCESS = "Success";
 
     public static void success(E2ETest test) {
-        Gdx.app.log(E2ETestRunner.class.toString(), test.getClass().getSimpleName() + " " + SUCCESS);
+        Gdx.app.log(E2ETestRunner.class.getSimpleName(), test.getClass().getSimpleName() + " " + SUCCESS);
     }
 
     public static void log(E2ETest test, String msg, Throwable t) {
-        Gdx.app.error(test.getClass().toString(), msg, t);
+        Gdx.app.error(test.getClass().getSimpleName(), msg, t);
     }
 
     public static void error(E2ETest test, String msg, Throwable t) {
-        Gdx.app.error(test.getClass().toString(), msg, t);
+        Gdx.app.error(test.getClass().getSimpleName(), msg, t);
     }
 }

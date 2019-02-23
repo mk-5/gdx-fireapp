@@ -19,9 +19,8 @@ public class AuthSignInUserEmailPasswordTest extends E2ETest {
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser gdxFirebaseUser) {
+                        gdxFirebaseUser.delete().subscribe();
                         success();
-                        // TODO - delete before creation?
-                        gdxFirebaseUser.delete();
                     }
                 });
     }

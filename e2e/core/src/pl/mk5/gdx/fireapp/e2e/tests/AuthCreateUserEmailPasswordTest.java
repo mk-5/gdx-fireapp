@@ -20,7 +20,6 @@ public class AuthCreateUserEmailPasswordTest extends E2ETest {
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser gdxFirebaseUser) {
-                        gdxFirebaseUser.delete();
                         success();
                     }
                 })
@@ -28,7 +27,7 @@ public class AuthCreateUserEmailPasswordTest extends E2ETest {
                     @Override
                     public void accept(String s, Throwable throwable) {
                         if( s.contains("The email address is already in use by another account") ){
-                            GdxFIRAuth.inst().getCurrentUser().delete();
+                            GdxFIRAuth.inst().getCurrentUser().delete().subscribe();
                             success();
                         }
                     }

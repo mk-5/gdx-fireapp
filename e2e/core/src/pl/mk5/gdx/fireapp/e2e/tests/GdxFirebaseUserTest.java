@@ -48,7 +48,7 @@ public class GdxFirebaseUserTest extends E2ETest {
                                                 .then(new Consumer<GdxFirebaseUser>() {
                                                     @Override
                                                     public void accept(GdxFirebaseUser gdxFirebaseUser) {
-                                                        gdxFirebaseUser.delete();
+                                                        gdxFirebaseUser.delete().subscribe();
                                                         success();
                                                     }
                                                 })
@@ -79,7 +79,7 @@ public class GdxFirebaseUserTest extends E2ETest {
         public void accept(String s, Throwable throwable) {
             Gdx.app.log(GdxFirebaseUserTest.class.getSimpleName(), s, throwable);
             if (GdxFIRAuth.instance().getCurrentUser() != null) {
-                GdxFIRAuth.instance().getCurrentUser().delete();
+                GdxFIRAuth.instance().getCurrentUser().delete().subscribe();
             }
         }
     }
