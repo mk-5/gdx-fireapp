@@ -43,8 +43,8 @@ class SnapshotValueListener implements ValueEventListener {
         if (ClassReflection.isAssignableFrom(List.class, dataType) && dataSnapshot.getValue() == null) {
             promise.doComplete(Collections.emptyList());
         } else if (ClassReflection.isAssignableFrom(List.class, dataType)
-                && ResolverDataSnapshotOrderBy.shouldResolveOrderBy(dataType, dataSnapshot)) {
-            promise.doComplete(ResolverDataSnapshotOrderBy.resolve(dataSnapshot));
+                && ResolverDataSnapshotList.shouldResolveOrderBy(dataType, dataSnapshot)) {
+            promise.doComplete(ResolverDataSnapshotList.resolve(dataSnapshot));
         } else {
             promise.doComplete(dataSnapshot.getValue());
         }

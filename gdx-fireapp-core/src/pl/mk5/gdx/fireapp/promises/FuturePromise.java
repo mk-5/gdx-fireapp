@@ -75,15 +75,6 @@ public class FuturePromise<T> implements Promise<T> {
         return this;
     }
 
-    public synchronized Object args(int index) {
-        if (args == null) {
-            throw new IllegalStateException(EXEC_ARGS_NOT_SET);
-        } else if (index > args.length - 1) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        return args[index];
-    }
-
     /**
      * Sets fail bi-consumer.
      *

@@ -26,9 +26,9 @@ import java.util.Map;
 /**
  * Gets data from DatabaseSnapshot with ordering preserved.
  */
-class ResolverDataSnapshotOrderBy {
+class ResolverDataSnapshotList {
 
-    private ResolverDataSnapshotOrderBy() {
+    private ResolverDataSnapshotList() {
         //
     }
 

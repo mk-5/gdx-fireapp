@@ -25,19 +25,22 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.List;
 
+import apple.foundation.NSArray;
 import apple.foundation.NSMutableArray;
 import apple.foundation.NSMutableDictionary;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.ios.GdxIOSAppTest;
 
-@PrepareForTest({NatJ.class, FIRDataSnapshot.class})
+@PrepareForTest({NatJ.class, FIRDataSnapshot.class, NSMutableArray.class, NSMutableDictionary.class})
 public class ResolverFIRDataSnapshotListTest extends GdxIOSAppTest {
 
     @Override
     public void setup() {
         super.setup();
         PowerMockito.mockStatic(FIRDataSnapshot.class);
+        PowerMockito.mockStatic(NSMutableArray.class);
+        PowerMockito.mockStatic(NSMutableDictionary.class);
     }
 
     @Test
@@ -61,7 +64,7 @@ public class ResolverFIRDataSnapshotListTest extends GdxIOSAppTest {
     }
 
     @Test
-    public void shouldResolveOrderBy_fail1() {
+    public void shouldResolveOrderBy2() {
         // Given
         FIRDataSnapshot firDataSnapshot = Mockito.mock(FIRDataSnapshot.class);
         Mockito.when(firDataSnapshot.childrenCount()).thenReturn(2L);
@@ -71,7 +74,7 @@ public class ResolverFIRDataSnapshotListTest extends GdxIOSAppTest {
         boolean shouldResolve = ResolverFIRDataSnapshotList.shouldResolveList(firDataSnapshot);
 
         // Then
-        Assert.assertFalse(shouldResolve);
+        Assert.assertTrue(shouldResolve);
     }
 
     @Test
@@ -81,6 +84,7 @@ public class ResolverFIRDataSnapshotListTest extends GdxIOSAppTest {
         Class dataType = List.class;
         FIRDataSnapshot firDataSnapshot = Mockito.mock(FIRDataSnapshot.class);
         Mockito.when(firDataSnapshot.childrenCount()).thenReturn(0L);
+        Mockito.when(firDataSnapshot.value()).thenReturn(Mockito.mock(NSArray.class));
 
         // When
         boolean shouldResolve = ResolverFIRDataSnapshotList.shouldResolveList(firDataSnapshot);

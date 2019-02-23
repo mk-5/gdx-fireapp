@@ -32,6 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
+import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
 import static org.mockito.Mockito.spy;
@@ -67,6 +68,7 @@ public class QueryReadValueTest extends AndroidContextTest {
         database.inReference("test");
         QueryReadValue query = new QueryReadValue(database, "/test");
         ConverterPromise promise = spy(ConverterPromise.class);
+        promise.with(Mockito.mock(FirebaseMapConverter.class), String.class);
 
         // When
         query.with(promise).withArgs(String.class).execute();

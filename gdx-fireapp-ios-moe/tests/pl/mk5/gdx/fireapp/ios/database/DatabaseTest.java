@@ -36,7 +36,6 @@ import apple.foundation.NSString;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
 import pl.mk5.gdx.fireapp.database.Filter;
 import pl.mk5.gdx.fireapp.database.FilterType;
@@ -48,7 +47,7 @@ import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.ios.GdxIOSAppTest;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -203,7 +202,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
         when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
         when(firDatabaseReference.observeEventTypeWithBlockWithCancelBlock(
-                eq(FIRDataEventType.Value),
+                anyLong(),
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class))).thenReturn(handleValue);
         mockStatic(QueryOnDataChange.class);
@@ -260,13 +259,13 @@ public class DatabaseTest extends GdxIOSAppTest {
     public void push() {
         // Given
         Database database = new Database();
+        Mockito.when(firDatabaseReference.childByAutoId()).thenReturn(firDatabaseReference);
 
         // When
         database.inReference("/test").push();
 
         // Then
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).childByAutoId();
-        Mockito.verifyNoMoreInteractions(firDatabaseReference);
     }
 
     @Test
