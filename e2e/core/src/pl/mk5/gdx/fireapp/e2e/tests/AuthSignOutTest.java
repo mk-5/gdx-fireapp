@@ -16,9 +16,11 @@
 
 package pl.mk5.gdx.fireapp.e2e.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
+import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 
@@ -33,7 +35,12 @@ public class AuthSignOutTest extends E2ETest {
                     public void accept(Void o) {
                         success();
                     }
-                });
+                }).fail(new BiConsumer<String, Throwable>() {
+            @Override
+            public void accept(String s, Throwable throwable) {
+                Gdx.app.error("AuthSignOutTest", s, throwable);
+            }
+        });
     }
 
     @Override

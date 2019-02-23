@@ -24,14 +24,15 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.util.List;
-import java.util.Map;
 
+import apple.foundation.NSMutableArray;
+import apple.foundation.NSMutableDictionary;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.ios.GdxIOSAppTest;
 
 @PrepareForTest({NatJ.class, FIRDataSnapshot.class})
-public class ResolverFIRDataSnapshotOrderByTest extends GdxIOSAppTest {
+public class ResolverFIRDataSnapshotListTest extends GdxIOSAppTest {
 
     @Override
     public void setup() {
@@ -50,9 +51,10 @@ public class ResolverFIRDataSnapshotOrderByTest extends GdxIOSAppTest {
         Class dataType = List.class;
         FIRDataSnapshot firDataSnapshot = Mockito.mock(FIRDataSnapshot.class);
         Mockito.when(firDataSnapshot.childrenCount()).thenReturn(2L);
+        Mockito.when(firDataSnapshot.value()).thenReturn(Mockito.mock(NSMutableArray.class));
 
         // When
-        boolean shouldResolve = ResolverFIRDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, firDataSnapshot);
+        boolean shouldResolve = ResolverFIRDataSnapshotList.shouldResolveList(firDataSnapshot);
 
         // Then
         Assert.assertTrue(shouldResolve);
@@ -61,28 +63,12 @@ public class ResolverFIRDataSnapshotOrderByTest extends GdxIOSAppTest {
     @Test
     public void shouldResolveOrderBy_fail1() {
         // Given
-        OrderByClause orderByClause = new OrderByClause();
-        Class dataType = Map.class;
         FIRDataSnapshot firDataSnapshot = Mockito.mock(FIRDataSnapshot.class);
         Mockito.when(firDataSnapshot.childrenCount()).thenReturn(2L);
+        Mockito.when(firDataSnapshot.value()).thenReturn(Mockito.mock(NSMutableDictionary.class));
 
         // When
-        boolean shouldResolve = ResolverFIRDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, firDataSnapshot);
-
-        // Then
-        Assert.assertFalse(shouldResolve);
-    }
-
-    @Test
-    public void shouldResolveOrderBy_fail2() {
-        // Given
-        OrderByClause orderByClause = null;
-        Class dataType = List.class;
-        FIRDataSnapshot firDataSnapshot = Mockito.mock(FIRDataSnapshot.class);
-        Mockito.when(firDataSnapshot.childrenCount()).thenReturn(2L);
-
-        // When
-        boolean shouldResolve = ResolverFIRDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, firDataSnapshot);
+        boolean shouldResolve = ResolverFIRDataSnapshotList.shouldResolveList(firDataSnapshot);
 
         // Then
         Assert.assertFalse(shouldResolve);
@@ -97,7 +83,7 @@ public class ResolverFIRDataSnapshotOrderByTest extends GdxIOSAppTest {
         Mockito.when(firDataSnapshot.childrenCount()).thenReturn(0L);
 
         // When
-        boolean shouldResolve = ResolverFIRDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, dataType, firDataSnapshot);
+        boolean shouldResolve = ResolverFIRDataSnapshotList.shouldResolveList(firDataSnapshot);
 
         // Then
         Assert.assertFalse(shouldResolve);

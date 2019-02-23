@@ -16,11 +16,8 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
-import apple.foundation.NSError;
-import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
-import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.OnDataValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
@@ -44,65 +41,10 @@ class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
     @SuppressWarnings("unchecked")
     protected R run() {
         long handle = filtersProvider.applyFiltering().observeEventTypeWithBlockWithCancelBlock(FIRDataEventType.Value,
-                new DataChangeBlock((Class) arguments.get(0), orderByClause, (ConverterPromise) promise),
-                new DataChangeCancelBlock((ConverterPromise) promise));
+                new SnapshotProcessorBlock((ConverterPromise) promise, orderByClause, (Class) arguments.get(0)),
+                new SnapshotCancelBlock((ConverterPromise) promise));
         ((FutureListenerPromise) promise).onCancel(new CancelAction(handle, query));
         return null;
-    }
-
-    /**
-     * Observer for data change. Wraps {@code DataChangeListener}
-     */
-    private class DataChangeBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1 {
-
-        private Class type;
-        private ConverterPromise promise;
-        private OrderByClause orderByClause;
-
-        private DataChangeBlock(Class type, OrderByClause orderByClause, ConverterPromise promise) {
-            this.type = type;
-            this.orderByClause = orderByClause;
-            this.promise = promise;
-        }
-
-
-        @Override
-        public void call_observeEventTypeWithBlockWithCancelBlock_1(FIRDataSnapshot arg0) {
-            if (arg0.value() == null) {
-                // TODO - consider about this fail
-                promise.doFail(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
-            } else {
-                Object data = arg0.value();
-                try {
-                    if (!ResolverFIRDataSnapshotOrderBy.shouldResolveOrderBy(orderByClause, type, arg0)) {
-                        data = DataProcessor.iosDataToJava(data, type);
-                    } else {
-                        data = ResolverFIRDataSnapshotOrderBy.resolve(arg0);
-                    }
-                } catch (Exception e) {
-                    promise.doFail(e);
-                    return;
-                }
-                promise.doComplete(data);
-            }
-        }
-    }
-
-    /**
-     * Observer for data change cancel. Wraps {@code DataChangeListener}
-     */
-    private class DataChangeCancelBlock implements FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2 {
-
-        private ConverterPromise promise;
-
-        private DataChangeCancelBlock(ConverterPromise promise) {
-            this.promise = promise;
-        }
-
-        @Override
-        public void call_observeEventTypeWithBlockWithCancelBlock_2(NSError arg0) {
-            promise.doFail(new Exception(arg0.localizedDescription()));
-        }
     }
 
     private static class CancelAction implements Runnable {

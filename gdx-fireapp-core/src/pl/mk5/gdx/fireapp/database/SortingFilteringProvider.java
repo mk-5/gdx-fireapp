@@ -18,6 +18,10 @@ package pl.mk5.gdx.fireapp.database;
 
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Arrays;
+
+import pl.mk5.gdx.fireapp.GdxFIRLogger;
+
 /**
  * Provides filtering flow.
  *
@@ -46,10 +50,12 @@ public abstract class SortingFilteringProvider<T, E extends FilterResolver, K ex
     public T applyFiltering() {
         Filter filter;
         if (orderByClause != null) {
+            GdxFIRLogger.log("Apply order by " + orderByClause.getOrderByMode() + ":" + orderByClause.getArgument());
             query = (T) orderByResolver.resolve(orderByClause, query);
         }
         while (filters.size > 0) {
             filter = filters.pop();
+            GdxFIRLogger.log("Apply filter " + filter.getFilterType() + ":" + Arrays.toString(filter.getFilterArguments()));
             query = (T) filterResolver.resolve(filter.getFilterType(), query, filter.getFilterArguments());
         }
         return query;

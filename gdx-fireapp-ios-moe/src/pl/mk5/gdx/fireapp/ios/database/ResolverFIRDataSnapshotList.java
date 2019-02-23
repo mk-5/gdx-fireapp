@@ -22,13 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apple.foundation.NSArray;
+import apple.foundation.NSDictionary;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
-import pl.mk5.gdx.fireapp.database.OrderByClause;
+import pl.mk5.gdx.fireapp.GdxFIRLogger;
 
 /**
  * Gets data from FIRDataSnapshot with ordering preserved.
  */
-class ResolverFIRDataSnapshotOrderBy {
+class ResolverFIRDataSnapshotList {
 
     /**
      * Gets children's from FIRDataSnapshot and puts them into new ArrayList.
@@ -39,7 +40,17 @@ class ResolverFIRDataSnapshotOrderBy {
     @SuppressWarnings("unchecked")
     static List resolve(FIRDataSnapshot dataSnapshot) {
         List result = new ArrayList<>();
-        NSArray nsArray = dataSnapshot.children().allObjects();
+        if (dataSnapshot.value() == null) {
+            throw new IllegalStateException();
+        }
+        NSArray nsArray;
+        if (ClassReflection.isAssignableFrom(NSArray.class, dataSnapshot.value().getClass())) {
+            nsArray = dataSnapshot.children().allObjects();
+        } else if (ClassReflection.isAssignableFrom(NSDictionary.class, dataSnapshot.value().getClass())) {
+            nsArray = ((NSDictionary) dataSnapshot.value()).allValues();
+        } else {
+            throw new IllegalStateException();
+        }
         for (Object object : nsArray) {
             if (object instanceof FIRDataSnapshot) {
                 result.add(DataProcessor.iosDataToJava(((FIRDataSnapshot) object).value()));
@@ -53,13 +64,13 @@ class ResolverFIRDataSnapshotOrderBy {
     /**
      * Decides if FIRDataSnapshot value should be converted to ordered list.
      *
-     * @param orderByClause OrderByClause that was applied, may be null
-     * @param dataType      Predicted data type of given snapshot value, not null
-     * @param dataSnapshot  FIRDataSnapshot to check, not null
-     * @return True if ordering should be preserved
+     * @param dataSnapshot FIRDataSnapshot to check, not null
      */
-    static boolean shouldResolveOrderBy(OrderByClause orderByClause, Class<?> dataType, FIRDataSnapshot dataSnapshot) {
-        return orderByClause != null && ClassReflection.isAssignableFrom(List.class, dataType)
+    static boolean shouldResolveList(FIRDataSnapshot dataSnapshot) {
+        GdxFIRLogger.log("Should resolve list, "
+                + "children: " + dataSnapshot.childrenCount());
+        return (ClassReflection.isAssignableFrom(NSArray.class, dataSnapshot.value().getClass())
+                || ClassReflection.isAssignableFrom(NSDictionary.class, dataSnapshot.value().getClass()))
                 && dataSnapshot.childrenCount() > 0;
     }
 }

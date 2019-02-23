@@ -58,7 +58,7 @@ class E2ETestRunnerImpl implements E2ETestRunner {
 
     private void startTest(E2ETest test) {
         Gdx.app.postRunnable(new TestAction(tests.peek()));
-        Gdx.app.log(E2ETestRunner.class.toString(), "Start new test " + tests.peek().getClass());
+        Gdx.app.log(E2ETestRunner.class.toString(), "Start new test " + tests.peek().getClass().getSimpleName());
         state = 0;
     }
 

@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.e2e.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import java.util.UUID;
@@ -50,7 +51,8 @@ public class GdxFirebaseUserTest extends E2ETest {
                                                         gdxFirebaseUser.delete();
                                                         success();
                                                     }
-                                                });
+                                                })
+                                                .fail(new DeleteUserBiConsumer());
                                     }
                                 })
                                 .fail(new DeleteUserBiConsumer());
@@ -71,10 +73,11 @@ public class GdxFirebaseUserTest extends E2ETest {
     public void dispose() {
     }
 
-    private static class DeleteUserBiConsumer implements BiConsumer<String, Throwable> {
+    private class DeleteUserBiConsumer implements BiConsumer<String, Throwable> {
 
         @Override
         public void accept(String s, Throwable throwable) {
+            Gdx.app.log(GdxFirebaseUserTest.class.getSimpleName(), s, throwable);
             if (GdxFIRAuth.instance().getCurrentUser() != null) {
                 GdxFIRAuth.instance().getCurrentUser().delete();
             }

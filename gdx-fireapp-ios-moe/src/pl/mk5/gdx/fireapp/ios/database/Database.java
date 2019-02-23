@@ -175,6 +175,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public DatabaseDistribution push() {
         dbReference = dbReference().childByAutoId();
+        databasePath = databasePath + "/" + dbReference.key();
         return this;
     }
 

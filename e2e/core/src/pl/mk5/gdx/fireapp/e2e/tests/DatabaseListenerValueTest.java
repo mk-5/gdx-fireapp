@@ -56,8 +56,8 @@ public class DatabaseListenerValueTest extends E2ETest {
                         .after(GdxFIRAuth.instance().signInAnonymously())
                         .subscribe();
 
-                if (counter.incrementAndGet() == 4) {
-                    if (listenCounter.get() == 4 || listenCounter.get() == 3) {
+                if (counter.incrementAndGet() >= 4) {
+                    if (listenCounter.get() >= 3) {
                         scheduler.cancel();
                         success();
                     }

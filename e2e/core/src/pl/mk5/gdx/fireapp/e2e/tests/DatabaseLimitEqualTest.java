@@ -24,19 +24,26 @@ public class DatabaseLimitEqualTest extends E2ETest {
         final Map<String, String> employee2 = new HashMap<>();
         employee.put("name", "bob");
         employee.put("salary", "1000");
-        employee.put("name", "john");
-        employee.put("salary", "5000");
+        employee2.put("name", "john");
+        employee2.put("salary", "5000");
 
         GdxFIRAuth.instance()
                 .signInAnonymously()
-                .then(GdxFIRDatabase.instance()
+                .then(GdxFIRDatabase.inst()
+                        .inReference("/employee")
+                        .removeValue())
+                .then(GdxFIRDatabase.inst()
                         .inReference("/employee")
                         .push()
                         .setValue(employee))
+                .then(GdxFIRDatabase.inst()
+                        .inReference("/employee")
+                        .push()
+                        .setValue(employee2))
                 .then(new Consumer<Void>() {
                     @Override
                     public void accept(Void aVoid) {
-                        GdxFIRDatabase.instance().inReference("/employee")
+                        GdxFIRDatabase.inst().inReference("/employee")
                                 .filter(FilterType.EQUAL_TO, "5000")
                                 .orderBy(OrderByMode.ORDER_BY_CHILD, "salary")
                                 .readValue(List.class)
