@@ -57,32 +57,28 @@ class E2ETestRunnerImpl implements E2ETestRunner {
     }
 
     private void startTest(E2ETest test) {
-        Gdx.app.postRunnable(new TestAction(tests.peek()));
-        Gdx.app.log(E2ETestRunner.class.toString(), "Start new test " + tests.peek().getClass().getSimpleName());
+        Gdx.app.postRunnable(new TestAction(test));
+        Gdx.app.log(E2ETestRunner.class.toString(), "Start new test " + test.getClass().getSimpleName());
         state = 0;
     }
 
     private void checkTestsStates() {
-        for (int i = tests.size - 1; i >= 0; i--) {
-            E2ETest test = tests.get(i);
-            if (!testTimeout.containsKey(test.getClass())) {
-                throw new IllegalStateException();
-            }
-            if (test.isComplete()) {
-                tests.peek().dispose();
-                tests.pop();
-                if (tests.size > 0) {
-                    startTest(tests.peek());
-                } else {
-                    Gdx.app.log(E2ETestRunner.class.toString(), "No more tests to run");
-                    if (this.onFinish != null) {
-                        this.onFinish.run();
-                    }
+        E2ETest test = tests.peek();
+        if (!testTimeout.containsKey(test.getClass())) {
+            throw new IllegalStateException();
+        }
+        if (test.isComplete()) {
+            tests.pop().dispose();
+            if (tests.size > 0) {
+                startTest(tests.peek());
+            } else {
+                Gdx.app.log(E2ETestRunner.class.toString(), "No more tests to run");
+                if (this.onFinish != null) {
+                    this.onFinish.run();
                 }
-                break;
-            } else if (state >= testTimeout.get(test.getClass())) {
-                throw new IllegalStateException(test.getClass().getSimpleName() + " timeout");
             }
+        } else if (state >= testTimeout.get(test.getClass())) {
+            throw new IllegalStateException(test.getClass().getSimpleName() + " timeout");
         }
     }
 }
