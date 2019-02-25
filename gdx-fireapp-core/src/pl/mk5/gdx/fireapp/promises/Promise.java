@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
@@ -27,31 +28,37 @@ public interface Promise<T> {
     /**
      * Sets then consumer.
      *
-     * @param consumer "Then" consumer, will be call when promise had been competed.
+     * @param consumer Consumer will be call when this promise will be complete.
      */
     Promise<T> then(Consumer<T> consumer);
 
     /**
-     * Promise will not throw exception on fail without {@link Promise#fail(BiConsumer)} earlier.
+     * Promise will not throw exception on fail.
      */
     Promise<T> silentFail();
 
     /**
      * Sets fail bi-consumer.
+     * <p>
+     * If set - {@link #silentFail()} will be executed so promise will not cause exception on fail.
      *
      * @param consumer "Fail" bi-consumer, will be call when promise had been failed.
      */
     Promise<T> fail(BiConsumer<String, ? super Throwable> consumer);
 
     /**
-     * Sets then consumer.
+     * Sets next promise.
+     * <p>
+     * Given promise will start execution when this promise will be complete.
      *
      * @param promise The next promise. The promise will not be executed until parent promise complete
      */
     <R> Promise<R> then(Promise<R> promise);
 
     /**
-     * Sets this given promise after this promise.
+     * Sets this promise after given promise.
+     * <p>
+     * This promise will start execution after given {@code promise}
      *
      * @param promise The future promise, not null
      * @return self
@@ -59,14 +66,16 @@ public interface Promise<T> {
     Promise<T> after(Promise<?> promise);
 
     /**
-     * Run promise flow execution
+     * Run promise flow execution.
      * <p>
-     * If you call {@link #then(Consumer)} or {@link #fail(BiConsumer)} it is not mandatory
+     * Not necessary if {@link GdxFIRApp#isAutoSubscribePromises()} == true
      */
     Promise<T> subscribe();
 
     /**
      * Attach consumer by {@link #then(Consumer)} and then run {@link #subscribe()}
+     *
+     * @see #subscribe()
      */
     Promise<T> subscribe(Consumer<T> thenConsumer);
 }
