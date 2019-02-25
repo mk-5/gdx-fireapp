@@ -29,20 +29,6 @@ public class DatabaseReadValueTest extends E2ETest {
     public void action() {
         final String stringValue = "abcd";
 
-//        GdxFIRDatabase.instance()
-//                .inReference("/test-value")
-//                .setValue(stringValue)
-//                .then(GdxFIRDatabase.instance().inReference("/test-value").readValue(String.class))
-//                .after(GdxFIRAuth.instance().signInAnonymously())
-//                .then(new Consumer<String>() {
-//                    @Override
-//                    public void accept(String v) {
-//                        if (stringValue.equals(v)) {
-//                            success();
-//                        }
-//                    }
-//                });
-
         GdxFIRDatabase.instance()
                 .inReference("/test-value")
                 .setValue(stringValue)

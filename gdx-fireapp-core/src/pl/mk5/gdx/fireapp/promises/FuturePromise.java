@@ -16,6 +16,9 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import com.badlogic.gdx.utils.Timer;
+
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
@@ -26,30 +29,30 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
  */
 public class FuturePromise<T> implements Promise<T> {
 
-    private static final String EXEC_ARGS_NOT_SET = "Execution arguments has not been set.";
-
     private static final int COMPLETE = 3;
     private static final int FAIL = 1;
     static final int INIT = 0;
 
-    protected int state = INIT;
     final ConsumerWrapper<T> thenConsumer;
+    int state = INIT;
+    Timer.Task subscribeTask;
+    protected final PromiseStackRecognizer stackRecognizer;
+    protected Runnable execution;
     private boolean pauseExecution;
     private boolean afterTriggered;
     private boolean throwFail;
     private T lazyResult;
     private FuturePromise thenPromise;
-    protected Runnable execution;
     private final BiConsumerWrapper failConsumer;
     private String failReason;
     private Throwable failThrowable;
     private FuturePromise parentPromise;
-    private Object[] args;
 
     protected FuturePromise() {
         throwFail = true;
         thenConsumer = new ConsumerWrapper<>();
         failConsumer = new BiConsumerWrapper();
+        stackRecognizer = new PromiseStackRecognizer(this);
     }
 
     /**
@@ -65,7 +68,6 @@ public class FuturePromise<T> implements Promise<T> {
         if (state == COMPLETE) {
             doComplete(lazyResult);
         }
-        subscribe();
         return this;
     }
 
@@ -88,7 +90,6 @@ public class FuturePromise<T> implements Promise<T> {
         if (state == FAIL) {
             doFail(failReason, failThrowable);
         }
-        subscribe();
         return this;
     }
 
@@ -96,7 +97,7 @@ public class FuturePromise<T> implements Promise<T> {
      * Add 'then' promise which will be invoke with {@link #doComplete(Object)}
      *
      * @param promise The future promise, not null
-     * @return self
+     * @return Given promise
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -109,6 +110,10 @@ public class FuturePromise<T> implements Promise<T> {
         ((FuturePromise) promise).pauseExecution = true;
         ((FuturePromise) promise).parentPromise = this;
         thenPromise = (FuturePromise) promise;
+        if (((FuturePromise<R>) promise).subscribeTask != null) {
+            ((FuturePromise<R>) promise).subscribeTask.cancel();
+            ((FuturePromise<R>) promise).subscribeTask = null;
+        }
         return (FuturePromise<R>) promise;
     }
 
@@ -128,20 +133,25 @@ public class FuturePromise<T> implements Promise<T> {
             throw new IllegalStateException("May be only one 'after' for promise");
         }
         afterTriggered = true;
-        ((FuturePromise) promise).then(this);
-        ((FuturePromise) promise).subscribe();
+        FuturePromise topParentPromise = stackRecognizer.getTopParentPromise();
+        ((FuturePromise) promise).then(topParentPromise != null ? topParentPromise : this);
         return this;
     }
 
     @Override
     public Promise<T> subscribe() {
-        FuturePromise topParentPromise = getTopParentPromise();
+        FuturePromise topParentPromise = stackRecognizer.getTopParentPromise();
         if (topParentPromise != null && topParentPromise.execution != null) {
             topParentPromise.subscribe();
         } else if (execution != null && !pauseExecution) {
             execution.run();
         }
         return this;
+    }
+
+    @Override
+    public Promise<T> subscribe(Consumer<T> thenConsumer) {
+        return then(thenConsumer).subscribe();
     }
 
     /**
@@ -184,10 +194,10 @@ public class FuturePromise<T> implements Promise<T> {
             return;
         }
         state = FAIL;
-        if (getBottomThenPromise() != this) {
-            getBottomThenPromise().doFail(reason, throwable);
+        if (stackRecognizer.getBottomThenPromise() != this) {
+            stackRecognizer.getBottomThenPromise().doFail(reason, throwable);
         } else {
-            if (throwFail || getBottomThenPromise().throwFail) {
+            if (throwFail || stackRecognizer.getBottomThenPromise().throwFail) {
                 throw new RuntimeException(reason, throwable);
             }
             if (failConsumer.isSet()) {
@@ -207,29 +217,15 @@ public class FuturePromise<T> implements Promise<T> {
         return thenConsumer;
     }
 
-    private FuturePromise getTopParentPromise() {
-        if (parentPromise == null) return null;
-        FuturePromise promise;
-        FuturePromise tmp = parentPromise;
-        do {
-            promise = tmp;
-            tmp = promise.parentPromise;
-        } while (tmp != null);
-        return promise;
+    FuturePromise getThenPromise() {
+        return thenPromise;
     }
 
-    protected FuturePromise getBottomThenPromise() {
-        if (thenPromise == null) return this;
-        FuturePromise promise;
-        FuturePromise tmp = this;
-        do {
-            promise = tmp;
-            tmp = promise.thenPromise;
-        } while (tmp != null);
-        return promise;
+    FuturePromise getParentPromise() {
+        return parentPromise;
     }
 
-    public static <R> FuturePromise<R> when(final Consumer<FuturePromise<R>> consumer) {
+    public static synchronized <R> FuturePromise<R> when(final Consumer<FuturePromise<R>> consumer) {
         final FuturePromise<R> promise = new FuturePromise<>();
         promise.execution = new Runnable() {
             @Override
@@ -238,10 +234,13 @@ public class FuturePromise<T> implements Promise<T> {
                 try {
                     consumer.accept(promise);
                 } catch (Exception e) {
-                    promise.getBottomThenPromise().doFail(e);
+                    promise.stackRecognizer.getBottomThenPromise().doFail(e);
                 }
             }
         };
+        if (GdxFIRApp.isAutoSubscribePromises()) {
+            promise.subscribeTask = Timer.post(new AutoSubscribeTask(promise));
+        }
         return promise;
     }
 

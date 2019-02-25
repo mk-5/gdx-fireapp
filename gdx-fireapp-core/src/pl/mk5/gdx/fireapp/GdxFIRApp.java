@@ -17,6 +17,7 @@
 package pl.mk5.gdx.fireapp;
 
 import pl.mk5.gdx.fireapp.distributions.AppDistribution;
+import pl.mk5.gdx.fireapp.promises.Promise;
 
 /**
  * Gets access to Firebase App API in multi-modules.
@@ -25,6 +26,8 @@ import pl.mk5.gdx.fireapp.distributions.AppDistribution;
  * @see PlatformDistributor
  */
 public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution {
+
+    private static boolean AUTO_SUBSCRIBE_PROMISES = true;
 
     /**
      * GdxFIRApp protected constructor.
@@ -77,5 +80,22 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
     @Override
     protected String getWebGLClassName() {
         return "pl.mk5.gdx.fireapp.html.App";
+    }
+
+    /**
+     * @return If true promises will be automatically subscribe
+     */
+    public static boolean isAutoSubscribePromises() {
+        return AUTO_SUBSCRIBE_PROMISES;
+    }
+
+    /**
+     * Sets 'promise auto subscribe' option.
+     * <p>
+     * If true all promises will be automatically subscribe so you don't need to
+     * subscribe it by {@link Promise#subscribe()} method.
+     */
+    public static void setAutoSubscribePromises(boolean autoSubscribePromises) {
+        AUTO_SUBSCRIBE_PROMISES = autoSubscribePromises;
     }
 }

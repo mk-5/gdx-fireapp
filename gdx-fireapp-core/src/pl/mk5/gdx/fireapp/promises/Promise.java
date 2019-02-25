@@ -59,10 +59,14 @@ public interface Promise<T> {
     Promise<T> after(Promise<?> promise);
 
     /**
-     * Run promise execution, should be execute when you will not attach .then or .fail to the promise.
-     * TODO - should name be 'exec'?
+     * Run promise flow execution
      * <p>
      * If you call {@link #then(Consumer)} or {@link #fail(BiConsumer)} it is not mandatory
      */
     Promise<T> subscribe();
+
+    /**
+     * Attach consumer by {@link #then(Consumer)} and then run {@link #subscribe()}
+     */
+    Promise<T> subscribe(Consumer<T> thenConsumer);
 }

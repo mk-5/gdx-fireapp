@@ -16,10 +16,15 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import com.badlogic.gdx.utils.Timer;
+
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
 /**
- * Promise implementation.
+ * Promise implementation with 'cancel option.
+ * <p>
+ * Useful when promise will be attach as many executions listener
  *
  * @param <T> The promise subject type
  */
@@ -46,23 +51,6 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
         state = INIT;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <R> FutureListenerPromise<R> whenListener(final Consumer<FutureListenerPromise<R>> consumer) {
-        final FutureListenerPromise<R> promise = new FutureListenerPromise<>();
-        promise.execution = new Runnable() {
-            @Override
-            public void run() {
-                promise.execution = null;
-                try {
-                    consumer.accept(promise);
-                } catch (Exception e) {
-                    promise.getBottomThenPromise().doFail(e);
-                }
-            }
-        };
-        return promise;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public ListenerPromise<T> thenListener(Consumer<T> listener) {
@@ -86,5 +74,25 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
 
     public void onCancel(Runnable onCancel) {
         this.onCancel = onCancel;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <R> FutureListenerPromise<R> whenListener(final Consumer<FutureListenerPromise<R>> consumer) {
+        final FutureListenerPromise<R> promise = new FutureListenerPromise<>();
+        promise.execution = new Runnable() {
+            @Override
+            public void run() {
+                promise.execution = null;
+                try {
+                    consumer.accept(promise);
+                } catch (Exception e) {
+                    promise.stackRecognizer.getBottomThenPromise().doFail(e);
+                }
+            }
+        };
+        if (GdxFIRApp.isAutoSubscribePromises()) {
+            promise.subscribeTask = Timer.post(new AutoSubscribeTask(promise));
+        }
+        return promise;
     }
 }

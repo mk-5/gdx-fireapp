@@ -16,12 +16,14 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.annotations.MapConversion;
 import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.deserialization.MapMitmConverter;
@@ -30,6 +32,8 @@ import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.reflection.AnnotationFinder;
 
 /**
+ * Promise implementation with conversion before {@link #doComplete(Object)}
+ *
  * @param <R> Output promise type
  */
 public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
@@ -58,7 +62,7 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
         if (modifier != null) {
             object = modifier.apply((T) object);
         }
-        if( object != null ) {
+        if (object != null) {
             if (!ClassReflection.isAssignableFrom(List.class, wantedDataType)) {
                 if (mapConverter.isPojo(wantedDataType)) {
                     object = mapConverter.doMitmConversion(wantedDataType, object);
@@ -90,10 +94,13 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
                 try {
                     consumer.accept(promise);
                 } catch (Exception e) {
-                    promise.getBottomThenPromise().doFail(e);
+                    promise.stackRecognizer.getBottomThenPromise().doFail(e);
                 }
             }
         };
+        if (GdxFIRApp.isAutoSubscribePromises()) {
+            promise.subscribeTask = Timer.post(new AutoSubscribeTask(promise));
+        }
         return promise;
     }
 }

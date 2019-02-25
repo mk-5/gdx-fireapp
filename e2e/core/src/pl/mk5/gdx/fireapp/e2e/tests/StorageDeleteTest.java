@@ -20,8 +20,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.GdxFIRStorage;
-import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
+import pl.mk5.gdx.fireapp.functional.Consumer;
 
 public class StorageDeleteTest extends E2ETest {
 
