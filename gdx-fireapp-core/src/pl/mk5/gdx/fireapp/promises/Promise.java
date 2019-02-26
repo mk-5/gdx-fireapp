@@ -30,7 +30,7 @@ public interface Promise<T> {
      *
      * @param consumer Consumer will be call when this promise will be complete.
      */
-    Promise<T> then(Consumer<T> consumer);
+    <R extends T> Promise<T> then(Consumer<R> consumer);
 
     /**
      * Promise will not throw exception on fail.

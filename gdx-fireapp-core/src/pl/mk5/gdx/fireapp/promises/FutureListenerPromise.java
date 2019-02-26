@@ -76,6 +76,9 @@ public class FutureListenerPromise<T> extends FuturePromise<T> implements Listen
         this.onCancel = onCancel;
     }
 
+    /**
+     * @see FuturePromise#when(Consumer)
+     */
     @SuppressWarnings("unchecked")
     public static <R> FutureListenerPromise<R> whenListener(final Consumer<FutureListenerPromise<R>> consumer) {
         final FutureListenerPromise<R> promise = new FutureListenerPromise<>();

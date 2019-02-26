@@ -83,7 +83,9 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
     }
 
     /**
-     * @return If true promises will be automatically subscribe
+     * If true (default) promises will be automatically subscribe
+     *
+     * @return default true
      */
     public static boolean isAutoSubscribePromises() {
         return AUTO_SUBSCRIBE_PROMISES;
@@ -92,7 +94,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
     /**
      * Sets 'promise auto subscribe' option.
      * <p>
-     * If true all promises will be automatically subscribe so you don't need to
+     * If true (default) all promises will be automatically subscribe so you don't need to
      * subscribe it by {@link Promise#subscribe()} method.
      */
     public static void setAutoSubscribePromises(boolean autoSubscribePromises) {

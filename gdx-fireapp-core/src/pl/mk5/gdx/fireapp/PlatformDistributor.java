@@ -22,6 +22,8 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 import pl.mk5.gdx.fireapp.exceptions.PlatformDistributorException;
+import pl.mk5.gdx.fireapp.promises.FuturePromise;
+import pl.mk5.gdx.fireapp.promises.Promise;
 
 /**
  * Provides clear and simple way to do platform specific code.
@@ -88,6 +90,24 @@ public abstract class PlatformDistributor<T> {
      */
     public void setMockObject(T mockObject) {
         platformObject = mockObject;
+    }
+
+    /**
+     * Returns empty promise.
+     * <p>
+     * This method allow you to chaining like this:
+     * {@code
+     * GdxFIRDatabase.promise()
+     * .then(...)
+     * .then(...)
+     * .then(...)
+     * }
+     *
+     * @param <R> The promise type
+     * @return The empty promise, not null
+     */
+    public static <R> Promise<R> promise() {
+        return FuturePromise.empty();
     }
 
     /**

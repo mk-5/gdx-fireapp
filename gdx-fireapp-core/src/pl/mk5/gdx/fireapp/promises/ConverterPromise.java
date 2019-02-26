@@ -84,6 +84,9 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
         super.doComplete((R) object);
     }
 
+    /**
+     * @see FuturePromise#when(Consumer)
+     */
     @SuppressWarnings("unchecked")
     public static <T, R> ConverterPromise<T, R> whenWithConvert(final Consumer<ConverterPromise<T, R>> consumer) {
         final ConverterPromise<T, R> promise = new ConverterPromise<>();

@@ -62,9 +62,9 @@ public class FuturePromise<T> implements Promise<T> {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public synchronized FuturePromise<T> then(Consumer<T> consumer) {
+    public synchronized <R extends T> FuturePromise<T> then(Consumer<R> consumer) {
         if (consumer == null) throw new IllegalArgumentException();
-        thenConsumer.addConsumer(consumer);
+        thenConsumer.addConsumer((Consumer<T>) consumer);
         if (state == COMPLETE) {
             doComplete(lazyResult);
         }
@@ -225,6 +225,15 @@ public class FuturePromise<T> implements Promise<T> {
         return parentPromise;
     }
 
+    /**
+     * Create promise with execution.
+     * <p>
+     * Execution should be included inside the {@code consumer#accept}
+     *
+     * @param consumer The execution consumer, not nul
+     * @param <R>      THe promise return type
+     * @return new promise
+     */
     public static synchronized <R> FuturePromise<R> when(final Consumer<FuturePromise<R>> consumer) {
         final FuturePromise<R> promise = new FuturePromise<>();
         promise.execution = new Runnable() {
@@ -244,7 +253,20 @@ public class FuturePromise<T> implements Promise<T> {
         return promise;
     }
 
+    /**
+     * Creates empty promise.
+     * <p>
+     * Promise will be automatically complete
+     *
+     * @param <R> The promise type
+     * @return new empty promise
+     */
     public static <R> FuturePromise<R> empty() {
-        return new FuturePromise<>();
+        return when(new Consumer<FuturePromise<R>>() {
+            @Override
+            public void accept(FuturePromise<R> rFuturePromise) {
+                rFuturePromise.doComplete(null);
+            }
+        });
     }
 }
