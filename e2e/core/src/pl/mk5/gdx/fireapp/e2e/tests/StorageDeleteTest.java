@@ -27,13 +27,13 @@ public class StorageDeleteTest extends E2ETest {
 
     @Override
     public void action() {
-        GdxFIRStorage.instance()
-                .delete(StorageUploadImageTest.STORAGE_PATH)
-                .then(GdxFIRStorage.instance().delete(StorageUploadBytesTest.FILE_PATH))
-                .after(GdxFIRAuth.instance().signInAnonymously())
+        GdxFIRStorage.promise()
+                .then(GdxFIRStorage.inst().delete(StorageUploadImageTest.STORAGE_PATH))
+                .then(GdxFIRStorage.inst().delete(StorageUploadBytesTest.FILE_PATH))
+                .after(GdxFIRAuth.inst().signInAnonymously())
                 .then(new Consumer<Void>() {
                     @Override
-                    public void accept(Void result) {
+                    public void accept(Void aVoid) {
                         success();
                     }
                 });

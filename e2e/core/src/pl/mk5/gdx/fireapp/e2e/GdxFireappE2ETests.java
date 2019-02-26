@@ -19,6 +19,7 @@ import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
 import pl.mk5.gdx.fireapp.e2e.tests.CrashTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseLimitEqualTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoListTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValue2Test;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValueTest;
@@ -61,6 +62,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(DatabaseSetValueTest.class, 10);
         e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
         e2ETestRunner.addNext(DatabaseListenerValueTest.class, 10);
+        e2ETestRunner.addNext(DatabaseReadPojoListTest.class, 10);
 
 
         e2ETestRunner.onFinish(new Runnable() {
