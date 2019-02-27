@@ -102,7 +102,7 @@ public class AuthTest extends GdxIOSAppTest {
 
         // When
         auth.createUserWithEmailAndPassword("email", "password".toCharArray())
-                .then(consumer);
+                .subscribe(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).createUserWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
@@ -122,7 +122,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.createUserWithEmailAndPassword("email", "password".toCharArray()).fail(biConsumer);
+        auth.createUserWithEmailAndPassword("email", "password".toCharArray()).fail(biConsumer).subscribe();
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).createUserWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
@@ -142,7 +142,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithEmailAndPassword("email", "password".toCharArray()).then(consumer);
+        auth.signInWithEmailAndPassword("email", "password".toCharArray()).subscribe(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
@@ -162,7 +162,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithEmailAndPassword("email", "password".toCharArray()).fail(biConsumer);
+        auth.signInWithEmailAndPassword("email", "password".toCharArray()).fail(biConsumer).subscribe();
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithEmailPasswordCompletion(Mockito.eq("email"), Mockito.eq("password"), Mockito.any());
@@ -182,7 +182,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithToken("token").then(consumer);
+        auth.signInWithToken("token").subscribe(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithCustomTokenCompletion(Mockito.eq("token"), Mockito.any());
@@ -202,7 +202,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInWithToken("token").fail(biConsumer);
+        auth.signInWithToken("token").fail(biConsumer).subscribe();
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInWithCustomTokenCompletion(Mockito.eq("token"), Mockito.any());
@@ -222,7 +222,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInAnonymously().then(consumer);
+        auth.signInAnonymously().subscribe(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInAnonymouslyWithCompletion(Mockito.any());
@@ -242,7 +242,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signInAnonymously().fail(biConsumer);
+        auth.signInAnonymously().fail(biConsumer).subscribe();
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signInAnonymouslyWithCompletion(Mockito.any());
@@ -257,7 +257,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signOut().then(consumer);
+        auth.signOut().subscribe(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signOut(Mockito.any());
@@ -274,7 +274,7 @@ public class AuthTest extends GdxIOSAppTest {
         Auth auth = new Auth();
 
         // When
-        auth.signOut().fail(biConsumer);
+        auth.signOut().fail(biConsumer).subscribe();
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).signOut(Mockito.any());
@@ -297,7 +297,7 @@ public class AuthTest extends GdxIOSAppTest {
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1).then(consumer);
+        auth.sendPasswordResetEmail(arg1).subscribe(consumer);
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).sendPasswordResetWithEmailCompletion(Mockito.eq(arg1), Mockito.any());
@@ -319,7 +319,7 @@ public class AuthTest extends GdxIOSAppTest {
         String arg1 = "email";
 
         // When
-        auth.sendPasswordResetEmail(arg1).fail(biConsumer);
+        auth.sendPasswordResetEmail(arg1).fail(biConsumer).subscribe();
 
         // Then
         Mockito.verify(firAuth, VerificationModeFactory.times(1)).sendPasswordResetWithEmailCompletion(Mockito.eq(arg1), Mockito.any());

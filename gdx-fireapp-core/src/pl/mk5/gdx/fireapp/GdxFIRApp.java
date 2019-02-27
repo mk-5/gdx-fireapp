@@ -28,8 +28,6 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  */
 public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements AppDistribution {
 
-    private static boolean AUTO_SUBSCRIBE_PROMISES = true;
-
     /**
      * GdxFIRApp protected constructor.
      * <p>
@@ -89,7 +87,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * @return default true
      */
     public static boolean isAutoSubscribePromises() {
-        return AUTO_SUBSCRIBE_PROMISES;
+        return FuturePromise.isAutoSubscribe();
     }
 
     /**
@@ -99,7 +97,7 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      * subscribe it by {@link Promise#subscribe()} method.
      */
     public static void setAutoSubscribePromises(boolean autoSubscribePromises) {
-        AUTO_SUBSCRIBE_PROMISES = autoSubscribePromises;
+        FuturePromise.setAutoSubscribe(autoSubscribePromises);
     }
 
     /**

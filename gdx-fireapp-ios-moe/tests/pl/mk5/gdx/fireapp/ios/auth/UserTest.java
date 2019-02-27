@@ -120,7 +120,7 @@ public class UserTest extends GdxIOSAppTest {
         String arg1 = "email";
 
         // When
-        user.updateEmail(arg1).then(consumer);
+        user.updateEmail(arg1).subscribe(consumer);
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).updateEmailCompletion(Mockito.eq(arg1), Mockito.any(FIRUser.Block_updateEmailCompletion.class));
@@ -143,7 +143,7 @@ public class UserTest extends GdxIOSAppTest {
         String arg1 = "email";
 
         // When
-        user.updateEmail(arg1).fail(consumer);
+        user.updateEmail(arg1).fail(consumer).subscribe();
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).updateEmailCompletion(Mockito.eq(arg1), Mockito.any(FIRUser.Block_updateEmailCompletion.class));
@@ -165,7 +165,7 @@ public class UserTest extends GdxIOSAppTest {
         }).when(firUser).sendEmailVerificationWithCompletion(Mockito.any(FIRUser.Block_sendEmailVerificationWithCompletion.class));
 
         // When
-        user.sendEmailVerification().then(consumer);
+        user.sendEmailVerification().subscribe(consumer);
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).sendEmailVerificationWithCompletion(Mockito.any(FIRUser.Block_sendEmailVerificationWithCompletion.class));
@@ -188,7 +188,7 @@ public class UserTest extends GdxIOSAppTest {
         }).when(firUser).sendEmailVerificationWithCompletion(Mockito.any(FIRUser.Block_sendEmailVerificationWithCompletion.class));
 
         // When
-        user.sendEmailVerification().fail(consumer);
+        user.sendEmailVerification().fail(consumer).subscribe();
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).sendEmailVerificationWithCompletion(Mockito.any(FIRUser.Block_sendEmailVerificationWithCompletion.class));
@@ -211,7 +211,7 @@ public class UserTest extends GdxIOSAppTest {
         char[] arg1 = {'p', 'a', 's', 's'};
 
         // When
-        user.updatePassword(arg1).then(consumer);
+        user.updatePassword(arg1).subscribe(consumer);
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).updatePasswordCompletion(Mockito.eq(new String(arg1)), Mockito.any(FIRUser.Block_updatePasswordCompletion.class));
@@ -235,7 +235,7 @@ public class UserTest extends GdxIOSAppTest {
         char[] arg1 = {'p', 'a', 's', 's'};
 
         // When
-        user.updatePassword(arg1).fail(consumer);
+        user.updatePassword(arg1).fail(consumer).subscribe();
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).updatePasswordCompletion(Mockito.eq(new String(arg1)), Mockito.any(FIRUser.Block_updatePasswordCompletion.class));
@@ -257,7 +257,7 @@ public class UserTest extends GdxIOSAppTest {
         }).when(firUser).deleteWithCompletion(Mockito.any(FIRUser.Block_deleteWithCompletion.class));
 
         // When
-        user.delete().then(consumer);
+        user.delete().then(consumer).subscribe();
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRUser.Block_deleteWithCompletion.class));
@@ -280,7 +280,7 @@ public class UserTest extends GdxIOSAppTest {
         }).when(firUser).deleteWithCompletion(Mockito.any(FIRUser.Block_deleteWithCompletion.class));
 
         // When
-        user.delete().fail(consumer);
+        user.delete().fail(consumer).subscribe();
 
         // Then
         Mockito.verify(firUser, VerificationModeFactory.times(1)).deleteWithCompletion(Mockito.any(FIRUser.Block_deleteWithCompletion.class));

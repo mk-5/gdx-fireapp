@@ -30,6 +30,7 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
 public class FuturePromise<T> implements Promise<T> {
 
     private static boolean THROW_FAIL_BY_DEFAULT = true;
+    private static boolean AUTO_SUBSCRIBE = true;
     private static final int COMPLETE = 3;
     private static final int FAIL = 1;
     static final int INIT = 0;
@@ -280,5 +281,13 @@ public class FuturePromise<T> implements Promise<T> {
 
     public static void setThrowFailByDefault(boolean throwFailByDefault) {
         THROW_FAIL_BY_DEFAULT = throwFailByDefault;
+    }
+
+    public static boolean isAutoSubscribe() {
+        return AUTO_SUBSCRIBE;
+    }
+
+    public static void setAutoSubscribe(boolean autoSubscribe) {
+        AUTO_SUBSCRIBE = autoSubscribe;
     }
 }
