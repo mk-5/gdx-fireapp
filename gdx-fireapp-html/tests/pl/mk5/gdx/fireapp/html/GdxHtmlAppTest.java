@@ -34,6 +34,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
+
 @PrepareForTest({ClassReflection.class, Constructor.class, ScriptInjector.class})
 @SuppressStaticInitializationFor({"com.google.gwt.core.client.ScriptInjector"})
 public abstract class GdxHtmlAppTest {
@@ -87,5 +89,8 @@ public abstract class GdxHtmlAppTest {
 
         Gdx.app = application;
         Gdx.files = files;
+
+        GdxFIRApp.setAutoSubscribePromises(false);
+        GdxFIRApp.setThrowFailureByDefault(false);
     }
 }

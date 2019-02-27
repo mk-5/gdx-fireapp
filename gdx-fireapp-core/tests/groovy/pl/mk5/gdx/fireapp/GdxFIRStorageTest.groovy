@@ -39,6 +39,7 @@ class GdxFIRStorageTest extends Specification {
     void setup() {
         Gdx.app = application
         application.postRunnable(_) >> { args -> (args[0] as Runnable).run() }
+        GdxFIRApp.setAutoSubscribePromises(false)
     }
 
     def "should create instance"() {
@@ -116,7 +117,7 @@ class GdxFIRStorageTest extends Specification {
         field.set(null, imageHelper)
 
         when:
-        gdxFIRStorage.downloadImage(path).then(consumer)
+        gdxFIRStorage.downloadImage(path).subscribe(consumer)
 
         then:
         1 * imageHelper.createTextureFromBytes(_)
@@ -155,7 +156,7 @@ class GdxFIRStorageTest extends Specification {
         field.set(null, imageHelper)
 
         when:
-        gdxFIRStorage.downloadImage(path).then(consumer)
+        gdxFIRStorage.downloadImage(path).subscribe(consumer)
 
         then:
         1 * imageHelper.createTextureFromBytes(_, _ as Consumer)

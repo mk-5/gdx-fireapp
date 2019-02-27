@@ -16,12 +16,18 @@
 
 package pl.mk5.gdx.fireapp.promises;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
@@ -33,6 +39,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class FuturePromiseTest {
+
+    @Before
+    public void setUp() {
+        Gdx.app = Mockito.mock(Application.class);
+        GdxFIRApp.setAutoSubscribePromises(false);
+        GdxFIRApp.setThrowFailureByDefault(false);
+    }
 
     @Test
     public void shouldGetBottomPromise() {
@@ -50,14 +63,15 @@ public class FuturePromiseTest {
                 .then(promise2)
                 .then(promise3)
                 .then(promise4)
-                .then(promise5);
+                .then(promise5)
+                .subscribe();
 
         // Then
-        Assert.assertEquals(promise5, rootPromise.getBottomThenPromise());
-        Assert.assertEquals(promise5, promise1.getBottomThenPromise());
-        Assert.assertEquals(promise5, promise2.getBottomThenPromise());
-        Assert.assertEquals(promise5, promise3.getBottomThenPromise());
-        Assert.assertEquals(promise5, promise4.getBottomThenPromise());
+        Assert.assertEquals(promise5, rootPromise.stackRecognizer.getBottomThenPromise());
+        Assert.assertEquals(promise5, promise1.stackRecognizer.getBottomThenPromise());
+        Assert.assertEquals(promise5, promise2.stackRecognizer.getBottomThenPromise());
+        Assert.assertEquals(promise5, promise3.stackRecognizer.getBottomThenPromise());
+        Assert.assertEquals(promise5, promise4.stackRecognizer.getBottomThenPromise());
     }
 
     @Test
@@ -94,7 +108,7 @@ public class FuturePromiseTest {
 
         // When
         promise.then(promise1).then(promise2)
-                .then(consumer);
+                .subscribe(consumer);
 
         // Then
         Assert.assertArrayEquals("" + result, new Integer[]{1, 2, 3, 4}, result.toArray());
@@ -146,7 +160,8 @@ public class FuturePromiseTest {
                 .then(promise2)
                 .then(promise3)
                 .then(promise4)
-                .fail(consumer);
+                .fail(consumer)
+                .subscribe();
 
         // Then
         verify(consumer, times(1)).accept(anyString(), any(Throwable.class));
@@ -194,7 +209,8 @@ public class FuturePromiseTest {
                 .then(promise2)
                 .then(promise3)
                 .then(promise4)
-                .fail(consumer);
+                .fail(consumer)
+                .subscribe();
 
         // Then
         verify(consumer, times(1)).accept(anyString(), any(Throwable.class));

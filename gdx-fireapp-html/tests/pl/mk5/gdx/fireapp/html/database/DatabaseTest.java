@@ -34,6 +34,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Map;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.exceptions.DatabaseReferenceNotSetException;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.html.firebase.ScriptRunner;
@@ -70,6 +71,7 @@ public class DatabaseTest {
         });
         databaseReference = PowerMockito.mock(DatabaseReference.class);
         PowerMockito.when(DatabaseReference.of(Mockito.anyString())).thenReturn(databaseReference);
+        GdxFIRApp.setAutoSubscribePromises(false);
     }
 
     @Test

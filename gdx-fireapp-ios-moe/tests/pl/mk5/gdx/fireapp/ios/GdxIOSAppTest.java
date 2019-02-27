@@ -18,17 +18,24 @@ package pl.mk5.gdx.fireapp.ios;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosmoe.IOSApplication;
+import com.badlogic.gdx.utils.Timer;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.moe.natj.general.NatJ;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
+
+import static org.mockito.ArgumentMatchers.any;
+
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({NatJ.class})
+@PrepareForTest({NatJ.class, Timer.class})
 public abstract class GdxIOSAppTest {
 
 //    @Rule
@@ -40,6 +47,15 @@ public abstract class GdxIOSAppTest {
         IOSApplication application = Mockito.mock(IOSApplication.class);
         Mockito.when(application.getType()).thenReturn(Application.ApplicationType.iOS);
         Gdx.app = application;
+        PowerMockito.mockStatic(Timer.class);
+        PowerMockito.when(Timer.post(any(Timer.Task.class))).then(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                ((Timer.Task) invocation.getArgument(0)).run();
+                return null;
+            }
+        });
+        GdxFIRApp.setThrowFailureByDefault(false);
     }
 
 }

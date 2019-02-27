@@ -19,11 +19,14 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.badlogic.gdx.utils.Timer;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -31,10 +34,14 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import pl.mk5.gdx.fireapp.GdxFIRApp;
+
+import static org.mockito.ArgumentMatchers.any;
+
 @Config(manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
-@PrepareForTest({GdxNativesLoader.class})
+@PrepareForTest({GdxNativesLoader.class, Timer.class})
 public abstract class AndroidContextTest {
 
     @Rule
@@ -46,5 +53,14 @@ public abstract class AndroidContextTest {
         AndroidApplication application = PowerMockito.mock(AndroidApplication.class);
         Mockito.when(application.getType()).thenReturn(Application.ApplicationType.Android);
         Gdx.app = application;
+        PowerMockito.mockStatic(Timer.class);
+        PowerMockito.when(Timer.post(any(Timer.Task.class))).then(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) {
+                ((Timer.Task) invocation.getArgument(0)).run();
+                return null;
+            }
+        });
+        GdxFIRApp.setThrowFailureByDefault(false);
     }
 }
