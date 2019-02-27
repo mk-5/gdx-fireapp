@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.android.utils;
+package pl.mk5.gdx.fireapp.android.auth;
 
 import android.content.res.Resources;
 

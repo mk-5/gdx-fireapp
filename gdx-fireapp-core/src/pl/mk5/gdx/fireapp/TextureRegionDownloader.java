@@ -22,8 +22,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import pl.mk5.gdx.fireapp.functional.BiConsumer;
 import pl.mk5.gdx.fireapp.functional.Consumer;
-import pl.mk5.gdx.fireapp.helpers.ImageHelper;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
+import pl.mk5.gdx.fireapp.storage.ImageHelper;
 
 class TextureRegionDownloader {
 

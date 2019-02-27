@@ -20,6 +20,7 @@ import java.util.Map;
 
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.FilterType;
+import pl.mk5.gdx.fireapp.database.MapConverter;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.promises.ListenerPromise;
@@ -69,7 +70,7 @@ public interface DatabaseDistribution {
      * Reads value from path given by {@code inReference(String)}.
      * <p>
      * POJO objects received from each platform should be represented as Map.
-     * Conversion will be guarantee later by {@link pl.mk5.gdx.fireapp.deserialization.MapConverter}
+     * Conversion will be guarantee later by {@link MapConverter}
      *
      * @param dataType Class you want to retrieve
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
@@ -83,7 +84,7 @@ public interface DatabaseDistribution {
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      * <p>
-     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link pl.mk5.gdx.fireapp.deserialization.MapConverter}
+     * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link MapConverter}
      * <p>
      *
      * @param dataType Class you want to retrieve

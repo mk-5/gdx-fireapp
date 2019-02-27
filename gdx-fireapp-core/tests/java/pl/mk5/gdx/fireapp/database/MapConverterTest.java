@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.deserialization;
+package pl.mk5.gdx.fireapp.database;
 
 import com.badlogic.gdx.utils.Json;
 

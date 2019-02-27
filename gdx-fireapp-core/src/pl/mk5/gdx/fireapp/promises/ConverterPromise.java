@@ -25,8 +25,7 @@ import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRApp;
 import pl.mk5.gdx.fireapp.annotations.MapConversion;
-import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
-import pl.mk5.gdx.fireapp.deserialization.MapMitmConverter;
+import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.reflection.AnnotationFinder;

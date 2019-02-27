@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.deserialization;
+package pl.mk5.gdx.fireapp.promises;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.exceptions.MapConversionNotPossibleException;
 
 public class MapMitmConverterTest {

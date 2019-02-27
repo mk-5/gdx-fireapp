@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.helpers;
+package pl.mk5.gdx.fireapp.database;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Pixmap;

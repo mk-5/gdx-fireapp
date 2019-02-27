@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
-import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
+import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 
 /**
  * Firebase supports only the Map structure for Pojo so here you can indicate conversion from Map to POJO.

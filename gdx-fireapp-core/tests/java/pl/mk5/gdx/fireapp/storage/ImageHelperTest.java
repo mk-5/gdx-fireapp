@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.helpers;
+package pl.mk5.gdx.fireapp.storage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;

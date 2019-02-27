@@ -32,7 +32,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
-import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
+import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
 import static org.mockito.Mockito.spy;

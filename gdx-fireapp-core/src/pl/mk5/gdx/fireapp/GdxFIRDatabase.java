@@ -20,9 +20,9 @@ import java.util.Map;
 
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.FilterType;
+import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
+import pl.mk5.gdx.fireapp.database.MapConverter;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
-import pl.mk5.gdx.fireapp.deserialization.FirebaseMapConverter;
-import pl.mk5.gdx.fireapp.deserialization.MapConverter;
 import pl.mk5.gdx.fireapp.distributions.DatabaseDistribution;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.promises.ListenerPromise;

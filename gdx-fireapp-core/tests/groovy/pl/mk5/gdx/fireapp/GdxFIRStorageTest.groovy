@@ -20,12 +20,10 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import pl.mk5.gdx.fireapp.GdxFIRStorage
-import pl.mk5.gdx.fireapp.TextureRegionDownloader
 import pl.mk5.gdx.fireapp.distributions.StorageDistribution
 import pl.mk5.gdx.fireapp.functional.Consumer
-import pl.mk5.gdx.fireapp.helpers.ImageHelper
 import pl.mk5.gdx.fireapp.promises.FuturePromise
+import pl.mk5.gdx.fireapp.storage.ImageHelper
 import spock.lang.Specification
 
 import java.lang.reflect.Field

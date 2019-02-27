@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2018 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.deserialization;
+package pl.mk5.gdx.fireapp.promises;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
@@ -22,21 +22,22 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRLogger;
+import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
+import pl.mk5.gdx.fireapp.database.JavaCoreClassDetector;
 import pl.mk5.gdx.fireapp.exceptions.MapConversionNotPossibleException;
-import pl.mk5.gdx.fireapp.helpers.JavaCoreClassDetector;
 
 /**
  * Abstract for man-in-the-middle converters.
  */
-public class MapMitmConverter {
-    static final String CANT_DO_MAP_CONVERSION_FROM_TYPE = "Can't do map conversion from type: ";
+class MapMitmConverter {
+    private static final String CANT_DO_MAP_CONVERSION_FROM_TYPE = "Can't do map conversion from type: ";
 
     private final FirebaseMapConverter mapConverter;
 
     /**
      * @param mapConverter Map converter implementation, not null
      */
-    public MapMitmConverter(FirebaseMapConverter mapConverter) {
+    MapMitmConverter(FirebaseMapConverter mapConverter) {
         this.mapConverter = mapConverter;
     }
 
@@ -52,7 +53,7 @@ public class MapMitmConverter {
      * @throws MapConversionNotPossibleException If can't do conversion
      */
     @SuppressWarnings("unchecked")
-    public Object doMitmConversion(Class<?> wantedType, Object data) {
+    Object doMitmConversion(Class<?> wantedType, Object data) {
         if (data == null) return null;
         // If client tell us to do map conversion and is not possible - throw exception.
         if (!isConversionPossible(data))
@@ -92,11 +93,10 @@ public class MapMitmConverter {
      * @param type Type to examinable
      * @return True if type is not Java type or List or Map.
      */
-    public boolean isPojo(Class<?> type) {
+    boolean isPojo(Class<?> type) {
         return !JavaCoreClassDetector.isJavaCoreClass(type)
                 && !ClassReflection.isAssignableFrom(List.class, type)
                 && !ClassReflection.isAssignableFrom(Map.class, type);
     }
-
 
 }

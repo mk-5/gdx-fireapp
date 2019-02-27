@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.android.utils;
+package pl.mk5.gdx.fireapp.android.auth;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -22,7 +22,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 /**
  * Gets string from R by name.
  */
-public class StringResource {
+class StringResource {
 
     private StringResource() {
 
@@ -34,7 +34,7 @@ public class StringResource {
      * @param name The resource name, not null
      * @return The R.string value
      */
-    public static String getStringResourceByName(String name) {
+    static String getStringResourceByName(String name) {
         int id = ((AndroidApplication) Gdx.app).getResources().getIdentifier(name, "string", ((AndroidApplication) Gdx.app).getPackageName());
         return ((AndroidApplication) Gdx.app).getResources().getString(id);
     }

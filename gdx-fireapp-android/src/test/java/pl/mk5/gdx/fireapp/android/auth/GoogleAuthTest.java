@@ -38,7 +38,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
-import pl.mk5.gdx.fireapp.android.utils.StringResource;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
 import static org.mockito.Mockito.spy;

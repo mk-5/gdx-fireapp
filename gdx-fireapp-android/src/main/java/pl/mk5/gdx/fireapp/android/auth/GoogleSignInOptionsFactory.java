@@ -18,8 +18,6 @@ package pl.mk5.gdx.fireapp.android.auth;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-import pl.mk5.gdx.fireapp.android.utils.StringResource;
-
 class GoogleSignInOptionsFactory {
 
     private GoogleSignInOptionsFactory() {
