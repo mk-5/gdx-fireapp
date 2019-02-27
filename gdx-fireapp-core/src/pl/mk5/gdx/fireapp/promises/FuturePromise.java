@@ -29,6 +29,7 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
  */
 public class FuturePromise<T> implements Promise<T> {
 
+    private static boolean THROW_FAIL_BY_DEFAULT = true;
     private static final int COMPLETE = 3;
     private static final int FAIL = 1;
     static final int INIT = 0;
@@ -49,7 +50,7 @@ public class FuturePromise<T> implements Promise<T> {
     private FuturePromise parentPromise;
 
     protected FuturePromise() {
-        throwFail = true;
+        throwFail = THROW_FAIL_BY_DEFAULT;
         thenConsumer = new ConsumerWrapper<>();
         failConsumer = new BiConsumerWrapper();
         stackRecognizer = new PromiseStackRecognizer(this);
@@ -74,6 +75,9 @@ public class FuturePromise<T> implements Promise<T> {
     @Override
     public synchronized Promise<T> silentFail() {
         throwFail = false;
+        stackRecognizer.getBottomThenPromise().throwFail = false;
+        if (stackRecognizer.getTopParentPromise() != null)
+            stackRecognizer.getTopParentPromise().throwFail = false;
         return this;
     }
 
@@ -85,7 +89,7 @@ public class FuturePromise<T> implements Promise<T> {
     @Override
     public synchronized FuturePromise<T> fail(BiConsumer<String, ? super Throwable> consumer) {
         if (consumer == null) throw new IllegalArgumentException();
-        throwFail = false;
+        silentFail();
         failConsumer.addConsumer(consumer);
         if (state == FAIL) {
             doFail(failReason, failThrowable);
@@ -268,5 +272,13 @@ public class FuturePromise<T> implements Promise<T> {
                 rFuturePromise.doComplete(null);
             }
         });
+    }
+
+    public static boolean isThrowFailByDefault() {
+        return THROW_FAIL_BY_DEFAULT;
+    }
+
+    public static void setThrowFailByDefault(boolean throwFailByDefault) {
+        THROW_FAIL_BY_DEFAULT = throwFailByDefault;
     }
 }

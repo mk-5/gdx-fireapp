@@ -17,6 +17,7 @@
 package pl.mk5.gdx.fireapp;
 
 import pl.mk5.gdx.fireapp.distributions.AppDistribution;
+import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.promises.Promise;
 
 /**
@@ -99,5 +100,23 @@ public class GdxFIRApp extends PlatformDistributor<AppDistribution> implements A
      */
     public static void setAutoSubscribePromises(boolean autoSubscribePromises) {
         AUTO_SUBSCRIBE_PROMISES = autoSubscribePromises;
+    }
+
+    /**
+     * If true all promises will be create with 'silentFail' as default (true).
+     *
+     * @return default true
+     */
+    public static boolean isThrowFailureByDefault() {
+        return FuturePromise.isThrowFailByDefault();
+    }
+
+    /**
+     * Sets global silent fail for all future promises.
+     * <p>
+     * If true (default) all promises will throw exception on failure by default.
+     */
+    public static void setThrowFailureByDefault(boolean throwFailureByDefault) {
+        FuturePromise.setThrowFailByDefault(throwFailureByDefault);
     }
 }
