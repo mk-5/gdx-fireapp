@@ -1,0 +1,2 @@
+#include "Pods/Target Support Files/Pods-ios-moe/Pods-ios-moe.release.xcconfig"
+LIBGDX_NATIVES =  -force_load ${SRCROOT}/native/ios/libObjectAL.a -force_load ${SRCROOT}/native/ios/libgdx.a

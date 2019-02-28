@@ -2,14 +2,15 @@ package com.badlogic.gdx.graphics;
 
 import com.google.gwt.dom.client.ImageElement;
 
-import mk.gdx.firebase.functional.Consumer;
+import pl.mk5.gdx.fireapp.functional.Consumer;
+import pl.mk5.gdx.fireapp.storage.ImageHelper;
 
 /**
  * Stub implementation - do nothing.
  * <p>
  * libGDX gwt backend has fake emu implementation of Pixmap which has Pixmap(ImageElement) constructor.
  * <p>
- * To avoid compilation errors while call this constructor inside {@link mk.gdx.firebase.helpers.ImageHelper#createTextureFromBytes(byte[], Consumer)}
+ * To avoid compilation errors while call this constructor inside {@link ImageHelper#createTextureFromBytes(byte[], Consumer)}
  * it is need to create this stub.
  */
 public class Pixmap {

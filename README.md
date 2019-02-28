@@ -19,23 +19,23 @@ The first thing you should do is installing Firebase SDK and add gradle dependen
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:1.+"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:1.+"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:$gdxFireappVersion"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:1.+"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:$gdxFireappVersion"
 ```
 
 **GWT**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:1.+"
+compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
 ```
 
 &nbsp;  
@@ -54,7 +54,7 @@ API is something like bridge between libGDX app and firebase sdk. It's cover fir
 To initialize Firebase SDK just put this line somewhere in your app initialization code:
 
 ```java
-GdxFIRApp.instance().configure();
+GdxFIRApp.inst().configure();
 ```
 
 **Firebase Analytics** should start working just after this step.  
@@ -62,7 +62,7 @@ GdxFIRApp.instance().configure();
 If you added ***Fabric/Crashlytics*** to your project you should initialize it also:
 
 ````
-GdxFIRCrash.instance().initialize();
+GdxFIRCrash.inst().initialize();
 ````
 
 &nbsp;  
@@ -81,22 +81,20 @@ Firebase SDK communication is done with following classes:
 
 ## Examples
 
-For some examples please look at [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
+To see some examples please go to [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
 
 &nbsp;  
 
 ## Useful links
 
 - [Javadoc](http://javadoc.io/doc/pl.mk5.gdx-fireapp/gdx-fireapp-core)
-- [Filtering API wiki](https://github.com/mk-5/gdx-fireapp/wiki/Filtering-API)
+- [Wiki](https://github.com/mk-5/gdx-fireapp/wiki)
 
 &nbsp;  
 
 ## What's next?
 
 - Better wiki/documentation
-- Promises instead of callbacks
-- Remote configuration API
 - Facebook, github authorization
 - Messaging
 - Upload task monitoring

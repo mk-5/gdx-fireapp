@@ -6,14 +6,14 @@ apply plugin: "maven-publish"
 sourceSets.test.java.srcDirs = ["tests/"]
 
 dependencies {
-    compile project(":gdx-fireapp-core")
-    compile libs.libgdx.html
-    testCompile libs.junit
-    testCompile libs.gwtmockito
-    testCompile libs.powermock.junit
-    testCompile libs.powermock.junitRule
-    testCompile libs.powermock.api
-    testCompile libs.powermock.xstream
+    implementation project(":gdx-fireapp-core")
+    implementation libs.libgdx.html
+    testImplementation libs.junit
+    testImplementation libs.gwtmockito
+    testImplementation libs.powermock.junit
+    testImplementation libs.powermock.junitRule
+    testImplementation libs.powermock.api
+    testImplementation libs.powermock.xstream
 }
 
 gwt {

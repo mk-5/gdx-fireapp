@@ -54,17 +54,28 @@
 **[1.8.1]**  
 \- API Addition: User-manage methods (update email, update password, send verification email)   
 \- API Addition: **GdxFIRAuth#sendPasswordResetEmail**   
-\- GWT API: Fix of broken signing-in after user creation  
+\- GWT API: Fix of broken signing-in after user creation   
 
 **[1.9.1]**  
-\- API Addition: #reload() method in User API
 
-**[1.9.2]**
-\- fix: #13 [iOS Database] Can't read string value
+\- API Addition: #reload() method in User API    
 
-**[1.9.3]**
-\- fix Android API: Wrong string/number param recognizing while sending analytics event
+**[1.9.2]**  
 
-**[1.9.4]**
-\- fix Analytics API: Run setScreen on the main thread
+\- fix: #13 [iOS Database] Can't read string value    
 
+**[1.9.3]**  
+
+\- fix: Wrong string/number param recognizing while sending analytics event in android api  
+
+**[1.9.4]**  
+
+\- fix: Run setScreen on the main thread in analytics api  
+
+**[2.0.0]**  | ***breaking changes***  
+
+\- the api packaging had changed to *pl.mk5.gdx.fireapp* as the base package  
+\- promises introduction 
+\- ***GdxFIRStorage#upload*** signature has changed
+\- firebase actions chaining 
+\- shorter version of *.instance()* method: *.inst()* in all GdxFIR classes

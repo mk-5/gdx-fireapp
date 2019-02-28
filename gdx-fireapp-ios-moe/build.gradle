@@ -20,13 +20,13 @@ task sourceJar(type: Jar) {
 }
 
 dependencies {
-    compile project(":gdx-fireapp-core")
-    compile libs.libgdx.iosmoe
-    testCompile libs.junit
-    testCompile libs.powermock.junit
-    testCompile libs.powermock.junitRule
-    testCompile libs.powermock.api
-    testCompile libs.powermock.xstream
+    implementation project(":gdx-fireapp-core")
+    implementation libs.libgdx.iosmoe
+    testImplementation libs.junit
+    testImplementation libs.powermock.junit
+    testImplementation libs.powermock.junitRule
+    testImplementation libs.powermock.api
+    testImplementation libs.powermock.xstream
 }
 
 eclipse.project {
