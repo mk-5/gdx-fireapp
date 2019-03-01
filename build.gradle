@@ -9,7 +9,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.3.1'
         classpath 'org.multi-os-engine:moe-gradle:1.4.3'
         classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.6'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.3'
