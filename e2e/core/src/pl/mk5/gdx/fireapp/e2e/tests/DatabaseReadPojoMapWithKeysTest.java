@@ -23,6 +23,7 @@ import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
+import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
@@ -38,7 +39,7 @@ public class DatabaseReadPojoMapWithKeysTest extends E2ETest {
                 .then(GdxFIRDatabase.inst().inReference("/employees").push().setValue(employee1))
                 .then(GdxFIRDatabase.inst().inReference("/employees").push().setValue(employee2))
                 .then(GdxFIRDatabase.inst().inReference("/employees").push().setValue(employee3))
-                .then(GdxFIRDatabase.inst().inReference("/employees").readValue(Map.class))
+                .then(GdxFIRDatabase.inst().inReference("/employees").filter(FilterType.LIMIT_FIRST, 2).readValue(Map.class))
                 .after(GdxFIRAuth.instance().signInAnonymously())
                 .then(new Consumer<Map>() {
 
