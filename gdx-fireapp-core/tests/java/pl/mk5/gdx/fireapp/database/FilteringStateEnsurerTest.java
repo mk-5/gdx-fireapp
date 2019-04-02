@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
 
 public class FilteringStateEnsurerTest {
 
@@ -65,7 +64,7 @@ public class FilteringStateEnsurerTest {
         Array<Filter> filtersArray = new Array<>();
         filtersArray.add(new Filter());
         OrderByClause orderByClause = null;
-        Class wantedType = Map.class;
+        Class wantedType = String.class;
 
         // When
         FilteringStateEnsurer.checkFilteringState(filtersArray, orderByClause, wantedType);
