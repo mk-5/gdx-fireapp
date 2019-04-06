@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
+import pl.mk5.gdx.fireapp.database.ChildEventType;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.DatabaseConsumer;
 import pl.mk5.gdx.fireapp.database.Filter;
@@ -133,6 +134,11 @@ public class Database implements DatabaseDistribution {
                         .execute();
             }
         });
+    }
+
+    @Override
+    public <T, R extends T> ListenerPromise<R> onChildChange(Class<T> dataType, ChildEventType... eventsType) {
+        return null;
     }
 
     /**

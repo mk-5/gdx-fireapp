@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
+import pl.mk5.gdx.fireapp.database.ChildEventType;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.DatabaseConsumer;
 import pl.mk5.gdx.fireapp.database.Filter;
@@ -144,6 +145,24 @@ public class Database implements DatabaseDistribution {
                         .with(getOrderByClause())
                         .with(trConverterPromise)
                         .withArgs(dataType)
+                        .execute();
+            }
+        });
+    }
+
+    @Override
+    public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
+        checkDatabaseReference();
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+            @Override
+            public void accept(ConverterPromise<T, R> trConverterPromise) {
+                trConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
+                new QueryOnChildChange<>(Database.this, getDatabasePath())
+                        .with(getFilters())
+                        .with(getOrderByClause())
+                        .with((FuturePromise<Object>) trConverterPromise) // TODO - suppose to be wrong cast here?
+                        .withArgs(dataType, eventsType)
                         .execute();
             }
         });
