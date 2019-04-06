@@ -23,6 +23,7 @@ import java.util.Map;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
+import pl.mk5.gdx.fireapp.database.ChildEventType;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.DatabaseConsumer;
 import pl.mk5.gdx.fireapp.database.Filter;
@@ -143,6 +144,13 @@ public class Database implements DatabaseDistribution {
                         .execute();
             }
         });
+    }
+
+    @Override
+    public <T, R extends T> ListenerPromise<R> onChildChange(Class<T> dataType, ChildEventType... eventsType) {
+        checkReference();
+        FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
+        return null;
     }
 
     /**

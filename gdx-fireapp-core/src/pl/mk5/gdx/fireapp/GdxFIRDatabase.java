@@ -18,6 +18,7 @@ package pl.mk5.gdx.fireapp;
 
 import java.util.Map;
 
+import pl.mk5.gdx.fireapp.database.ChildEventType;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
@@ -100,6 +101,14 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     @Override
     public <T, E extends T> ListenerPromise<E> onDataChange(Class<T> dataType) {
         return platformObject.onDataChange(dataType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T, R extends T> ListenerPromise<R> onChildChange(Class<T> dataType, ChildEventType... eventsType) {
+        return platformObject.onChildChange(dataType, eventsType);
     }
 
     /**

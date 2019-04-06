@@ -18,40 +18,27 @@ package pl.mk5.gdx.fireapp.android.database;
 
 import android.support.annotation.NonNull;
 
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Collections;
-import java.util.List;
 
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
 class SnapshotValueListener implements ValueEventListener {
 
-    private Class dataType;
-    private ConverterPromise promise;
+    private DataSnapshotResolver dataSnapshotResolver;
 
     SnapshotValueListener(Class dataType, ConverterPromise promise) {
-        this.promise = promise;
-        this.dataType = dataType;
+        this.dataSnapshotResolver = new DataSnapshotResolver(dataType, promise);
     }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        if (ClassReflection.isAssignableFrom(List.class, dataType) && dataSnapshot.getValue() == null) {
-            promise.doComplete(Collections.emptyList());
-        } else if (ClassReflection.isAssignableFrom(List.class, dataType)
-                && ResolverDataSnapshotList.shouldResolveOrderBy(dataType, dataSnapshot)) {
-            promise.doComplete(ResolverDataSnapshotList.resolve(dataSnapshot));
-        } else {
-            promise.doComplete(dataSnapshot.getValue());
-        }
+        dataSnapshotResolver.resolve(dataSnapshot);
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-        promise.doFail(databaseError.toException());
+        dataSnapshotResolver.getPromise().doFail(databaseError.toException());
     }
 }

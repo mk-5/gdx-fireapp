@@ -18,6 +18,7 @@ package pl.mk5.gdx.fireapp.distributions;
 
 import java.util.Map;
 
+import pl.mk5.gdx.fireapp.database.ChildEventType;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.MapConverter;
@@ -62,7 +63,7 @@ public interface DatabaseDistribution {
      * Sets value for path given by {@code inReference(String)}.
      *
      * @param value Any value which you want to store. Given object will be transformed to Firebase-like data type.
-     * @throws RuntimeException if {@link #inReference(String)} was not call after.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     Promise<Void> setValue(Object value);
 
@@ -72,27 +73,38 @@ public interface DatabaseDistribution {
      * POJO objects received from each platform should be represented as Map.
      * Conversion will be guarantee later by {@link MapConverter}
      *
-     * @param dataType Class you want to retrieve
+     * @param dataType Class you want to retrieve, not null
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
      * @param <R>      More specific type of data you want - should be not-abstract type.
-     * @throws RuntimeException if {@link #inReference(String)} was not call after.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     <T, R extends T> Promise<R> readValue(Class<T> dataType);
 
     /**
-     * Handles value changes for path given by {@code inReference(String)}.
+     * Listen for value changes in given path.
      * <p>
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      * <p>
      * POJO objects received from each platform should be represented as Map. Conversion will be guarantee later by {@link MapConverter}
      * <p>
      *
-     * @param dataType Class you want to retrieve
+     * @param dataType Class you want to retrieve, not null
      * @param <T>      Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
      * @param <R>      More specific type of data you want to retrieve - should be not-abstract type.
-     * @throws RuntimeException if {@link #inReference(String)} was not call after.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     <T, R extends T> ListenerPromise<R> onDataChange(Class<T> dataType);
+
+    /**
+     * Listen for child changes in given path.
+     *
+     * @param dataType   Class you want to retrieve, not null
+     * @param eventsType List of listening events, api will listen for all types of events, may be empty
+     * @param <T>        Type of data you want to retrieve, associated with {@code dataType} for ex. {@code List.class}
+     * @param <R>        More specific type of data you want to retrieve - should be not-abstract type.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
+     */
+    <T, R extends T> ListenerPromise<R> onChildChange(Class<T> dataType, ChildEventType... eventsType);
 
     /**
      * Applies filter to the next database query.
@@ -152,7 +164,7 @@ public interface DatabaseDistribution {
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      *
      * @param data New data
-     * @throws RuntimeException if {@link #inReference(String)} was not call after.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     Promise<Void> updateChildren(Map<String, Object> data);
 
@@ -166,7 +178,7 @@ public interface DatabaseDistribution {
      *
      * @param dataType            Type of data you want to get, not null
      * @param transactionFunction Function to modify transaction data, not null
-     * @throws RuntimeException if {@link #inReference(String)} was not call after call this method.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     <T, R extends T> Promise<Void> transaction(Class<T> dataType, Function<R, R> transactionFunction);
 
@@ -187,7 +199,7 @@ public interface DatabaseDistribution {
      * Remember to set database reference earlier by calling the {@link #inReference(String)} method.
      *
      * @param synced If true sync for specified database path will be enabled
-     * @throws RuntimeException if {@link #inReference(String)} was not call after call this method.
+     * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     void keepSynced(boolean synced);
 }

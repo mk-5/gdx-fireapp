@@ -19,6 +19,7 @@ package pl.mk5.gdx.fireapp
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import pl.mk5.gdx.fireapp.GdxFIRDatabase
+import pl.mk5.gdx.fireapp.database.ChildEventType
 import pl.mk5.gdx.fireapp.database.FilterType
 import pl.mk5.gdx.fireapp.database.OrderByMode
 import pl.mk5.gdx.fireapp.distributions.DatabaseDistribution
@@ -51,6 +52,7 @@ class GdxFIRDatabaseTest extends Specification {
         gdxFIRDatabase.removeValue()
         gdxFIRDatabase.transaction(String.class, _ as Function)
         gdxFIRDatabase.updateChildren(_ as Map)
+        gdxFIRDatabase.onChildChange(String.class, ChildEventType.ADDED, ChildEventType.MOVED)
 
         then:
         1 * distribution.filter(FilterType.END_AT, _ as Object[])
@@ -64,5 +66,6 @@ class GdxFIRDatabaseTest extends Specification {
         1 * distribution.removeValue()
         1 * distribution.transaction(String.class, _ as Function)
         1 * distribution.updateChildren(_ as Map)
+        1 * distribution.onChildChange(String.class, ChildEventType.ADDED, ChildEventType.MOVED)
     }
 }
