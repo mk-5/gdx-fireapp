@@ -161,7 +161,7 @@ public class Database implements DatabaseDistribution {
                 new QueryOnChildChange<>(Database.this, getDatabasePath())
                         .with(getFilters())
                         .with(getOrderByClause())
-                        .with((FuturePromise<Object>) trConverterPromise) // TODO - suppose to be wrong cast here?
+                        .with((FuturePromise<Object>) trConverterPromise)
                         .withArgs(dataType, eventsType)
                         .execute();
             }
