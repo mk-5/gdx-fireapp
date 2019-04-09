@@ -135,7 +135,7 @@ public class Database implements DatabaseDistribution {
         return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
             @Override
             public void accept(ConverterPromise<T, R> rFuturePromise) {
-                rFuturePromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
+                rFuturePromise.with(GdxFIRDatabase.inst().getMapConverter(), dataType);
                 new QueryOnDataChange(Database.this, getDatabasePath())
                         .with(getFilters())
                         .with(getOrderByClause())
@@ -147,10 +147,21 @@ public class Database implements DatabaseDistribution {
     }
 
     @Override
-    public <T, R extends T> ListenerPromise<R> onChildChange(Class<T> dataType, ChildEventType... eventsType) {
+    public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
         checkReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return null;
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+            @Override
+            public void accept(ConverterPromise<T, R> rFuturePromise) {
+                rFuturePromise.with(GdxFIRDatabase.inst().getMapConverter(), dataType);
+                new QueryOnChildChange<>(Database.this, getDatabasePath())
+                        .with(getFilters())
+                        .with(getOrderByClause())
+                        .with((FuturePromise<Object>) rFuturePromise)
+                        .withArgs(dataType, eventsType)
+                        .execute();
+            }
+        });
     }
 
     /**

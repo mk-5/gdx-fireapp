@@ -36,7 +36,9 @@ import apple.foundation.NSString;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
+import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
+import pl.mk5.gdx.fireapp.database.ChildEventType;
 import pl.mk5.gdx.fireapp.database.Filter;
 import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.MapConverter;
@@ -218,6 +220,29 @@ public class DatabaseTest extends GdxIOSAppTest {
 //      PowerMockito.verifyNew(OnDataChangeQuery.class).withArguments(Mockito.any());
 //      Mockito.verify(query, VerificationModeFactory.times(1)).execute();
         Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).removeObserverWithHandle(Mockito.eq(handleValue));
+    }
+
+    @Test
+    public void onChildChange() throws Exception {
+        // Given
+        Database database = new Database();
+        mockStatic(QueryOnChildChange.class);
+        QueryOnChildChange query = PowerMockito.spy(new QueryOnChildChange(database, "/test"));
+        GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
+        when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
+        when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
+        whenNew(QueryOnChildChange.class).withAnyArguments().thenReturn(query);
+        Class dataType = String.class;
+
+        // When
+        database.inReference("/test").onChildChange(dataType, ChildEventType.CHANGED).subscribe();
+
+        // Then
+        Mockito.verify(firDatabaseReference, VerificationModeFactory.times(1)).observeEventTypeWithBlockWithCancelBlock(
+                Mockito.eq(FIRDataEventType.ChildChanged),
+                Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
+                Mockito.any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2.class)
+        );
     }
 
     @Test
