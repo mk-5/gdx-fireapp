@@ -21,9 +21,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnDataValidator;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides setValue execution.
- */
 class QueryOnDataChange extends GwtDatabaseQuery {
 
     QueryOnDataChange(Database databaseDistribution, String databasePath) {

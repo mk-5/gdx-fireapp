@@ -137,8 +137,19 @@ public class Database implements DatabaseDistribution {
     }
 
     @Override
-    public <T, R extends T> ListenerPromise<R> onChildChange(Class<T> dataType, ChildEventType... eventsType) {
-        return null;
+    public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference(), orderByClause, filters) {
+            @Override
+            public void accept(ConverterPromise<T, R> rConverterPromise) {
+                rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
+                new QueryOnChildChange(Database.this, getDatabasePath())
+                        .with(getFilters())
+                        .with(getOrderByClause())
+                        .with(rConverterPromise)
+                        .withArgs(dataType, eventsType)
+                        .execute();
+            }
+        });
     }
 
     /**
