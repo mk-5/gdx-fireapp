@@ -25,9 +25,11 @@ class OnChildValidatorTest extends Specification {
     def "should pass valid arguments"() {
         given:
         def validator = new OnChildValidator()
+        def eventType = new ChildEventType[1]
+        eventType[0] = ChildEventType.CHANGED
 
         when:
-        validator.validate(new Array<Object>({ String.class { ChildEventType.CHANGED } }))
+        validator.validate(new Array<Object>(Arrays.asList(String.class, eventType).toArray()))
 
         then:
         notThrown(IllegalArgumentException)
@@ -38,12 +40,12 @@ class OnChildValidatorTest extends Specification {
         def validator = new OnChildValidator()
 
         when:
-        validator.validate(new Array<Object>({ String.class { ChildEventType.CHANGED } }))
+        validator.validate(arguments)
 
         then:
-        notThrown(IllegalArgumentException)
+        thrown(IllegalArgumentException)
 
         where:
-        arguments << [new Array<Object>({ "abc" }), new Array<Object>({ String.class "abcdef" })]
+        arguments << [new Array<Object>(Arrays.asList("abc", "absds").toArray())]
     }
 }

@@ -29,7 +29,7 @@ public class OnChildValidator implements ArgumentsValidator {
 
     private static final String MESSAGE1 = "Database#onChildChange needs at least one argument";
     private static final String MESSAGE2 = "The first argument should be class type";
-    private static final String MESSAGE3 = "The first argument should be class type";
+    private static final String MESSAGE3 = "The second argument should be ChildEventType[]";
 
     @Override
     public void validate(Array<Object> arguments) {
