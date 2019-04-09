@@ -79,3 +79,9 @@
 \- ***GdxFIRStorage#upload*** signature has changed
 \- firebase actions chaining 
 \- shorter version of *.instance()* method: *.inst()* in all GdxFIR classes
+
+**[2.0.1]**
+\- ISSUE #16 - API Change: allows Map to be filtered
+
+**[2.1.0]**
+\- ISSUE #18 - API Addition: add new #onChildChange in database API
