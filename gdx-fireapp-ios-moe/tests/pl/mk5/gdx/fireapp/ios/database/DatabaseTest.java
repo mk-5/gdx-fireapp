@@ -180,7 +180,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         QueryOnDataChange query = PowerMockito.spy(new QueryOnDataChange(database, "/test"));
         GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
-        when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
+        when(GdxFIRDatabase.inst()).thenReturn(mock(GdxFIRDatabase.class));
         whenNew(QueryOnDataChange.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
@@ -202,7 +202,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         long handleValue = 10L;
         GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
-        when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
+        when(GdxFIRDatabase.inst()).thenReturn(mock(GdxFIRDatabase.class));
         when(firDatabaseReference.observeEventTypeWithBlockWithCancelBlock(
                 anyLong(),
                 any(FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1.class),
@@ -230,7 +230,7 @@ public class DatabaseTest extends GdxIOSAppTest {
         QueryOnChildChange query = PowerMockito.spy(new QueryOnChildChange(database, "/test"));
         GdxFIRDatabase gdxFIRDatabase = mock(GdxFIRDatabase.class);
         when(gdxFIRDatabase.getMapConverter()).thenReturn(mock(MapConverter.class));
-        when(GdxFIRDatabase.instance()).thenReturn(mock(GdxFIRDatabase.class));
+        when(GdxFIRDatabase.inst()).thenReturn(mock(GdxFIRDatabase.class));
         whenNew(QueryOnChildChange.class).withAnyArguments().thenReturn(query);
         Class dataType = String.class;
 
