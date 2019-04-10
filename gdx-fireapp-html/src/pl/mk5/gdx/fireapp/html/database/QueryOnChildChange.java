@@ -38,7 +38,8 @@ class QueryOnChildChange extends GwtDatabaseQuery {
     @Override
     @SuppressWarnings("unchecked")
     protected void runJS() {
-        Array<ChildEventType> childEventTypes = new Array<>((ChildEventType[]) arguments.get(1));
+        Array<ChildEventType> childEventTypes = new Array<>();
+        childEventTypes.addAll((ChildEventType[]) arguments.get(1));
         for (ChildEventType type : childEventTypes) {
             String jsEventName = getJsEventName(type);
             if (!GwtDataPromisesManager.hasPromise(databasePath + jsEventName)) {
