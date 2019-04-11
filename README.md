@@ -2,9 +2,7 @@
 
 A libGDX cross-platform API for Firebase.
 
-[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion) [_![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mk-5_gdx-fireapp&metric=coverage)_](https://sonarcloud.io/dashboard?id=mk-5_gdx-fireapp)
-
-
+[ ![Build Status](https://travis-ci.org/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.org/mk-5/gdx-fireapp) [ ![Download](https://api.bintray.com/packages/mk-5/maven/gdx-fireapp/images/download.svg) ](https://bintray.com/mk-5/maven/gdx-fireapp/_latestVersion) [_![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mk-5_gdx-fireapp&metric=coverage)_](https://sonarcloud.io/dashboard?id=mk-5_gdx-fireapp) 
 
 
 ## Getting Started
@@ -119,6 +117,8 @@ To see some examples please go to [examples wiki page](https://github.com/mk-5/g
 - [x] GWT
 
 &nbsp;  
+
+[ ![Donate](https://www.paypalobjects.com/en_US/PL/i/btn/btn_donateCC_LG.gif) ](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CUUKJD6CXN7JG&currency_code=PLN&source=url)
 
 ## License
 
