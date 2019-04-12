@@ -118,7 +118,6 @@ To see some examples please go to [examples wiki page](https://github.com/mk-5/g
 
 &nbsp;  
 
-[ ![Donate](https://www.paypalobjects.com/en_US/PL/i/btn/btn_donateCC_LG.gif) ](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CUUKJD6CXN7JG&currency_code=PLN&source=url)
 
 ## License
 
