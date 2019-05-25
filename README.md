@@ -14,6 +14,17 @@ The first thing you should do is installing Firebase SDK and add gradle dependen
 - [GWT guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide)
 - [ProGuard rules](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)  
 
+** Repository **
+
+```
+allprojects {
+    ...
+    repositories {
+        ...
+        maven { url 'https://dl.bintray.com/mk-5/maven' }
+    }
+}
+```
 **Core**
 
 ```
