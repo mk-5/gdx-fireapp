@@ -21,7 +21,7 @@ allprojects {
     ...
     repositories {
         ...
-        maven { url 'https://dl.bintray.com/mk-5/maven' }
+        jcenter()
     }
 }
 ```
