@@ -48,6 +48,7 @@ libs.firebase = [
         auth    : "com.google.firebase:firebase-auth:$firebaseLibsVersion",
         crash   : "com.google.firebase:firebase-crash:$firebaseLibsVersion",
         database: "com.google.firebase:firebase-database:$firebaseLibsVersion",
+        config  : "com.google.firebase:firebase-config:$firebaseLibsVersion",
 ]
 libs.crashlytics = "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
 

@@ -11,6 +11,7 @@ target 'ios-moe' do
   pod 'Firebase/Database', '5.2.0'
   pod 'Firebase/Auth', '5.2.0'
   pod 'Firebase/Messaging', '5.2.0'
+  pod 'Firebase/RemoteConfig', '5.2.0'
   pod 'GoogleSignIn', '4.1.2'
   pod 'Fabric', '~> 1.7.11'
   pod 'Crashlytics', '~> 3.10.7'
