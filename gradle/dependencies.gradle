@@ -3,8 +3,8 @@ ext {
     gdxVersion = '1.9.8'
     jUnitVersion = '4.12'
     mockitoVersion = '2.21.0'
-    firebaseCoreVersion = '16.0.0'
-    firebaseLibsVersion = '16.0.1'
+    firebaseCoreVersion = '16.0.9'
+    firebaseLibsVersion = '17.0.0'
     powerMockVersion = '1.7.4'
     robolectricVersion = '3.8'
     systemRulesVersion = '1.18.0'
@@ -13,7 +13,8 @@ ext {
     playServicesVersion = '16.0.0'
     spockVersion = '1.2-groovy-2.4'
     groovyVersion = '2.4.15'
-    byteBuddyVersion = '1.8.21'
+    byteBuddyVersion = '1.9.13'
+    electricSpock = '0.9'
 }
 
 
@@ -61,5 +62,6 @@ libs.playservices = [
 libs.spock = [
         groovyAll: "org.codehaus.groovy:groovy-all:$groovyVersion",
         spockCore: "org.spockframework:spock-core:$spockVersion",
-        byteBuddy: "net.bytebuddy:byte-buddy:$byteBuddyVersion"
+        byteBuddy: "net.bytebuddy:byte-buddy:$byteBuddyVersion",
+        electricSpock: "com.github.hkhc:electricspock:$electricSpock"
 ]

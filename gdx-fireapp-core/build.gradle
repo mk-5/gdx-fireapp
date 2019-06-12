@@ -29,7 +29,8 @@ dependencies {
     testImplementation libs.systemrules
     testImplementation libs.spock.groovyAll
     testImplementation libs.spock.spockCore
-    testImplementation libs.spock.byteBuddy
+//    testImplementation libs.spock.byteBuddy
+    testImplementation "cglib:cglib-nodep:3.2.4"
 }
 
 eclipse.project {

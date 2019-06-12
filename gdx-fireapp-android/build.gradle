@@ -1,4 +1,5 @@
 apply plugin: "com.android.library"
+apply plugin: 'groovyx.android'
 apply plugin: "maven-publish"
 
 dependencies {
@@ -12,6 +13,12 @@ dependencies {
     testImplementation libs.powermock.api
     testImplementation libs.powermock.xstream
     testImplementation libs.robolectric
+    testImplementation libs.spock.groovyAll
+    testImplementation libs.spock.spockCore
+//    testImplementation libs.spock.byteBuddy
+    testImplementation "cglib:cglib-nodep:3.2.4"
+    testImplementation libs.spock.electricSpock
+    testImplementation "org.objenesis:objenesis:2.5.1"
 }
 
 task sourceJar(type: Jar) {

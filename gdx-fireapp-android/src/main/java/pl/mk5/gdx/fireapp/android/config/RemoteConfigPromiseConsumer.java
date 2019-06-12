@@ -27,20 +27,21 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
 class RemoteConfigPromiseConsumer implements Consumer<FuturePromise<Void>> {
+
     @Override
     public void accept(final FuturePromise<Void> voidFuturePromise) {
         FirebaseRemoteConfig.getInstance()
-                .fetch()
+                .fetchAndActivate()
                 .addOnCompleteListener(completeListener(voidFuturePromise))
                 .addOnFailureListener(failureListener(voidFuturePromise));
     }
 
-    private OnCompleteListener<Void> completeListener(final FuturePromise<Void> voidFuturePromise) {
-        return new OnCompleteListener<Void>() {
+    private OnCompleteListener<Boolean> completeListener(final FuturePromise<Void> voidFuturePromise) {
+        return new OnCompleteListener<Boolean>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onComplete(@NonNull Task<Boolean> task) {
                 if (task.isSuccessful()) {
-                    if (FirebaseRemoteConfig.getInstance().activateFetched()) {
+                    if (Boolean.TRUE.equals(task.getResult())) {
                         voidFuturePromise.doComplete(null);
                     } else {
                         voidFuturePromise.doFail(new Exception("Couldn't activate fetched config"));
