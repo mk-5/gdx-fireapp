@@ -16,6 +16,8 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+
 import apple.foundation.NSError;
 import apple.foundation.NSNull;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
@@ -32,7 +34,8 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
  * Provides call to {@link FIRDatabaseReference#runTransactionBlockAndCompletionBlock(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0, FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1)}.
  */
 class QueryRunTransaction<R> extends IosDatabaseQuery<R> {
-    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transaction - aborting";
+
+    private static final String TRANSACTION_ERROR = "Transaction error - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
 
     QueryRunTransaction(Database databaseDistribution, String databasePath) {
@@ -73,13 +76,26 @@ class QueryRunTransaction<R> extends IosDatabaseQuery<R> {
         @Override
         @SuppressWarnings("unchecked")
         public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0) {
-            if (arg0.value() == null || NSNull.class.isAssignableFrom(arg0.value().getClass())) {
-                GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
+            try {
+                if (arg0.value() == null || NSNull.class.isAssignableFrom(arg0.value().getClass())) {
+                    arg0.setValue(defaultValueForDataType());
+                    return FIRTransactionResult.successWithValue(arg0);
+                }
+                Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), type);
+                arg0.setValue(DataProcessor.javaDataToIos(transactionFunction.apply((R) transactionObject)));
+                return FIRTransactionResult.successWithValue(arg0);
+            } catch (Exception e) {
+                GdxFIRLogger.error(TRANSACTION_ERROR);
                 return FIRTransactionResult.abort();
             }
-            Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), type);
-            arg0.setValue(DataProcessor.javaDataToIos(transactionFunction.apply((R) transactionObject)));
-            return FIRTransactionResult.successWithValue(arg0);
+        }
+
+        private Object defaultValueForDataType() {
+            if (ClassReflection.isAssignableFrom(Number.class, type)) {
+                return 0;
+            } else {
+                return "";
+            }
         }
     }
 

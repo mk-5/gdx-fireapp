@@ -14,4 +14,6 @@ public interface E2ETestRunner {
     void render(Batch batch);
 
     void onFinish(Runnable runnable);
+
+    void only(Class<? extends E2ETest> testType);
 }
