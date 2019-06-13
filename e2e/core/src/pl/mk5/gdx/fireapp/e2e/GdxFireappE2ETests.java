@@ -25,6 +25,8 @@ import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValue2Test;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseSetValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionValue2Test;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.GdxFirebaseUserTest;
 import pl.mk5.gdx.fireapp.e2e.tests.StorageDeleteTest;
 import pl.mk5.gdx.fireapp.e2e.tests.StorageDownloadBytesTest;
@@ -66,6 +68,8 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(DatabaseReadPojoListTest.class, 10);
         e2ETestRunner.addNext(DatabaseReadPojoMapWithKeysTest.class, 10);
         e2ETestRunner.addNext(DatabaseChildEventTest.class, 30);
+        e2ETestRunner.addNext(DatabaseTransactionValueTest.class, 30);
+        e2ETestRunner.addNext(DatabaseTransactionValue2Test.class, 30);
 
 
         e2ETestRunner.onFinish(new Runnable() {

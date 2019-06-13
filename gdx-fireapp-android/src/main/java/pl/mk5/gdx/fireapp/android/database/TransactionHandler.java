@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
@@ -32,20 +33,22 @@ import pl.mk5.gdx.fireapp.reflection.AnnotationFinder;
  */
 class TransactionHandler<R> implements Transaction.Handler {
 
-    private static final String TRANSACTION_NULL_VALUE_RETRIEVED = "Null value retrieved from database for transactionFunction - aborting";
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
-    private static final String TRANSACTION_ERROR = "Null value retrieved from database for transactionFunction - aborting";
+    private static final String TRANSACTION_ERROR = "Transaction error - aborting";
 
 
-    private Function<R, R> transactionFunction;
-    private FuturePromise<Void> promise;
+    private final Function<R, R> transactionFunction;
+    private final FuturePromise<Void> promise;
+    private final Class<?> dataType;
 
 
     /**
+     * @param dataType            DataType, not null
      * @param transactionFunction Transaction function, not null
-     * @param promise             Promise, may be null
+     * @param promise             Promise, not null
      */
-    TransactionHandler(Function<R, R> transactionFunction, FuturePromise<Void> promise) {
+    TransactionHandler(Class<?> dataType, Function<R, R> transactionFunction, FuturePromise<Void> promise) {
+        this.dataType = dataType;
         this.transactionFunction = transactionFunction;
         this.promise = promise;
     }
@@ -53,22 +56,27 @@ class TransactionHandler<R> implements Transaction.Handler {
     @Override
     @SuppressWarnings("unchecked")
     public Transaction.Result doTransaction(MutableData mutableData) {
-        if (mutableData.getValue() == null) {
-            GdxFIRLogger.error(TRANSACTION_NULL_VALUE_RETRIEVED);
+        try {
+            if (mutableData.getValue() == null) {
+                mutableData.setValue(defaultValueForDataType());
+                return Transaction.success(mutableData);
+            }
+            MapConversion mapConversionAnnotation = null;
+            R transactionData;
+            if (promise.getThenConsumer() != null) {
+                mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, promise.getThenConsumer());
+            }
+            if (mapConversionAnnotation != null) {
+                transactionData = (R) mutableData.getValue(mapConversionAnnotation.value());
+            } else {
+                transactionData = (R) mutableData.getValue();
+            }
+            mutableData.setValue(transactionFunction.apply(transactionData));
+            return Transaction.success(mutableData);
+        } catch (Exception e) {
+            GdxFIRLogger.error(TRANSACTION_ERROR, e);
             return Transaction.abort();
         }
-        MapConversion mapConversionAnnotation = null;
-        R transactionData;
-        if (promise.getThenConsumer() != null) {
-            mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, promise.getThenConsumer());
-        }
-        if (mapConversionAnnotation != null) {
-            transactionData = (R) mutableData.getValue(mapConversionAnnotation.value());
-        } else {
-            transactionData = (R) mutableData.getValue();
-        }
-        mutableData.setValue(transactionFunction.apply(transactionData));
-        return Transaction.success(mutableData);
     }
 
     @Override
@@ -81,6 +89,14 @@ class TransactionHandler<R> implements Transaction.Handler {
             } else {
                 promise.doFail(TRANSACTION_NOT_ABLE_TO_COMMIT, null);
             }
+        }
+    }
+
+    private Object defaultValueForDataType() {
+        if (ClassReflection.isAssignableFrom(Number.class, dataType)) {
+            return 0;
+        } else {
+            return "";
         }
     }
 }

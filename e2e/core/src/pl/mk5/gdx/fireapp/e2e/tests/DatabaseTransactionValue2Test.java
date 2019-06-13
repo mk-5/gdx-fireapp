@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 mk
+ * Copyright 2019 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,27 +23,27 @@ import pl.mk5.gdx.fireapp.e2e.runner.E2ETest;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.functional.Function;
 
-public class DatabaseTransactionValueTest extends E2ETest {
+public class DatabaseTransactionValue2Test extends E2ETest {
 
     @Override
     public void action() {
-        final Integer value = 5;
+        final String value = "test-value";
         final String reference = "/test-trans";
 
         GdxFIRDatabase.inst()
                 .inReference(reference).setValue(value)
                 .then(GdxFIRDatabase.inst().inReference(reference)
-                        .transaction(Long.class, new Function<Long, Long>() {
+                        .transaction(String.class, new Function<String, String>() {
                             @Override
-                            public Long apply(Long i) {
-                                return i + 1;
+                            public String apply(String str) {
+                                return str + "abc";
                             }
                         }))
-                .then(GdxFIRDatabase.inst().inReference(reference).readValue(Long.class))
-                .then(new Consumer<Long>() {
+                .then(GdxFIRDatabase.inst().inReference(reference).readValue(String.class))
+                .then(new Consumer<String>() {
                     @Override
-                    public void accept(Long i) {
-                        if (i == 6) {
+                    public void accept(String i) {
+                        if (i.equals(value + "abc")) {
                             success();
                         }
                     }

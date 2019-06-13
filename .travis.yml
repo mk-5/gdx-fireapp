@@ -1,9 +1,11 @@
 language: android
 android:
   components:
+  - platform-tools
   - build-tools-28.0.3
   - android-28
   - extra-google-google_play_services
+dist: trusty
 licenses:
 - android-sdk-preview-license-.+
 - android-sdk-license-.+
@@ -13,6 +15,8 @@ branches:
   only:
   - master
   - develop
+  - /^feature\/.*$/
+  - /^fix\/.*$/
   - /^\d+\.\d+(\.\d+)?(-\S*)?$/
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -22,7 +26,6 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 before_install:
-- yes | sdkmanager "platforms;android-28"
 - chmod +x gradlew
 jobs:
   include:

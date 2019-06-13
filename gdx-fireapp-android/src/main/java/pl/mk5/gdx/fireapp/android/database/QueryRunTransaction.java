@@ -16,6 +16,7 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DatabaseReference;
 
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
@@ -47,7 +48,7 @@ class QueryRunTransaction<R> extends AndroidDatabaseQuery<R> {
     @Override
     @SuppressWarnings("unchecked")
     protected R run() {
-        ((DatabaseReference) query).runTransaction(new TransactionHandler((Function<R, R>) arguments.get(1), (FuturePromise<Void>) promise));
+        ((DatabaseReference) query).runTransaction(new TransactionHandler((Class<?>) arguments.get(0), (Function<R, R>) arguments.get(1), (FuturePromise<Void>) promise));
         return null;
     }
 }

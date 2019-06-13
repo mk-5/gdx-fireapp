@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -49,7 +50,7 @@ public class TransactionHandlerTest extends AndroidContextTest {
         // Given
         Function transactionFunction = Mockito.mock(Function.class);
         FuturePromise promise = Mockito.mock(FuturePromise.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
+        TransactionHandler transactionHandler = new TransactionHandler(Long.class, transactionFunction, promise);
         MutableData mutableData = Mockito.mock(MutableData.class);
         Mockito.when(mutableData.getValue()).thenReturn("test_value");
 
@@ -62,28 +63,11 @@ public class TransactionHandlerTest extends AndroidContextTest {
     }
 
     @Test
-    public void doTransaction_nullData() {
-        // Given
-        Function transactionFunction = Mockito.mock(Function.class);
-        FuturePromise promise = Mockito.mock(FuturePromise.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
-        MutableData mutableData = Mockito.mock(MutableData.class);
-        Mockito.when(mutableData.getValue()).thenReturn(null);
-
-        // When
-        transactionHandler.doTransaction(mutableData);
-
-        // Then
-        PowerMockito.verifyStatic(Transaction.class, VerificationModeFactory.times(1));
-        Transaction.abort();
-    }
-
-    @Test
     public void onComplete_withErrorAndCallback() {
         // Given
         Function transactionFunction = Mockito.mock(Function.class);
         FuturePromise promise = Mockito.mock(FuturePromise.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
+        TransactionHandler transactionHandler = new TransactionHandler(Long.class, transactionFunction, promise);
         DatabaseError databaseError = Mockito.mock(DatabaseError.class);
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         boolean status = true;
@@ -100,7 +84,7 @@ public class TransactionHandlerTest extends AndroidContextTest {
         // Given
         Function transactionFunction = Mockito.mock(Function.class);
         FuturePromise promise = Mockito.mock(FuturePromise.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
+        TransactionHandler transactionHandler = new TransactionHandler(Long.class, transactionFunction, promise);
         DatabaseError databaseError = null;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         boolean status = true;
@@ -117,7 +101,7 @@ public class TransactionHandlerTest extends AndroidContextTest {
         // Given
         Function transactionFunction = Mockito.mock(Function.class);
         FuturePromise promise = Mockito.mock(FuturePromise.class);
-        TransactionHandler transactionHandler = new TransactionHandler(transactionFunction, promise);
+        TransactionHandler transactionHandler = new TransactionHandler(Long.class, transactionFunction, promise);
         DatabaseError databaseError = null;
         DataSnapshot dataSnapshot = Mockito.mock(DataSnapshot.class);
         boolean status = false;
@@ -128,4 +112,5 @@ public class TransactionHandlerTest extends AndroidContextTest {
         // Then
         Mockito.verify(promise, VerificationModeFactory.times(1)).doFail(Mockito.anyString(), Mockito.nullable(Throwable.class));
     }
+
 }
