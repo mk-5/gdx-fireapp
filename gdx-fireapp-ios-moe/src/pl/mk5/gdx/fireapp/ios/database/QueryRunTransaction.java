@@ -16,15 +16,7 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-
-import apple.foundation.NSError;
-import apple.foundation.NSNull;
-import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
-import bindings.google.firebasedatabase.FIRMutableData;
-import bindings.google.firebasedatabase.FIRTransactionResult;
-import pl.mk5.gdx.fireapp.GdxFIRLogger;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.RunTransactionValidator;
 import pl.mk5.gdx.fireapp.functional.Function;
@@ -33,10 +25,10 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 /**
  * Provides call to {@link FIRDatabaseReference#runTransactionBlockAndCompletionBlock(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0, FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1)}.
  */
-class QueryRunTransaction<R> extends IosDatabaseQuery<R> {
+class QueryRunTransaction<R> extends DatabaseQuery<R> {
 
-    private static final String TRANSACTION_ERROR = "Transaction error - aborting";
-    private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
+    static final String TRANSACTION_ERROR = "Transaction error - aborting";
+    static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "Transaction has not been committed";
 
     QueryRunTransaction(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);
@@ -63,61 +55,4 @@ class QueryRunTransaction<R> extends IosDatabaseQuery<R> {
         return null;
     }
 
-    private static class RunTransactionBlock<R> implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0 {
-
-        private Class type;
-        private Function<R, R> transactionFunction;
-
-        private RunTransactionBlock(Class type, Function<R, R> transactionFunction) {
-            this.type = type;
-            this.transactionFunction = transactionFunction;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0) {
-            try {
-                if (arg0.value() == null || NSNull.class.isAssignableFrom(arg0.value().getClass())) {
-                    arg0.setValue(defaultValueForDataType());
-                    return FIRTransactionResult.successWithValue(arg0);
-                }
-                Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), type);
-                arg0.setValue(DataProcessor.javaDataToIos(transactionFunction.apply((R) transactionObject)));
-                return FIRTransactionResult.successWithValue(arg0);
-            } catch (Exception e) {
-                GdxFIRLogger.error(TRANSACTION_ERROR);
-                return FIRTransactionResult.abort();
-            }
-        }
-
-        private Object defaultValueForDataType() {
-            if (ClassReflection.isAssignableFrom(Number.class, type)) {
-                return 0;
-            } else {
-                return "";
-            }
-        }
-    }
-
-    private static class TransactionCompleteBlock implements FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1 {
-
-        private FuturePromise<Void> promise;
-
-        private TransactionCompleteBlock(FuturePromise<Void> promise) {
-            this.promise = promise;
-        }
-
-        @Override
-        public void call_runTransactionBlockAndCompletionBlock_1(NSError arg0, boolean arg1, FIRDataSnapshot arg2) {
-            if (arg0 != null) {
-                promise.doFail(new Exception(arg0.localizedDescription()));
-            } else {
-                if (arg1) {
-                    promise.doComplete(null);
-                } else {
-                    promise.doFail(new Exception(TRANSACTION_NOT_ABLE_TO_COMMIT));
-                }
-            }
-        }
-    }
 }

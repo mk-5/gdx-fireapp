@@ -32,14 +32,14 @@ import pl.mk5.gdx.fireapp.database.queries.GdxFireappQuery;
  *
  * @param <R> Return type of {@link GdxFireappQuery#run()} method.
  */
-abstract class IosDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
+abstract class DatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     protected static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with FIRDatabaseReference instance.";
     protected static final String GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE = "Given database path returned null value";
 
     protected FIRDatabaseQuery query;
     protected ProviderFIRDatabaseQueryFiltering filtersProvider;
 
-    IosDatabaseQuery(Database databaseDistribution, String databasePath) {
+    DatabaseQuery(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);
         filtersProvider = new ProviderFIRDatabaseQueryFiltering();
     }

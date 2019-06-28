@@ -25,7 +25,7 @@ import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 /**
  * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
  */
-class QueryReadValue<R> extends IosDatabaseQuery<R> {
+class QueryReadValue<R> extends DatabaseQuery<R> {
 
     QueryReadValue(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);

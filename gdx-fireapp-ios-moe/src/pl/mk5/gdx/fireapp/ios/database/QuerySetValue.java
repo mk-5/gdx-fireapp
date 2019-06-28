@@ -24,7 +24,7 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 /**
  * Provides call to {@link FIRDatabaseReference#setValue(Object)} ()}.
  */
-class QuerySetValue extends IosDatabaseQuery<Void> {
+class QuerySetValue extends DatabaseQuery<Void> {
 
     QuerySetValue(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);

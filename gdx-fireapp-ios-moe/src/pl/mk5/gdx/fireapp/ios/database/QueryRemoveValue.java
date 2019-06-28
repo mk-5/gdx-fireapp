@@ -23,7 +23,7 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 /**
  * Provides call to {@link FIRDatabaseReference#removeValue()}.
  */
-class QueryRemoveValue extends IosDatabaseQuery<Void> {
+class QueryRemoveValue extends DatabaseQuery<Void> {
 
     QueryRemoveValue(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);
