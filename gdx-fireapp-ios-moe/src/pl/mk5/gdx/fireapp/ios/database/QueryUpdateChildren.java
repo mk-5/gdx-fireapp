@@ -25,7 +25,7 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 /**
  * Provides call to {@link FIRDatabaseReference#updateChildValues(NSDictionary)} ()}.
  */
-class QueryUpdateChildren extends IosDatabaseQuery<Void> {
+class QueryUpdateChildren extends DatabaseQuery<Void> {
 
     QueryUpdateChildren(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);

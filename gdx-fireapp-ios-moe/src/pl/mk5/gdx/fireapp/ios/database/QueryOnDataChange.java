@@ -26,7 +26,7 @@ import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 /**
  * Provides call to {@link FIRDatabaseQuery#observeEventTypeWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2)}.
  */
-class QueryOnDataChange<R> extends IosDatabaseQuery<R> {
+class QueryOnDataChange<R> extends DatabaseQuery<R> {
 
     QueryOnDataChange(Database databaseDistribution, String databasePath) {
         super(databaseDistribution, databasePath);

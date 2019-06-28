@@ -31,7 +31,7 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 /**
  * Provides call to {@link FIRDatabaseReference#observeEventTypeWithBlock(long, FIRDatabaseReference.Block_observeEventTypeWithBlock)}  ()} for "".info/connected""
  */
-class QueryConnectionStatus extends IosDatabaseQuery<ConnectionStatus> {
+class QueryConnectionStatus extends DatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
 
     QueryConnectionStatus(Database databaseDistribution) {

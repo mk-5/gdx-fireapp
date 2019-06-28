@@ -21,7 +21,7 @@ import apple.foundation.NSNumber;
 /**
  * Transforms {@code NSNumber} to java {@code Number} equivalent.
  */
-public class NSNumberHelper {
+class NSNumberHelper {
 
     private NSNumberHelper() {
 
