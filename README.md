@@ -9,10 +9,7 @@ A libGDX cross-platform API for Firebase.
 
 The first thing you should do is installing Firebase SDK and add gradle dependencies.   
 
-- [Android  guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-guide)
-- [iOS guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Guide)
-- [GWT guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide)
-- [ProGuard rules](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)  
+[Android  guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-guide) - [iOS guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Guide) - [HTML guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide) - [ProGuard required rules](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
 **Core**
 
@@ -36,18 +33,18 @@ compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:$gdxFireappVersion"
 compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
 ```
 
-&nbsp;  
+&nbsp;
 
-**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x,   
+**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x,
 android firebase sdk 16.x
 
-&nbsp;  
+&nbsp;
 
 ## Basics
 
-API is something like bridge between libGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this API should be intuitive for you.  
+API is something like bridge between libGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this API should be intuitive for you.
 
-&nbsp;  
+&nbsp;
 
 To initialize Firebase SDK just put this line somewhere in your app initialization code:
 
@@ -55,7 +52,7 @@ To initialize Firebase SDK just put this line somewhere in your app initializati
 GdxFIRApp.inst().configure();
 ```
 
-**Firebase Analytics** should start working just after this step.  
+**Firebase Analytics** should start working just after this step.
 
 If you added ***Fabric/Crashlytics*** to your project you should initialize it also:
 
@@ -63,7 +60,7 @@ If you added ***Fabric/Crashlytics*** to your project you should initialize it a
 GdxFIRCrash.inst().initialize();
 ````
 
-&nbsp;  
+&nbsp;
 
 Firebase SDK communication is done with following classes:
 
@@ -74,25 +71,26 @@ Firebase SDK communication is done with following classes:
 - **[GdxFIRDatabase](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRDatabase.html)**
 - **[GdxFIRCrash](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRCrash.html)**
 
-&nbsp;  
+&nbsp;
 
 
 ## Examples
 
 To see some examples please go to [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
 
-&nbsp;  
+&nbsp;
 
 ## Useful links
 
 - [Javadoc](http://javadoc.io/doc/pl.mk5.gdx-fireapp/gdx-fireapp-core)
 - [Wiki](https://github.com/mk-5/gdx-fireapp/wiki)
 
-&nbsp;  
+&nbsp;
 
 ## What's next?
 
 - Better wiki/documentation
+- Cloud Firestore
 - Facebook, github authorization
 - Messaging
 - Upload task monitoring
