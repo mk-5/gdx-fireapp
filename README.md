@@ -62,10 +62,6 @@ GdxFIRCrash.inst().initialize();
 
 &nbsp;
 
-Common API classes are: **[GdxFIRApp](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRApp.html)**, **[GdxFIRAnalytics](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRAnalytics.html)**, **[GdxFIRAuth](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRAuth.html)**, **[GdxFIRStorage](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRStorage.html)**, **[GdxFIRDatabase](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRDatabase.html)**, **[GdxFIRCrash](http://javadoc.io/page/pl.mk5.gdx-fireapp/gdx-fireapp-core/latest/mk/gdx/firebase/GdxFIRCrash.html)**
-
-&nbsp;
-
 
 ## Examples
 
