@@ -16,10 +16,18 @@
 
 package pl.mk5.gdx.fireapp.database;
 
+import com.badlogic.gdx.utils.Array;
+
 /**
  * Gives information about type origin.
  */
 public class JavaCoreClassDetector {
+
+    private static final Array<String> kotlinPrimitivesNames = new Array<>();
+
+    static {
+        kotlinPrimitivesNames.addAll("long", "float", "double", "boolean", "char", "byte");
+    }
 
     private JavaCoreClassDetector() {
         //
@@ -32,6 +40,6 @@ public class JavaCoreClassDetector {
      * @return True if type is core java class.
      */
     public static boolean isJavaCoreClass(Class<?> type) {
-        return type.getName().startsWith("java");
+        return type.getName().startsWith("java") || kotlinPrimitivesNames.contains(type.getName(), false);
     }
 }

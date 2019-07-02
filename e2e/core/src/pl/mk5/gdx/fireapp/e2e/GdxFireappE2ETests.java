@@ -59,8 +59,8 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(AnalyticsTest.class);
         e2ETestRunner.addNext(CrashTest.class);
 
-        e2ETestRunner.addNext(DatabaseReadValueTest.class);
-        e2ETestRunner.addNext(DatabaseReadValue2Test.class);
+        e2ETestRunner.addNext(DatabaseReadValueTest.class, 10);
+        e2ETestRunner.addNext(DatabaseReadValue2Test.class, 30);
         e2ETestRunner.addNext(DatabaseReadPojoTest.class);
         e2ETestRunner.addNext(DatabaseSetValueTest.class, 10);
         e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
@@ -84,6 +84,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         GdxFIRApp.inst().configure();
+        e2ETestRunner.only(DatabaseReadValue2Test.class);
         e2ETestRunner.start();
     }
 
