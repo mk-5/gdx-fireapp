@@ -31,9 +31,9 @@ public class DatabaseReadPojoListTest extends E2ETest {
 
     @Override
     public void action() {
-        final Employee employee1 = new Employee("Fred", (long) Math.floor(Math.random() * 100000000));
-        final Employee employee2 = new Employee("Bob", (long) Math.floor(Math.random() * 100000000));
-        final Employee employee3 = new Employee("John", (long) Math.floor(Math.random() * 100000000));
+        final Employee employee1 = new Employee("Fred", (int) Math.floor(Math.random() * 100000000));
+        final Employee employee2 = new Employee("Bob", (int) Math.floor(Math.random() * 100000000));
+        final Employee employee3 = new Employee("John", (int) Math.floor(Math.random() * 100000000));
         GdxFIRDatabase.promise()
                 .then(GdxFIRDatabase.inst().inReference("/employees").removeValue())
                 .then(GdxFIRDatabase.inst().inReference("/employees").push().setValue(employee1))
@@ -69,12 +69,12 @@ public class DatabaseReadPojoListTest extends E2ETest {
 
     private static class Employee {
         public String name;
-        public Long salary;
+        public int salary;
 
         public Employee() {
         }
 
-        public Employee(String name, Long salary) {
+        public Employee(String name, int salary) {
             this.name = name;
             this.salary = salary;
         }

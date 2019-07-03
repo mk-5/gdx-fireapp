@@ -28,6 +28,23 @@ import pl.mk5.gdx.fireapp.GdxFIRLogger;
  */
 public class MapConverter implements FirebaseMapConverter {
 
+    private static final Json json = new Json();
+    private static final Json.Serializer primitiveSerializer = new PrimitiveSerializer();
+
+    static {
+        json.setIgnoreUnknownFields(true);
+        json.setTypeName(null);
+        json.setQuoteLongValues(true);
+        json.setSerializer(int.class, primitiveSerializer);
+        json.setSerializer(double.class, primitiveSerializer);
+        json.setSerializer(boolean.class, primitiveSerializer);
+        json.setSerializer(float.class, primitiveSerializer);
+        json.setSerializer(long.class, primitiveSerializer);
+        json.setSerializer(byte.class, primitiveSerializer);
+        json.setSerializer(char.class, primitiveSerializer);
+        json.setSerializer(short.class, primitiveSerializer);
+    }
+
     /**
      * Transforms {@code Map<String,Object>} to {@code T object}.
      * <p>
@@ -44,11 +61,7 @@ public class MapConverter implements FirebaseMapConverter {
      */
     public <T> T convert(Map<String, Object> map, Class<T> wantedType) {
         try {
-            String jsonString = new Json().toJson(map);
-            Json json = new Json();
-            json.setIgnoreUnknownFields(true);
-            json.setTypeName(null);
-            json.setQuoteLongValues(true);
+            String jsonString = json.toJson(map);
             return json.fromJson(wantedType, jsonString);
         } catch (Exception e) {
             GdxFIRLogger.error("Can't deserialize Map to " + wantedType.getSimpleName(), e);
@@ -68,11 +81,7 @@ public class MapConverter implements FirebaseMapConverter {
     @SuppressWarnings("unchecked")
     public Map<String, Object> unConvert(Object object) {
         try {
-            String jsonString = new Json().toJson(object);
-            Json json = new Json();
-            json.setIgnoreUnknownFields(true);
-            json.setTypeName(null);
-            json.setQuoteLongValues(true);
+            String jsonString = json.toJson(object);
             return json.fromJson(HashMap.class, jsonString);
         } catch (Exception e) {
             GdxFIRLogger.error("Can't serialize " + object.getClass().getSimpleName() + " to Map.", e);
