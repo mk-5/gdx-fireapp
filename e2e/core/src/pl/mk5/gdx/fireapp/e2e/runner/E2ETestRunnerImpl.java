@@ -18,7 +18,7 @@ class E2ETestRunnerImpl implements E2ETestRunner {
     private final ObjectMap<Class<? extends E2ETest>, Float> testTimeout = new ObjectMap<>();
     private float state = 0f;
     private Runnable onFinish;
-    private Class<? extends E2ETest> onlyType;
+    private final Array<Class<? extends E2ETest>> onlyTypes = new Array<>();
 
     @Override
     public void addNext(Class<? extends E2ETest> testType) throws ReflectionException {
@@ -37,10 +37,12 @@ class E2ETestRunnerImpl implements E2ETestRunner {
         if (testsStable.size == 0) {
             throw new IllegalStateException("No tests to run.");
         }
-        if (onlyType != null) {
+        if (!onlyTypes.isEmpty()) {
             testsStable.clear();
             try {
-                addNext(onlyType, testTimeout.get(onlyType));
+                for (Class<? extends E2ETest> testType : onlyTypes) {
+                    addNext(testType, testTimeout.get(testType));
+                }
             } catch (ReflectionException e) {
                 Gdx.app.error(E2ETestRunnerImpl.class.getSimpleName(), e.getMessage(), e);
             }
@@ -66,8 +68,8 @@ class E2ETestRunnerImpl implements E2ETestRunner {
     }
 
     @Override
-    public void only(Class<? extends E2ETest> testType) {
-        this.onlyType = testType;
+    public void only(Class<? extends E2ETest>... testType) {
+        this.onlyTypes.addAll(testType);
     }
 
     private void startTest(E2ETest test) {

@@ -160,13 +160,6 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      */
     @Override
     public <T, R extends T> Promise<Void> transaction(Class<T> dataType, Function<R, R> transaction) {
-//        TransactionMitmConverter<T, R> mitmConverter = new TransactionMitmConverter<T, R>(dataType, transactionCallback, mapConverter);
-//        if (mitmConverter.isPojo(dataType)) {
-//            platformObject.transaction(Map.class, mitmConverter.getPojoCallback(), completeCallback);
-//        } else {
-//            platformObject.transaction(dataType, mitmConverter.getGenericCallback(), completeCallback);
-//        }
-        // maybe conversion is not needed? TODO - check data types in transactions
         return platformObject.transaction(dataType, transaction);
     }
 

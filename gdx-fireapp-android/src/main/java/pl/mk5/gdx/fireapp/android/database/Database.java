@@ -156,12 +156,13 @@ public class Database implements DatabaseDistribution {
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
         return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
             @Override
+            @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> trConverterPromise) {
                 trConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
                 new QueryOnChildChange<>(Database.this, getDatabasePath())
                         .with(getFilters())
                         .with(getOrderByClause())
-                        .with((FuturePromise<Object>) trConverterPromise)
+                        .with((FuturePromise) trConverterPromise)
                         .withArgs(dataType, eventsType)
                         .execute();
             }
@@ -245,7 +246,6 @@ public class Database implements DatabaseDistribution {
         return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
-                // TODO - converter
                 new QueryRunTransaction(Database.this, getDatabasePath())
                         .withArgs(dataType, transaction)
                         .with(voidFuturePromise)

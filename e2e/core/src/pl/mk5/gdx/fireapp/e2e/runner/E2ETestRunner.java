@@ -15,5 +15,5 @@ public interface E2ETestRunner {
 
     void onFinish(Runnable runnable);
 
-    void only(Class<? extends E2ETest> testType);
+    void only(Class<? extends E2ETest>... testType);
 }

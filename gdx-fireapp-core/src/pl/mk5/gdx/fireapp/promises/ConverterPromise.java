@@ -29,6 +29,7 @@ import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.reflection.AnnotationFinder;
+import pl.mk5.gdx.fireapp.reflection.DefaultTypeRecognizer;
 
 /**
  * Promise implementation with conversion before {@link #doComplete(Object)}
@@ -80,6 +81,12 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
                         }
                     }
                 }
+            }
+            if (object != null &&
+                    DefaultTypeRecognizer.isLongNumberType(object.getClass()) &&
+                    DefaultTypeRecognizer.isFloatingPointNumberType(wantedDataType)
+            ) {
+                object = Double.valueOf(Long.valueOf(object.toString()));
             }
             super.doComplete((R) object);
         } catch (Exception e) {
