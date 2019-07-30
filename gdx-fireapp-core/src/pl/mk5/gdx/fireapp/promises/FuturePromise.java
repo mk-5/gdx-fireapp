@@ -165,26 +165,30 @@ public class FuturePromise<T> implements Promise<T> {
      * @param result The promise result, may be null
      */
     public synchronized void doComplete(T result) {
-        if (state != INIT && state != COMPLETE) {
-            return;
-        }
-        state = COMPLETE;
-        lazyResult = result;
-        if (!thenConsumer.isSet() && thenPromise == null) {
-            return;
-        }
-        if (state == INIT && execution != null) {
-            throw new IllegalStateException("Promise 'when' has not been executed, please use 'exec', 'then(Consumer)' or fail(Consumer) method ");
-        }
-        if (thenConsumer.isSet()) {
-            thenConsumer.accept(result);
-        }
-        if (thenPromise != null) {
-            if (thenPromise.execution == null) {
-                throw new IllegalStateException("Chained promise should has 'when' execution");
+        try {
+            if (state != INIT && state != COMPLETE) {
+                return;
             }
-            thenPromise.pauseExecution = false;
-            thenPromise.execution.run();
+            state = COMPLETE;
+            lazyResult = result;
+            if (!thenConsumer.isSet() && thenPromise == null) {
+                return;
+            }
+            if (state == INIT && execution != null) {
+                throw new IllegalStateException("Promise 'when' has not been executed, please use 'exec', 'then(Consumer)' or fail(Consumer) method ");
+            }
+            if (thenConsumer.isSet()) {
+                thenConsumer.accept(result);
+            }
+            if (thenPromise != null) {
+                if (thenPromise.execution == null) {
+                    throw new IllegalStateException("Chained promise should has 'when' execution");
+                }
+                thenPromise.pauseExecution = false;
+                thenPromise.execution.run();
+            }
+        } catch (Exception e) {
+            doFail(e);
         }
     }
 

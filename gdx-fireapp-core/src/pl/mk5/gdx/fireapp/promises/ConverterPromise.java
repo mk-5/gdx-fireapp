@@ -55,32 +55,36 @@ public class ConverterPromise<T, R> extends FutureListenerPromise<R> {
     @Override
     @SuppressWarnings("unchecked")
     public synchronized void doComplete(Object object) {
-        if (canceled) return;
-        if (mapConverter == null)
-            throw new IllegalStateException();
-        if (modifier != null) {
-            object = modifier.apply((T) object);
-        }
-        if (object != null) {
-            if (!ClassReflection.isAssignableFrom(List.class, wantedDataType)) {
-                if (mapConverter.isPojo(wantedDataType)) {
-                    object = mapConverter.doMitmConversion(wantedDataType, object);
-                }
-            } else {
-                if (thenConsumer.isSet()) {
-                    MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer.first());
-                    if (mapConversionAnnotation != null) {
-                        object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
-                        if (object.getClass() == mapConversionAnnotation.value()) {
+        try {
+            if (canceled) return;
+            if (mapConverter == null)
+                throw new IllegalStateException();
+            if (modifier != null) {
+                object = modifier.apply((T) object);
+            }
+            if (object != null) {
+                if (!ClassReflection.isAssignableFrom(List.class, wantedDataType)) {
+                    if (mapConverter.isPojo(wantedDataType)) {
+                        object = mapConverter.doMitmConversion(wantedDataType, object);
+                    }
+                } else {
+                    if (thenConsumer.isSet()) {
+                        MapConversion mapConversionAnnotation = AnnotationFinder.getMethodAnnotation(MapConversion.class, thenConsumer.first());
+                        if (mapConversionAnnotation != null) {
+                            object = mapConverter.doMitmConversion(mapConversionAnnotation.value(), object);
+                            if (object.getClass() == mapConversionAnnotation.value()) {
+                                object = Collections.singletonList(object);
+                            }
+                        } else if (ClassReflection.isAssignableFrom(Map.class, object.getClass())) {
                             object = Collections.singletonList(object);
                         }
-                    } else if (ClassReflection.isAssignableFrom(Map.class, object.getClass())) {
-                        object = Collections.singletonList(object);
                     }
                 }
             }
+            super.doComplete((R) object);
+        } catch (Exception e) {
+            doFail(e);
         }
-        super.doComplete((R) object);
     }
 
     /**
