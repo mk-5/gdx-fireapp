@@ -16,7 +16,6 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
@@ -27,6 +26,7 @@ import pl.mk5.gdx.fireapp.annotations.MapConversion;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.reflection.AnnotationFinder;
+import pl.mk5.gdx.fireapp.reflection.DefaultTypeRecognizer;
 
 /**
  * Provides transactionFunction invocation
@@ -58,7 +58,7 @@ class TransactionHandler<R> implements Transaction.Handler {
     public Transaction.Result doTransaction(MutableData mutableData) {
         try {
             if (mutableData.getValue() == null) {
-                mutableData.setValue(defaultValueForDataType());
+                mutableData.setValue(transactionFunction.apply((R) DefaultTypeRecognizer.getDefaultValue(dataType)));
                 return Transaction.success(mutableData);
             }
             MapConversion mapConversionAnnotation = null;
@@ -89,14 +89,6 @@ class TransactionHandler<R> implements Transaction.Handler {
             } else {
                 promise.doFail(TRANSACTION_NOT_ABLE_TO_COMMIT, null);
             }
-        }
-    }
-
-    private Object defaultValueForDataType() {
-        if (ClassReflection.isAssignableFrom(Number.class, dataType)) {
-            return 0;
-        } else {
-            return "";
         }
     }
 }

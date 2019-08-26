@@ -27,6 +27,7 @@ cache:
   - $HOME/.gradle/wrapper/
 before_install:
 - chmod +x gradlew
+- chmod +x gradle/release-patch.sh
 jobs:
   include:
   - stage: build
@@ -36,6 +37,9 @@ jobs:
   - script: ./gradlew gdx-fireapp-html:jar
   - stage: test
     script: ./gradlew test
+  - stage: release
+    script: ./gradle/release-patch.sh
+    if: branch = master && pull_request = "false"
   - stage: deploy
     script: ./gradlew bintrayUpload -Pversion=$TRAVIS_BRANCH
     env:

@@ -16,20 +16,13 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import apple.foundation.NSNull;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.FIRMutableData;
 import bindings.google.firebasedatabase.FIRTransactionResult;
 import pl.mk5.gdx.fireapp.GdxFIRLogger;
 import pl.mk5.gdx.fireapp.functional.Function;
+import pl.mk5.gdx.fireapp.reflection.DefaultTypeRecognizer;
 
 import static pl.mk5.gdx.fireapp.ios.database.QueryRunTransaction.TRANSACTION_ERROR;
 
@@ -49,37 +42,18 @@ class RunTransactionBlock<R> implements FIRDatabaseReference.Block_runTransactio
     public FIRTransactionResult call_runTransactionBlockAndCompletionBlock_0(FIRMutableData arg0) {
         try {
             if (arg0.value() == null || NSNull.class.isAssignableFrom(arg0.value().getClass())) {
-                arg0.setValue(defaultValueForDataType());
+                arg0.setValue(transactionFunction.apply((R) DefaultTypeRecognizer.getDefaultValue(type)));
                 return FIRTransactionResult.successWithValue(arg0);
             }
             Object transactionObject = DataProcessor.iosDataToJava(arg0.value(), type);
             if (transactionObject == null) {
-                transactionObject = defaultValueForDataType();
+                transactionObject = DefaultTypeRecognizer.getDefaultValue(type);
             }
             arg0.setValue(DataProcessor.javaDataToIos(transactionFunction.apply((R) transactionObject)));
             return FIRTransactionResult.successWithValue(arg0);
         } catch (Exception e) {
             GdxFIRLogger.error(TRANSACTION_ERROR);
             return FIRTransactionResult.abort();
-        }
-    }
-
-    private Object defaultValueForDataType() {
-        if (ClassReflection.isAssignableFrom(Double.class, type) || ClassReflection.isAssignableFrom(Float.class, type)) {
-            return 0.;
-        } else if (ClassReflection.isAssignableFrom(Number.class, type)) {
-            return 0;
-        } else if (ClassReflection.isAssignableFrom(Map.class, type)) {
-            return new HashMap<>();
-        } else if (ClassReflection.isAssignableFrom(List.class, type)) {
-            return new ArrayList<>();
-        } else {
-            try {
-                return ClassReflection.newInstance(type);
-            } catch (ReflectionException e) {
-                GdxFIRLogger.error(CANT_FIND_DEFAULT_VALUE_FOR_GIVEN_TYPE);
-                return "";
-            }
         }
     }
 }

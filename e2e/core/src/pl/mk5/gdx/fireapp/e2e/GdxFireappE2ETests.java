@@ -26,6 +26,9 @@ import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValue2Test;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseSetValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionDefaultDoubleValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionDefaultLongValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionDefaultStringValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionValue2Test;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseTransactionValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.GdxFirebaseUserTest;
@@ -72,6 +75,9 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(DatabaseChildEventTest.class, 30);
         e2ETestRunner.addNext(DatabaseTransactionValueTest.class, 30);
         e2ETestRunner.addNext(DatabaseTransactionValue2Test.class, 30);
+        e2ETestRunner.addNext(DatabaseTransactionDefaultDoubleValueTest.class, 120);
+        e2ETestRunner.addNext(DatabaseTransactionDefaultLongValueTest.class, 30);
+        e2ETestRunner.addNext(DatabaseTransactionDefaultStringValueTest.class, 30);
 
 
         e2ETestRunner.onFinish(new Runnable() {
@@ -86,6 +92,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         GdxFIRApp.inst().configure();
+//        e2ETestRunner.only(DatabaseTransactionDefaultDoubleValueTest.class, DatabaseTransactionDefaultLongValueTest.class, DatabaseTransactionDefaultStringValueTest.class);
         e2ETestRunner.start();
     }
 
