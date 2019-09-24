@@ -29,6 +29,7 @@ import pl.mk5.gdx.fireapp.database.Filter;
 import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
+import pl.mk5.gdx.fireapp.database.QueryProvider;
 import pl.mk5.gdx.fireapp.distributions.DatabaseDistribution;
 import pl.mk5.gdx.fireapp.exceptions.DatabaseReferenceNotSetException;
 import pl.mk5.gdx.fireapp.functional.Consumer;
@@ -44,7 +45,7 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution {
+public class Database implements DatabaseDistribution, QueryProvider {
 
     private String refPath;
     private final Array<Filter> filters;
@@ -84,7 +85,8 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> setValue(final Object value) {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
+        checkDatabaseReference();
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QuerySetValue(Database.this, getDatabasePath())
@@ -100,7 +102,8 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference(), orderByClause, filters) {
+        checkDatabaseReference();
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> rConverterPromise) {
@@ -122,7 +125,8 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference(), orderByClause, filters) {
+        checkDatabaseReference();
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
@@ -138,7 +142,8 @@ public class Database implements DatabaseDistribution {
 
     @Override
     public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databaseReference(), orderByClause, filters) {
+        checkDatabaseReference();
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             public void accept(ConverterPromise<T, R> rConverterPromise) {
                 rConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
@@ -158,6 +163,7 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <V> DatabaseDistribution filter(FilterType filterType, V... filterArguments) {
+        checkDatabaseReference();
         filters.add(new Filter(filterType, filterArguments));
         return this;
     }
@@ -167,6 +173,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public DatabaseDistribution orderBy(OrderByMode orderByMode, String argument) {
+        checkDatabaseReference();
         orderByClause = new OrderByClause(orderByMode, argument);
         return this;
     }
@@ -190,7 +197,7 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> removeValue() {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRemoveValue(Database.this, getDatabasePath())
@@ -205,7 +212,8 @@ public class Database implements DatabaseDistribution {
      */
     @Override
     public Promise<Void> updateChildren(final Map<String, Object> data) {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
+        checkDatabaseReference();
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryUpdateChildren(Database.this, getDatabasePath())
@@ -222,7 +230,8 @@ public class Database implements DatabaseDistribution {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transactionFunction) {
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databaseReference(), orderByClause, filters) {
+        checkDatabaseReference();
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRunTransaction(Database.this, getDatabasePath())
@@ -265,6 +274,21 @@ public class Database implements DatabaseDistribution {
         return refPath;
     }
 
+    @Override
+    public String getReferencePath() {
+        return refPath;
+    }
+
+    @Override
+    public Array<Filter> getFilters() {
+        return filters;
+    }
+
+    @Override
+    public OrderByClause getOrderByClause() {
+        return orderByClause;
+    }
+
     /**
      * Reset {@link #refPath} to initial state.
      * <p>
@@ -280,7 +304,7 @@ public class Database implements DatabaseDistribution {
      * <li>{@link #transaction(Class, Function)}</li>
      * </uL>
      */
-    void terminateOperation() {
+    public void terminateOperation() {
         refPath = null;
         filters.clear();
         orderByClause = null;

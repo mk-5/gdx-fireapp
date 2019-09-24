@@ -30,13 +30,16 @@ public abstract class DatabaseConsumer<T> implements Consumer<T> {
     private final OrderByClause orderByClause;
     private final Array<Filter> filters;
 
-    public DatabaseConsumer(String databasePath, OrderByClause orderByClause, Array<Filter> filtersArr) {
-        this.databasePath = databasePath;
-        this.orderByClause = orderByClause != null ? new OrderByClause(orderByClause.getOrderByMode(), orderByClause.getArgument()) : null;
+    public DatabaseConsumer(QueryProvider queryProvider) {
+        this.databasePath = queryProvider.getReferencePath();
+        this.orderByClause = queryProvider.getOrderByClause() != null ?
+                new OrderByClause(queryProvider.getOrderByClause().getOrderByMode(), queryProvider.getOrderByClause().getArgument()) :
+                null;
         this.filters = new Array<>();
-        for (Filter filter : filtersArr) {
+        for (Filter filter : queryProvider.getFilters()) {
             filters.add(new Filter(filter.getFilterType(), filter.getFilterArguments()));
         }
+        queryProvider.terminateOperation();
     }
 
     public String getDatabasePath() {
