@@ -31,6 +31,7 @@ import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.FilteringStateEnsurer;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
+import pl.mk5.gdx.fireapp.database.QueryProvider;
 import pl.mk5.gdx.fireapp.distributions.DatabaseDistribution;
 import pl.mk5.gdx.fireapp.exceptions.DatabaseReferenceNotSetException;
 import pl.mk5.gdx.fireapp.functional.Consumer;
@@ -47,7 +48,7 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution {
+public class Database implements DatabaseDistribution, QueryProvider {
 
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
@@ -91,7 +92,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public Promise<Void> setValue(final Object value) {
         checkReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QuerySetValue(Database.this, getDatabasePath())
@@ -110,7 +111,7 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> Promise<R> readValue(final Class<T> dataType) {
         checkReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             public void accept(ConverterPromise<T, R> rFuturePromise) {
                 rFuturePromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
@@ -132,7 +133,7 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
         checkReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             public void accept(ConverterPromise<T, R> rFuturePromise) {
                 rFuturePromise.with(GdxFIRDatabase.inst().getMapConverter(), dataType);
@@ -150,7 +151,7 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
         checkReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             public void accept(ConverterPromise<T, R> rFuturePromise) {
                 rFuturePromise.with(GdxFIRDatabase.inst().getMapConverter(), dataType);
@@ -204,7 +205,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public Promise<Void> removeValue() {
         checkReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRemoveValue(Database.this, getDatabasePath())
@@ -220,7 +221,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public Promise<Void> updateChildren(final Map<String, Object> data) {
         checkReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryUpdateChildren(Database.this, getDatabasePath())
@@ -238,7 +239,7 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transactionFunction) {
         checkReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRunTransaction(Database.this, getDatabasePath())
@@ -277,6 +278,21 @@ public class Database implements DatabaseDistribution {
         return dbReference;
     }
 
+    @Override
+    public String getReferencePath() {
+        return databasePath;
+    }
+
+    @Override
+    public Array<Filter> getFilters() {
+        return filters;
+    }
+
+    @Override
+    public OrderByClause getOrderByClause() {
+        return orderByClause;
+    }
+
     /**
      * Reset {@link #dbReference} and {@link #databasePath} to initial state.
      * After each flow-terminate operation{@link #dbReference} and {@link #databasePath} should be reset the initial value,
@@ -291,7 +307,7 @@ public class Database implements DatabaseDistribution {
      * <li>{@link #transaction(Class, Function)}</li>
      * </uL>
      */
-    void terminateOperation() {
+    public void terminateOperation() {
         dbReference = null;
         databasePath = null;
         filters.clear();

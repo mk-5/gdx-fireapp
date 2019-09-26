@@ -16,7 +16,6 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.google.firebase.database.DatabaseReference;
 
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;

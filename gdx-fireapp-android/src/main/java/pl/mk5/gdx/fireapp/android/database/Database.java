@@ -31,6 +31,7 @@ import pl.mk5.gdx.fireapp.database.FilterType;
 import pl.mk5.gdx.fireapp.database.FilteringStateEnsurer;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
+import pl.mk5.gdx.fireapp.database.QueryProvider;
 import pl.mk5.gdx.fireapp.distributions.DatabaseDistribution;
 import pl.mk5.gdx.fireapp.exceptions.DatabaseReferenceNotSetException;
 import pl.mk5.gdx.fireapp.functional.Consumer;
@@ -47,7 +48,7 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  *
  * @see DatabaseDistribution
  */
-public class Database implements DatabaseDistribution {
+public class Database implements DatabaseDistribution, QueryProvider {
 
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
@@ -95,7 +96,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public Promise<Void> setValue(final Object value) {
         checkDatabaseReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QuerySetValue(Database.this, getDatabasePath())
@@ -114,7 +115,7 @@ public class Database implements DatabaseDistribution {
     public <T, E extends T> Promise<E> readValue(final Class<T> dataType) {
         checkDatabaseReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, E>>(databasePath, orderByClause, filters) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, E>>(this) {
             @Override
             public void accept(ConverterPromise<T, E> teConverterPromise) {
                 teConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
@@ -136,7 +137,7 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> ListenerPromise<R> onDataChange(final Class<T> dataType) {
         checkDatabaseReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             public void accept(ConverterPromise<T, R> trConverterPromise) {
                 trConverterPromise.with(GdxFIRDatabase.instance().getMapConverter(), dataType);
@@ -154,7 +155,7 @@ public class Database implements DatabaseDistribution {
     public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
         checkDatabaseReference();
         FilteringStateEnsurer.checkFilteringState(filters, orderByClause, dataType);
-        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(databasePath, orderByClause, filters) {
+        return ConverterPromise.whenWithConvert(new DatabaseConsumer<ConverterPromise<T, R>>(this) {
             @Override
             @SuppressWarnings("unchecked")
             public void accept(ConverterPromise<T, R> trConverterPromise) {
@@ -209,7 +210,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public Promise<Void> removeValue() {
         checkDatabaseReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRemoveValue(Database.this, getDatabasePath())
@@ -225,7 +226,7 @@ public class Database implements DatabaseDistribution {
     @Override
     public Promise<Void> updateChildren(final Map<String, Object> data) {
         checkDatabaseReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryUpdateChildren(Database.this, getDatabasePath())
@@ -243,7 +244,7 @@ public class Database implements DatabaseDistribution {
     @SuppressWarnings("unchecked")
     public <T, R extends T> Promise<Void> transaction(final Class<T> dataType, final Function<R, R> transaction) {
         checkDatabaseReference();
-        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(databasePath, orderByClause, filters) {
+        return FuturePromise.when(new DatabaseConsumer<FuturePromise<Void>>(this) {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
                 new QueryRunTransaction(Database.this, getDatabasePath())
@@ -281,6 +282,21 @@ public class Database implements DatabaseDistribution {
         return databaseReference;
     }
 
+    @Override
+    public String getReferencePath() {
+        return databasePath;
+    }
+
+    @Override
+    public Array<Filter> getFilters() {
+        return filters;
+    }
+
+    @Override
+    public OrderByClause getOrderByClause() {
+        return orderByClause;
+    }
+
     /**
      * Reset {@link #databaseReference} and {@link #databasePath} to initial state.
      * After each flow-terminate operation{@link #databaseReference} and {@link #databasePath} should be reset the initial value,
@@ -295,7 +311,8 @@ public class Database implements DatabaseDistribution {
      * <li>{@link #transaction(Class, Function)}</li>
      * </uL>
      */
-    void terminateOperation() {
+    @Override
+    public void terminateOperation() {
         databaseReference = null;
         databasePath = null;
         orderByClause = null;
