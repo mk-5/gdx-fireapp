@@ -14,23 +14,23 @@ The first thing you should do is installing Firebase SDK and add gradle dependen
 **Core**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion"
+implementation "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion"
 ```
 **Android**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-android:$gdxFireappVersion"
+implementation "pl.mk5.gdx-fireapp:gdx-fireapp-android:$gdxFireappVersion"
 ```
 **iOS**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:$gdxFireappVersion"
+implementation "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:$gdxFireappVersion"
 ```
 
 **GWT**
 
 ```
-compile "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
+implementation "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
 ```
 
 &nbsp;
