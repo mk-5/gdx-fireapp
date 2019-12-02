@@ -7,7 +7,7 @@ A libGDX cross-platform API for Firebase.
 
 ## Getting Started
 
-The first thing you should do is installing Firebase SDK and add gradle dependencies.   
+The first thing you should do is install Firebase SDK and add gradle dependencies.   
 
 [Android  guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-guide) - [iOS guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Guide) - [HTML guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide) - [ProGuard required rules](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
@@ -35,18 +35,18 @@ implementation "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
 
 &nbsp;
 
-**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS firebase sdk 5.x,
-android firebase sdk 16.x
+**The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS Firebase sdk 5.x,
+android Firebase sdk 16.x
 
 &nbsp;
 
 ## Basics
 
-API is something like bridge between libGDX app and firebase sdk. It's cover firebase functionality so if you have some knowledge about firebase SDK - using this API should be intuitive for you.
+This API is like a bridge between libGDX app and Firebase sdk. It covers Firebase functionality, so if you have some knowledge of the Firebase SDK, using this API should be intuitive.
 
 &nbsp;
 
-To initialize Firebase SDK just put this line somewhere in your app initialization code:
+To initialize Firebase SDK, just put this line somewhere in your app initialization code:
 
 ```java
 GdxFIRApp.inst().configure();
@@ -54,7 +54,7 @@ GdxFIRApp.inst().configure();
 
 **Firebase Analytics** should start working just after this step.
 
-If you added ***Fabric/Crashlytics*** to your project you should initialize it also:
+If you added ***Fabric/Crashlytics*** to your project, you should also initialize it:
 
 ````
 GdxFIRCrash.inst().initialize();
@@ -65,7 +65,7 @@ GdxFIRCrash.inst().initialize();
 
 ## Examples
 
-To see some examples please go to [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
+To see some examples, please go to [examples wiki page](https://github.com/mk-5/gdx-fireapp/wiki/Examples).
 
 &nbsp;
 
@@ -93,7 +93,7 @@ To see some examples please go to [examples wiki page](https://github.com/mk-5/g
 - [x] Authentication
 - [x] Database
 - [x] Storage
-- [x] Crash raporting (Crashlytics)
+- [x] Crash reporting (Crashlytics)
 - [ ] Messaging
 
 &nbsp;  
