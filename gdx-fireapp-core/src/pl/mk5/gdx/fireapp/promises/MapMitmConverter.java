@@ -26,9 +26,6 @@ import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 import pl.mk5.gdx.fireapp.database.JavaCoreClassDetector;
 import pl.mk5.gdx.fireapp.exceptions.MapConversionNotPossibleException;
 
-/**
- * Abstract for man-in-the-middle converters.
- */
 class MapMitmConverter {
     private static final String CANT_DO_MAP_CONVERSION_FROM_TYPE = "Can't do map conversion from type: ";
 
@@ -41,17 +38,6 @@ class MapMitmConverter {
         this.mapConverter = mapConverter;
     }
 
-    /**
-     * Checks type of {@code data} and do conversion(s) from Map to type keeped by {@code mapConversionType}.
-     * <p>
-     * If {@code data} is a Map, convert directly.
-     * If {@code data} is a List, go through all elements and do conversion on each element.
-     *
-     * @param wantedType Type to which map will be transformed
-     * @param data       Results to go through and convert founded maps, may be null
-     * @return Converted data or same data if no Map founded, may be null.
-     * @throws MapConversionNotPossibleException If can't do conversion
-     */
     @SuppressWarnings("unchecked")
     Object doMitmConversion(Class<?> wantedType, Object data) {
         if (data == null) return null;
@@ -77,22 +63,10 @@ class MapMitmConverter {
         return data;
     }
 
-    /**
-     * Check if conversion from {@code data} to POJO is possible.
-     *
-     * @param data Source data
-     * @return True if conversions is possible.
-     */
     boolean isConversionPossible(Object data) {
         return ClassReflection.isAssignableFrom(Map.class, data.getClass()) || ClassReflection.isAssignableFrom(List.class, data.getClass());
     }
 
-    /**
-     * Check if given type should be respected as POJO (for conversion).
-     *
-     * @param type Type to examinable
-     * @return True if type is not Java type or List or Map.
-     */
     boolean isPojo(Class<?> type) {
         return !JavaCoreClassDetector.isJavaCoreClass(type)
                 && !ClassReflection.isAssignableFrom(List.class, type)

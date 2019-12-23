@@ -19,22 +19,12 @@ package pl.mk5.gdx.fireapp.html.storage;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.storage.FileMetadata;
 
-/**
- * Javascript calls to firebase storage api.
- */
 class StorageJS {
 
     private StorageJS() {
         //
     }
 
-    /**
-     * Downloads file given at {@code refPath} and convert it to base64 string.
-     *
-     * @param bucketUrl        Bucket url, may be null
-     * @param refPath          Storage reference path, not null
-     * @param urlDownloader Callback, not null
-     */
     static native void download(String bucketUrl, String refPath, UrlDownloader urlDownloader) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).getDownloadURL().then(function(url){
@@ -44,13 +34,6 @@ class StorageJS {
         });
     }-*/;
 
-    /**
-     * Removes file given at {@code refPath}.
-     *
-     * @param bucketUrl     Bucket url, may be null
-     * @param refPath       Storage reference path, not null
-     * @param futurePromise FuturePromise, not null
-     */
     static native void remove(String bucketUrl, String refPath, FuturePromise<Void> futurePromise) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath)['delete']().then(function(){
@@ -62,14 +45,6 @@ class StorageJS {
         });
     }-*/;
 
-    /**
-     * Upload base64 encoded data to storage.
-     *
-     * @param bucketUrl        Bucket url, may be null
-     * @param refPath          Storage reference path, not null
-     * @param base64DataString Base64 data representation, not null
-     * @param promise          Promise, not null
-     */
     static native void upload(String bucketUrl, String refPath, String base64DataString, FuturePromise<FileMetadata> promise) /*-{
         var storage = $wnd.firebase.app().storage((bucketUrl != "" ? bucketUrl : null));
         storage.ref(refPath).putString(base64DataString,'base64').then(function(snapshot){
@@ -81,12 +56,6 @@ class StorageJS {
         });
     }-*/;
 
-    /**
-     * Creates FileMetaData from {@code snapshot} and calls callback.
-     *
-     * @param snapshot Snapshot from firebase, not null
-     * @param promise  Upload promise, not null
-     */
     static void callUploadPromise(UploadTaskSnapshot snapshot, FuturePromise<FileMetadata> promise) {
         FileMetadata fileMetadata = SnapshotFileMetaDataResolver.resolve(snapshot);
         promise.doComplete(fileMetadata);

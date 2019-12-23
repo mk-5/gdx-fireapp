@@ -20,9 +20,6 @@ import apple.foundation.NSError;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Wraps {@link pl.mk5.gdx.fireapp.promises.FuturePromise} with ios completion observer.
- */
 class FIRDatabaseReferenceCompleteObserver implements FIRDatabaseReference.Block_setValueWithCompletionBlock,
         FIRDatabaseReference.Block_removeValueWithCompletionBlock, FIRDatabaseReference.Block_updateChildValuesWithCompletionBlock {
 
@@ -32,7 +29,7 @@ class FIRDatabaseReferenceCompleteObserver implements FIRDatabaseReference.Block
         this.promise = promise;
     }
 
-    protected void process(NSError arg0, FIRDatabaseReference arg1) {
+    void process(NSError arg0, FIRDatabaseReference arg1) {
         if (promise == null) return;
         if (arg0 != null) {
             promise.doFail(new Exception(arg0.localizedDescription()));

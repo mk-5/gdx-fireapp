@@ -24,9 +24,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnDataValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 
-/**
- * Provides call to {@link com.google.firebase.database.Query#addValueEventListener(ValueEventListener)}.
- */
 class QueryOnDataChange<R> extends AndroidDatabaseQuery<R> {
 
     QueryOnDataChange(Database databaseDistribution, String databasePath) {

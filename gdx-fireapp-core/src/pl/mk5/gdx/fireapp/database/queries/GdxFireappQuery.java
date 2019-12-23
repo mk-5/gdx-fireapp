@@ -26,16 +26,6 @@ import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.promises.Promise;
 
-/**
- * Abstraction for firebase database query.
- * <p>
- * Holds basic shared features of all queries: filtering and terminate operation after each query.
- * <p>
- * Keeps order of each query part execution inside {@link #execute()} so it will be the same for each platform.
- *
- * @param <D> Target DatabaseDistribution
- * @param <R> Query execution return type
- */
 public abstract class GdxFireappQuery<D extends DatabaseDistribution, R> {
 
     protected final D databaseDistribution;
@@ -95,39 +85,15 @@ public abstract class GdxFireappQuery<D extends DatabaseDistribution, R> {
         return result;
     }
 
-//    public <R extends T, T> GdxFireappQuery with(ConverterPromise<T, R> promise) {
-//        return null;
-//    }
-
     protected void prepare() {
         // To overwrite
     }
 
-    /**
-     * Creates arguments validator instance.
-     *
-     * @return ArgumentsValidator, may be null
-     */
     protected abstract ArgumentsValidator createArgumentsValidator();
 
-    /**
-     * Applies filters/order-by only if they are present.
-     */
     protected abstract void applyFilters();
 
-    /**
-     * Do some operations on Firebase Database.
-     * <p>
-     * Only flow here, every validation should be in {@link #prepare()}.
-     *
-     * @return Results of query execution
-     */
     protected abstract R run();
 
-    /**
-     * Terminates query.
-     * <p>
-     * It is means clear all artifacts created by this query execution so next execution will be run with clear state.
-     */
     protected abstract void terminate();
 }

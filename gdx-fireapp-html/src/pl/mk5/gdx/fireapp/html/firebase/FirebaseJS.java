@@ -16,9 +16,6 @@
 
 package pl.mk5.gdx.fireapp.html.firebase;
 
-/**
- * Provides javascript calls for firebase.js loading.
- */
 class FirebaseJS {
 
     private FirebaseJS() {

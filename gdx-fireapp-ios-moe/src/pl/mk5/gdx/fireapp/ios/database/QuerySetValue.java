@@ -21,9 +21,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.SetValueValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides call to {@link FIRDatabaseReference#setValue(Object)} ()}.
- */
 class QuerySetValue extends DatabaseQuery<Void> {
 
     QuerySetValue(Database databaseDistribution, String databasePath) {

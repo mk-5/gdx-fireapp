@@ -16,20 +16,12 @@
 
 package pl.mk5.gdx.fireapp.html.firebase;
 
-/**
- * Provides awaiting for firebase.js script loaded.
- */
 public class ScriptRunner {
 
     private ScriptRunner() {
 
     }
 
-    /**
-     * Run action or add it into waiting queue.
-     *
-     * @param action Action with firebase.js script
-     */
     public static synchronized void firebaseScript(Runnable action) {
         if (FirebaseScriptInformant.isFirebaseScriptLoaded())
             action.run();
@@ -37,9 +29,9 @@ public class ScriptRunner {
     }
 
     public static abstract class ScriptDBAction implements Runnable {
-        protected String scriptRefPath;
+        String scriptRefPath;
 
-        public ScriptDBAction(String scriptRefPath) {
+        protected ScriptDBAction(String scriptRefPath) {
             this.scriptRefPath = scriptRefPath;
         }
     }
@@ -47,7 +39,7 @@ public class ScriptRunner {
     public static abstract class ScriptStorageAction implements Runnable {
         protected String scriptBucketUrl;
 
-        public ScriptStorageAction(String scriptBucketUrl) {
+        protected ScriptStorageAction(String scriptBucketUrl) {
             this.scriptBucketUrl = scriptBucketUrl;
         }
     }

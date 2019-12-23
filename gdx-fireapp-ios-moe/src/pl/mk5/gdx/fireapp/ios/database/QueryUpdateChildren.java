@@ -16,15 +16,11 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
-import apple.foundation.NSDictionary;
 import bindings.google.firebasedatabase.FIRDatabaseReference;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.UpdateChildrenValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides call to {@link FIRDatabaseReference#updateChildValues(NSDictionary)} ()}.
- */
 class QueryUpdateChildren extends DatabaseQuery<Void> {
 
     QueryUpdateChildren(Database databaseDistribution, String databasePath) {

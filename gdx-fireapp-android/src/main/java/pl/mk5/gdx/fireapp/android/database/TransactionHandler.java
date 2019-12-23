@@ -28,9 +28,6 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 import pl.mk5.gdx.fireapp.reflection.AnnotationFinder;
 import pl.mk5.gdx.fireapp.reflection.DefaultTypeRecognizer;
 
-/**
- * Provides transactionFunction invocation
- */
 class TransactionHandler<R> implements Transaction.Handler {
 
     private static final String TRANSACTION_NOT_ABLE_TO_COMMIT = "The database value at given path was not be able to commit";
@@ -41,12 +38,6 @@ class TransactionHandler<R> implements Transaction.Handler {
     private final FuturePromise<Void> promise;
     private final Class<?> dataType;
 
-
-    /**
-     * @param dataType            DataType, not null
-     * @param transactionFunction Transaction function, not null
-     * @param promise             Promise, not null
-     */
     TransactionHandler(Class<?> dataType, Function<R, R> transactionFunction, FuturePromise<Void> promise) {
         this.dataType = dataType;
         this.transactionFunction = transactionFunction;

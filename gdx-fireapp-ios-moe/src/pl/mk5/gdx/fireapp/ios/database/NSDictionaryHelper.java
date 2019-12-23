@@ -27,10 +27,6 @@ import apple.foundation.NSDictionary;
 import apple.foundation.NSMutableDictionary;
 import apple.foundation.NSString;
 
-/**
- * Transforms {@code NSDictionary} and {@code Map}.
- * <p>
- */
 class NSDictionaryHelper {
 
     private NSDictionaryHelper() {
@@ -58,7 +54,6 @@ class NSDictionaryHelper {
         return dictionary;
     }
 
-    // TODO - check type erasure error occur?
     @SuppressWarnings("unchecked")
     static NSDictionary toNSDictionary(Object object) {
         if (object instanceof Map) {

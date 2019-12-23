@@ -20,11 +20,6 @@ import com.badlogic.gdx.utils.Array;
 
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
-/**
- * Consumer to use with async database calls
- *
- * @param <T> Consumer type
- */
 public abstract class DatabaseConsumer<T> implements Consumer<T> {
     private final String databasePath;
     private final OrderByClause orderByClause;

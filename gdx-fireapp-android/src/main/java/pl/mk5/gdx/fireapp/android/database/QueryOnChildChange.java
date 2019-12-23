@@ -25,9 +25,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnChildValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 
-/**
- * Provides call to {@link Query#addChildEventListener(ChildEventListener)}}.
- */
 class QueryOnChildChange<R> extends AndroidDatabaseQuery<R> {
 
     QueryOnChildChange(Database databaseDistribution, String databasePath) {

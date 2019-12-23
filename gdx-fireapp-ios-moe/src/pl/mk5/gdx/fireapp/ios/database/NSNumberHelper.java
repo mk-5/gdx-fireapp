@@ -18,23 +18,12 @@ package pl.mk5.gdx.fireapp.ios.database;
 
 import apple.foundation.NSNumber;
 
-/**
- * Transforms {@code NSNumber} to java {@code Number} equivalent.
- */
 class NSNumberHelper {
 
     private NSNumberHelper() {
 
     }
 
-    /**
-     * Transforms {@code NSNumber} to java {@code Number} equivalent.
-     * <p>
-     * Possible values are instances of {@link Number}
-     *
-     * @param nsNumber {@code NSNumber} that you want to transform.
-     * @return Transformed value, default value is {@link NSNumber#integerValue()}
-     */
     static Object getNSNumberPrimitive(NSNumber nsNumber) {
         String cType = nsNumber.objCType();
         switch (cType) {

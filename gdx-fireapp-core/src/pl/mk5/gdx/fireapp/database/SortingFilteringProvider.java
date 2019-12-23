@@ -22,13 +22,6 @@ import java.util.Arrays;
 
 import pl.mk5.gdx.fireapp.GdxFIRLogger;
 
-/**
- * Provides filtering flow.
- *
- * @param <T> Firebase database Query type
- * @param <E> Filter resolver type
- * @param <K> Order-by resolver type
- */
 public abstract class SortingFilteringProvider<T, E extends FilterResolver, K extends OrderByResolver> {
 
     protected E filterResolver;
@@ -43,9 +36,6 @@ public abstract class SortingFilteringProvider<T, E extends FilterResolver, K ex
         orderByResolver = createOrderByResolver();
     }
 
-    /**
-     * @return The query with filtering and soring applied - if any
-     */
     @SuppressWarnings("unchecked")
     public T applyFiltering() {
         Filter filter;
@@ -70,17 +60,10 @@ public abstract class SortingFilteringProvider<T, E extends FilterResolver, K ex
         return this;
     }
 
-    /**
-     * Set filters in new array instance in reverse order.
-     *
-     * @param filters Filters array, not null
-     * @return this
-     */
     public SortingFilteringProvider setFilters(Array<Filter> filters) {
         if (filters == null) return this;
         this.filters.clear();
         this.filters.addAll(filters);
-        // The first go to the end, now i can use .pop() later.
         filters.reverse();
         return this;
     }

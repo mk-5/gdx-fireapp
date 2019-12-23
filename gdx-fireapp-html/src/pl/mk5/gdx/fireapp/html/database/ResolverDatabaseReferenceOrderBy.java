@@ -19,9 +19,6 @@ package pl.mk5.gdx.fireapp.html.database;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByResolver;
 
-/**
- * Resolves order-by for javascript firebase db.
- */
 class ResolverDatabaseReferenceOrderBy implements OrderByResolver<DatabaseReference, DatabaseReference> {
 
     private final static String MISSING_ARGUMENT = "Order by argument is missing";

@@ -18,8 +18,5 @@ package pl.mk5.gdx.fireapp.ios.database;
 
 import pl.mk5.gdx.fireapp.database.DataListenersManager;
 
-/**
- * Keeps references to observers handles.
- */
 class DataObserversManager extends DataListenersManager<Long> {
 }

@@ -18,9 +18,6 @@ package pl.mk5.gdx.fireapp.html.database;
 
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 
-/**
- * Provides push javascript execution.
- */
 class QueryPush extends GwtDatabaseQuery<String> {
 
     QueryPush(Database databaseDistribution, String databasePath) {
@@ -37,14 +34,6 @@ class QueryPush extends GwtDatabaseQuery<String> {
         return null;
     }
 
-    /**
-     * Calls firebase.database().push method.
-     * <p>
-     * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#push">https://firebase.google.com/docs/reference/js/firebase.database.Reference#push</a>
-     *
-     * @param reference Reference path, not null
-     * @return A new reference path
-     */
     public static native String push(String reference) /*-{
         return $wnd.firebase.database().ref(reference).push().path["Q"].join("/");
     }-*/;

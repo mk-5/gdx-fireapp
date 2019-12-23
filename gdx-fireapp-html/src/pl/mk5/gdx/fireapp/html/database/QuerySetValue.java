@@ -20,9 +20,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.SetValueValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides setValue execution.
- */
 class QuerySetValue extends GwtDatabaseQuery {
 
     QuerySetValue(Database databaseDistribution, String databasePath) {
@@ -43,15 +40,6 @@ class QuerySetValue extends GwtDatabaseQuery {
         return new SetValueValidator();
     }
 
-    /**
-     * Set value to database.
-     * <p>
-     * JSON.parse is using here. It's getting object or primitive (for primitives types it is primitive wrapped by string ex. "1", "true") and returns object representation.
-     * Is one exception here - when stringValue is actually a string like "abc", JSON.parse will be throw error.
-     *
-     * @param reference   Reference path, not null
-     * @param stringValue String value representation
-     */
     public static native void set(String reference, String stringValue) /*-{
         var val;
         try{
@@ -62,14 +50,6 @@ class QuerySetValue extends GwtDatabaseQuery {
         $wnd.firebase.database().ref(reference).set(val);
     }-*/;
 
-    /**
-     * Set value to database.
-     * <p>
-     * For more explanation look at {@link #set(String, String)}
-     *
-     * @param reference   Reference path, not null
-     * @param stringValue String value representation
-     */
     public static native void setWithPromise(String reference, String stringValue, FuturePromise promise) /*-{
         var val;
         try{

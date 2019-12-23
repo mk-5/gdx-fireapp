@@ -31,10 +31,6 @@ class MapTransformer {
         //
     }
 
-    /**
-     * @param map Map, not null
-     * @return JSON representation of given map
-     */
     static String mapToJSON(Map<String, Object> map) {
         Json json = new Json();
         json.setTypeName(null);

@@ -23,25 +23,8 @@ import java.util.Map;
 
 import pl.mk5.gdx.fireapp.GdxFIRLogger;
 
-/**
- * Converts {@code Map<String, Object>} to POJO.
- */
 public class MapConverter implements FirebaseMapConverter {
 
-    /**
-     * Transforms {@code Map<String,Object>} to {@code T object}.
-     * <p>
-     * Transformation flow is as follow:
-     * <ul>
-     * <li>Transform {@code map} to Json string by {@link Json#toJson(Object)}
-     * <li>Transform Json string to POJO object by {@link Json#fromJson(Class, String)}
-     * </ul>
-     *
-     * @param map        Map which we want to transform.
-     * @param wantedType Class type we want to get
-     * @param <T>        Generic type of class we want to get. Needed if type we want have nested generic type.
-     * @return Deserialized object, may be null
-     */
     public <T> T convert(Map<String, Object> map, Class<T> wantedType) {
         try {
             String jsonString = new Json().toJson(map);
@@ -56,14 +39,6 @@ public class MapConverter implements FirebaseMapConverter {
         }
     }
 
-    /**
-     * Transforms {@code object} to Map.
-     * <p>
-     * Should be inverse of {@link #convert(Map, Class)}
-     *
-     * @param object Should be Pojo
-     * @return Serialized object, may be null
-     */
     @Override
     @SuppressWarnings("unchecked")
     public Map<String, Object> unConvert(Object object) {

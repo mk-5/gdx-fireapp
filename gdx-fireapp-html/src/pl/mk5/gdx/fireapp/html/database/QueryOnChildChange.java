@@ -70,9 +70,6 @@ class QueryOnChildChange extends GwtDatabaseQuery {
         }
     }
 
-    /**
-     * Attaches listener from {@link GwtDataPromisesManager} to given reference.
-     */
     public static native void onEvent(String reference, String event, DatabaseReference databaseReference) /*-{
          var ref = reference;
          var orderByCalled = databaseReference.orderByCalled_;
@@ -94,9 +91,6 @@ class QueryOnChildChange extends GwtDatabaseQuery {
         });
     }-*/;
 
-    /**
-     * Remove value listeners for given path.
-     */
     public static native void offEvent(String reference, String event) /*-{
         $wnd.valueListeners = $wnd.valueListeners || {};
         $wnd.valueListenersOrderByCalled = $wnd.valueListenersOrderByCalled || {};

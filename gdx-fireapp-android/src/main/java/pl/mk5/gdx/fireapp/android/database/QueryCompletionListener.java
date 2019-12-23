@@ -21,9 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Wraps {@link FuturePromise} with {@link DatabaseReference.CompletionListener}
- */
 class QueryCompletionListener implements DatabaseReference.CompletionListener {
 
     private FuturePromise promise;

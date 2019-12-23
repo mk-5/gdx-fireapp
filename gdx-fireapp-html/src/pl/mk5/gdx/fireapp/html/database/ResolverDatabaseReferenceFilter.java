@@ -19,9 +19,6 @@ package pl.mk5.gdx.fireapp.html.database;
 import pl.mk5.gdx.fireapp.database.FilterResolver;
 import pl.mk5.gdx.fireapp.database.FilterType;
 
-/**
- * Resolves filtering for javascript firebase db.
- */
 class ResolverDatabaseReferenceFilter implements FilterResolver<DatabaseReference, DatabaseReference> {
 
     private static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Number";

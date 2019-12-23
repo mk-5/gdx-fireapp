@@ -16,13 +16,6 @@
 
 package pl.mk5.gdx.fireapp.database;
 
-/**
- * Provides filtering to object {@code T} received in methods.
- * <p>
- *
- * @param <T> The type of target object
- * @param <R> The type of return object
- */
 public interface FilterResolver<T, R> {
     <V> R resolve(FilterType filterType, T target, V[] filterArguments);
 }

@@ -27,10 +27,8 @@ import pl.mk5.gdx.fireapp.distributions.AppDistribution;
 public class App implements AppDistribution {
 
     /**
-     * {@inheritDoc}
-     * <p>
      * Android Firebase SDK do not require any additional action for initialize app
-     * everything is configured automatically after app is started.
+     * everything is configured automatically.
      */
     @Override
     public void configure() {

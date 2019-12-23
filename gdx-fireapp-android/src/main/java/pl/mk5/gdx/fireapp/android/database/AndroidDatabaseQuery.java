@@ -21,18 +21,6 @@ import com.google.firebase.database.Query;
 
 import pl.mk5.gdx.fireapp.database.queries.GdxFireappQuery;
 
-/**
- * Provides flow for android firebase database call.
- * <p>
- * Flow is as follow:
- * <p>
- * - Gets {@code Query} instance and databasePath from {@link Database}.
- * - Applies filters if needed it
- * - Do some action on db
- * - Terminate query: clear given filters - if any - and call {@link Database#terminateOperation()}
- *
- * @param <R> Return type of {@link GdxFireappQuery#run()} method.
- */
 abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
     static final String SHOULD_BE_RUN_WITH_DATABASE_REFERENCE = "Set value should be call with DatabaseReference instance.";
 

@@ -20,22 +20,12 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.storage.DownloadUrl;
 import pl.mk5.gdx.fireapp.storage.FileMetadata;
 
-/**
- * Resolves transformation from UploadTaskSnapshot to FileMetadata
- */
 class SnapshotFileMetaDataResolver {
 
     private SnapshotFileMetaDataResolver() {
         //
     }
 
-
-    /**
-     * Resolves conversion from UploadTaskSnapshot to FileMetadata resolve.
-     *
-     * @param snapshot UploadTaskSnapshot from javascript, not null
-     * @return FileMetadata object filled with data
-     */
     static FileMetadata resolve(final UploadTaskSnapshot snapshot) {
         FileMetadata.Builder builder = new FileMetadata.Builder();
         FullMetaData metaData = snapshot.getMetaData();

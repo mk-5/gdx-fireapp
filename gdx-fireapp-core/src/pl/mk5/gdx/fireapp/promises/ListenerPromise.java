@@ -37,7 +37,7 @@ public interface ListenerPromise<T> extends Promise<T> {
     ListenerPromise<T> cancel();
 
     /**
-     * Start listening, do same logic as {@link Promise#subscribe()}
+     * Start listening, basically it's the same logic as {@link Promise#subscribe()}
      */
     ListenerPromise<T> listen();
 }

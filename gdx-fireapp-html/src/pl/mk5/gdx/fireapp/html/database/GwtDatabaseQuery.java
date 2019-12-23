@@ -24,9 +24,6 @@ import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.queries.GdxFireappQuery;
 import pl.mk5.gdx.fireapp.html.firebase.ScriptRunner;
 
-/**
- * Provides flow for html firebase call.
- */
 abstract class GwtDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
 
     protected ProviderJsFiltering providerJsFiltering;

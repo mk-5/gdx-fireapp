@@ -20,24 +20,12 @@ import com.badlogic.gdx.utils.reflect.Annotation;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Method;
 
-/**
- * Gets information from annotations.
- */
 public class AnnotationFinder {
 
     private AnnotationFinder() {
         //
     }
 
-    /**
-     * Find object methods annotation.
-     * <p>
-     * Looks at all object methods and returns first encountered annotation.
-     *
-     * @param annotationType Annotation type, not null
-     * @param object         Object to deal with, not null
-     * @return Annotation, may be null
-     */
     public static <T extends java.lang.annotation.Annotation> T getMethodAnnotation(Class<T> annotationType, Object object) {
         T result = null;
         Method[] methods = ClassReflection.getMethods(object.getClass());

@@ -19,12 +19,12 @@ package pl.mk5.gdx.fireapp.database;
 import java.util.Map;
 
 /**
- * Covers interface for converting database Maps to POJO
+ * Is responsible for conversion between database Maps to POJO
  */
 public interface FirebaseMapConverter {
 
     /**
-     * Transforms {@code Map<String,Object>} to {@code T object}.
+     * Convert {@code Map<String,Object>} to {@code T object}.
      * <p>
      *
      * @param map        Map which we want to transform.
@@ -35,7 +35,7 @@ public interface FirebaseMapConverter {
     <T> T convert(Map<String, Object> map, Class<T> wantedType);
 
     /**
-     * Transforms {@code object} to Map.
+     * Convert {@code object} to Map.
      * <p>
      * Should be inverse of {@link #convert(Map, Class)}
      *

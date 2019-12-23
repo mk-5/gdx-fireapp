@@ -16,9 +16,6 @@
 
 package pl.mk5.gdx.fireapp.database;
 
-/**
- * Keeps information about filter.
- */
 public class Filter {
     private FilterType filterType;
     private Object[] filterArguments;

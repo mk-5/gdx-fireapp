@@ -22,9 +22,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.ReadValueValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
-/**
- * Provides call to {@link com.google.firebase.database.Query#addListenerForSingleValueEvent(ValueEventListener)}.
- */
 class QueryReadValue<R> extends AndroidDatabaseQuery<R> {
 
     QueryReadValue(Database databaseDistribution, String databasePath) {

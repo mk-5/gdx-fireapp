@@ -23,9 +23,6 @@ import pl.mk5.gdx.fireapp.database.validators.RunTransactionValidator;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides setValue execution with firebase database reference.
- */
 class QueryRunTransaction<R> extends AndroidDatabaseQuery<R> {
 
     QueryRunTransaction(Database databaseDistribution, String databasePath) {

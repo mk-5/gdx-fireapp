@@ -21,9 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides call to {@link DatabaseReference#removeValue()} and {@link DatabaseReference#removeValue(DatabaseReference.CompletionListener)}.
- */
 class QueryRemoveValue extends AndroidDatabaseQuery<Void> {
 
     QueryRemoveValue(Database databaseDistribution, String databasePath) {

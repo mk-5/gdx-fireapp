@@ -22,9 +22,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.UpdateChildrenValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides update javascript execution.
- */
 class QueryUpdateChildren extends GwtDatabaseQuery {
 
     QueryUpdateChildren(Database databaseDistribution, String databasePath) {
@@ -46,17 +43,6 @@ class QueryUpdateChildren extends GwtDatabaseQuery {
         return new UpdateChildrenValidator();
     }
 
-    /**
-     * Writes multiple values to database at once.
-     * <p>
-     * JSON.parse is using here. It get object or primitive (for primitives types it is primitive wrapped by string ex. "1", "true") and returns object representation.
-     * Is one exception here - when stringValue is actually a string like "abc", JSON.parse will be throw error.
-     * <p>
-     * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#update">https://firebase.google.com/docs/reference/js/firebase.database.Reference#update</a>
-     *
-     * @param reference   Reference path, not null
-     * @param stringValue String value representation
-     */
     static native void update(String reference, String stringValue) /*-{
         var val;
         try{
@@ -67,14 +53,6 @@ class QueryUpdateChildren extends GwtDatabaseQuery {
         $wnd.firebase.database().ref(reference).update(val);
     }-*/;
 
-    /**
-     * Update multiple values in database with callback.
-     * <p>
-     * For more explanation look at {@link #update(String, String)}
-     *
-     * @param reference   Reference path, not null
-     * @param stringValue String value representation
-     */
     static native void updateWithPromise(String reference, String stringValue, FuturePromise promise) /*-{
         var val;
         try{

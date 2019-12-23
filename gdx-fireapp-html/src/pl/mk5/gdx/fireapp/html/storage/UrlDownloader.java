@@ -24,9 +24,6 @@ import com.google.gwt.xhr.client.XMLHttpRequest;
 
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides access to download url of firebase storage file.
- */
 class UrlDownloader {
 
     private final FuturePromise<byte[]> promise;
@@ -40,9 +37,6 @@ class UrlDownloader {
         xmlHttpRequest(downloadUrl);
     }
 
-    /**
-     * @param e Exception describes what was wrong during authorization.
-     */
     void onFail(Exception e) {
         promise.doFail(e);
     }

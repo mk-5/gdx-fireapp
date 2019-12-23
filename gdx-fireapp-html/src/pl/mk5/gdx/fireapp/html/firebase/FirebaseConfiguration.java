@@ -31,11 +31,6 @@ public class FirebaseConfiguration {
     private String rawHtml;
     private FirebaseConfigParser configParser;
 
-    /**
-     * Returns itself with html from {@code firebase-config.html} file.
-     *
-     * @return self
-     */
     public FirebaseConfiguration load() {
         Gdx.app.log(GdxFIRLogger.getLogTag(), "Loading firebase config...");
         if (!Gdx.files.internal("firebase-config.html").exists()) {
@@ -47,9 +42,6 @@ public class FirebaseConfiguration {
         return this;
     }
 
-    /**
-     * Injects lazy firebase loading inside GWT application.
-     */
     public void init() {
         if (rawHtml == null) {
             Gdx.app.error(GdxFIRLogger.getLogTag(), "You forgot about calling FirebaseConfiguration#init() first.");
@@ -62,9 +54,6 @@ public class FirebaseConfiguration {
                 .inject();
     }
 
-    /**
-     * @return Config parser, may be null.
-     */
     public FirebaseConfigParser getConfigParser() {
         return configParser;
     }

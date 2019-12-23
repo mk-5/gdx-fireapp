@@ -21,9 +21,6 @@ import com.badlogic.gdx.utils.Array;
 import pl.mk5.gdx.fireapp.database.DataListenersManager;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Keeps reference do DataListenersManager and provides static methods for javascript calls.
- */
 class GwtDataPromisesManager {
     private static final DataListenersManager<FuturePromise> listenersManager = new DataListenersManager<>();
 
@@ -31,30 +28,14 @@ class GwtDataPromisesManager {
         //
     }
 
-    /**
-     * @param refPath Reference path, not null
-     * @param promise Listener, may be null
-     */
     static void addDataPromise(String refPath, FuturePromise promise) {
         listenersManager.addNewListener(refPath, promise);
     }
 
-    /**
-     * Gets true if listener for given path is already attached.
-     *
-     * @param referencePath Reference path, not null
-     * @return True if listener is already attached.
-     */
     static boolean hasPromise(String referencePath) {
         return listenersManager.hasListeners(referencePath);
     }
 
-    /**
-     * Calls listener added by {@code addDataPromise}.
-     *
-     * @param refPath  Database ref path
-     * @param newValue New value as json string
-     */
     @SuppressWarnings("unchecked")
     static void callPromise(String refPath, String newValue) {
         if (!listenersManager.hasListeners(refPath))
@@ -64,11 +45,6 @@ class GwtDataPromisesManager {
             promise.doComplete(newValue);
     }
 
-    /**
-     * Remove listener.
-     *
-     * @param refPath Database reference path
-     */
     static void removeDataPromise(String refPath) {
         listenersManager.removeListenersForPath(refPath);
     }

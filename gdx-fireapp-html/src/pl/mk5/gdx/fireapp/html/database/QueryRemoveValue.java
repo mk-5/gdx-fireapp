@@ -19,9 +19,6 @@ package pl.mk5.gdx.fireapp.html.database;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides removeValue javascript execution.
- */
 class QueryRemoveValue extends GwtDatabaseQuery {
 
     QueryRemoveValue(Database databaseDistribution, String databasePath) {
@@ -42,24 +39,10 @@ class QueryRemoveValue extends GwtDatabaseQuery {
         return null;
     }
 
-    /**
-     * Calls firebase.database().remove method.
-     * <p>
-     * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove">https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove</a>
-     *
-     * @param reference Reference path, not null
-     */
     public static native void remove(String reference) /*-{
         $wnd.firebase.database().ref(reference).remove();
     }-*/;
 
-    /**
-     * Calls firebase.database().remove
-     * <p>
-     * You can read more here: <a href="https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove">https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove</a>
-     *
-     * @param reference Reference path, not null
-     */
     public static native void removeWithPromise(String reference, FuturePromise promise) /*-{
         $wnd.firebase.database().ref(reference).remove().then(function(){
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);

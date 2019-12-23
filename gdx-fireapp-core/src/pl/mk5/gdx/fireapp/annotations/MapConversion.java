@@ -25,7 +25,8 @@ import pl.mk5.gdx.fireapp.GdxFIRDatabase;
 import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
 
 /**
- * Firebase supports only the Map structure for Pojo so here you can indicate conversion from Map to POJO.
+ * Firebase supports only the Map structure for Pojo. To convert received Map instance into Pojo representation
+ * you need to use this annotation.
  * <p>
  * You can customize map conversions by {@link GdxFIRDatabase#setMapConverter(FirebaseMapConverter)}
  * Some examples:
@@ -42,14 +43,12 @@ import pl.mk5.gdx.fireapp.database.FirebaseMapConverter;
  * \@MapConversion(User.class)
  * doSomething(new Callback<User>){}...
  * }
- * <p>
- * TODO - should be PojoConversion?
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface MapConversion {
     /**
-     * @return The type to which Map are converted.
+     * @return The requested type
      */
     Class<?> value();
 }

@@ -18,9 +18,6 @@ package pl.mk5.gdx.fireapp.html.database;
 
 import pl.mk5.gdx.fireapp.database.SortingFilteringProvider;
 
-/**
- * Applies filtering and sorting to the js database reference.
- */
 class ProviderJsFiltering extends SortingFilteringProvider<DatabaseReference, ResolverDatabaseReferenceFilter, ResolverDatabaseReferenceOrderBy> {
     @Override
     public ResolverDatabaseReferenceFilter createFilterResolver() {

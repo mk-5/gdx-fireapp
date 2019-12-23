@@ -23,21 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Gets data from DatabaseSnapshot with ordering preserved.
- */
 class ResolverDataSnapshotList {
 
     private ResolverDataSnapshotList() {
         //
     }
 
-    /**
-     * Gets children's from DataSnapshot and puts them into new ArrayList.
-     *
-     * @param dataSnapshot DataSnapshot, not null
-     * @return New instance of List with ordering preserved from DataSnapshot
-     */
     @SuppressWarnings("unchecked")
     static List resolve(DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue() == null) {
@@ -60,13 +51,6 @@ class ResolverDataSnapshotList {
         return result;
     }
 
-    /**
-     * Decides if DataSnapshot value should be converted to ordered list.
-     *
-     * @param dataType     Predicted data type of given snapshot value, not null
-     * @param dataSnapshot DataSnapshot to check, not null
-     * @return True if ordering should be preserved
-     */
     static boolean shouldResolveOrderBy(Class<?> dataType, DataSnapshot dataSnapshot) {
         return (ClassReflection.isAssignableFrom(List.class, dataType) || ClassReflection.isAssignableFrom(Map.class, dataType))
                 && dataSnapshot.getChildrenCount() > 0;

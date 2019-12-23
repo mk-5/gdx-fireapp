@@ -21,9 +21,6 @@ import com.google.firebase.database.Query;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByResolver;
 
-/**
- * Applies OrderByClause to the Query instance.
- */
 class ResolverQueryOrderBy implements OrderByResolver<Query, Query> {
 
     private final static String MISSING_ARGUMENT = "Order by argument is missing";

@@ -19,9 +19,6 @@ package pl.mk5.gdx.fireapp.ios.database;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import pl.mk5.gdx.fireapp.database.SortingFilteringProvider;
 
-/**
- * Provides decision between call {@code FIRDatabaseReference} or {@code FIRDatabaseQuery} based at current query context.
- */
 class ProviderFIRDatabaseQueryFiltering extends SortingFilteringProvider<FIRDatabaseQuery, ResolverFIRQueryFilter, ResolverFIRQueryOrderBy> {
 
     @Override

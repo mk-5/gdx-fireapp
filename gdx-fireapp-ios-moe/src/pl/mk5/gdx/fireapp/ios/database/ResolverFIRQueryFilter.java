@@ -20,9 +20,6 @@ import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import pl.mk5.gdx.fireapp.database.FilterResolver;
 import pl.mk5.gdx.fireapp.database.FilterType;
 
-/**
- * Provides filtering for {@code DatabaseReference} instance.
- */
 class ResolverFIRQueryFilter implements FilterResolver<FIRDatabaseQuery, FIRDatabaseQuery> {
 
     private static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
