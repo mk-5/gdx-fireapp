@@ -24,7 +24,7 @@ import com.badlogic.gdx.math.MathUtils;
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
 /**
- * Helper for dealing with transforming {@code byte[]} to {@code TextureRegion}.
+ * Helper for dealing with transformation between {@code byte[]} to {@code TextureRegion}.
  */
 public class ImageHelper {
 

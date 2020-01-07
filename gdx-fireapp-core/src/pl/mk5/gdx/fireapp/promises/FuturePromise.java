@@ -82,11 +82,6 @@ public class FuturePromise<T> implements Promise<T> {
         return this;
     }
 
-    /**
-     * Sets fail bi-consumer.
-     *
-     * @param consumer "Fail" bi-consumer, will be call when promise had been failed.
-     */
     @Override
     public synchronized FuturePromise<T> fail(BiConsumer<String, ? super Throwable> consumer) {
         if (consumer == null) throw new IllegalArgumentException();
@@ -98,12 +93,6 @@ public class FuturePromise<T> implements Promise<T> {
         return this;
     }
 
-    /**
-     * Add 'then' promise which will be invoke with {@link #doComplete(Object)}
-     *
-     * @param promise The future promise, not null
-     * @return Given promise
-     */
     @Override
     @SuppressWarnings("unchecked")
     public synchronized <R> FuturePromise<R> then(Promise<R> promise) {
@@ -122,12 +111,6 @@ public class FuturePromise<T> implements Promise<T> {
         return (FuturePromise<R>) promise;
     }
 
-    /**
-     * Sets this given promise after this promise.
-     *
-     * @param promise The future promise, not null
-     * @return self
-     */
     @Override
     @SuppressWarnings("unchecked")
     public synchronized Promise<T> after(Promise<?> promise) {
@@ -159,11 +142,6 @@ public class FuturePromise<T> implements Promise<T> {
         return then(thenConsumer).subscribe();
     }
 
-    /**
-     * Resolves success of this promise
-     *
-     * @param result The promise result, may be null
-     */
     public synchronized void doComplete(T result) {
         try {
             if (state != INIT && state != COMPLETE) {
@@ -192,12 +170,6 @@ public class FuturePromise<T> implements Promise<T> {
         }
     }
 
-    /**
-     * Resolves fail of  this promise
-     *
-     * @param reason    The fail reason, may be null
-     * @param throwable The fail exception, may be null
-     */
     public synchronized void doFail(String reason, Throwable throwable) {
         if (state != INIT && state != FAIL) {
             return;
@@ -234,15 +206,6 @@ public class FuturePromise<T> implements Promise<T> {
         return parentPromise;
     }
 
-    /**
-     * Create promise with execution.
-     * <p>
-     * Execution should be included inside the {@code consumer#accept}
-     *
-     * @param consumer The execution consumer, not nul
-     * @param <R>      THe promise return type
-     * @return new promise
-     */
     public static synchronized <R> FuturePromise<R> when(final Consumer<FuturePromise<R>> consumer) {
         final FuturePromise<R> promise = new FuturePromise<>();
         promise.execution = new Runnable() {
@@ -262,14 +225,6 @@ public class FuturePromise<T> implements Promise<T> {
         return promise;
     }
 
-    /**
-     * Creates empty promise.
-     * <p>
-     * Promise will be automatically complete
-     *
-     * @param <R> The promise type
-     * @return new empty promise
-     */
     public static <R> FuturePromise<R> empty() {
         return when(new Consumer<FuturePromise<R>>() {
             @Override

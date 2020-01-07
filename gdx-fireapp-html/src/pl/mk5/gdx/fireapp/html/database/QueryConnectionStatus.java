@@ -21,9 +21,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnConnectionValidator;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides connection-status ask javascript execution.
- */
 class QueryConnectionStatus extends GwtDatabaseQuery {
 
     QueryConnectionStatus(Database databaseDistribution) {
@@ -51,15 +48,6 @@ class QueryConnectionStatus extends GwtDatabaseQuery {
         return new OnConnectionValidator();
     }
 
-    /**
-     * Set connected/disconnected listener.
-     * <p>
-     * You can read more here: <a href="https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state">https://firebase.google.com/docs/database/web/offline-capabilities#section-connection-state</a>
-     * <p>
-     * TODO - check doComplete with enum here
-     *
-     * @param promise FuturePromise, not null
-     */
     public static native void onConnect(FuturePromise promise) /*-{
         $wnd.firebase.database().ref(".info/connected").on("value", function(snap){
             if (snap.val() === true) {

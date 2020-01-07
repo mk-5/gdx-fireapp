@@ -19,21 +19,12 @@ package pl.mk5.gdx.fireapp.android.auth;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
-/**
- * Gets string from R by name.
- */
 class StringResource {
 
     private StringResource() {
 
     }
 
-    /**
-     * Gets value from R.string by name.
-     *
-     * @param name The resource name, not null
-     * @return The R.string value
-     */
     static String getStringResourceByName(String name) {
         int id = ((AndroidApplication) Gdx.app).getResources().getIdentifier(name, "string", ((AndroidApplication) Gdx.app).getPackageName());
         return ((AndroidApplication) Gdx.app).getResources().getString(id);

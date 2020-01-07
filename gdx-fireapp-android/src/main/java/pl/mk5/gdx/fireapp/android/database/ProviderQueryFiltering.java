@@ -20,9 +20,6 @@ import com.google.firebase.database.Query;
 
 import pl.mk5.gdx.fireapp.database.SortingFilteringProvider;
 
-/**
- * Provides filter and order-by application into given {@code Query} instance.
- */
 class ProviderQueryFiltering extends SortingFilteringProvider<Query, ResolverQueryFilter, ResolverQueryOrderBy> {
 
     @Override

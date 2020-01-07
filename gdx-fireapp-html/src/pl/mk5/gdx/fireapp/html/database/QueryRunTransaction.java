@@ -21,9 +21,6 @@ import pl.mk5.gdx.fireapp.database.validators.RunTransactionValidator;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides transaction javascript execution.
- */
 class QueryRunTransaction<R> extends GwtDatabaseQuery<R> {
 
     QueryRunTransaction(Database databaseDistribution, String databasePath) {
@@ -41,12 +38,6 @@ class QueryRunTransaction<R> extends GwtDatabaseQuery<R> {
         return new RunTransactionValidator();
     }
 
-    /**
-     * Modify database data in single transaction.
-     *
-     * @param reference    Reference path, not null
-     * @param dataModifier Json data modifier, not null
-     */
     public static native void transaction(String reference, JsonDataModifier dataModifier, FuturePromise promise) /*-{
         $wnd.firebase.database().ref(reference).transaction(function(currentData){
             var newData = dataModifier.@pl.mk5.gdx.fireapp.html.database.JsonDataModifier::modify(Ljava/lang/String;)(JSON.stringify(currentData));

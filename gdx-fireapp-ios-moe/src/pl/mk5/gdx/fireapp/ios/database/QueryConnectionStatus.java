@@ -20,7 +20,6 @@ import apple.foundation.NSNumber;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import bindings.google.firebasedatabase.FIRDatabase;
 import bindings.google.firebasedatabase.FIRDatabaseQuery;
-import bindings.google.firebasedatabase.FIRDatabaseReference;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
@@ -28,9 +27,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnConnectionValidator;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides call to {@link FIRDatabaseReference#observeEventTypeWithBlock(long, FIRDatabaseReference.Block_observeEventTypeWithBlock)}  ()} for "".info/connected""
- */
 class QueryConnectionStatus extends DatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
 

@@ -22,9 +22,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.SetValueValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides setValue execution with firebase database reference.
- */
 class QuerySetValue extends AndroidDatabaseQuery<Void> {
 
     QuerySetValue(Database databaseDistribution, String databasePath) {

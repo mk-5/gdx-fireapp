@@ -42,11 +42,6 @@ class QueryOnDataChange extends GwtDatabaseQuery {
         return new OnDataValidator();
     }
 
-    /**
-     * Attaches listener from {@link GwtDataPromisesManager} to given reference.
-     *
-     * @param reference Reference path, not null
-     */
     public static native void onValue(String reference, DatabaseReference databaseReference) /*-{
          var ref = reference;
          var orderByCalled = databaseReference.orderByCalled_;
@@ -68,13 +63,6 @@ class QueryOnDataChange extends GwtDatabaseQuery {
         });
     }-*/;
 
-    /**
-     * Remove value listeners for given path.
-     * <p>
-     * If listener was not declared after - all value listeners for given path will be cleared.
-     *
-     * @param reference Reference path, not null
-     */
     public static native void offValue(String reference) /*-{
         $wnd.valueListeners = $wnd.valueListeners || {};
         $wnd.valueListenersOrderByCalled = $wnd.valueListenersOrderByCalled || {};

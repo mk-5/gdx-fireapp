@@ -18,9 +18,6 @@ package pl.mk5.gdx.fireapp.database;
 
 import com.badlogic.gdx.utils.Array;
 
-/**
- * Gives information about type origin.
- */
 public class JavaCoreClassDetector {
 
     private static final Array<String> kotlinPrimitivesNames = new Array<>();
@@ -33,12 +30,6 @@ public class JavaCoreClassDetector {
         //
     }
 
-    /**
-     * Check if given type package name starts with 'java'.
-     *
-     * @param type Type to examination, not null
-     * @return True if type is core java class.
-     */
     public static boolean isJavaCoreClass(Class<?> type) {
         return type.getName().startsWith("java") || kotlinPrimitivesNames.contains(type.getName(), false);
     }

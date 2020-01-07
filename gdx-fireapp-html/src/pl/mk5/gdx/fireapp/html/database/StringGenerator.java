@@ -20,23 +20,12 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
-/**
- * Transforms data to string.
- */
 public class StringGenerator {
 
     private StringGenerator() {
         //
     }
 
-    /**
-     * Returns JSON string representation of object.
-     * <p>
-     * It using libgdx {@link Json} class.
-     *
-     * @param object Any object
-     * @return JSON string representation of {@code object}
-     */
     public static String dataToString(Object object) {
         if (isPrimitiveType(object))
             return object.toString();

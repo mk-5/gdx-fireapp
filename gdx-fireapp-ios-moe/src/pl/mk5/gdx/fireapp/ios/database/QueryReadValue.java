@@ -16,15 +16,11 @@
 
 package pl.mk5.gdx.fireapp.ios.database;
 
-import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import bindings.google.firebasedatabase.enums.FIRDataEventType;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.ReadValueValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
-/**
- * Provides call to {@link FIRDatabaseQuery#observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeSingleEventOfTypeAndPreviousSiblingKeyWithBlockWithCancelBlock_2)}.
- */
 class QueryReadValue<R> extends DatabaseQuery<R> {
 
     QueryReadValue(Database databaseDistribution, String databasePath) {

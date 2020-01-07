@@ -32,13 +32,6 @@ class FileMetadataBuilder {
         this.firMetadata = firMetadata;
     }
 
-    /**
-     * Transforms {@code FIRStorageMetadata} to {@code FileMetadata}.
-     * <p>
-     * Transformation is needed because of need of shared code between modules.
-     *
-     * @return FileMetadata created of base of given {@code firMetadata}, not null.
-     */
     FileMetadata build(final FIRStorageReference firStorage) {
         // UpdateTimeMillis is specified in seconds so have to multiply it by 1000.
         /** https://developer.apple.com/documentation/foundation/timeinterval */

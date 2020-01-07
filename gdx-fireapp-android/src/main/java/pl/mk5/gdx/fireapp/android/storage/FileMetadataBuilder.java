@@ -26,11 +26,6 @@ import pl.mk5.gdx.fireapp.functional.Consumer;
 import pl.mk5.gdx.fireapp.storage.DownloadUrl;
 import pl.mk5.gdx.fireapp.storage.FileMetadata;
 
-/**
- * Transforms {@code UploadTask.TaskSnapshot} to {@code FileMetadata}.
- * <p>
- * Transformation is needed because of need of shared code between modules.
- */
 class FileMetadataBuilder {
 
     private final UploadTask.TaskSnapshot uploadTask;

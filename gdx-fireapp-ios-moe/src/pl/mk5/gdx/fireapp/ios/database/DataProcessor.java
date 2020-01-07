@@ -30,34 +30,12 @@ import apple.foundation.NSString;
 import pl.mk5.gdx.fireapp.GdxFIRLogger;
 import pl.mk5.gdx.fireapp.ios.exceptions.ConvertingException;
 
-/**
- * Is responsible for transform ios objects to normal Java objects.
- * <p>
- * Following transformations are going on (in both direction):
- * <ul>
- * <li>{@link NSNumber} to {@link Number} or {@link Boolean}
- * <li>{@link NSString} to {@link String}
- * <li>{@link NSArray} to {@link List}
- * <li>{@link NSDictionary} to {@link Map} or to POJO object
- * </ul>
- * <p>
- * In case of transform from {@link NSDictionary} to POJO object,
- * {@link NSDictionary} is transformed to Json string then it is transformed by {@link com.badlogic.gdx.utils.Json#fromJson(Class, String)}
- */
 class DataProcessor {
 
     private DataProcessor() {
 
     }
 
-    /**
-     * Transforms ios object to java with preserved GenericType.
-     *
-     * @param iosObject  iOS object, in most cases instance of {@link NSObject}
-     * @param wantedType Wanted type, not null
-     * @param <T>        Type of object which you want to get - needed by transforming types flow.
-     * @return {@code iosObject} java representation. For ex. {@link NSString} was transformed to {@link String}
-     */
     @SuppressWarnings("unchecked")
     static <T> T iosDataToJava(Object iosObject, Class<T> wantedType) {
         Class resultType = iosObject.getClass();
@@ -88,15 +66,6 @@ class DataProcessor {
         return result;
     }
 
-    /**
-     * Transforms ios object to java primitive type object.
-     * TODO - better docs.
-     *
-     * @param data       Object instance to be transformed.
-     * @param wantedType Type of object which should be returned after transformation.
-     * @param <T>        Generic type of wanted data.
-     * @return Transformed object.  If {@link NSObject} instance has passed object was transformed - otherwise {@code data} itself was returned.
-     */
     @SuppressWarnings("unchecked")
     static <T> T processPrimitiveData(Object data, Class<T> wantedType) {
         T result = null;
@@ -123,12 +92,6 @@ class DataProcessor {
         return result;
     }
 
-    /**
-     * Transforms ios object to java.
-     *
-     * @param iosObject Any java object got by multi-os-engine classes. In most cases it should be instance of {@link NSObject}
-     * @return Java object which is equals to multi-os-engine object representation.
-     */
     @SuppressWarnings("unchecked")
     static Object iosDataToJava(Object iosObject) {
         if (iosObject instanceof NSString) {
@@ -143,12 +106,6 @@ class DataProcessor {
         return iosObject;
     }
 
-    /**
-     * Transforms java object to ios.
-     *
-     * @param javaObject Any java object instance.
-     * @return {@link NSObject} instance equals to {@code javaObject}.
-     */
     @SuppressWarnings("unchecked")
     static NSObject javaDataToIos(Object javaObject) {
         if (javaObject instanceof String) {

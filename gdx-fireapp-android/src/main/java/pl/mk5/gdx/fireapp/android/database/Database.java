@@ -271,12 +271,6 @@ public class Database implements DatabaseDistribution, QueryProvider {
         databaseReference().keepSynced(synced);
     }
 
-    /**
-     * Simple getter of {@link DatabaseReference} which this {@link Database} instance will be deal with.
-     *
-     * @return FirebaseSDK Database reference. Every action will be deal with it.
-     * @throws DatabaseReferenceNotSetException It is thrown when user forgot to call {@link #inReference(String)}
-     */
     DatabaseReference databaseReference() {
         checkDatabaseReference();
         return databaseReference;
@@ -299,8 +293,6 @@ public class Database implements DatabaseDistribution, QueryProvider {
 
     /**
      * Reset {@link #databaseReference} and {@link #databasePath} to initial state.
-     * After each flow-terminate operation{@link #databaseReference} and {@link #databasePath} should be reset the initial value,
-     * it forces the users to call {@link #inReference(String)} after each flow-terminate operation.
      * <p>
      * Flow-terminate operations are: <uL>
      * <li>{@link #setValue(Object)}</li>
@@ -319,11 +311,6 @@ public class Database implements DatabaseDistribution, QueryProvider {
         filters.clear();
     }
 
-    /**
-     * Getter for databasePath.
-     *
-     * @return Database path, may be null
-     */
     String getDatabasePath() {
         return databasePath;
     }

@@ -17,23 +17,12 @@ package pl.mk5.gdx.fireapp.android.analytics;
 
 import android.os.Bundle;
 
-/**
- * The helper methods for {@link android.os.Bundle}.
- */
 class BundleHelper {
 
     private BundleHelper() {
         //
     }
 
-    /**
-     * Put numeric value from string inside given bundle.
-     * If {@code number} do not contain numeric value - nothing will happen
-     *
-     * @param bundle Bundle in which you want to put String numeric value.
-     * @param key    Bundle key where you want to put the new value.
-     * @param number String which should contain numeric value.
-     */
     static void putNumberParam(Bundle bundle, String key, String number) {
         String[] types = {"int", "long", "double", "float"};
         boolean found = false;

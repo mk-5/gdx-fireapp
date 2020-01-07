@@ -33,11 +33,6 @@ public class FirebaseConfigParser {
     private String firebaseScriptSrc;
     private String initializationScript;
 
-    /**
-     * Parse html configuration to {@code firebaseScriptSrc} and {@code initializationScri[t}
-     *
-     * @param rawHtml HTML from firebase console
-     */
     public FirebaseConfigParser(String rawHtml) {
         this.rawHtml = rawHtml;
         firebaseScriptSrc = parseFirebaseScriptSrc();
@@ -52,9 +47,6 @@ public class FirebaseConfigParser {
         return initializationScript;
     }
 
-    /**
-     * @return Laz firebase initialization script.
-     */
     public String getLazyLoadingInitializationScript() {
         return "(function(){\n" +
                 "var script = document.createElement(\"script\");\n" +
@@ -66,7 +58,7 @@ public class FirebaseConfigParser {
                 "}());";
     }
 
-    // TODO - allow to add more then one script (after sdk 5.0 should be one script per firebase package)
+    // TODO - allow to add more then one script (after sdk 5.0 only one script should exist for firebase package)
     private String parseFirebaseInitializationScript() {
         Pattern pattern = Pattern.compile("<script>((.|\\n|\\rn|\\r)*?)</script>");
         Matcher matcher = pattern.matcher(rawHtml);

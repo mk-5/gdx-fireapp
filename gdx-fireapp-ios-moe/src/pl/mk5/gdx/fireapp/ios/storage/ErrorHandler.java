@@ -19,13 +19,6 @@ package pl.mk5.gdx.fireapp.ios.storage;
 import apple.foundation.NSError;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Wraps error handling flow for different callbacks type.
- * <p>
- * Wrapped callbacks:
- * <ul>
- * <li>{@link FuturePromise}
- */
 class ErrorHandler {
     static boolean handleError(NSError error, FuturePromise promise) {
         if (error != null) {

@@ -26,9 +26,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnChildValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 
-/**
- * Provides call to {@link FIRDatabaseQuery#observeEventTypeWithBlockWithCancelBlock(long, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_1, FIRDatabaseQuery.Block_observeEventTypeWithBlockWithCancelBlock_2)}.
- */
 class QueryOnChildChange<R> extends DatabaseQuery<R> {
 
     QueryOnChildChange(Database databaseDistribution, String databasePath) {

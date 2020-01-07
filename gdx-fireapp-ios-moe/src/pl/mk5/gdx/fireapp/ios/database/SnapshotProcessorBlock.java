@@ -40,7 +40,6 @@ class SnapshotProcessorBlock implements FIRDatabaseQuery.Block_observeSingleEven
     @SuppressWarnings("unchecked")
     private void process(FIRDataSnapshot arg0, String arg1) {
         if (arg0.value() == null) {
-            // TODO - consider about this fail
             promise.doFail(new Exception(GIVEN_DATABASE_PATH_RETURNED_NULL_VALUE));
         } else {
             Object data = arg0.value();

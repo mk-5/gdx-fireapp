@@ -19,13 +19,6 @@ package pl.mk5.gdx.fireapp.database;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
-/**
- * Menages data listeners for db.
- * <p>
- * Keeps all current listeners inside {@link #listeners}
- *
- * @param <T> Data listener type
- */
 public class DataListenersManager<T> {
     private final ObjectMap<String, Array<T>> listeners;
 

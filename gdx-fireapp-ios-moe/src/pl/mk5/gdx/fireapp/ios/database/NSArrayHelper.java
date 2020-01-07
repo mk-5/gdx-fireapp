@@ -23,22 +23,8 @@ import apple.NSObject;
 import apple.foundation.NSArray;
 import apple.foundation.NSMutableArray;
 
-/**
- * Transforms {@code NSArray} and {@code List}.
- * <p>
- * Helper class that provides transformation from {@link NSArray} to {@link List}
- * and {@link List} to {@link NSArray}
- */
 class NSArrayHelper {
 
-    /**
-     * Transforms {@code nsArray} to java List object.
-     * <p>
-     * {@link DataProcessor#iosDataToJava(Object)} method will be call to transform each {@code nsArray} value.
-     *
-     * @param nsArray {@link NSArray} you want to transform.
-     * @return {@code nsArray} object  transformed to {@code List} with normal java Object instances inside, not null.
-     */
     @SuppressWarnings("unchecked")
     static List toList(NSArray<NSObject> nsArray) {
         List list = new ArrayList();
@@ -49,14 +35,6 @@ class NSArrayHelper {
         return list;
     }
 
-    /**
-     * Transforms {@code list} to NSArray object.
-     * <p>
-     * {@link DataProcessor#javaDataToIos(Object)} method will be call to transform each {@code list} value.
-     *
-     * @param list {@link List} you want to transform.
-     * @return {@code list} object transformed to {@code NSMutableArray} with NSObject instances inside, not null.
-     */
     @SuppressWarnings("unchecked")
     static NSMutableArray<NSObject> toArray(List list) {
         NSMutableArray<NSObject> nsMutableArray = (NSMutableArray<NSObject>) NSMutableArray.alloc().init();

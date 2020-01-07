@@ -17,7 +17,7 @@
 package pl.mk5.gdx.fireapp.exceptions;
 
 /**
- * Throws when database reference has not been set yet.
+ * It's thrown when database reference has not been set yet.
  */
 public class DatabaseReferenceNotSetException extends RuntimeException {
     public DatabaseReferenceNotSetException(String msg) {

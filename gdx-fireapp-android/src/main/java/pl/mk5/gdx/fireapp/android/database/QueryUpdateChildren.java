@@ -24,9 +24,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.UpdateChildrenValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides {@link DatabaseReference#updateChildren(Map)} execution with firebase database reference.
- */
 class QueryUpdateChildren extends AndroidDatabaseQuery<Void> {
 
     QueryUpdateChildren(Database databaseDistribution, String databasePath) {

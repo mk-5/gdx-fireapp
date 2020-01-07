@@ -19,7 +19,7 @@ package pl.mk5.gdx.fireapp.exceptions;
 import pl.mk5.gdx.fireapp.PlatformDistributor;
 
 /**
- * Throws when something is wrong with environment.
+ * It's thrown when something is wrong with environment.
  * <p>
  * For ex. can't find class given by {@link PlatformDistributor#getIOSClassName()} or {@link PlatformDistributor#getAndroidClassName()}
  */

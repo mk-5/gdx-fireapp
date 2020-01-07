@@ -20,9 +20,6 @@ import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.database.validators.ReadValueValidator;
 import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
-/**
- * Provides setValue execution.
- */
 class QueryReadValue<R> extends GwtDatabaseQuery<R> {
 
     QueryReadValue(Database databaseDistribution, String databasePath) {
@@ -41,12 +38,6 @@ class QueryReadValue<R> extends GwtDatabaseQuery<R> {
         return new ReadValueValidator();
     }
 
-    /**
-     * Gets some data from firebase and returns value parsed by JSON.stringify
-     * <p>
-     *
-     * @param databaseReference DatabaseReference path, not null
-     */
     static native void once(DatabaseReference databaseReference, ConverterPromise promise) /*-{
         var orderByCalled = databaseReference.orderByCalled_;
         databaseReference.once("value").then(function(snapshot){

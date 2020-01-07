@@ -20,9 +20,6 @@ import bindings.google.firebasedatabase.FIRDatabaseQuery;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByResolver;
 
-/**
- * Applies OrderByClause to the FIRDatabaseQuery instance.
- */
 class ResolverFIRQueryOrderBy implements OrderByResolver<FIRDatabaseQuery, FIRDatabaseQuery> {
     @Override
     public FIRDatabaseQuery resolve(OrderByClause orderByClause, FIRDatabaseQuery target) {

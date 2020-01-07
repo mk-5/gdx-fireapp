@@ -26,17 +26,8 @@ import apple.foundation.NSDictionary;
 import bindings.google.firebasedatabase.FIRDataSnapshot;
 import pl.mk5.gdx.fireapp.GdxFIRLogger;
 
-/**
- * Gets data from FIRDataSnapshot with ordering preserved.
- */
 class ResolverFIRDataSnapshotList {
 
-    /**
-     * Gets children's from FIRDataSnapshot and puts them into new ArrayList.
-     *
-     * @param dataSnapshot DataSnapshot, not null
-     * @return New instance of List with ordering preserved from DataSnapshot
-     */
     @SuppressWarnings("unchecked")
     static List resolve(FIRDataSnapshot dataSnapshot) {
         List result = new ArrayList<>();
@@ -61,11 +52,6 @@ class ResolverFIRDataSnapshotList {
         return result;
     }
 
-    /**
-     * Decides if FIRDataSnapshot value should be converted to ordered list.
-     *
-     * @param dataSnapshot FIRDataSnapshot to check, not null
-     */
     static boolean shouldResolveList(FIRDataSnapshot dataSnapshot) {
         GdxFIRLogger.log("Should resolve list, "
                 + "children: " + dataSnapshot.childrenCount());

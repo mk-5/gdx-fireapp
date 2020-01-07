@@ -20,9 +20,6 @@ import bindings.google.firebasedatabase.FIRDatabaseReference;
 import pl.mk5.gdx.fireapp.database.validators.ArgumentsValidator;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides call to {@link FIRDatabaseReference#removeValue()}.
- */
 class QueryRemoveValue extends DatabaseQuery<Void> {
 
     QueryRemoveValue(Database databaseDistribution, String databasePath) {

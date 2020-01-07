@@ -21,24 +21,12 @@ import com.google.firebase.database.Query;
 import pl.mk5.gdx.fireapp.database.FilterResolver;
 import pl.mk5.gdx.fireapp.database.FilterType;
 
-/**
- * Provides filtering for {@code Query} instance.
- */
 class ResolverQueryFilter implements FilterResolver<Query, Query> {
 
     private static final String WRONG_ARGUMENT_TYPE = "Wrong argument type. Available type is: Integer.";
     private static final String WRONG_ARGUMENT_TYPE2 = "Wrong argument type. Available types are: String, Boolean, Double.";
     private static final String MISSING_FILTER_ARGUMENTS = "Missing filter arguments.";
 
-    /**
-     * Apply filtering to the database ref and return appropriate query instance.
-     *
-     * @param filterType      Filter type which will be applied
-     * @param target          Target DatabaseReference instance
-     * @param filterArguments Arguments for filtering for ex. 100 or some String key
-     * @param <V>             Type for filterArgument, one from following: Integer, String, Double, Boolean
-     * @return Query with filtering applied
-     */
     @Override
     public <V> Query resolve(FilterType filterType, Query target, V... filterArguments) {
         if (filterArguments.length == 0)

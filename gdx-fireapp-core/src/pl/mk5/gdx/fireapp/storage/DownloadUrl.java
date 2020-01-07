@@ -18,10 +18,6 @@ package pl.mk5.gdx.fireapp.storage;
 
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
-/**
- * Holds reference to the download url with support for async fetch.
- * <p>
- */
 public class DownloadUrl {
 
     private final Consumer<Consumer<String>> urlConsumer;
@@ -38,12 +34,7 @@ public class DownloadUrl {
     public DownloadUrl(Consumer<Consumer<String>> urlConsumer) {
         this.urlConsumer = urlConsumer;
     }
-
-    /**
-     * Get download url, the url may be null.
-     *
-     * @param urlConsumer The url consumer, not null
-     */
+    
     public void getUrl(Consumer<String> urlConsumer) {
         this.urlConsumer.accept(urlConsumer);
     }

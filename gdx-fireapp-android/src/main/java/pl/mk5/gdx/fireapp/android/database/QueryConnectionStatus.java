@@ -18,7 +18,6 @@ package pl.mk5.gdx.fireapp.android.database;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -30,9 +29,6 @@ import pl.mk5.gdx.fireapp.database.validators.OnConnectionValidator;
 import pl.mk5.gdx.fireapp.promises.FutureListenerPromise;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides asking for connection status.
- */
 class QueryConnectionStatus extends AndroidDatabaseQuery<ConnectionStatus> {
     private static final String CONNECTED_REFERENCE = ".info/connected";
     private static final String CONNECTION_LISTENER_CANCELED = "Connection listener was canceled";
@@ -76,10 +72,6 @@ class QueryConnectionStatus extends AndroidDatabaseQuery<ConnectionStatus> {
         }
     }
 
-    /**
-     * Wrapper for {@link ValueEventListener} used when need to deal with {@link DatabaseReference#addValueEventListener(ValueEventListener)}
-     * and getting information from {@code .info/connected} path.
-     */
     private static class ConnectionValueListener implements ValueEventListener {
 
         private FuturePromise promise;

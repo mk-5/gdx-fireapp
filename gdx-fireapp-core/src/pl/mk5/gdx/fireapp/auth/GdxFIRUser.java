@@ -21,9 +21,6 @@ import pl.mk5.gdx.fireapp.PlatformDistributor;
 import pl.mk5.gdx.fireapp.distributions.AuthUserDistribution;
 import pl.mk5.gdx.fireapp.promises.Promise;
 
-/**
- * Distribution for Firebase user methods.
- */
 class GdxFIRUser extends PlatformDistributor<AuthUserDistribution> implements AuthUserDistribution {
 
     @Override

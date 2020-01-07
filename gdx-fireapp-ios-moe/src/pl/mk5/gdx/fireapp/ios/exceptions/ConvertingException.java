@@ -17,7 +17,7 @@
 package pl.mk5.gdx.fireapp.ios.exceptions;
 
 /**
- * Throws when can't convert data from ios to java object or opposite way.
+ * Thrown when conversion between moe and java is not possible
  */
 public class ConvertingException extends RuntimeException {
     public ConvertingException(String msg) {

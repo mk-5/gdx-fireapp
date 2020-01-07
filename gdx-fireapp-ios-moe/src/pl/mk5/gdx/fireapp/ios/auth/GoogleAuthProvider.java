@@ -42,9 +42,6 @@ import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides google authorization.
- */
 class GoogleAuthProvider {
 
     private boolean initialized;

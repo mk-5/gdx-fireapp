@@ -31,42 +31,18 @@ import pl.mk5.gdx.fireapp.storage.FileMetadata;
 
 class UploadProcessor {
 
-
-    /**
-     * Process bytes upload
-     *
-     * @param firebaseStorage FirebaseStorage, not null
-     * @param path            Firebase storage path, not null
-     * @param data            Data to upload, not null
-     * @param promise         The future promise, not null
-     */
     void processUpload(final FirebaseStorage firebaseStorage, final String path, final byte[] data, final FuturePromise<FileMetadata> promise) {
         StorageReference dataRef = firebaseStorage.getReference().child(path);
         UploadTask uploadTask = dataRef.putBytes(data);
         processUpload(firebaseStorage, uploadTask, promise);
     }
 
-    /**
-     * Process upload of file
-     *
-     * @param firebaseStorage FirebaseStorage, not null
-     * @param path            Firebase storage path, not null
-     * @param file            File to upload, not null
-     * @param promise         The future promise, not null
-     */
     void processUpload(final FirebaseStorage firebaseStorage, final String path, final FileHandle file, final FuturePromise<FileMetadata> promise) {
         StorageReference dataRef = firebaseStorage.getReference().child(path);
         UploadTask uploadTask = dataRef.putFile(Uri.fromFile(file.file()));
         processUpload(firebaseStorage, uploadTask, promise);
     }
 
-    /**
-     * Process upload
-     *
-     * @param firebaseStorage FirebaseStorage, not null
-     * @param uploadTask      Upload task which we want to deal with, not null
-     * @param promise         The future promise, not null
-     */
     private void processUpload(final FirebaseStorage firebaseStorage, UploadTask uploadTask, final FuturePromise<FileMetadata> promise) {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override

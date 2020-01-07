@@ -17,7 +17,7 @@
 package pl.mk5.gdx.fireapp.exceptions;
 
 /**
- * Throws when conversions indicated by {@link pl.mk5.gdx.fireapp.annotations.MapConversion} is not possible.
+ * It's thrown when conversions indicated by {@link pl.mk5.gdx.fireapp.annotations.MapConversion} is not possible.
  */
 public class MapConversionNotPossibleException extends RuntimeException {
     public MapConversionNotPossibleException(String msg) {

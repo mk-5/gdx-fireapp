@@ -16,9 +16,6 @@
 
 package pl.mk5.gdx.fireapp.database;
 
-/**
- * Keeps information about order-by clause.
- */
 public class OrderByClause {
     private OrderByMode orderByMode;
     private String argument;

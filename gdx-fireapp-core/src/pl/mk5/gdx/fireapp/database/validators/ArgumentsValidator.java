@@ -24,10 +24,10 @@ import com.badlogic.gdx.utils.Array;
 public interface ArgumentsValidator {
 
     /**
-     * Validates given arguments and throws exception when someone is wrong.
+     * Validates given arguments and throws validation exception.
      *
      * @param arguments Array of arguments
-     * @throws RuntimeException
+     * @throws RuntimeException When one of arguments is not valid
      */
     void validate(Array<Object> arguments);
 }

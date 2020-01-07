@@ -33,17 +33,6 @@ class JsonProcessor {
         //
     }
 
-    /**
-     * Converts json string into java object.
-     * <p>
-     * If wantedType is exactly List.class, ArrayList instance will be created instead
-     * If wantedType is exactly Map.class, HashMap instance will be created instead
-     *
-     * @param wantedType Wanted type
-     * @param jsonString Json string data
-     * @param <R>        Return type
-     * @return Instance of wanted type parsed from given json string, not null
-     */
     static <R> R process(Class<?> wantedType, String jsonString) {
         Json json = new Json();
         json.setIgnoreUnknownFields(true);

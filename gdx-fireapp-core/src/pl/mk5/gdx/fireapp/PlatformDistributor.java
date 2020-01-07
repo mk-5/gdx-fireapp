@@ -30,7 +30,7 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  * <p>
  * Using manual:
  * <p>
- * First of all create an Interface that contains the methods you want to share between LibGDX modules (android, ios)<p>
+ * First of all you need to create an Interface that contains the methods you want to share between LibGDX modules (android, ios)<p>
  * then create {@code PlatformDistributor} which will be accessible from all modules.
  * <p>
  * {@code
@@ -38,14 +38,14 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  * }
  * }
  * <p>
- * Now create classes that implements same interface in android and ios modules:
+ * Now you need to create implementation classes which implements YourInterface:
  * <p>
  * {@code
  * class MyAndroidLib implements YourInterface{}
  * class MyIOSLib implements YourInterface{}
  * }
  * <p>
- * Last step is telling {@code PlatformDistributor} which classes it should use on each platform,<p>
+ * The last step is to tell {@code PlatformDistributor} which classes should be used on each platform,<p>
  * you can do this by implementing {@link #getAndroidClassName()} and {@link #getIOSClassName()} methods.
  */
 public abstract class PlatformDistributor<T> {
@@ -95,7 +95,7 @@ public abstract class PlatformDistributor<T> {
     /**
      * Returns empty promise.
      * <p>
-     * This method allow you to chaining like this:
+     * This method allow you to chaining flow like this:
      * {@code
      * GdxFIRDatabase.promise()
      * .then(...)

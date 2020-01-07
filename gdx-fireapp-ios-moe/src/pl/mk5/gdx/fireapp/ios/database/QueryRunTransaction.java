@@ -22,9 +22,6 @@ import pl.mk5.gdx.fireapp.database.validators.RunTransactionValidator;
 import pl.mk5.gdx.fireapp.functional.Function;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
-/**
- * Provides call to {@link FIRDatabaseReference#runTransactionBlockAndCompletionBlock(FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_0, FIRDatabaseReference.Block_runTransactionBlockAndCompletionBlock_1)}.
- */
 class QueryRunTransaction<R> extends DatabaseQuery<R> {
 
     static final String TRANSACTION_ERROR = "Transaction error - aborting";

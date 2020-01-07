@@ -147,6 +147,9 @@ public class Database implements DatabaseDistribution, QueryProvider {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T, R extends T> ListenerPromise<R> onChildChange(final Class<T> dataType, final ChildEventType... eventsType) {
         checkReference();
@@ -158,7 +161,7 @@ public class Database implements DatabaseDistribution, QueryProvider {
                 new QueryOnChildChange<>(Database.this, getDatabasePath())
                         .with(getFilters())
                         .with(getOrderByClause())
-                        .with((FuturePromise<Object>) rFuturePromise)
+                        .with((FuturePromise) rFuturePromise)
                         .withArgs(dataType, eventsType)
                         .execute();
             }
