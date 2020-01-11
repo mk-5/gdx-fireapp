@@ -7,6 +7,11 @@
     <inherits name='gdxfireapp_gwt'/>
     <inherits name='GdxFireappE2ETests'/>
 
+    <extend-configuration-property name="gdx.reflect.include"
+        value="pl.mk5.gdx.fireapp.e2e.tests" />
+    <extend-configuration-property name="gdx.reflect.include"
+        value="pl.mk5.gdx.fireapp.e2e.tests.Employee" />
+
     <entry-point class='pl.mk5.gdx.fireapp.e2e.client.HtmlLauncher'/>
     <set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
     <set-configuration-property name="gdx.assetpath" value="../android/assets"/>

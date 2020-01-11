@@ -16,9 +16,7 @@
 
 package pl.mk5.gdx.fireapp.html.firebase;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -27,38 +25,13 @@ import org.mockito.Mockito;
 @RunWith(BlockJUnit4ClassRunner.class)
 public class FirebaseScriptInformantTest {
 
-    @AfterClass
-    public static void afterClass() {
-        FirebaseScriptInformant.setIsLoaded(true);
-        FirebaseScriptInformant.setIsLoaded(false);
-    }
-
-    @BeforeClass
-    public static void beforeClass() {
-        FirebaseScriptInformant.setIsLoaded(true);
-        FirebaseScriptInformant.setIsLoaded(false);
-    }
-
-    @Test
-    public void isFirebaseScriptLoaded() {
-        // Given
-        // When
-        FirebaseScriptInformant.setIsLoaded(true);
-        boolean val1 = FirebaseScriptInformant.isFirebaseScriptLoaded();
-        FirebaseScriptInformant.setIsLoaded(false);
-        boolean val2 = FirebaseScriptInformant.isFirebaseScriptLoaded();
-
-        // Then
-        Assert.assertTrue(val1);
-        Assert.assertFalse(val2);
-    }
-
     @Test
     public void addWaitingAction() {
         // Given
         Runnable runnable = Mockito.mock(Runnable.class);
         Runnable runnable2 = Mockito.mock(Runnable.class);
         Runnable runnable3 = Mockito.mock(Runnable.class);
+        FirebaseScriptInformant.isLoaded = false;
 
         // When
         FirebaseScriptInformant.addWaitingAction(runnable);
@@ -70,6 +43,17 @@ public class FirebaseScriptInformantTest {
         Mockito.verify(runnable).run();
         Mockito.verify(runnable2).run();
         Mockito.verify(runnable3).run();
+    }
+
+    @Test
+    public void isFirebaseScriptLoaded() {
+        // Given
+        // When
+        FirebaseScriptInformant.setIsLoaded(true);
+        boolean val1 = FirebaseScriptInformant.isFirebaseScriptLoaded();
+
+        // Then
+        Assert.assertTrue(val1);
     }
 
     @Test
@@ -88,11 +72,12 @@ public class FirebaseScriptInformantTest {
     public void setIsLoaded_false() {
         // Given
         boolean isLoaded = false;
+        FirebaseScriptInformant.setIsLoaded(true);
 
         // When
         FirebaseScriptInformant.setIsLoaded(isLoaded);
 
         // Then
-        Assert.assertFalse(FirebaseScriptInformant.isFirebaseScriptLoaded());
+        Assert.assertTrue(FirebaseScriptInformant.isFirebaseScriptLoaded());
     }
 }

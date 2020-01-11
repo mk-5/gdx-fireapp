@@ -6,13 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 
 class E2ETestRunnerImpl implements E2ETestRunner {
 
-    private static final float DEFAULT_TEST_DURATION = 5f;
+    private static final float DEFAULT_TEST_DURATION = 10f;
     private final Array<E2ETest> tests = new Array<>();
     private final Array<E2ETest> testsStable = new Array<>();
     private final ObjectMap<Class<? extends E2ETest>, Float> testTimeout = new ObjectMap<>();
@@ -21,15 +19,14 @@ class E2ETestRunnerImpl implements E2ETestRunner {
     private final Array<Class<? extends E2ETest>> onlyTypes = new Array<>();
 
     @Override
-    public void addNext(Class<? extends E2ETest> testType) throws ReflectionException {
-        this.addNext(testType, DEFAULT_TEST_DURATION);
+    public void addNext(E2ETest test) {
+        this.addNext(test, DEFAULT_TEST_DURATION);
     }
 
     @Override
-    public void addNext(Class<? extends E2ETest> testType, float timeoutSeconds) throws ReflectionException {
-        E2ETest test = ClassReflection.newInstance(testType);
+    public void addNext(E2ETest test, float timeoutSeconds) {
         testsStable.insert(0, test);
-        testTimeout.put(testType, timeoutSeconds);
+        testTimeout.put(test.getClass(), timeoutSeconds);
     }
 
     @Override
@@ -39,12 +36,11 @@ class E2ETestRunnerImpl implements E2ETestRunner {
         }
         if (!onlyTypes.isEmpty()) {
             testsStable.clear();
-            try {
-                for (Class<? extends E2ETest> testType : onlyTypes) {
-                    addNext(testType, testTimeout.get(testType));
+            for (int i = testsStable.size - 1; i >= 0; i--) {
+                if (!onlyTypes.contains(testsStable.get(i).getClass(), true)) {
+                    testTimeout.remove(testsStable.get(i).getClass());
+                    testsStable.removeIndex(i);
                 }
-            } catch (ReflectionException e) {
-                Gdx.app.error(E2ETestRunnerImpl.class.getSimpleName(), e.getMessage(), e);
             }
         }
         tests.addAll(testsStable);

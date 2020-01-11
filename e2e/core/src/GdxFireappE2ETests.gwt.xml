@@ -3,4 +3,7 @@
     "http://www.gwtproject.org/doctype/2.8.0/gwt-module.dtd">
 <module>
     <source path="pl/mk5/gdx/fireapp/e2e"/>
+
+    <extend-configuration-property name="gdx.reflect.include"
+        value="pl.mk5.gdx.fireapp.e2e.tests" />
 </module>

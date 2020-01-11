@@ -104,18 +104,4 @@ public class DatabaseChildEventTest extends E2ETest {
             checkTask.cancel();
         }
     }
-
-    private static class Employee {
-        public String name;
-        public Long salary;
-
-        public Employee() {
-        }
-
-        public Employee(String name, Long salary) {
-            this.name = name;
-            this.salary = salary;
-        }
-
-    }
 }

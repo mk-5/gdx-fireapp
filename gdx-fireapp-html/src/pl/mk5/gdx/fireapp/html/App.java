@@ -26,6 +26,8 @@ import pl.mk5.gdx.fireapp.html.firebase.FirebaseConfiguration;
  */
 public class App implements AppDistribution {
 
+    private static boolean configured;
+
     /**
      * Loads configuration from {@code Gdx.files.internal("firebase-config.html")} file.
      * <p>
@@ -35,7 +37,11 @@ public class App implements AppDistribution {
      */
     @Override
     public void configure() {
+        if (configured) {
+            return;
+        }
         FirebaseConfiguration configuration = new FirebaseConfiguration();
         configuration.load().init();
+        configured = true;
     }
 }

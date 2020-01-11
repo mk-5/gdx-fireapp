@@ -16,7 +16,9 @@
 
 package pl.mk5.gdx.fireapp.e2e.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.GdxFIRDatabase;
@@ -28,14 +30,14 @@ public class DatabaseReadPojoTest extends E2ETest {
     @Override
     public void action() {
         final Employee employee = new Employee("Fred", (long) Math.floor(Math.random() * 100000000));
-        GdxFIRDatabase.instance()
+        GdxFIRDatabase.inst()
                 .inReference("/employee-fred")
                 .setValue(employee)
-                .after(GdxFIRAuth.instance().signInAnonymously())
+                .after(GdxFIRAuth.inst().signInAnonymously())
                 .then(new Consumer<Void>() {
                     @Override
                     public void accept(Void v) {
-                        GdxFIRDatabase.instance()
+                        GdxFIRDatabase.inst()
                                 .inReference("/employee-fred")
                                 .readValue(Employee.class)
                                 .then(new Consumer<Employee>() {
@@ -63,17 +65,4 @@ public class DatabaseReadPojoTest extends E2ETest {
     public void dispose() {
     }
 
-    private static class Employee {
-        public String name;
-        public Long salary;
-
-        public Employee() {
-        }
-
-        public Employee(String name, Long salary) {
-            this.name = name;
-            this.salary = salary;
-        }
-
-    }
 }

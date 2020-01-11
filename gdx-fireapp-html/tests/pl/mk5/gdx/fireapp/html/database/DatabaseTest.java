@@ -129,6 +129,44 @@ public class DatabaseTest {
     }
 
     @Test
+    public void setValue2() throws Exception {
+        // Given
+        String testReference = "test_reference";
+        Database database = new Database();
+        mockStatic(QuerySetValue.class);
+        QuerySetValue query = spy(new QuerySetValue(database, testReference));
+        PowerMockito.whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
+        Long testValue = 2L;
+
+        // When
+        database.inReference(testReference)
+                .setValue(testValue).subscribe();
+
+        // Then
+        PowerMockito.verifyStatic(QuerySetValue.class);
+        QuerySetValue.setWithPromise(eq(testReference), eq("" + testValue), Mockito.any(FuturePromise.class));
+    }
+
+    @Test
+    public void setValue3() throws Exception {
+        // Given
+        String testReference = "test_reference";
+        Database database = new Database();
+        mockStatic(QuerySetValue.class);
+        QuerySetValue query = spy(new QuerySetValue(database, testReference));
+        PowerMockito.whenNew(QuerySetValue.class).withAnyArguments().thenReturn(query);
+        float testValue = 4.45f;
+
+        // When
+        database.inReference(testReference)
+                .setValue(testValue).subscribe();
+
+        // Then
+        PowerMockito.verifyStatic(QuerySetValue.class);
+        QuerySetValue.setWithPromise(eq(testReference), eq("" + testValue), Mockito.any(FuturePromise.class));
+    }
+
+    @Test
     public void readValue() throws Exception {
         // Given
         String testReference = "test_reference";

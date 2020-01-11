@@ -36,15 +36,11 @@ class AuthJS {
     }-*/;
 
     static native void signInAnonymously(final FuturePromise promise) /*-{
-        var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
-            if( user ){
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
-                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
-                );
-            }
-            removeAuthListener();
-        });
-        $wnd.firebase.auth().signInAnonymously()['catch'](function(error) {
+        $wnd.firebase.auth().signInAnonymously().then(function(){
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
+                @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+            );
+        })['catch'](function(error) {
            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
             @java.lang.Exception::new(Ljava/lang/String;)(error.message)
           );
@@ -52,15 +48,11 @@ class AuthJS {
     }-*/;
 
     static native void signInWithEmailAndPassword(final String email, final String password, final FuturePromise promise) /*-{
-        var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
-            if( user ){
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
-                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
-                );
-            }
-            removeAuthListener();
-        });
-        $wnd.firebase.auth().signInWithEmailAndPassword(email, password)['catch'](function(error) {
+        $wnd.firebase.auth().signInWithEmailAndPassword(email, password).then(function(){
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
+                @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+            );
+        })['catch'](function(error) {
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
@@ -80,15 +72,11 @@ class AuthJS {
     }-*/;
 
     static native void signInWithToken(final String token, final FuturePromise promise) /*-{
-        var removeAuthListener = $wnd.firebase.auth().onAuthStateChanged(function(user){
-            if( user ){
-                promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
-                    @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
-                );
-            }
-            removeAuthListener();
-        });
-        $wnd.firebase.auth().signInWithCustomToken(token)['catch'](function(error) {
+        $wnd.firebase.auth().signInWithCustomToken(token).then(function(){
+            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(
+                @pl.mk5.gdx.fireapp.html.auth.AuthJS::getUserBridge()()
+            );
+        })['catch'](function(error) {
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(
                 @java.lang.Exception::new(Ljava/lang/String;)(error.message)
             );
@@ -117,9 +105,6 @@ class AuthJS {
         });
     }-*/;
 
-    /**
-     * @return Simplest way for javascript to get GdxFirebaseUser.
-     */
     static GdxFirebaseUser getUserBridge() {
         return GdxFIRAuth.instance().getCurrentUser();
     }

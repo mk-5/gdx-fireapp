@@ -8,6 +8,11 @@
 
     <collapse-all-properties/>
 
+    <extend-configuration-property name="gdx.reflect.include"
+        value="pl.mk5.gdx.fireapp.e2e.tests" />
+    <extend-configuration-property name="gdx.reflect.include"
+        value="pl.mk5.gdx.fireapp.e2e.tests.Employee" />
+
     <add-linker name="xsiframe"/>
     <set-configuration-property name="devModeRedirectEnabled" value="true"/>
     <set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>

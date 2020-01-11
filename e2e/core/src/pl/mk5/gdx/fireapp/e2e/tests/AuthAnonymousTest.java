@@ -14,8 +14,8 @@ public class AuthAnonymousTest extends E2ETest {
 
     @Override
     public void action() {
-        GdxFIRApp.instance().configure();
-        GdxFIRAuth.instance().signInAnonymously()
+        GdxFIRApp.inst().configure();
+        GdxFIRAuth.inst().signInAnonymously()
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
                     public void accept(GdxFirebaseUser gdxFirebaseUser) {

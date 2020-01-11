@@ -46,38 +46,38 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 
     public GdxFireappE2ETests() throws Exception {
         GdxFIRLogger.setEnabled(true);
-        e2ETestRunner.addNext(BadlogicTest.class);
-        e2ETestRunner.addNext(AuthAnonymousTest.class);
-        e2ETestRunner.addNext(AuthCreateUserEmailPasswordTest.class);
-        e2ETestRunner.addNext(AuthSignInUserEmailPasswordTest.class);
-//        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
-        e2ETestRunner.addNext(GdxFirebaseUserTest.class, 60);
-        e2ETestRunner.addNext(AuthSignOutTest.class);
+        e2ETestRunner.addNext(new BadlogicTest());
+//        e2ETestRunner.addNext(new AuthAnonymousTest());
+//        e2ETestRunner.addNext(new AuthCreateUserEmailPasswordTest());
+//        e2ETestRunner.addNext(new AuthSignInUserEmailPasswordTest());
+////        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
+//        e2ETestRunner.addNext(new GdxFirebaseUserTest(), 60);
+//        e2ETestRunner.addNext(new AuthSignOutTest());
+//
+//        e2ETestRunner.addNext(new StorageUploadImageTest(), 60);
+//        e2ETestRunner.addNext(new StorageDownloadImageTest(), 30);
+//        e2ETestRunner.addNext(new StorageUploadBytesTest(), 60);
+//        e2ETestRunner.addNext(new StorageDownloadBytesTest(), 30);
+//        e2ETestRunner.addNext(new StorageDeleteTest(), 30);
+//
+//        e2ETestRunner.addNext(new AnalyticsTest());
+//        e2ETestRunner.addNext(new CrashTest());
 
-        e2ETestRunner.addNext(StorageUploadImageTest.class, 60);
-        e2ETestRunner.addNext(StorageDownloadImageTest.class, 30);
-        e2ETestRunner.addNext(StorageUploadBytesTest.class, 60);
-        e2ETestRunner.addNext(StorageDownloadBytesTest.class, 30);
-        e2ETestRunner.addNext(StorageDeleteTest.class, 30);
-
-        e2ETestRunner.addNext(AnalyticsTest.class);
-        e2ETestRunner.addNext(CrashTest.class);
-
-        e2ETestRunner.addNext(DatabaseReadPojoTest.class);
-        e2ETestRunner.addNext(DatabaseReadPojoFailTest.class, 30);
-        e2ETestRunner.addNext(DatabaseSetValueTest.class, 10);
-        e2ETestRunner.addNext(DatabaseLimitEqualTest.class, 60);
-        e2ETestRunner.addNext(DatabaseReadValueTest.class, 10);
-        e2ETestRunner.addNext(DatabaseReadValue2Test.class, 30);
-        e2ETestRunner.addNext(DatabaseListenerValueTest.class, 10);
-        e2ETestRunner.addNext(DatabaseReadPojoListTest.class, 10);
-        e2ETestRunner.addNext(DatabaseReadPojoMapWithKeysTest.class, 10);
-        e2ETestRunner.addNext(DatabaseChildEventTest.class, 30);
-        e2ETestRunner.addNext(DatabaseTransactionValueTest.class, 30);
-        e2ETestRunner.addNext(DatabaseTransactionValue2Test.class, 30);
-        e2ETestRunner.addNext(DatabaseTransactionDefaultDoubleValueTest.class, 120);
-        e2ETestRunner.addNext(DatabaseTransactionDefaultLongValueTest.class, 30);
-        e2ETestRunner.addNext(DatabaseTransactionDefaultStringValueTest.class, 30);
+//        e2ETestRunner.addNext(new DatabaseReadPojoTest(), 30);
+//        e2ETestRunner.addNext(new DatabaseReadPojoFailTest(), 30);
+//        e2ETestRunner.addNext(new DatabaseSetValueTest(), 10);
+//        e2ETestRunner.addNext(new DatabaseLimitEqualTest(), 60);
+//        e2ETestRunner.addNext(new DatabaseReadValueTest(), 10);
+        e2ETestRunner.addNext(new DatabaseReadValue2Test(), 30);
+        e2ETestRunner.addNext(new DatabaseListenerValueTest(), 10);
+        e2ETestRunner.addNext(new DatabaseReadPojoListTest(), 10);
+        e2ETestRunner.addNext(new DatabaseReadPojoMapWithKeysTest(), 10);
+        e2ETestRunner.addNext(new DatabaseChildEventTest(), 30);
+        e2ETestRunner.addNext(new DatabaseTransactionValueTest(), 30);
+        e2ETestRunner.addNext(new DatabaseTransactionValue2Test(), 30);
+        e2ETestRunner.addNext(new DatabaseTransactionDefaultDoubleValueTest(), 120);
+        e2ETestRunner.addNext(new DatabaseTransactionDefaultLongValueTest(), 30);
+        e2ETestRunner.addNext(new DatabaseTransactionDefaultStringValueTest(), 30);
 
 
         e2ETestRunner.onFinish(new Runnable() {
@@ -92,7 +92,6 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         GdxFIRApp.inst().configure();
-//        e2ETestRunner.only(DatabaseReadValueTest.class, DatabaseLimitEqualTest.class);
         e2ETestRunner.start();
     }
 

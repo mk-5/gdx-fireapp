@@ -18,7 +18,6 @@ package pl.mk5.gdx.fireapp.html.database;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 public class StringGenerator {
 
@@ -31,13 +30,13 @@ public class StringGenerator {
             return object.toString();
         Json json = new Json();
         json.setTypeName(null);
-        json.setQuoteLongValues(true);
+        json.setQuoteLongValues(false);
         json.setIgnoreUnknownFields(true);
         json.setOutputType(JsonWriter.OutputType.json);
         return json.toJson(object);
     }
 
     private static boolean isPrimitiveType(Object object) {
-        return object.getClass() == String.class || ClassReflection.isPrimitive(object.getClass());
+        return object.getClass() == String.class;
     }
 }

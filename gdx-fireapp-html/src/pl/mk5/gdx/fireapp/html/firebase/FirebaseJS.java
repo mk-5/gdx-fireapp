@@ -23,9 +23,15 @@ class FirebaseJS {
     }
 
     static native void initializeFirebase(String initializationScript) /*-{
-        console.log("GdxFireapp: eval initialization script...");
+        console.log("GdxFireapp: initialization script...");
         eval(initializationScript);
-        @pl.mk5.gdx.fireapp.html.firebase.FirebaseJS::setFirebaseScriptIsLoaded()();
+        var interval = $wnd.setInterval(function(){
+          if( $wnd.firebase.apps.length > 0 ) {
+            console.log("GdxFireapp: app initialized");
+            @pl.mk5.gdx.fireapp.html.firebase.FirebaseJS::setFirebaseScriptIsLoaded()();
+            $wnd.clearInterval(interval);
+          }
+        }, 100);
     }-*/;
 
     static native boolean isFirebaseLoaded() /*-{
