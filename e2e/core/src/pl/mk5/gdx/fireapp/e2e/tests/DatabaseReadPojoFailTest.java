@@ -75,17 +75,4 @@ public class DatabaseReadPojoFailTest extends E2ETest {
     public void dispose() {
     }
 
-    private static class Employee {
-        public String name;
-        public Long salary;
-
-        public Employee() {
-        }
-
-        public Employee(String name, Long salary) {
-            this.name = name;
-            this.salary = salary;
-        }
-
-    }
 }

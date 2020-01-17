@@ -1,7 +1,7 @@
 gwt {
-    gwtVersion='2.8.0' // Should match the gwt version used for building the gwt backend
-    maxHeapSize="1G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
-    minHeapSize="1G"
+    gwtVersion='2.8.2' // Should match the gwt version used for building the gwt backend
+    maxHeapSize="2G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
+    minHeapSize="2G"
 
     src = files(file("src/")) // Needs to be in front of "modules" below.
     modules 'pl.mk5.gdx.fireapp.e2e.GdxDefinition'
@@ -17,7 +17,7 @@ gwt {
 import org.wisepersist.gradle.plugins.gwt.GwtSuperDev
 
 HttpFileServer server = null
-def httpFilePort = 8080
+def httpFilePort = 8888
 
 task startHttpServer () {
     dependsOn draftCompileGwt

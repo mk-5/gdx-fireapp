@@ -15,6 +15,34 @@ public class HtmlLauncher extends GwtApplication {
     }
     // END CODE FOR FIXED SIZE APPLICATION
 
+    @Override
+    public void log(String tag, String message) {
+        jsLog(tag, message);
+    }
+
+    @Override
+    public void log(String tag, String message, Throwable exception) {
+        jsLog(tag, message + ", exception: " + exception.getLocalizedMessage());
+    }
+
+    @Override
+    public void error(String tag, String message) {
+        jsError(tag, message);
+    }
+
+    @Override
+    public void error(String tag, String message, Throwable exception) {
+        jsError(tag, message + ", exception: " + exception.getLocalizedMessage());
+    }
+
+    public static native void jsLog(String tag, String message) /*-{
+        console.log(tag + ":", message);
+    }-*/;
+
+    public static native void jsError(String tag, String message) /*-{
+        console.error(tag + ":", message);
+    }-*/;
+
     // UNCOMMENT THIS CODE FOR A RESIZABLE APPLICATION
     // PADDING is to avoid scrolling in iframes, set to 20 if you have problems
     // private static final int PADDING = 0;

@@ -1,5 +1,6 @@
 package pl.mk5.gdx.fireapp.e2e.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
@@ -15,7 +16,7 @@ public class AuthCreateUserEmailPasswordTest extends E2ETest {
 
     @Override
     public void action() {
-        GdxFIRAuth.instance()
+        GdxFIRAuth.inst()
                 .createUserWithEmailAndPassword(USER, PASSWORD.toCharArray())
                 .then(new Consumer<GdxFirebaseUser>() {
                     @Override
@@ -26,7 +27,11 @@ public class AuthCreateUserEmailPasswordTest extends E2ETest {
                 .fail(new BiConsumer<String, Throwable>() {
                     @Override
                     public void accept(String s, Throwable throwable) {
-                        if( s.contains("The email address is already in use by another account") ){
+                        Gdx.app.log("AuthCreateUserEmail", "create user error: " + s);
+                        if( s.contains("The email address is already in use by another account")
+                                || s.contains("EMAIL_EXISTS")
+                                || s.contains("DEFAULT")
+                        ){
                             GdxFIRAuth.inst().getCurrentUser().delete().subscribe();
                             success();
                         }

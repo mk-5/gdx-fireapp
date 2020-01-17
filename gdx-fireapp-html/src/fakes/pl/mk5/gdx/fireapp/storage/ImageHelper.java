@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 mk
+ * Copyright 2019 mk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pl.mk5.gdx.fireapp.helpers;
+package pl.mk5.gdx.fireapp.storage;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,7 +39,6 @@ public class ImageHelper {
      * Covers implementation of {@code createTextureFromBytes} on GWT platform.
      * <p>
      * LibGDX GWT backend do not support {@link Pixmap (byte[] encodedData, int offset, int len) }
-     * FIXME
      */
     public static TextureRegion createTextureFromBytes(byte[] bytes) {
         throw new IllegalStateException("No such feature at GWT please use ImageHelper#createTextureFromBytes(byte[] bytes, Consumer<TextureRegion> consumer) instead");

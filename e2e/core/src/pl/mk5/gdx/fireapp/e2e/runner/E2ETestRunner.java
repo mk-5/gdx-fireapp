@@ -5,9 +5,9 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public interface E2ETestRunner {
 
-    void addNext(Class<? extends E2ETest> testType) throws ReflectionException;
+    void addNext(E2ETest test);
 
-    void addNext(Class<? extends E2ETest> testType, float durationSeconds) throws ReflectionException;
+    void addNext(E2ETest test, float durationSeconds);
 
     void start();
 

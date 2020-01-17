@@ -57,8 +57,12 @@ class QuerySetValue extends GwtDatabaseQuery {
         }catch(err){
             val = stringValue;
         }
-        $wnd.firebase.database().ref(reference).set(val).then(function(){
-            promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
+        $wnd.firebase.database().ref(reference).set(val, function(error){
+            if( error ) {
+               promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
+            } else {
+              promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doComplete(Ljava/lang/Object;)(null);
+            }
         })['catch'](function(error){
             promise.@pl.mk5.gdx.fireapp.promises.FuturePromise::doFail(Ljava/lang/Throwable;)(@java.lang.Exception::new(Ljava/lang/String;)(error.message));
         });

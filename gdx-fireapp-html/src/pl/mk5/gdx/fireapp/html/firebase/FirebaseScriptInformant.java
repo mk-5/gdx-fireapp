@@ -19,7 +19,7 @@ package pl.mk5.gdx.fireapp.html.firebase;
 import com.badlogic.gdx.utils.Array;
 
 class FirebaseScriptInformant {
-    private static boolean isLoaded;
+    static boolean isLoaded;
 
     private FirebaseScriptInformant() {
         //
@@ -37,11 +37,14 @@ class FirebaseScriptInformant {
     }
 
     static void setIsLoaded(boolean isLoaded) {
-        if (FirebaseScriptInformant.isLoaded == isLoaded) return;
+        if (FirebaseScriptInformant.isLoaded) {
+            return;
+        }
         FirebaseScriptInformant.isLoaded = isLoaded;
         if (isLoaded) {
-            for (Runnable action : waitingActions)
-                action.run();
+            for (int i = 0, s = waitingActions.size; i < s; i++) {
+                waitingActions.get(i).run();
+            }
             waitingActions.clear();
         }
     }

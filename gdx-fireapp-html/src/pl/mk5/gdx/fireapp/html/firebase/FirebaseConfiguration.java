@@ -44,7 +44,7 @@ public class FirebaseConfiguration {
 
     public void init() {
         if (rawHtml == null) {
-            Gdx.app.error(GdxFIRLogger.getLogTag(), "You forgot about calling FirebaseConfiguration#init() first.");
+            Gdx.app.error(GdxFIRLogger.getLogTag(), "You forgot about FirebaseConfiguration#init()");
             return;
         }
         ScriptInjector.fromUrl(configParser.getFirebaseScriptSrc())
