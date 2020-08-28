@@ -18,7 +18,10 @@ import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
 import pl.mk5.gdx.fireapp.e2e.tests.CrashTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseChildEventTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseLimitEqualTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueCancelTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseOrderByChildTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseOrderByTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoFailTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoListTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseReadPojoMapWithKeysTest;
@@ -47,29 +50,32 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public GdxFireappE2ETests() throws Exception {
         GdxFIRLogger.setEnabled(true);
         e2ETestRunner.addNext(new BadlogicTest());
-//        e2ETestRunner.addNext(new AuthAnonymousTest());
-//        e2ETestRunner.addNext(new AuthCreateUserEmailPasswordTest());
-//        e2ETestRunner.addNext(new AuthSignInUserEmailPasswordTest());
-////        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
-//        e2ETestRunner.addNext(new GdxFirebaseUserTest(), 60);
-//        e2ETestRunner.addNext(new AuthSignOutTest());
-//
-//        e2ETestRunner.addNext(new StorageUploadImageTest(), 60);
-//        e2ETestRunner.addNext(new StorageDownloadImageTest(), 30);
-//        e2ETestRunner.addNext(new StorageUploadBytesTest(), 60);
-//        e2ETestRunner.addNext(new StorageDownloadBytesTest(), 30);
-//        e2ETestRunner.addNext(new StorageDeleteTest(), 30);
-//
-//        e2ETestRunner.addNext(new AnalyticsTest());
-//        e2ETestRunner.addNext(new CrashTest());
+        e2ETestRunner.addNext(new AuthAnonymousTest());
+        e2ETestRunner.addNext(new AuthCreateUserEmailPasswordTest());
+        e2ETestRunner.addNext(new AuthSignInUserEmailPasswordTest());
+//        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
+        e2ETestRunner.addNext(new GdxFirebaseUserTest(), 60);
+        e2ETestRunner.addNext(new AuthSignOutTest());
 
-//        e2ETestRunner.addNext(new DatabaseReadPojoTest(), 30);
-//        e2ETestRunner.addNext(new DatabaseReadPojoFailTest(), 30);
-//        e2ETestRunner.addNext(new DatabaseSetValueTest(), 10);
-//        e2ETestRunner.addNext(new DatabaseLimitEqualTest(), 60);
-//        e2ETestRunner.addNext(new DatabaseReadValueTest(), 10);
+        e2ETestRunner.addNext(new StorageUploadImageTest(), 60);
+        e2ETestRunner.addNext(new StorageDownloadImageTest(), 30);
+        e2ETestRunner.addNext(new StorageUploadBytesTest(), 60);
+        e2ETestRunner.addNext(new StorageDownloadBytesTest(), 30);
+        e2ETestRunner.addNext(new StorageDeleteTest(), 30);
+
+        e2ETestRunner.addNext(new AnalyticsTest());
+        e2ETestRunner.addNext(new CrashTest());
+
+        e2ETestRunner.addNext(new DatabaseReadPojoTest(), 30);
+        e2ETestRunner.addNext(new DatabaseReadPojoFailTest(), 30);
+        e2ETestRunner.addNext(new DatabaseSetValueTest(), 10);
+        e2ETestRunner.addNext(new DatabaseLimitEqualTest(), 60);
+        e2ETestRunner.addNext(new DatabaseOrderByChildTest(), 60);
+        e2ETestRunner.addNext(new DatabaseOrderByTest(), 60);
+        e2ETestRunner.addNext(new DatabaseReadValueTest(), 10);
         e2ETestRunner.addNext(new DatabaseReadValue2Test(), 30);
         e2ETestRunner.addNext(new DatabaseListenerValueTest(), 10);
+//        e2ETestRunner.addNext(new DatabaseListenerValueCancelTest(), 10);
         e2ETestRunner.addNext(new DatabaseReadPojoListTest(), 10);
         e2ETestRunner.addNext(new DatabaseReadPojoMapWithKeysTest(), 10);
         e2ETestRunner.addNext(new DatabaseChildEventTest(), 30);

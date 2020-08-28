@@ -36,12 +36,7 @@ class ResolverDataSnapshotList {
         }
         List result = new ArrayList<>();
         Iterable<DataSnapshot> dataSnapshots;
-        if (ClassReflection.isAssignableFrom(Map.class, dataSnapshot.getValue().getClass())) {
-            dataSnapshots = ((Map) dataSnapshot.getValue()).values();
-        } else {
-            dataSnapshots = dataSnapshot.getChildren();
-        }
-        for (Object o : dataSnapshots) {
+        for (Object o : dataSnapshot.getChildren()) {
             if (o instanceof DataSnapshot) {
                 result.add(((DataSnapshot) o).getValue());
             } else {
