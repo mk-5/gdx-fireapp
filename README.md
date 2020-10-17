@@ -36,13 +36,13 @@ implementation "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
 &nbsp;
 
 **The latest version** was built using libGDX 1.9.8, multi-os-engine 1.4.3, gwt 2.8.0, iOS Firebase sdk 5.x,
-android Firebase sdk 16.x
+android Firebase BOM 25.12.0
 
 &nbsp;
 
 ## Basics
 
-This API is like a bridge between libGDX app and Firebase sdk. It covers Firebase functionality, so if you have some knowledge of the Firebase SDK, using this API should be intuitive.
+The API is like a bridge between libGDX app and Firebase sdk. It covers Firebase functionality, so if you have some knowledge of the Firebase SDK, using this API should be intuitive.
 
 &nbsp;
 
@@ -53,12 +53,6 @@ GdxFIRApp.inst().configure();
 ```
 
 **Firebase Analytics** should start working just after this step.
-
-If you added ***Fabric/Crashlytics*** to your project, you should also initialize it:
-
-````
-GdxFIRCrash.inst().initialize();
-````
 
 &nbsp;
 

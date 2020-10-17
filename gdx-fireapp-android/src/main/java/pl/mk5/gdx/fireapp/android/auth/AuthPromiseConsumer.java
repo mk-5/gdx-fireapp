@@ -16,7 +16,7 @@
 
 package pl.mk5.gdx.fireapp.android.auth;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +28,7 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
 class AuthPromiseConsumer<T> implements Consumer<FuturePromise<GdxFirebaseUser>> {
 
-    private Task<T> task;
+    private final Task<T> task;
 
     public AuthPromiseConsumer(Task<T> task) {
         this.task = task;

@@ -9,11 +9,12 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.9'
-        classpath 'com.android.tools.build:gradle:3.2.0'
-        classpath 'org.multi-os-engine:moe-gradle:1.4.0'
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'org.gretty:gretty:3.0.2'
+        classpath 'org.multi-os-engine.community:moe-gradle:1.7.0'
+        classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
     }
 }
 
@@ -35,6 +36,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -42,14 +44,14 @@ allprojects {
 }
 
 project(":android") {
-    apply plugin: "android"
-    apply plugin: 'io.fabric'
+    apply plugin: "com.android.application"
+    apply plugin: 'com.google.firebase.crashlytics'
 
     configurations { natives }
 
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
@@ -58,57 +60,55 @@ project(":android") {
 
         implementation "pl.mk5.gdx-fireapp:gdx-fireapp-android:$gdxFireappVersion"
 
-        api 'com.google.firebase:firebase-core:16.0.0'
-        api 'com.google.firebase:firebase-storage:16.0.1'
-        api 'com.google.firebase:firebase-auth:16.0.1'
-        api 'com.google.firebase:firebase-database:16.0.1'
+        implementation platform("com.google.firebase:firebase-bom:25.12.0")
+        implementation 'com.google.firebase:firebase-core'
+        implementation 'com.google.firebase:firebase-storage'
+        implementation 'com.google.firebase:firebase-auth'
+        implementation 'com.google.firebase:firebase-database'
+        implementation 'com.google.firebase:firebase-crashlytics'
+        implementation 'com.google.firebase:firebase-analytics'
 
         // Add this if you need google authorization
-        api 'com.google.android.gms:play-services-auth:16.0.0'
-
-        // Crashlytics
-        api 'com.crashlytics.sdk.android:crashlytics:2.9.5'
-    }
-}
-
-project(":core") {
-    apply plugin: "java"
-
-
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion"
+        api 'com.google.android.gms:play-services-auth:18.1.0'
     }
 }
 
 project(":ios-moe") {
+    apply plugin: "java-library"
     apply plugin: "moe"
 
     configurations { natives }
 
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         implementation "pl.mk5.gdx-fireapp:gdx-fireapp-ios-moe:$gdxFireappVersion"
     }
 }
 
 project(":html") {
+    apply plugin: "java-library"
     apply plugin: "gwt"
     apply plugin: "war"
+    apply plugin: "org.gretty"
 
 
     dependencies {
         implementation project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
         implementation "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
         implementation "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion:sources"
     }
 }
 
-tasks.eclipse.doLast {
-    delete ".project"
+project(":core") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "pl.mk5.gdx-fireapp:gdx-fireapp-core:$gdxFireappVersion"
+    }
 }

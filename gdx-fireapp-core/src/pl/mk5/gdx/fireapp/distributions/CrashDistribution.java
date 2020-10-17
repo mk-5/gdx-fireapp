@@ -40,4 +40,28 @@ public interface CrashDistribution {
      * Fabric.with will be call here so you don't need to add it manually to your AndroidLauncher/IOSMoeLauncher.
      */
     void initialize();
+
+    /**
+     * Records exception, you can use it in try/catch block.
+     *
+     * @param throwable throwable, not null
+     */
+    void recordException(Throwable throwable);
+
+    /**
+     * https://firebase.google.com/docs/crashlytics/customize-crash-reports?platform=android#set-user-ids
+     *
+     * @param userId userId, not null
+     */
+    void setUserId(String userId);
+
+    /**
+     * Custom keys help you get the specific state of your app leading up to a crash.
+     * You can associate arbitrary key/value pairs with your crash reports and see them in the Firebase console
+     *
+     * @param key   key, not null
+     * @param value value, not null
+     * @param <T>   one of those types [boolean, int, string, float, double, long]
+     */
+    <T> void setCustomKey(String key, T value);
 }

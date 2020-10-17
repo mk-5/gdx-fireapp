@@ -65,6 +65,21 @@ public class GdxFIRCrash extends PlatformDistributor<CrashDistribution> implemen
         platformObject.initialize();
     }
 
+    @Override
+    public void recordException(Throwable throwable) {
+        platformObject.recordException(throwable);
+    }
+
+    @Override
+    public void setUserId(String userId) {
+        platformObject.setUserId(userId);
+    }
+
+    @Override
+    public <T> void setCustomKey(String key, T value) {
+        platformObject.setCustomKey(key, value);
+    }
+
     /**
      * {@inheritDoc}
      */

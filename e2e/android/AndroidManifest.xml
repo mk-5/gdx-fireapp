@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="pl.mk5.gdx.fireapp.e2e">
+    package="pl.mk5.gdx.fireapp.e2e">
 
     <application
         android:allowBackup="true"
