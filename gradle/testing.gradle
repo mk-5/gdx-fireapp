@@ -1,4 +1,5 @@
 apply plugin: "org.sonarqube"
+apply plugin: 'java'
 
 sonarqube {
     properties {
@@ -29,7 +30,7 @@ configure(subprojects.findAll { it.name.indexOf("android") < 0 }) {
             csv.enabled false
             html.enabled true
             xml.enabled true
-            html.destination "${buildDir}/jacoco-html"
+            html.destination file("${buildDir}/jacoco-html")
         }
 
         afterEvaluate {

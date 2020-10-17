@@ -15,56 +15,60 @@
  */
 package pl.mk5.gdx.fireapp.android.crash;
 
-import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
+import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-import io.fabric.sdk.android.Fabric;
+import java.util.HashMap;
+
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
 
-@PrepareForTest({Crashlytics.class, Fabric.class, GdxNativesLoader.class})
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
+
+@PrepareForTest({FirebaseCrashlytics.class, GdxNativesLoader.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CrashTest extends AndroidContextTest {
 
-    @Test
-    public void initialize() {
+    @Test(expected = Exception.class)
+    public void shouldThrowExceptionWhenInvalidKey() {
         // Given
-        PowerMockito.mockStatic(Crashlytics.class);
-        PowerMockito.mockStatic(Fabric.class);
+        PowerMockito.mockStatic(FirebaseCrashlytics.class);
+        when(FirebaseCrashlytics.getInstance()).thenReturn(mock(FirebaseCrashlytics.class));
         Crash crash = new Crash();
 
         // When
-        crash.initialize();
-        crash.initialize();
-        crash.initialize();
+        crash.setCustomKey("key", new HashMap<>());
 
-        // Then
-        PowerMockito.verifyStatic(Fabric.class, VerificationModeFactory.times(1));
-        Fabric.with(Mockito.any(AndroidApplication.class), Mockito.any(Crashlytics.class));
-        PowerMockito.verifyNoMoreInteractions(Fabric.class);
+        // Then - no exceptions
+        Assert.fail();
     }
 
     @Test
-    public void log() {
+    public void shouldRunMethodsWithoutException() {
         // Given
-        PowerMockito.mockStatic(Crashlytics.class);
-        PowerMockito.mockStatic(Fabric.class);
+        PowerMockito.mockStatic(FirebaseCrashlytics.class);
+        when(FirebaseCrashlytics.getInstance()).thenReturn(mock(FirebaseCrashlytics.class));
         Crash crash = new Crash();
 
         // When
+        crash.recordException(new IllegalArgumentException());
         crash.log("abc");
+        crash.setUserId("Abc");
+        crash.setCustomKey("key", true);
+        crash.setCustomKey("key", 1);
+        crash.setCustomKey("key", 1L);
+        crash.setCustomKey("key", 1.0);
+        crash.setCustomKey("key", 1f);
+        crash.setCustomKey("key", "abc");
 
-        // Then
-        PowerMockito.verifyStatic(Crashlytics.class, VerificationModeFactory.times(1));
-        Crashlytics.log("abc");
-        PowerMockito.verifyNoMoreInteractions(Crashlytics.class);
+        // Then - no exceptions
+        Assert.assertTrue(true);
     }
 }

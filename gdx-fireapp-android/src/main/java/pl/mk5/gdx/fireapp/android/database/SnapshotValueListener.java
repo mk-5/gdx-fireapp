@@ -16,7 +16,7 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +26,7 @@ import pl.mk5.gdx.fireapp.promises.ConverterPromise;
 
 class SnapshotValueListener implements ValueEventListener {
 
-    private DataSnapshotResolver dataSnapshotResolver;
+    private final DataSnapshotResolver dataSnapshotResolver;
 
     SnapshotValueListener(Class dataType, ConverterPromise promise) {
         this.dataSnapshotResolver = new DataSnapshotResolver(dataType, promise);

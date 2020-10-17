@@ -16,11 +16,8 @@
 
 package pl.mk5.gdx.fireapp.android.crash;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import io.fabric.sdk.android.Fabric;
 import pl.mk5.gdx.fireapp.distributions.CrashDistribution;
 
 /**
@@ -31,26 +28,46 @@ import pl.mk5.gdx.fireapp.distributions.CrashDistribution;
  */
 public class Crash implements CrashDistribution {
 
-    private boolean initialized;
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void log(String message) {
-        initializeOnce();
-        Crashlytics.log(message);
+        FirebaseCrashlytics.getInstance().log(message);
     }
 
     @Override
     public void initialize() {
-        initializeOnce();
+        // do nothing
     }
 
-    private synchronized void initializeOnce() {
-        if (!initialized) {
-            initialized = true;
-            Fabric.with((AndroidApplication) Gdx.app, new Crashlytics());
+    @Override
+    public void recordException(Throwable throwable) {
+        FirebaseCrashlytics.getInstance().recordException(throwable);
+    }
+
+    @Override
+    public void setUserId(String userIdentifier) {
+        FirebaseCrashlytics.getInstance().setUserId(userIdentifier);
+    }
+
+    @Override
+    public <T> void setCustomKey(String key, T value) {
+        if (value instanceof Boolean) {
+            FirebaseCrashlytics.getInstance().setCustomKey(key, (Boolean) value);
+        } else if (value instanceof String) {
+            FirebaseCrashlytics.getInstance().setCustomKey(key, (String) value);
+        } else if (value instanceof Double) {
+            FirebaseCrashlytics.getInstance().setCustomKey(key, (Double) value);
+        } else if (value instanceof Long) {
+            FirebaseCrashlytics.getInstance().setCustomKey(key, (Long) value);
+        } else if (value instanceof Float) {
+            FirebaseCrashlytics.getInstance().setCustomKey(key, (Float) value);
+        } else if (value instanceof Integer) {
+            FirebaseCrashlytics.getInstance().setCustomKey(key, (Integer) value);
+        } else {
+            throw new IllegalStateException("Wrong value type. Supported types are [boolean, int, string, float, double, long]");
         }
     }
+
 }

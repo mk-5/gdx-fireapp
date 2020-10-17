@@ -16,9 +16,8 @@
 
 package pl.mk5.gdx.fireapp.ios.crash;
 
-import apple.foundation.NSArray;
-import bindings.fabric.fabric.Fabric;
-import bindings.google.crashlytics.c.Crashlytics;
+import com.badlogic.gdx.Gdx;
+
 import pl.mk5.gdx.fireapp.distributions.CrashDistribution;
 
 /**
@@ -28,16 +27,15 @@ import pl.mk5.gdx.fireapp.distributions.CrashDistribution;
  * @see CrashDistribution
  */
 public class Crash implements CrashDistribution {
-
-    private boolean initialized;
+    private static final String LOG = "CrashIOS";
+    private static final String NOT_SUPPORTED = "Method not supported for MOE backend";
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void log(String message) {
-        initializeOnce();
-        Crashlytics.CLSLogv(message, null);
+        Gdx.app.error(LOG, NOT_SUPPORTED);
     }
 
     /**
@@ -45,13 +43,20 @@ public class Crash implements CrashDistribution {
      */
     @Override
     public void initialize() {
-        initializeOnce();
     }
 
-    private synchronized void initializeOnce() {
-        if (!initialized) {
-            initialized = true;
-            Fabric.with(NSArray.arrayWithObject(bindings.google.crashlytics.Crashlytics.alloc().init()));
-        }
+    @Override
+    public void recordException(Throwable throwable) {
+        Gdx.app.error(LOG, NOT_SUPPORTED);
+    }
+
+    @Override
+    public void setUserId(String userId) {
+        Gdx.app.error(LOG, NOT_SUPPORTED);
+    }
+
+    @Override
+    public <T> void setCustomKey(String key, T value) {
+        Gdx.app.error(LOG, NOT_SUPPORTED);
     }
 }

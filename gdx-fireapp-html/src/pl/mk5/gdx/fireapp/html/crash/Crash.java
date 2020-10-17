@@ -34,4 +34,19 @@ public class Crash implements CrashDistribution {
     public void initialize() {
         // No supported at web platform
     }
+
+    @Override
+    public void recordException(Throwable throwable) {
+        // No supported at web platform
+    }
+
+    @Override
+    public void setUserId(String userId) {
+        // No supported at web platform
+    }
+
+    @Override
+    public <T> void setCustomKey(String key, T value) {
+        // No supported at web platform
+    }
 }

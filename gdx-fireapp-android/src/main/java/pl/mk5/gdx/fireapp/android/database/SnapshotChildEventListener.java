@@ -16,8 +16,8 @@
 
 package pl.mk5.gdx.fireapp.android.database;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.badlogic.gdx.utils.Array;
 import com.google.firebase.database.ChildEventListener;

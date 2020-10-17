@@ -3,6 +3,7 @@ apply plugin: "maven-publish"
 
 dependencies {
     implementation project(":gdx-fireapp-core")
+    implementation platform(libs.firebase.bom)
     api libs.firebase.core, libs.firebase.storage, libs.firebase.auth, libs.firebase.database
     api libs.crashlytics
     api libs.libgdx.android
