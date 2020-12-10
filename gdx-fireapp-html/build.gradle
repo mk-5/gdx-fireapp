@@ -1,4 +1,4 @@
-apply plugin: "java"
+apply plugin: "java-library"
 apply plugin: "gwt"
 apply plugin: "war"
 apply plugin: "maven-publish"
@@ -7,7 +7,9 @@ sourceSets.test.java.srcDirs = ["tests/"]
 
 dependencies {
     implementation project(":gdx-fireapp-core")
-    implementation libs.libgdx.html
+    api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+    api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
     testImplementation libs.junit
     testImplementation libs.gwtmockito
     testImplementation libs.powermock.junit
@@ -20,14 +22,14 @@ gwt {
     gwtVersion = '2.8.2' // Should match the gwt version used for building the gwt backend
     maxHeapSize = "2G" // Default 256m is not enough for gwt compiler. GWT is HUNGRY
     minHeapSize = "2G"
-    modules 'pl.mk5.gdx.fireapp.e2e.GdxDefinition'
-    devModules 'pl.mk5.gdx.fireapp.e2e.GdxDefinitionSuperdev'
+    modules 'GdxDefinition'
+    devModules 'GdxDefinitionSuperdev'
     src = files(file("src/")) // Needs to be in front of "modules" below.
 }
 
 task addSource {
     doLast {
-        sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+        sourceSets.main.compileClasspath += files(project(':gdx-fireapp-core').sourceSets.main.allJava.srcDirs)
     }
 }
 
@@ -40,10 +42,6 @@ tasks.draftCompileGwt.dependsOn(addSource)
 
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = ["src/"]
-
-eclipse.project {
-    name = appName + "-html"
-}
 
 apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
 apply from: "" + project.rootDir + "/gradle/pom.gradle"

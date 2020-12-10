@@ -9,7 +9,7 @@ sonarqube {
 }
 
 configure(subprojects.findAll { it.name.indexOf("android") < 0 }) {
-    apply plugin: "java"
+    apply plugin: "java-library"
     apply plugin: "jacoco"
 
     sonarqube {
@@ -34,7 +34,7 @@ configure(subprojects.findAll { it.name.indexOf("android") < 0 }) {
         }
 
         afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
+            classDirectories.from(files(classDirectories.files.collect {
                 def excludes = [
                         '**/bindings/**', '**/fakes/**', '**/com/badlogic/**',
                         // Exclude because - do nothing special
@@ -56,7 +56,7 @@ configure(subprojects.findAll { it.name.indexOf("android") < 0 }) {
                     excludes.push('mk/gdx/firebase/helpers/ImageHelper*')
                 }
                 fileTree(dir: it, exclude: excludes)
-            })
+            }))
         }
     }
 
@@ -65,7 +65,8 @@ configure(subprojects.findAll { it.name.indexOf("android") < 0 }) {
 
 configure(subprojects.findAll { it.name.equals('gdx-fireapp-android') }) {
     apply plugin: "android-library"
-    apply plugin: "jacoco-android"
+//    apply plugin: "jacoco-android"
+    apply plugin: "jacoco"
 
     sonarqube {
         properties {
@@ -87,11 +88,11 @@ configure(subprojects.findAll { it.name.equals('gdx-fireapp-android') }) {
         }
     }
 
-    jacocoAndroidUnitTestReport {
-        csv.enabled false
-        html.enabled true
-        xml.enabled true
-    }
+//    jacocoAndroidUnitTestReport {
+//        csv.enabled false
+//        html.enabled true
+//        xml.enabled true
+//    }
 
     android {
         buildTypes {
@@ -108,7 +109,7 @@ configure(subprojects.findAll { it.name.equals('gdx-fireapp-android') }) {
         }
     }
 
-    jacocoTestReport.dependsOn.add("test")
+//    jacocoTestReport.dependsOn.add("test")
 }
 
 allprojects {

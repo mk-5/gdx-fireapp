@@ -1,1 +1,0 @@
-This is only scaffolding project, need it for generating pods binding classes.

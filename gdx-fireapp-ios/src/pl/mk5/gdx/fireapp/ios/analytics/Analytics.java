@@ -1,0 +1,84 @@
+/*
+ * Copyright 2017 mk
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package pl.mk5.gdx.fireapp.ios.analytics;
+
+import org.robovm.apple.foundation.NSDictionary;
+import org.robovm.apple.foundation.NSMutableDictionary;
+import org.robovm.apple.foundation.NSOperationQueue;
+import org.robovm.apple.foundation.NSString;
+import org.robovm.pods.firebase.analytics.FIRAnalytics;
+
+import java.util.Map;
+
+import pl.mk5.gdx.fireapp.distributions.AnalyticsDistribution;
+
+/**
+ * iOS Firebase analytics API implementation.
+ * <p>
+ *
+ * @see AnalyticsDistribution
+ */
+public class Analytics implements AnalyticsDistribution {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void logEvent(String name, Map<String, String> params) {
+        NSDictionary<NSString, NSString> dictionaryParams;
+        if (params != null) {
+            dictionaryParams = new NSMutableDictionary<>();
+            for (String key : params.keySet()) {
+                String value = params.get(key);
+                dictionaryParams.put(key, new NSString(value));
+            }
+        } else {
+            dictionaryParams = null;
+        }
+        FIRAnalytics.logEvent(name, dictionaryParams);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setScreen(final String name, final Class<?> screenClass) {
+        NSOperationQueue.getMainQueue().addOperation(new Runnable() {
+            @Override
+            public void run() {
+                FIRAnalytics.setScreenName(name, screenClass.getSimpleName());
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setUserProperty(String name, String value) {
+        FIRAnalytics.setUserPropertyString(value, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setUserId(String id) {
+        FIRAnalytics.setUserID(id);
+    }
+
+}

@@ -26,8 +26,6 @@ public class DatabaseOrderByChildTest extends E2ETest {
         GdxFIRAuth.inst()
                 .signInAnonymously()
                 .then(GdxFIRDatabase.inst()
-                        .inReference("/employee").removeValue())
-                .then(GdxFIRDatabase.inst()
                         .inReference("/employee")
                         .removeValue())
                 .then(GdxFIRDatabase.inst()

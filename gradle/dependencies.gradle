@@ -1,6 +1,7 @@
 ext {
     libs = [:]
-    gdxVersion = '1.9.8'
+    gdxVersion = '1.9.12'
+    roboVMVersion = '2.3.11'
     jUnitVersion = '4.12'
     mockitoVersion = '2.21.0'
     firebaseBomVersion = '25.12.0'
@@ -13,6 +14,7 @@ ext {
     spockVersion = '1.2-groovy-2.4'
     groovyVersion = '2.4.15'
     byteBuddyVersion = '1.8.21'
+    altPodsVersion = '1.13.0-SNAPSHOT'
 }
 
 

@@ -32,10 +32,6 @@ dependencies {
     testImplementation libs.spock.byteBuddy
 }
 
-eclipse.project {
-    name = "gdx-fireapp-core"
-}
-
 ext {
     appModuleName = 'GDX Fireapp Core'
 }

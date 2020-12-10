@@ -6,21 +6,20 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.3'
         classpath 'org.multi-os-engine.community:moe-gradle:1.7.0'
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.9'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
-        classpath 'org.codehaus.groovy:groovy-all:2.4.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
+        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0"
+//        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.11'
     }
 }
 apply plugin: 'base'
 
 allprojects {
-    apply plugin: "eclipse"
     apply plugin: "idea"
     if( project.name.indexOf("e2e") < 0 ) apply plugin: "maven-publish"
     group 'pl.mk5.gdx-fireapp'
@@ -59,6 +58,7 @@ allprojects {
 
     repositories {
         mavenLocal()
+        mavenCentral()
         jcenter()
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
@@ -67,7 +67,3 @@ allprojects {
 }
 
 apply from: "" + project.rootDir + "/gradle/testing.gradle"
-
-tasks.eclipse.doLast {
-    delete ".project"
-}
