@@ -17,6 +17,7 @@
 package pl.mk5.gdx.fireapp.storage;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
@@ -34,6 +35,8 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import pl.mk5.gdx.fireapp.functional.Consumer;
 
+import static org.mockito.ArgumentMatchers.anyString;
+
 @PrepareForTest({Pixmap.class, TextureRegion.class, Gdx2DPixmap.class, Pixmap.Format.class})
 @SuppressStaticInitializationFor("com.badlogic.gdx.graphics.g2d.Gdx2DPixmap")
 public class ImageHelperTest {
@@ -50,11 +53,14 @@ public class ImageHelperTest {
         PowerMockito.mockStatic(Gdx2DPixmap.class);
         PowerMockito.mockStatic(TextureRegion.class);
         Gdx.gl = Mockito.mock(GL20.class);
+        Graphics graphics = Mockito.mock(Graphics.class);
+        Gdx.graphics = graphics;
         Gdx2DPixmap gdx2DPixmap = PowerMockito.mock(Gdx2DPixmap.class);
         pixmap = PowerMockito.mock(Pixmap.class);
         Mockito.when(pixmap.getWidth()).thenReturn(10);
         Mockito.when(pixmap.getHeight()).thenReturn(10);
         Mockito.when(pixmap.getFormat()).thenReturn(Pixmap.Format.RGB888);
+        Mockito.when(graphics.supportsExtension(anyString())).thenReturn(false);
         PowerMockito.whenNew(Gdx2DPixmap.class).withAnyArguments().thenReturn(gdx2DPixmap);
         PowerMockito.whenNew(Pixmap.class).withAnyArguments().thenReturn(pixmap);
     }

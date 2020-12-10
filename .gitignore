@@ -34,6 +34,7 @@ android/gen/
 out/
 com_crashlytics_export_strings.xml
 google-services.json
+GoogleService-Info.plist
 
 ## Eclipse
 .classpath

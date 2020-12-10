@@ -37,12 +37,14 @@ public class DatabaseReadPojoTest extends E2ETest {
                 .then(new Consumer<Void>() {
                     @Override
                     public void accept(Void v) {
+                        Gdx.app.log("E2ETestRunner", "setting pojo value success");
                         GdxFIRDatabase.inst()
                                 .inReference("/employee-fred")
                                 .readValue(Employee.class)
                                 .then(new Consumer<Employee>() {
                                     @Override
                                     public void accept(Employee s) {
+                                        Gdx.app.log("E2ETestRunner", "reading pojo value success. " + s);
                                         if (s.name.equals("Fred")) {
                                             success();
                                         }

@@ -85,3 +85,8 @@
 
 **[2.1.0]**
 \- ISSUE #18 - API Addition: add new #onChildChange in database API
+
+**[3.0.1]**  | ***breaking changes***
+\- ISSUE #40 - API Change: RoboVM backend
+\- Drop ios-moe support
+\- Upgrade to libgdx 1.9.12

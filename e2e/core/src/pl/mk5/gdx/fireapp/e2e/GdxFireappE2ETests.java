@@ -18,7 +18,6 @@ import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
 import pl.mk5.gdx.fireapp.e2e.tests.CrashTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseChildEventTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseLimitEqualTest;
-import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueCancelTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseOrderByChildTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseOrderByTest;
@@ -47,7 +46,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
 
     private final E2ETestRunner e2ETestRunner = E2ETestRunnerFactory.factory();
 
-    public GdxFireappE2ETests() throws Exception {
+    public GdxFireappE2ETests() {
         GdxFIRLogger.setEnabled(true);
         e2ETestRunner.addNext(new BadlogicTest());
         e2ETestRunner.addNext(new AuthAnonymousTest());

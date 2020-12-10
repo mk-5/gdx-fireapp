@@ -1,0 +1,98 @@
+apply plugin: "java-library"
+apply plugin: "robovm"
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.test.java.srcDirs = ["tests/"]
+
+sourceCompatibility = '1.7'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+configurations {
+    external
+
+    compile.extendsFrom(configurations.external)
+}
+
+dependencies {
+    implementation project(":gdx-fireapp-core")
+    api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+    api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+    api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+
+    testImplementation libs.junit
+    testImplementation libs.powermock.junit
+    testImplementation libs.powermock.junitRule
+    testImplementation libs.powermock.api
+    testImplementation libs.powermock.xstream
+
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-database-ios:$altPodsVersion"
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-core-ios:$altPodsVersion"
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-analytics-ios:$altPodsVersion"
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-auth-ios:$altPodsVersion"
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-storage-ios:$altPodsVersion"
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-google-signin-ios:$altPodsVersion"
+    implementation "io.github.dkimitsa.robovm:robopods-firebase-crashlytics-ios:$altPodsVersion"
+
+    external "io.github.dkimitsa.robovm:robopods-firebase-database-ios:$altPodsVersion"
+    external "io.github.dkimitsa.robovm:robopods-firebase-core-ios:$altPodsVersion"
+    external "io.github.dkimitsa.robovm:robopods-firebase-analytics-ios:$altPodsVersion"
+    external "io.github.dkimitsa.robovm:robopods-firebase-auth-ios:$altPodsVersion"
+    external "io.github.dkimitsa.robovm:robopods-firebase-storage-ios:$altPodsVersion"
+    external "io.github.dkimitsa.robovm:robopods-firebase-google-signin-ios:$altPodsVersion"
+    external "io.github.dkimitsa.robovm:robopods-firebase-crashlytics-ios:$altPodsVersion"
+}
+
+ext {
+    appModuleName = 'GDX Fireapp iOS'
+}
+
+apply from: "" + project.rootDir + "/gradle/javadoc.gradle"
+apply from: "" + project.rootDir + "/gradle/pom.gradle"
+
+jar {
+    from sourceSets.main.output
+    from sourceSets.main.allJava
+    from {
+        configurations.external.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Test.class"
+    exclude "**/GdxIOSAppTest.class"
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId rootProject.group
+            version = rootProject.version
+            artifactId = 'gdx-fireapp-ios'
+            artifact jar
+            artifact sourceJar
+            artifact javadocJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', libraryDescription)
+                root.appendNode('name', libraryName)
+                root.appendNode('url', siteUrl)
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+apply from: "" + project.rootDir + "/gradle/bintray.gradle"
