@@ -57,7 +57,6 @@ allprojects {
     apply from: "" + project.rootDir + "/gradle/dependencies.gradle"
 
     repositories {
-        mavenLocal()
         mavenCentral()
         jcenter()
         google()
