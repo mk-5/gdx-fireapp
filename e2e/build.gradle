@@ -32,7 +32,7 @@ allprojects {
         aiVersion = '1.8.0'
         gdxFireappVersion = 'latest'
 
-        altPodsVersion = '1.13.0-SNAPSHOT'
+        altPodsVersion = '1.14.0-SNAPSHOT'
     }
 
     repositories {

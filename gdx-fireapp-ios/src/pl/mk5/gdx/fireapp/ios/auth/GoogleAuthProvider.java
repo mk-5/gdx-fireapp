@@ -30,6 +30,7 @@ import org.robovm.pods.firebase.core.FIRApp;
 import org.robovm.pods.firebase.googlesignin.GIDGoogleUser;
 import org.robovm.pods.firebase.googlesignin.GIDSignIn;
 import org.robovm.pods.firebase.googlesignin.GIDSignInDelegate;
+import org.robovm.pods.firebase.googlesignin.GIDSignInDelegateAdapter;
 
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
@@ -38,8 +39,8 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 class GoogleAuthProvider {
 
     private boolean initialized;
-    private Array<FuturePromise<GdxFirebaseUser>> signInPromises = new Array<>();
-    private Array<FuturePromise<Void>> disconnectPromises = new Array<>();
+    private final Array<FuturePromise<GdxFirebaseUser>> signInPromises = new Array<>();
+    private final Array<FuturePromise<Void>> disconnectPromises = new Array<>();
 
     synchronized boolean isInitialized() {
         return initialized;
@@ -50,9 +51,7 @@ class GoogleAuthProvider {
             GIDSignIn.sharedInstance().setClientID(FIRApp.defaultApp().getOptions().getClientID());
             GIDSignDelegate delegate = new GIDSignDelegate();
             GIDSignIn.sharedInstance().setDelegate(delegate);
-            UIViewController viewController = GIDSignIn.sharedInstance().getPresentingViewController();
-//            GIDSignIn.sharedInstance().setDelegate(viewController);
-            ((IOSApplication) Gdx.app).getUIViewController().addChildViewController(viewController);
+            GIDSignIn.sharedInstance().setPresentingViewController(((IOSApplication) Gdx.app).getUIViewController());
         }
         initialized = true;
     }
@@ -65,7 +64,7 @@ class GoogleAuthProvider {
         disconnectPromises.add(promise);
     }
 
-    class GIDSignDelegate implements GIDSignInDelegate {
+    class GIDSignDelegate extends GIDSignInDelegateAdapter {
 
         @Override
         public void didSignIn(GIDSignIn signIn, GIDGoogleUser user, NSError error) {
