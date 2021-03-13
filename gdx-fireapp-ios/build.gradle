@@ -27,21 +27,49 @@ dependencies {
     testImplementation libs.powermock.api
     testImplementation libs.powermock.xstream
 
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-database-ios:$altPodsVersion"
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-core-ios:$altPodsVersion"
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-analytics-ios:$altPodsVersion"
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-auth-ios:$altPodsVersion"
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-storage-ios:$altPodsVersion"
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-google-signin-ios:$altPodsVersion"
-    implementation "io.github.dkimitsa.robovm:robopods-firebase-crashlytics-ios:$altPodsVersion"
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-database-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-core-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-analytics-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-auth-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-storage-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-google-signin-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    implementation("io.github.dkimitsa.robovm:robopods-firebase-crashlytics-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
 
-    external "io.github.dkimitsa.robovm:robopods-firebase-database-ios:$altPodsVersion"
-    external "io.github.dkimitsa.robovm:robopods-firebase-core-ios:$altPodsVersion"
-    external "io.github.dkimitsa.robovm:robopods-firebase-analytics-ios:$altPodsVersion"
-    external "io.github.dkimitsa.robovm:robopods-firebase-auth-ios:$altPodsVersion"
-    external "io.github.dkimitsa.robovm:robopods-firebase-storage-ios:$altPodsVersion"
-    external "io.github.dkimitsa.robovm:robopods-firebase-google-signin-ios:$altPodsVersion"
-    external "io.github.dkimitsa.robovm:robopods-firebase-crashlytics-ios:$altPodsVersion"
+    external("io.github.dkimitsa.robovm:robopods-firebase-database-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    external("io.github.dkimitsa.robovm:robopods-firebase-core-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    external("io.github.dkimitsa.robovm:robopods-firebase-analytics-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    external("io.github.dkimitsa.robovm:robopods-firebase-auth-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    external("io.github.dkimitsa.robovm:robopods-firebase-storage-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    external("io.github.dkimitsa.robovm:robopods-firebase-google-signin-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
+    external("io.github.dkimitsa.robovm:robopods-firebase-crashlytics-ios:$altPodsVersion") {
+        exclude group: 'com.mobidevelop.robovm'
+    }
 }
 
 ext {

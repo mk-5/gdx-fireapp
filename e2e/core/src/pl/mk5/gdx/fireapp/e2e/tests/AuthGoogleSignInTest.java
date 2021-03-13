@@ -36,12 +36,13 @@ public class AuthGoogleSignInTest extends E2ETest {
                     public void accept(GdxFirebaseUser gdxFirebaseUser) {
                         success();
                     }
-                }).fail(new BiConsumer<String, Throwable>() {
-            @Override
-            public void accept(String s, Throwable throwable) {
-                success();
-            }
-        });
+                })
+                .fail(new BiConsumer<String, Throwable>() {
+                    @Override
+                    public void accept(String s, Throwable throwable) {
+                        throw new RuntimeException(throwable);
+                    }
+                });
     }
 
     @Override
