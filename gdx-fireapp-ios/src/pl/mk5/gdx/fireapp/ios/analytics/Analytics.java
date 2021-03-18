@@ -16,8 +16,9 @@
 
 package pl.mk5.gdx.fireapp.ios.analytics;
 
-import org.robovm.apple.foundation.NSDictionary;
 import org.robovm.apple.foundation.NSMutableDictionary;
+import org.robovm.apple.foundation.NSNumber;
+import org.robovm.apple.foundation.NSObject;
 import org.robovm.apple.foundation.NSOperationQueue;
 import org.robovm.apple.foundation.NSString;
 import org.robovm.pods.firebase.analytics.FIRAnalytics;
@@ -39,15 +40,21 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void logEvent(String name, Map<String, String> params) {
-        NSDictionary<NSString, NSString> dictionaryParams;
+        NSMutableDictionary<NSString, NSObject> dictionaryParams = null;
         if (params != null) {
             dictionaryParams = new NSMutableDictionary<>();
             for (String key : params.keySet()) {
                 String value = params.get(key);
-                dictionaryParams.put(key, new NSString(value));
+                Long valueAsLong = asLongOrNull(value);
+                Double valueAsDouble = asDoubleOrNull(value);
+                if (valueAsLong != null) {
+                    dictionaryParams.put(new NSString(key), NSNumber.valueOf(valueAsLong));
+                } else if (valueAsDouble != null) {
+                    dictionaryParams.put(new NSString(key), NSNumber.valueOf(valueAsDouble));
+                } else {
+                    dictionaryParams.put(new NSString(key), new NSString(value));
+                }
             }
-        } else {
-            dictionaryParams = null;
         }
         FIRAnalytics.logEvent(name, dictionaryParams);
     }
@@ -79,6 +86,30 @@ public class Analytics implements AnalyticsDistribution {
     @Override
     public void setUserId(String id) {
         FIRAnalytics.setUserID(id);
+    }
+
+    private Long asLongOrNull(String value) {
+        try {
+            if (value.endsWith("l") || value.endsWith("L")) {
+                return Long.parseLong(value.substring(0, value.length() - 1));
+            } else {
+                return Long.parseLong(value);
+            }
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private Double asDoubleOrNull(String value) {
+        try {
+            if (value.endsWith("f") || value.endsWith("F")) {
+                return Double.parseDouble(value.substring(0, value.length() - 1));
+            } else {
+                return Double.parseDouble(value);
+            }
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 }

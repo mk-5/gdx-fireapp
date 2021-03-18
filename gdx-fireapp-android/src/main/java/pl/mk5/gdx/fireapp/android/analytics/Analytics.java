@@ -17,7 +17,6 @@
 package pl.mk5.gdx.fireapp.android.analytics;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -45,9 +44,9 @@ public class Analytics implements AnalyticsDistribution {
             bundle = new Bundle();
             for (String key : params.keySet()) {
                 String value = params.get(key);
-                if (TextUtils.isDigitsOnly(value)) {
+                try {
                     BundleHelper.putNumberParam(bundle, key, value);
-                } else {
+                } catch (IllegalArgumentException e) {
                     bundle.putString(key, value);
                 }
             }
