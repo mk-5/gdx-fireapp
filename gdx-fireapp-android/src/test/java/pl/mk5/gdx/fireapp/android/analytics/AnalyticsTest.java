@@ -25,8 +25,10 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.InvocationOnMock;
@@ -38,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pl.mk5.gdx.fireapp.android.AndroidContextTest;
+import pl.mk5.gdx.fireapp.android.TestUtils;
 
 @PrepareForTest({FirebaseAnalytics.class, GdxNativesLoader.class})
 public class AnalyticsTest extends AndroidContextTest {
@@ -76,15 +79,30 @@ public class AnalyticsTest extends AndroidContextTest {
         params.put("param_string", "lorem ipsum");
         params.put("param_string_starting_with_number", "12:00 hour");
         params.put("param_number_int", "15");
-        params.put("param_number_float", "15.54");
+        params.put("param_number_long", "15l");
+        params.put("param_number_double", "15.54");
+        params.put("param_number_float", "15.54f");
 
         // When
         analytics.logEvent("test", params);
 
         // Then
+        Bundle expected = new Bundle();
+        expected.putString("param_string", "lorem ipsum");
+        expected.putString("param_string_starting_with_number", "12:00 hour");
+        expected.putInt("param_number_int", 15);
+        expected.putLong("param_number_long", 15L);
+        expected.putDouble("param_number_double", 15.54);
+        expected.putFloat("param_number_float", 15.54f);
+
         PowerMockito.verifyStatic(FirebaseAnalytics.class, VerificationModeFactory.times(1));
         FirebaseAnalytics.getInstance((Context) Gdx.app);
-        Mockito.verify(firebaseAnalytics, VerificationModeFactory.times(1)).logEvent(Mockito.eq("test"), Mockito.any(Bundle.class));
+        ArgumentCaptor<Bundle> captor = ArgumentCaptor.forClass(Bundle.class);
+        Mockito.verify(firebaseAnalytics, VerificationModeFactory.times(1))
+                .logEvent(
+                        Mockito.eq("test"),
+                        captor.capture());
+        Assert.assertTrue(TestUtils.equalBundles(expected, captor.getValue()));
         Mockito.verifyNoMoreInteractions(firebaseAnalytics);
     }
 
