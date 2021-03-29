@@ -30,7 +30,8 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
 
     private static final String USER_NOT_LOGGED_IN = "User is not logged in.";
     private static volatile GdxFIRAuth instance;
-    private GdxFIRGoogleAuth gdxFIRGoogleAuth;
+    private final GdxFIRGoogleAuth gdxFIRGoogleAuth = new GdxFIRGoogleAuth();
+    private final GdxFIRAppleAuth gdxFIRAppleAuth = new GdxFIRAppleAuth();
 
     /**
      * GdxFIRAuth protected constructor.
@@ -40,7 +41,6 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      * {@link PlatformDistributor#PlatformDistributor()}
      */
     GdxFIRAuth() {
-        gdxFIRGoogleAuth = new GdxFIRGoogleAuth();
     }
 
     public static GdxFIRAuth instance() {
@@ -59,6 +59,13 @@ public class GdxFIRAuth extends PlatformDistributor<AuthDistribution> implements
      */
     public GdxFIRGoogleAuth google() {
         return gdxFIRGoogleAuth;
+    }
+
+    /**
+     * @return AppleAuth platform distribution, not null
+     */
+    public GdxFIRAppleAuth apple() {
+        return gdxFIRAppleAuth;
     }
 
     /**
