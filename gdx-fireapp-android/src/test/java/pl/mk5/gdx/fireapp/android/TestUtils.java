@@ -5,13 +5,14 @@ import android.os.Bundle;
 import java.util.HashSet;
 import java.util.Set;
 
-class TestUtils {
+public class TestUtils {
 
-    private TestUtils() {}
+    private TestUtils() {
+    }
 
     // Copied and simplified from https://stackoverflow.com/a/13238729
     public static boolean equalBundles(Bundle one, Bundle two) {
-        if(one.size() != two.size())
+        if (one.size() != two.size())
             return false;
 
         Set<String> setOne = new HashSet<>(one.keySet());
