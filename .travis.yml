@@ -29,10 +29,12 @@ before_install:
 - chmod +x gradlew
 - chmod +x gradle/release-patch.sh
 stages:
-  - name: deploy
-    if: branch =~ /^\d+\.\d+(\.\d+)?$/
+  - name: build
+  - name: test
   - name: release
     if: branch = master && pull_request = "false"
+  - name: deploy
+    if: branch =~ /^\d+\.\d+(\.\d+)?$/
 jobs:
   include:
   - stage: build
