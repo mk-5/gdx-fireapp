@@ -18,6 +18,7 @@ package pl.mk5.gdx.fireapp;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import pl.mk5.gdx.fireapp.distributions.AnalyticsDistribution;
 import pl.mk5.gdx.fireapp.distributions.AppDistribution;
@@ -27,40 +28,52 @@ import pl.mk5.gdx.fireapp.distributions.DatabaseDistribution;
 import pl.mk5.gdx.fireapp.distributions.StorageDistribution;
 
 class Api {
-    private static final Map<Class, Object> apis = new ConcurrentHashMap<>();
+    private static final Map<String, Object> apis = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> T instance(final Class<T> api) {
+    public static <T> T instance(final Class<T> api, Object... args) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(api.getName());
+        if (args.length > 0) {
+            for (Object o : args) {
+                sb.append(o.toString());
+            }
+        }
+        String apiKey = sb.toString();
         if (api == AnalyticsDistribution.class) {
-            if (!apis.containsKey(api)) {
-                apis.put(api, new GdxFIRAnalytics());
+            if (!apis.containsKey(apiKey)) {
+                apis.put(apiKey, new GdxFIRAnalytics());
             }
-            return (T) apis.get(api);
+            return (T) apis.get(apiKey);
         } else if (api == AuthDistribution.class) {
-            if (!apis.containsKey(api)) {
-                apis.put(api, new GdxFIRAuth());
+            if (!apis.containsKey(apiKey)) {
+                apis.put(apiKey, new GdxFIRAuth());
             }
-            return (T) apis.get(api);
+            return (T) apis.get(apiKey);
         } else if (api == CrashDistribution.class) {
-            if (!apis.containsKey(api)) {
-                apis.put(api, new GdxFIRCrash());
+            if (!apis.containsKey(apiKey)) {
+                apis.put(apiKey, new GdxFIRCrash());
             }
-            return (T) apis.get(api);
+            return (T) apis.get(apiKey);
         } else if (api == DatabaseDistribution.class) {
-            if (!apis.containsKey(api)) {
-                apis.put(api, new GdxFIRDatabase());
+            if (!apis.containsKey(apiKey)) {
+                if (args.length > 0) {
+                    apis.put(apiKey, new GdxFIRDatabase((String) args[0]));
+                } else {
+                    apis.put(apiKey, new GdxFIRDatabase());
+                }
             }
-            return (T) apis.get(api);
+            return (T) apis.get(apiKey);
         } else if (api == StorageDistribution.class) {
-            if (!apis.containsKey(api)) {
-                apis.put(api, new GdxFIRStorage());
+            if (!apis.containsKey(apiKey)) {
+                apis.put(apiKey, new GdxFIRStorage());
             }
-            return (T) apis.get(api);
+            return (T) apis.get(apiKey);
         } else if (api == AppDistribution.class) {
-            if (!apis.containsKey(api)) {
-                apis.put(api, new GdxFIRApp());
+            if (!apis.containsKey(apiKey)) {
+                apis.put(apiKey, new GdxFIRApp());
             }
-            return (T) apis.get(api);
+            return (T) apis.get(apiKey);
         } else {
             throw new IllegalArgumentException();
         }

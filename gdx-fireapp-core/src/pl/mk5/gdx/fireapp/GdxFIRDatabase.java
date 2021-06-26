@@ -47,8 +47,17 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * <p>
      * {@link PlatformDistributor#PlatformDistributor()}
      */
+    GdxFIRDatabase(String dbUrl) {
+        super(dbUrl);
+        mapConverter = new MapConverter();
+    }
+
     GdxFIRDatabase() {
         mapConverter = new MapConverter();
+    }
+
+    public static GdxFIRDatabase inst(String dbUrl) {
+        return (GdxFIRDatabase) Api.instance(DatabaseDistribution.class, dbUrl);
     }
 
     public static GdxFIRDatabase instance() {

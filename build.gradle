@@ -1,15 +1,13 @@
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
+        mavenCentral()
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.3'
-        classpath 'org.multi-os-engine.community:moe-gradle:1.7.0'
         classpath 'com.google.gms:google-services:4.3.4'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0"
 //        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
@@ -28,9 +26,6 @@ allprojects {
     ext {
         appName = 'GDX Fireapp'
         groupId = 'pl.mk5.gdx-fireapp'
-
-        bintrayRepo = 'maven'
-        bintrayName = 'gdx-fireapp'
 
         libraryVersion = project.version
         libraryName = 'GDX Fireapp'
@@ -58,7 +53,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
         google()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }

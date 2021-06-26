@@ -1,0 +1,23 @@
+apply plugin: 'maven-publish'
+
+Properties properties = new Properties()
+if (project.rootProject.file('local.properties').exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+def user = System.getenv('SONATYPE_USER') != null ? System.getenv('SONATYPE_USER') : properties.getProperty("sonatype.user")
+def token = System.getenv('SONATYPE_TOKEN') != null ? System.getenv('SONATYPE_TOKEN') : properties.getProperty("sonatype.token")
+def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+
+publishing {
+    repositories {
+        maven {
+            name = 'sonatype'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = user
+                password = token
+            }
+        }
+    }
+}
