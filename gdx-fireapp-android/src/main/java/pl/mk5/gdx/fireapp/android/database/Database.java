@@ -52,17 +52,20 @@ public class Database implements DatabaseDistribution, QueryProvider {
 
     private static final String MISSING_REFERENCE = "Please call GdxFIRDatabase#inReference() first";
 
-    private DatabaseReference databaseReference;
-    private String databasePath;
+    private final FirebaseDatabase database;
     private final Array<Filter> filters;
     private OrderByClause orderByClause;
+    private DatabaseReference databaseReference;
+    private String databasePath;
 
-
-    /**
-     * Constructor of android database distribution
-     */
     public Database() {
         filters = new Array<>();
+        database = FirebaseDatabase.getInstance();
+    }
+
+    public Database(String dbUrl) {
+        filters = new Array<>();
+        database = FirebaseDatabase.getInstance(dbUrl);
     }
 
     /**
@@ -85,7 +88,7 @@ public class Database implements DatabaseDistribution, QueryProvider {
      */
     @Override
     public DatabaseDistribution inReference(String databasePath) {
-        databaseReference = FirebaseDatabase.getInstance().getReference(databasePath);
+        databaseReference = database.getReference(databasePath);
         this.databasePath = databasePath;
         return this;
     }
@@ -260,7 +263,7 @@ public class Database implements DatabaseDistribution, QueryProvider {
      */
     @Override
     public void setPersistenceEnabled(boolean enabled) {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(enabled);
+        database.setPersistenceEnabled(enabled);
     }
 
     /**
@@ -313,6 +316,10 @@ public class Database implements DatabaseDistribution, QueryProvider {
 
     String getDatabasePath() {
         return databasePath;
+    }
+
+    FirebaseDatabase getDatabase () {
+        return database;
     }
 
     private void checkDatabaseReference() {

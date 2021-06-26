@@ -38,7 +38,7 @@ class QueryConnectionStatus extends DatabaseQuery<ConnectionStatus> {
 
     @Override
     protected void prepare() {
-        query = FIRDatabase.database().reference(CONNECTED_REFERENCE);
+        query = databaseDistribution.getFirDatabase().reference(CONNECTED_REFERENCE);
     }
 
     @Override

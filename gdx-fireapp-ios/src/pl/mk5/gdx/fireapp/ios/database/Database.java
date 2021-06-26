@@ -55,11 +55,18 @@ public class Database implements DatabaseDistribution, QueryProvider {
 
     FIRDatabaseReference dbReference;
     String databasePath;
+    private final FIRDatabase firDatabase;
     private final Array<Filter> filters;
     private OrderByClause orderByClause;
 
+    public Database(String dbUrl) {
+        filters = new Array<>();
+        firDatabase = FIRDatabase.database().referenceFromURL(dbUrl).getDatabase();
+    }
+
     public Database() {
         filters = new Array<>();
+        firDatabase = FIRDatabase.database();
     }
 
     /**
@@ -82,7 +89,7 @@ public class Database implements DatabaseDistribution, QueryProvider {
      */
     @Override
     public DatabaseDistribution inReference(String databasePath) {
-        dbReference = FIRDatabase.database().reference(databasePath);
+        dbReference = firDatabase.reference(databasePath);
         this.databasePath = databasePath;
         return this;
     }
@@ -259,7 +266,7 @@ public class Database implements DatabaseDistribution, QueryProvider {
      */
     @Override
     public void setPersistenceEnabled(boolean enabled) {
-        FIRDatabase.database().setPersistenceEnabled(enabled);
+        firDatabase.setPersistenceEnabled(enabled);
     }
 
     /**
@@ -316,6 +323,10 @@ public class Database implements DatabaseDistribution, QueryProvider {
         databasePath = null;
         filters.clear();
         orderByClause = null;
+    }
+
+    FIRDatabase getFirDatabase() {
+        return firDatabase;
     }
 
     private void checkReference() {

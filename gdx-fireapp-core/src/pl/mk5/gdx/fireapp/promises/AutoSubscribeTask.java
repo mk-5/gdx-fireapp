@@ -30,7 +30,6 @@ class AutoSubscribeTask extends Timer.Task {
 
     @Override
     public void run() {
-        GdxFIRLogger.log("Run scheduled promise execution");
         promise.subscribe();
     }
 }

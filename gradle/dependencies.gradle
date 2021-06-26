@@ -14,7 +14,7 @@ ext {
     spockVersion = '1.2-groovy-2.4'
     groovyVersion = '2.4.15'
     byteBuddyVersion = '1.8.21'
-    altPodsVersion = '1.13.0-SNAPSHOT'
+    altPodsVersion = '1.16.0-SNAPSHOT'
 }
 
 

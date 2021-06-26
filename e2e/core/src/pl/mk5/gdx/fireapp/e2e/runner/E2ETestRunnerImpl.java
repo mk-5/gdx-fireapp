@@ -12,7 +12,7 @@ class E2ETestRunnerImpl implements E2ETestRunner {
 
     private static final float DEFAULT_TEST_DURATION = 10f;
     private final Array<E2ETest> tests = new Array<>();
-    private final Array<E2ETest> testsStable = new Array<>();
+    private final Array<E2ETest> testsTmp = new Array<>();
     private final ObjectMap<Class<? extends E2ETest>, Float> testTimeout = new ObjectMap<>();
     private float state = 0f;
     private Runnable onFinish;
@@ -25,25 +25,24 @@ class E2ETestRunnerImpl implements E2ETestRunner {
 
     @Override
     public void addNext(E2ETest test, float timeoutSeconds) {
-        testsStable.insert(0, test);
+        testsTmp.insert(0, test);
         testTimeout.put(test.getClass(), timeoutSeconds);
     }
 
     @Override
     public void start() {
-        if (testsStable.size == 0) {
+        if (testsTmp.size == 0) {
             throw new IllegalStateException("No tests to run.");
         }
         if (!onlyTypes.isEmpty()) {
-            testsStable.clear();
-            for (int i = testsStable.size - 1; i >= 0; i--) {
-                if (!onlyTypes.contains(testsStable.get(i).getClass(), true)) {
-                    testTimeout.remove(testsStable.get(i).getClass());
-                    testsStable.removeIndex(i);
+            for (int i = testsTmp.size - 1; i >= 0; i--) {
+                if (!onlyTypes.contains(testsTmp.get(i).getClass(), true)) {
+                    testTimeout.remove(testsTmp.get(i).getClass());
+                    testsTmp.removeIndex(i);
                 }
             }
         }
-        tests.addAll(testsStable);
+        tests.addAll(testsTmp);
         startTest(tests.peek());
     }
 
