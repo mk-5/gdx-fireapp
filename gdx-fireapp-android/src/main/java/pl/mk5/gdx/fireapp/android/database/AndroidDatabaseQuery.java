@@ -34,7 +34,7 @@ abstract class AndroidDatabaseQuery<R> extends GdxFireappQuery<Database, R> {
 
     @Override
     protected void prepare() {
-        query = FirebaseDatabase.getInstance().getReference(databasePath);
+        query = databaseDistribution.getDatabase().getReference(databasePath);
     }
 
     @Override

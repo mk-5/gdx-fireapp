@@ -62,7 +62,7 @@ public abstract class PlatformDistributor<T> {
      * @throws PlatformDistributorException Throws when something is wrong with environment
      */
     @SuppressWarnings("unchecked")
-    protected PlatformDistributor() {
+    protected PlatformDistributor(Object... args) {
         String className = null;
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             className = getAndroidClassName();
@@ -75,7 +75,11 @@ public abstract class PlatformDistributor<T> {
         }
         try {
             Class objClass = ClassReflection.forName(className);
-            platformObject = (T) ClassReflection.getConstructor(objClass).newInstance();
+            Class[] argumentsTypes = new Class[args.length];
+            for (int i = 0; i < args.length; i++) {
+                argumentsTypes[i] = args[i].getClass();
+            }
+            platformObject = (T) ClassReflection.getConstructor(objClass, argumentsTypes).newInstance(args);
         } catch (ReflectionException e) {
             throw new PlatformDistributorException("Something wrong with environment", e);
         }

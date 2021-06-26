@@ -47,7 +47,7 @@ abstract class DatabaseQuery<R> extends GdxFireappQuery<Database, R> {
 
     @Override
     protected void prepare() {
-        query = FIRDatabase.database().reference(databasePath);
+        query = databaseDistribution.getFirDatabase().reference(databasePath);
     }
 
     @Override

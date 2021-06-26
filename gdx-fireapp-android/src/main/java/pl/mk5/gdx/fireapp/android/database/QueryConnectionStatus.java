@@ -39,7 +39,7 @@ class QueryConnectionStatus extends AndroidDatabaseQuery<ConnectionStatus> {
 
     @Override
     protected void prepare() {
-        query = FirebaseDatabase.getInstance().getReference(CONNECTED_REFERENCE);
+        query = databaseDistribution.getDatabase().getReference(CONNECTED_REFERENCE);
     }
 
     @Override
