@@ -2,7 +2,7 @@
 
 A libGDX cross-platform API for Firebase.
 
-[ ![Build Status](https://travis-ci.com/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.com/mk-5/gdx-fireapp) ![Maven Central](https://img.shields.io/maven-central/v/pl.mk5.gdx-fireapp/gdx-fireapp-core) [_![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mk-5_gdx-fireapp&metric=coverage)_](https://sonarcloud.io/dashboard?id=mk-5_gdx-fireapp)
+[ ![Build Status](https://travis-ci.com/mk-5/gdx-fireapp.svg?branch=master)](https://travis-ci.com/mk-5/gdx-fireapp) [_![Maven Central](https://img.shields.io/maven-central/v/pl.mk5.gdx-fireapp/gdx-fireapp-core)_](https://search.maven.org/search?q=g:pl.mk5.gdx-fireapp) [_![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mk-5_gdx-fireapp&metric=coverage)_](https://sonarcloud.io/dashboard?id=mk-5_gdx-fireapp)
 
 ## Getting Started
 
