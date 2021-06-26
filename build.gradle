@@ -4,6 +4,7 @@ buildscript {
         mavenCentral()
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven {url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.3'
@@ -15,6 +16,11 @@ buildscript {
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.11'
     }
 }
+
+plugins {
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+}
+
 apply plugin: 'base'
 
 allprojects {

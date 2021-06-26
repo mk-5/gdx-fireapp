@@ -1,4 +1,5 @@
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 Properties properties = new Properties()
 if (project.rootProject.file('local.properties').exists()) {
@@ -8,6 +9,21 @@ def user = System.getenv('SONATYPE_USER') != null ? System.getenv('SONATYPE_USER
 def token = System.getenv('SONATYPE_TOKEN') != null ? System.getenv('SONATYPE_TOKEN') : properties.getProperty("sonatype.token")
 def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
 def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+def base64Decode(String prop) {
+    def signingKey = findProperty("signingKey")
+    return signingKey ? new String(Base64.getDecoder().decode(signingKey as String)).trim() : ""
+}
+
+signing {
+    required { isReleaseVersion }
+    def signingKey = base64Decode("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.maven
+}
 
 publishing {
     repositories {

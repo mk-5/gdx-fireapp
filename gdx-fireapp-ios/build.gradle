@@ -112,21 +112,12 @@ publishing {
             artifact jar
             artifact sourceJar
             artifact javadocJar
-            pom {
-                name = libraryName
-                description = libraryDescription
-                url = siteUrl
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                scm {
-                    connection = 'scm:git@github.com:mk-5/gdx-fireapp.git'
-                    developerConnection = 'scm:git@github.com:mk-5/gdx-fireapp.git'
-                    url = 'https://github.com/mk-5/gdx-fireapp.git'
-                }
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', libraryDescription)
+                root.appendNode('name', libraryName)
+                root.appendNode('url', siteUrl)
+                root.children().last() + pomConfig
             }
         }
     }
