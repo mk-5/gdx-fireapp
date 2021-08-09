@@ -25,6 +25,8 @@ import java.util.List;
 
 class NSArrayHelper {
 
+    private NSArrayHelper(){}
+
     @SuppressWarnings("unchecked")
     static List toList(NSArray<NSObject> nsArray) {
         List list = new ArrayList();
