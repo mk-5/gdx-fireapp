@@ -15,14 +15,17 @@
  */
 package pl.mk5.gdx.fireapp.ios.auth;
 
-import com.android.org.conscrypt.OpenSSLMessageDigestJDK;
+import com.android.org.bouncycastle.util.encoders.Hex;
 
 import org.robovm.apple.authservices.ASAuthorizationAppleIDProvider;
 import org.robovm.apple.authservices.ASAuthorizationAppleIDRequest;
 import org.robovm.apple.authservices.ASAuthorizationController;
 import org.robovm.apple.authservices.ASAuthorizationRequest;
 import org.robovm.apple.foundation.NSArray;
+import org.robovm.apple.foundation.NSError;
+import org.robovm.pods.firebase.auth.FIRAuth;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -39,6 +42,7 @@ import pl.mk5.gdx.fireapp.promises.Promise;
  * @see AppleAuthDistribution
  */
 public class AppleAuth implements AppleAuthDistribution {
+    private static final String[] SCOPES = {"email", "full_name"};
 
     @Override
     public Promise<GdxFirebaseUser> signIn() {
@@ -47,11 +51,12 @@ public class AppleAuth implements AppleAuthDistribution {
             public void accept(final FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
                 ASAuthorizationAppleIDProvider appleIDProvider = new ASAuthorizationAppleIDProvider();
                 ASAuthorizationAppleIDRequest request = appleIDProvider.createRequest();
-                final String nonce = hash256(UUID.randomUUID().toString());
-                request.setRequestedScopes(NSArray.fromStrings("email", "full_name"));
+                String nonce = hash256(UUID.randomUUID().toString());
+                request.setRequestedScopes(NSArray.fromStrings(SCOPES));
                 request.setNonce(nonce);
                 ASAuthorizationController asAuthorizationController = new ASAuthorizationController(new NSArray<ASAuthorizationRequest>(request));
                 asAuthorizationController.setDelegate(new AppleAuthProvider(nonce, gdxFirebaseUserFuturePromise));
+                asAuthorizationController.setPresentationContextProvider(new ApplePresentationContextProvider());
                 asAuthorizationController.performRequests();
             }
         });
@@ -62,32 +67,30 @@ public class AppleAuth implements AppleAuthDistribution {
         return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
             @Override
             public void accept(FuturePromise<Void> voidFuturePromise) {
+                NSError.NSErrorPtr ptr = new NSError.NSErrorPtr();
+                FIRAuth.auth().signOut(ptr);
+                if (ptr.get() != null) {
+                    voidFuturePromise.doFail(new RuntimeException(ptr.get().getLocalizedDescription()));
+                } else {
+                    voidFuturePromise.doComplete(null);
+                }
             }
         });
     }
 
     @Override
     public Promise<Void> revokeAccess() {
-        return FuturePromise.when(new Consumer<FuturePromise<Void>>() {
-            @Override
-            public void accept(FuturePromise<Void> voidFuturePromise) {
-
-            }
-        });
+        return signOut();
     }
 
-    private static String hash256(String data)  {
-        MessageDigest md = null;
+    private static String hash256(String data) {
+        MessageDigest digest = null;
         try {
-            md = MessageDigest.getInstance("SHA-256");
+            digest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-        md.update(data.getBytes());
-        byte[] bytes = md.digest();
-        StringBuilder result = new StringBuilder();
-        for (byte byt : bytes)
-            result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
-        return result.toString();
+        byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
+        return new String(Hex.encode(hash));
     }
 }

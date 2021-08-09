@@ -30,6 +30,9 @@ import pl.mk5.gdx.fireapp.GdxFIRLogger;
 
 class ResolverFIRDataSnapshotList {
 
+    private ResolverFIRDataSnapshotList() {
+    }
+
     @SuppressWarnings("unchecked")
     static List resolve(FIRDataSnapshot dataSnapshot) {
         List result = new ArrayList<>();
