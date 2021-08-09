@@ -40,6 +40,7 @@ import pl.mk5.gdx.fireapp.e2e.tests.StorageDownloadBytesTest;
 import pl.mk5.gdx.fireapp.e2e.tests.StorageDownloadImageTest;
 import pl.mk5.gdx.fireapp.e2e.tests.StorageUploadBytesTest;
 import pl.mk5.gdx.fireapp.e2e.tests.StorageUploadImageTest;
+import pl.mk5.gdx.fireapp.e2e.tests.AuthAppleSignInTest;
 
 public class GdxFireappE2ETests extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -54,6 +55,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(new AuthCreateUserEmailPasswordTest());
         e2ETestRunner.addNext(new AuthSignInUserEmailPasswordTest());
 //        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
+        e2ETestRunner.addNext(new AuthAppleSignInTest(), 360);
         e2ETestRunner.addNext(new GdxFirebaseUserTest(), 60);
         e2ETestRunner.addNext(new AuthSignOutTest());
 
@@ -99,6 +101,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         GdxFIRApp.inst().configure();
+        e2ETestRunner.only(AuthAppleSignInTest.class);
         e2ETestRunner.start();
     }
 

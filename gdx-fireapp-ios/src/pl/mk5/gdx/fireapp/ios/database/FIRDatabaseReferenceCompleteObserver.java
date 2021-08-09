@@ -24,7 +24,7 @@ import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
 class FIRDatabaseReferenceCompleteObserver implements VoidBlock2<NSError, FIRDatabaseReference> {
 
-    private FuturePromise promise;
+    private final FuturePromise promise;
 
     FIRDatabaseReferenceCompleteObserver(FuturePromise promise) {
         this.promise = promise;

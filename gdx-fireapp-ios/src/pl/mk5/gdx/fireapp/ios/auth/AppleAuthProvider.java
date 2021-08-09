@@ -32,6 +32,7 @@ import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
 
 class AppleAuthProvider extends ASAuthorizationControllerDelegateAdapter {
+    private static final String PROVIDER = "apple.com";
 
     private final String nonce;
     private final FuturePromise<GdxFirebaseUser> delegatePromise;
@@ -45,11 +46,15 @@ class AppleAuthProvider extends ASAuthorizationControllerDelegateAdapter {
     public void didComplete(ASAuthorizationController asAuthorizationController, ASAuthorization asAuthorization) {
         if (asAuthorization.getCredential() instanceof ASAuthorizationAppleIDCredential) {
             ASAuthorizationAppleIDCredential credential = (ASAuthorizationAppleIDCredential) asAuthorization.getCredential();
-            FIROAuthCredential firoAuthCredential = FIROAuthProvider.createUsingIDToken("apple.com", credential.getIdentityToken().toString(), nonce);
+            FIROAuthCredential firoAuthCredential = FIROAuthProvider.createUsingIDToken(PROVIDER, credential.getIdentityToken().toString(), nonce);
             FIRAuth.auth().signInUsingCredential(firoAuthCredential, new VoidBlock2<FIRAuthDataResult, NSError>() {
                 @Override
                 public void invoke(FIRAuthDataResult firAuthDataResult, NSError nsError) {
-                    delegatePromise.doComplete(GdxFIRAuth.instance().getCurrentUser());
+                    if (nsError != null) {
+                        delegatePromise.doFail(new RuntimeException(nsError.getLocalizedDescription()));
+                    } else {
+                        delegatePromise.doComplete(GdxFIRAuth.instance().getCurrentUser());
+                    }
                 }
             });
         }
