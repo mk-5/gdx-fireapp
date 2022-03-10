@@ -18,6 +18,7 @@ import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
 import pl.mk5.gdx.fireapp.e2e.tests.CrashTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseByURLTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseChildEventTest;
+import pl.mk5.gdx.fireapp.e2e.tests.DatabaseConnectionTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseLimitEqualTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseListenerValueTest;
 import pl.mk5.gdx.fireapp.e2e.tests.DatabaseOrderByChildTest;
@@ -87,6 +88,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(new DatabaseTransactionDefaultLongValueTest(), 30);
         e2ETestRunner.addNext(new DatabaseTransactionDefaultStringValueTest(), 30);
         e2ETestRunner.addNext(new DatabaseByURLTest(), 30);
+        e2ETestRunner.addNext(new DatabaseConnectionTest(), 30);
 
 
         e2ETestRunner.onFinish(new Runnable() {
@@ -101,7 +103,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         GdxFIRApp.inst().configure();
-        e2ETestRunner.only(AuthAppleSignInTest.class);
+        e2ETestRunner.only(DatabaseConnectionTest.class);
         e2ETestRunner.start();
     }
 

@@ -27,7 +27,6 @@ import pl.mk5.gdx.fireapp.database.ConnectionStatus;
 import pl.mk5.gdx.fireapp.database.DatabaseConsumer;
 import pl.mk5.gdx.fireapp.database.Filter;
 import pl.mk5.gdx.fireapp.database.FilterType;
-import pl.mk5.gdx.fireapp.database.MapConverter;
 import pl.mk5.gdx.fireapp.database.OrderByClause;
 import pl.mk5.gdx.fireapp.database.OrderByMode;
 import pl.mk5.gdx.fireapp.database.QueryProvider;
@@ -74,6 +73,11 @@ public class Database implements DatabaseDistribution, QueryProvider {
                         .execute();
             }
         });
+    }
+
+    @Override
+    public DatabaseDistribution.OnDisconnect onDisconnect() {
+        throw new UnsupportedOperationException("Not supported in GWT version yet.");
     }
 
     /**
@@ -266,6 +270,22 @@ public class Database implements DatabaseDistribution, QueryProvider {
     @Override
     public void keepSynced(boolean synced) {
         Gdx.app.log("GdxFireapp", "No such feature on firebase web platform.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOffline() {
+        throw new UnsupportedOperationException("Not supported in GWT version yet.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOnline() {
+        throw new UnsupportedOperationException("Not supported in GWT version yet.");
     }
 
     /**

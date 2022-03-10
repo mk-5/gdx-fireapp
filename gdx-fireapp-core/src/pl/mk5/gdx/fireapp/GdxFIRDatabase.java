@@ -83,6 +83,14 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
      * {@inheritDoc}
      */
     @Override
+    public DatabaseDistribution.OnDisconnect onDisconnect() {
+        return platformObject.onDisconnect();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public DatabaseDistribution inReference(String databasePath) {
         platformObject.inReference(databasePath);
         return this;
@@ -186,6 +194,22 @@ public class GdxFIRDatabase extends PlatformDistributor<DatabaseDistribution> im
     @Override
     public void keepSynced(boolean synced) {
         platformObject.keepSynced(synced);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOffline() {
+        return platformObject.goOffline();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOnline() {
+        return platformObject.goOnline();
     }
 
     /**

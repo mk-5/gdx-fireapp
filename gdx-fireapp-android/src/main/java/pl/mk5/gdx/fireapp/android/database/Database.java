@@ -83,6 +83,11 @@ public class Database implements DatabaseDistribution, QueryProvider {
         });
     }
 
+    @Override
+    public DatabaseDistribution.OnDisconnect onDisconnect() {
+        return new pl.mk5.gdx.fireapp.android.database.OnDisconnect(databaseReference.onDisconnect());
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -274,6 +279,24 @@ public class Database implements DatabaseDistribution, QueryProvider {
         databaseReference().keepSynced(synced);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOffline() {
+        database.goOffline();
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOnline() {
+        database.goOnline();
+        return this;
+    }
+
     DatabaseReference databaseReference() {
         checkDatabaseReference();
         return databaseReference;
@@ -318,7 +341,7 @@ public class Database implements DatabaseDistribution, QueryProvider {
         return databasePath;
     }
 
-    FirebaseDatabase getDatabase () {
+    FirebaseDatabase getDatabase() {
         return database;
     }
 
