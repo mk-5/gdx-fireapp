@@ -84,6 +84,11 @@ public class Database implements DatabaseDistribution, QueryProvider {
         });
     }
 
+    @Override
+    public DatabaseDistribution.OnDisconnect onDisconnect() {
+        return new pl.mk5.gdx.fireapp.ios.database.OnDisconnect(dbReference());
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -276,6 +281,24 @@ public class Database implements DatabaseDistribution, QueryProvider {
     public void keepSynced(boolean synced) {
         dbReference().keepSynced(synced);
         terminateOperation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOffline() {
+        firDatabase.goOffline();
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DatabaseDistribution goOnline() {
+        firDatabase.goOnline();
+        return this;
     }
 
     /**

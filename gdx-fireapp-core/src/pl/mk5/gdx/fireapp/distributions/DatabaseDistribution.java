@@ -52,6 +52,11 @@ public interface DatabaseDistribution {
     ListenerPromise<ConnectionStatus> onConnect();
 
     /**
+     * Listens for database disconnect event.
+     */
+    DatabaseDistribution.OnDisconnect onDisconnect();
+
+    /**
      * Sets database path you want to deal with in next action.
      *
      * @param databasePath Reference inside your database for ex. {@code "/users"}
@@ -202,4 +207,30 @@ public interface DatabaseDistribution {
      * @throws RuntimeException if {@link #inReference(String)} has not been called before
      */
     void keepSynced(boolean synced);
+
+    /**
+     * Drop database connection.
+     * <p>
+     * Check firebase documentation in order to get more info.
+     */
+    DatabaseDistribution goOffline();
+
+    /**
+     * Establish new database connection.
+     * <p>
+     * Check firebase documentation in order to get more info.
+     */
+    DatabaseDistribution goOnline();
+
+    /**
+     * Representation of database OnDisconnect object. It's needed in order to
+     * run onDisconnect actions.
+     */
+    interface OnDisconnect {
+        Promise<Void> removeValue();
+
+        Promise<Void> cancel();
+
+        Promise<Void> setValue(Object value);
+    }
 }
