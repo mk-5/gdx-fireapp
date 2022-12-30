@@ -51,11 +51,11 @@ public class AppleAuth implements AppleAuthDistribution {
             public void accept(final FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
                 ASAuthorizationAppleIDProvider appleIDProvider = new ASAuthorizationAppleIDProvider();
                 ASAuthorizationAppleIDRequest request = appleIDProvider.createRequest();
-                String nonce = hash256(UUID.randomUUID().toString());
+                String rawNonce = UUID.randomUUID().toString()
                 request.setRequestedScopes(NSArray.fromStrings(SCOPES));
-                request.setNonce(nonce);
+                request.setNonce(hash256(rawNonce));
                 ASAuthorizationController asAuthorizationController = new ASAuthorizationController(new NSArray<ASAuthorizationRequest>(request));
-                asAuthorizationController.setDelegate(new AppleAuthProvider(nonce, gdxFirebaseUserFuturePromise));
+                asAuthorizationController.setDelegate(new AppleAuthProvider(rawNonce, gdxFirebaseUserFuturePromise));
                 asAuthorizationController.setPresentationContextProvider(new ApplePresentationContextProvider());
                 asAuthorizationController.performRequests();
             }

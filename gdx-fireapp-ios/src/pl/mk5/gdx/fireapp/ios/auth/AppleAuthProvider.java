@@ -46,7 +46,8 @@ class AppleAuthProvider extends ASAuthorizationControllerDelegateAdapter {
     public void didComplete(ASAuthorizationController asAuthorizationController, ASAuthorization asAuthorization) {
         if (asAuthorization.getCredential() instanceof ASAuthorizationAppleIDCredential) {
             ASAuthorizationAppleIDCredential credential = (ASAuthorizationAppleIDCredential) asAuthorization.getCredential();
-            FIROAuthCredential firoAuthCredential = FIROAuthProvider.createUsingIDToken(PROVIDER, credential.getIdentityToken().toString(), nonce);
+            String idToken = new String(credential.getIdentityToken().getBytes(), StandardCharsets.UTF_8);
+            FIROAuthCredential firoAuthCredential = FIROAuthProvider.createUsingIDToken(PROVIDER, idToken, nonce);
             FIRAuth.auth().signInUsingCredential(firoAuthCredential, new VoidBlock2<FIRAuthDataResult, NSError>() {
                 @Override
                 public void invoke(FIRAuthDataResult firAuthDataResult, NSError nsError) {
