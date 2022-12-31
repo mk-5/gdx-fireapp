@@ -51,7 +51,7 @@ public class AppleAuth implements AppleAuthDistribution {
             public void accept(final FuturePromise<GdxFirebaseUser> gdxFirebaseUserFuturePromise) {
                 ASAuthorizationAppleIDProvider appleIDProvider = new ASAuthorizationAppleIDProvider();
                 ASAuthorizationAppleIDRequest request = appleIDProvider.createRequest();
-                String rawNonce = UUID.randomUUID().toString()
+                String rawNonce = UUID.randomUUID().toString();
                 request.setRequestedScopes(NSArray.fromStrings(SCOPES));
                 request.setNonce(hash256(rawNonce));
                 ASAuthorizationController asAuthorizationController = new ASAuthorizationController(new NSArray<ASAuthorizationRequest>(request));
