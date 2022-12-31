@@ -27,6 +27,8 @@ import org.robovm.pods.firebase.auth.FIRAuthDataResult;
 import org.robovm.pods.firebase.auth.FIROAuthCredential;
 import org.robovm.pods.firebase.auth.FIROAuthProvider;
 
+import java.nio.charset.StandardCharsets;
+
 import pl.mk5.gdx.fireapp.GdxFIRAuth;
 import pl.mk5.gdx.fireapp.auth.GdxFirebaseUser;
 import pl.mk5.gdx.fireapp.promises.FuturePromise;
