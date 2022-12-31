@@ -12,6 +12,7 @@ import pl.mk5.gdx.fireapp.e2e.runner.E2ETestRunnerFactory;
 import pl.mk5.gdx.fireapp.e2e.tests.AnalyticsTest;
 import pl.mk5.gdx.fireapp.e2e.tests.AuthAnonymousTest;
 import pl.mk5.gdx.fireapp.e2e.tests.AuthCreateUserEmailPasswordTest;
+import pl.mk5.gdx.fireapp.e2e.tests.AuthGoogleSignInTest;
 import pl.mk5.gdx.fireapp.e2e.tests.AuthSignInUserEmailPasswordTest;
 import pl.mk5.gdx.fireapp.e2e.tests.AuthSignOutTest;
 import pl.mk5.gdx.fireapp.e2e.tests.BadlogicTest;
@@ -55,8 +56,8 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
         e2ETestRunner.addNext(new AuthAnonymousTest());
         e2ETestRunner.addNext(new AuthCreateUserEmailPasswordTest());
         e2ETestRunner.addNext(new AuthSignInUserEmailPasswordTest());
-//        e2ETestRunner.addNext(AuthGoogleSignInTest.class);
-        e2ETestRunner.addNext(new AuthAppleSignInTest(), 360);
+//        e2ETestRunner.addNext(new AuthGoogleSignInTest(), 360);
+//        e2ETestRunner.addNext(new AuthAppleSignInTest(), 360);
         e2ETestRunner.addNext(new GdxFirebaseUserTest(), 60);
         e2ETestRunner.addNext(new AuthSignOutTest());
 
@@ -103,7 +104,7 @@ public class GdxFireappE2ETests extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         GdxFIRApp.inst().configure();
-        e2ETestRunner.only(DatabaseConnectionTest.class);
+//        e2ETestRunner.only(AuthGoogleSignInTest.class);
         e2ETestRunner.start();
     }
 

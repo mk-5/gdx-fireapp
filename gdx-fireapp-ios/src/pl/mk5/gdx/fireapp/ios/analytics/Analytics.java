@@ -64,12 +64,7 @@ public class Analytics implements AnalyticsDistribution {
      */
     @Override
     public void setScreen(final String name, final Class<?> screenClass) {
-        NSOperationQueue.getMainQueue().addOperation(new Runnable() {
-            @Override
-            public void run() {
-                FIRAnalytics.setScreenName(name, screenClass.getSimpleName());
-            }
-        });
+        // do nothing / setScreen no longer available, after firebase > 8.x
     }
 
     /**

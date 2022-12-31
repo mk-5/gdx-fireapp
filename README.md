@@ -34,7 +34,7 @@ implementation "pl.mk5.gdx-fireapp:gdx-fireapp-html:$gdxFireappVersion"
 
 &nbsp;
 
-**The latest version** was built using libGDX 1.9.12, robovm 2.3.1, gwt 2.8.2, iOS Firebase sdk 7.x,
+**The latest version** was built using libGDX 1.9.12, robovm 2.3.1, gwt 2.8.2, iOS Firebase sdk 8.x,
 android Firebase BOM 25.12.0
 
 &nbsp;
