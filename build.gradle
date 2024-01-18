@@ -10,7 +10,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.4.3'
         classpath 'com.google.gms:google-services:4.3.4'
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
 //        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.4'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.11'
