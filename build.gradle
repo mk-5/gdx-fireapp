@@ -7,7 +7,7 @@ buildscript {
         maven {url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.3'
+        classpath 'com.android.tools.build:gradle:8.3.1'
         classpath 'com.google.gms:google-services:4.4.0'
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
