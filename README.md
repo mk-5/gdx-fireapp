@@ -10,6 +10,17 @@ The first thing you should do is install Firebase SDK and add gradle dependencie
 
 [Android  guide](https://github.com/mk-5/gdx-fireapp/wiki/Android-guide) - [iOS guide](https://github.com/mk-5/gdx-fireapp/wiki/iOS-Guide) - [HTML guide](https://github.com/mk-5/gdx-fireapp/wiki/GWT-guide) - [ProGuard required rules](https://github.com/mk-5/gdx-fireapp/wiki/Proguard-required-rules)
 
+**Repository**
+
+```
+allprojects {
+    ...
+    repositories {
+        ...
+        jcenter()
+    }
+}
+```
 **Core**
 
 ```
